@@ -127,11 +127,12 @@ def load_and_validate(foo, schema):
     valid=validator.validate(inp_yaml)
     # Print out errors
     if valid:
-      logger.info('Input file has no errors. :)')
+      logger.info('No Syntax errors in Input Yaml. :)')
     else:
       logger.error(validator.errors)
       sys.exit(0)
 
+    logger.info('Performing Additional Checks')
     
     specific_checks(normalized)
 

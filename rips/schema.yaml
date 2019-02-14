@@ -1,4 +1,9 @@
 
+# ISA Supported
+ISA: 
+    type: string
+    regex: '^RV[0-9]{2}[ACDEFGIMNQSUX]*'
+
 # Version number of User Level ISA specification
 User_Spec_Version:
     type: float
@@ -87,13 +92,16 @@ MISA_X:
 # Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
 
 Vendorid:
-    type: string
+    type: integer
+    regex: ^0x
 
 Archid:
-    type: string
+    type: integer
+    regex: ^0x
 
 Impid:
     type: string
+    regex: ^0x
 
 Hartids:
     type: list
@@ -113,6 +121,12 @@ MSTATUS_UXL:
     default: []
 # TODO: TW and XS as per nikhil's def
 
+
+## ================================================================
+## Features: MTVEC WARL functions
+MTVEC_writable:
+    type: boolean
+    default: True
 
 ## ================================================================
 ## Features: MIDELEG and MEDELEG WARL functions
