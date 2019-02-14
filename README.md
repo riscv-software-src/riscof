@@ -1,6 +1,6 @@
-#RISC-V Compliance Framework
+# RISC-V Compliance Framework
 
-#Usage
+## Usage
 
 python3 -m rips.main --help
 
