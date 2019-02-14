@@ -20,19 +20,19 @@ def specific_checks(foo):
         str(foo['XLEN']))
         sys.exit(0)
 
-    if foo['MISA_D'] and not foo['MISA_F']:
+    if 1 in foo['MISA_D'] and 1 not in foo['MISA_F']:
         logger.error('MISA_D set without setting MISA_F')
         sys.exit(0)
     
-    if foo['MISA_Q'] and not foo['MISA_D']:
+    if 1 in foo['MISA_Q'] and 1 not in foo['MISA_D']:
         logger.error('MISA_Q set without setting MISA_D')
         sys.exit(0)
 
-    if foo['MISA_N'] and not foo['MISA_U']:
+    if 1 in foo['MISA_N'] and 1 not in foo['MISA_U']:
         logger.error('MISA_N set without setting MISA_U')
         sys.exit(0)
 
-    if foo['MISA_S'] and not foo['MISA_U']:
+    if 1 in foo['MISA_S'] and 1 not in foo['MISA_U']:
         logger.error('MISA_S set without setting MISA_U')
         sys.exit(0)
 
@@ -135,7 +135,8 @@ def load_and_validate(foo, schema):
     
     specific_checks(normalized)
 
-    logger.info('Dumping out Normalized Checked YAML')
     file_name_split=foo.split('.')
-    outfile=open(file_name_split[0]+'_checked.'+file_name_split[1],'w')
+    output_filename=file_name_split[0]+'_checked.'+file_name_split[1]
+    outfile=open(output_filename,'w')
+    logger.info('Dumping out Normalized Checked YAML: '+output_filename)
     yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)

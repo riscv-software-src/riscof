@@ -24,52 +24,64 @@ MISA_MXL:
     default: [1]  # XLEN=32
 
 MISA_A:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_C:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_D:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_F:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_G:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_I:
-    type: boolean
-    default: True
+    type: list
+    allowed: [1]
+    default: [1]
 
 MISA_M:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_N:
-    type: boolean
-    default: False 
+    type: list
+    allowed: [0, 1]
+    default: [0] 
 
 MISA_Q:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_S:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_U:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 MISA_X:
-    type: boolean
-    default: False
+    type: list
+    allowed: [0, 1]
+    default: [0]
 
 # ================================================================
 # Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
