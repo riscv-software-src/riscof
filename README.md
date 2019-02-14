@@ -1,6 +1,12 @@
-#RISC-V Compliance Framework
+# RISC-V Compliance Framework
 
-#Usage
+## Setup
+```
+sudo apt-get install python3 pip3
+pip3 intall cerberus oyaml
+```
+
+## Usage
 
 python3 -m rips.main --help
 
