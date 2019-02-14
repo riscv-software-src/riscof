@@ -1,0 +1,13 @@
+module: pwm
+type: device
+clusters:
+  - cluster1
+roles:
+  master:
+    - null
+  slave:
+    - cluster1
+parameters:
+  pwmwidth: 30
+  clock: 1
+

@@ -1,0 +1,7 @@
+# Example: demonstrate check for missing required fields
+
+# Standard
+
+XLEN: 32
+MISA_F: [1]
+MISA_D: [0]

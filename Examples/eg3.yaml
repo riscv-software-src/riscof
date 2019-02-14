@@ -1,0 +1,23 @@
+# Example: demonstrate irrelevant VM_Sv39 field (no RV64, no S)
+
+# Standard
+
+XLEN: 32
+MSIP_address: 0x_0200_0000
+MTIME_address: 0x_0200_bFF8
+MTIMECMP_address: 0x_0200_4000
+MCAUSE_on_reset: 0
+MTVEC_is_read_only: False
+Reset_PC: 0x1000
+Traps_on_unaligned_mem_access: True
+WFI_is_nop: False
+NMI_address: 0x200
+CYCLE_defined: True
+TIME_defined: False
+INSTRET_defined: True
+
+address_map: [Address_map,
+              ["Main Mem", 0x8000_0000, 0x0100_0000, "MEM", "RW"]
+             ]
+
+Sv39: True

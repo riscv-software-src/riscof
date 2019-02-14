@@ -1,0 +1,43 @@
+# Feature list for implementation "foo": RV64AIMSU
+
+# Standard
+
+User_Spec_Version: "2.2"
+Privilege_Spec_Version: "1.10"
+XLEN: 64
+Traps_on_unaligned_mem_access: True
+Reset_PC: 0x1000
+WFI_is_nop: False
+MTVEC_is_read_only: False
+MTVEC_BASE_WARL_fn: ["WARL_fn", "$writeval"]
+MTVEC_MODE_WARL_fn: ["WARL_fn", 1]
+NMI_address: 0x200
+MSIP_address: 0x_0200_0000
+MTIME_address: 0x_0200_bFF8
+MTIMECMP_address: 0x_0200_4000
+MCAUSE_on_reset: 0
+
+MISA_U: True
+MISA_S: True
+STVEC_is_read_only: False
+Sv48: True
+PTE_A_trap: True
+PTE_D_trap: True
+
+MISA_U: True
+
+CYCLE_defined: True
+TIME_defined: False
+INSTRET_defined: True
+
+address_map: [Address_map,
+               ["Boot ROM",          0x1000,      0x1000, "MEM", "RO"],
+               ["Timer, MSIP",  0x0200_0000,      0xC000, "IO",  "RW"],
+               ["Main Mem",     0x8000_0000, 0x1000_0000, "MEM", "RW"],
+               ["UART",         0xC000_0000,        0x80, "IO",  "RW"]
+             ]
+
+# Non-standard
+
+M_implem: fast
+Shifter_implem: serial
