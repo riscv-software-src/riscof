@@ -3,5 +3,8 @@
 # Standard
 
 XLEN: 32
+ISA: RV32IMSU
 MISA_F: [1]
 MISA_D: [0]
+MSTATUS_MPP: [0,3]
+Vendorid: 0xabc
