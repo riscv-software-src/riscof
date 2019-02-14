@@ -1,0 +1,211 @@
+
+# Version number of User Level ISA specification
+User_Spec_Version:
+    type: float
+    allowed: [2.2, 2.3]
+    default: 2.2
+
+# Version number of Privileged Architecture specification
+Privilege_Spec_Version:
+    type: float
+    allowed: [1.10, 1.11]
+    default: 1.10
+
+# Width of integer general-purpose registers
+XLEN:
+    type: integer
+    allowed: [32, 64]
+    default: 32
+
+# MISA Features
+MISA_MXL:
+    type: list
+    allowed: [1,  2,  3]
+    default: [1]  # XLEN=32
+
+MISA_A:
+    type: boolean
+    default: False
+
+MISA_C:
+    type: boolean
+    default: False
+
+MISA_D:
+    type: boolean
+    default: False
+
+MISA_F:
+    type: boolean
+    default: False
+
+MISA_G:
+    type: boolean
+    default: False
+
+MISA_I:
+    type: boolean
+    default: True
+
+MISA_M:
+    type: boolean
+    default: False
+
+MISA_N:
+    type: boolean
+    default: False 
+
+MISA_Q:
+    type: boolean
+    default: False
+
+MISA_S:
+    type: boolean
+    default: False
+
+MISA_U:
+    type: boolean
+    default: False
+
+MISA_X:
+    type: boolean
+    default: False
+
+# ================================================================
+# Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
+
+Vendorid:
+    type: string
+
+Archid:
+    type: string
+
+Impid:
+    type: string
+
+Hartids:
+    type: list
+    default: [0]
+
+## ================================================================
+## Features: MSTATUS fields
+
+MSTATUS_SXL:
+    type: list
+    allowed: [1,  2,  3]
+    default: []
+
+MSTATUS_UXL:
+    type: list
+    allowed: [1,  2,  3]
+    default: []
+# TODO: TW and XS as per nikhil's def
+
+
+## ================================================================
+## Features: MIDELEG and MEDELEG WARL functions
+
+# This field will specify which of the interrupts in the machine mode
+# can delegated to a lower level privilege. A 0-bit indicates that
+# particular interrupt cannot be delegated.
+MIDELEG:
+    type: integer
+    max: 0xFFF
+    default: 0xFFF
+
+
+# This field will specify which of the exceptions in the machine mode
+# can delegated to a lower level privilege. A 0-bit indicates that
+# particular exception cannot be delegated.
+MEDELEG:
+    type: integer
+    default: 0x7FF
+
+## ================================================================
+## Features: MIP and MIE WARL functions
+
+# This field will describe all valid bits of MIP register which can be 
+# interpreted as Interrupts by the system in Machine Mode.
+MIP:
+  type: integer
+  default: 0xFFF
+  max: 0xFFF
+
+# This field will describe all valid bits of MIE register which can be 
+# used to enable or disable Interrupts in Machine Mode.
+MIE:
+  type: integer
+  max: 0xFFF
+
+## ================================================================
+## Features: addresses for memory-mapped MSIP, MTIME and MTIMECMP
+#MSIP_address:
+#    type: integer
+#    required: True
+#MTIME_address:
+#    type: integer
+#    required: True
+#MTIMECMP_address:
+#    type: integer
+#    required: True
+#
+## ================================================================
+## Features: MTVEC implementation choices
+#MTVEC_is_read_only:
+#    type: boolean
+#    required: True
+#
+#MTVEC_reset_value: # TODO extra checks
+#    type:
+#
+## ================================================================
+## Features: Hardware Performance Monitor CSRs
+#
+#MHPM3_exists:
+#    type: boolean
+#    default: False
+#
+#MHPMEVENT3_WARL_fn
+#
+## ================================================================
+## Features: MEPC WARL function
+#MEPC:
+#    type: integer
+#    required: True
+#
+## ================================================================
+## Features: MCAUSE value on reset and NMI
+#
+#MCAUSE_on_reset:
+#    type: integer
+#    required: True
+#
+#MCAUSE_on_NMI: #TODO This cannot be 0 
+#    type: integer
+#    default: 0
+## ================================================================
+## Features: SATP WARL functions
+#
+## ================================================================
+## Features: Virtual memory schemes
+#Sv32:
+#    type: boolean
+#    default: False # TODO extra checks
+#Sv39:
+#    type: boolean
+#    default: False # TODO extra checks
+#Sv48:
+#    type: boolean
+#    default: False # TODO extra checks
+#PTE_A_trap:
+#    type: boolean
+#    required: True # TODO extra checks
+#PTE_D_trap:
+#    type: boolean
+#    required: True # TODO extra checks
+## ================================================================
+## Features: misc. implementation choices
+#
+## ================================================================
+## Features: Memory system implementation choices
+
