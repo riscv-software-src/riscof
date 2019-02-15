@@ -1,10 +1,15 @@
 # Example: demonstrate check for missing required fields
 
 # Standard
-
-XLEN: 32
 ISA: RV32IMSU
 MISA_F: [1]
 MISA_D: [0]
 MSTATUS_MPP: [0,3]
+MTVEC:
+  #  range:
+  #    - base: 0xabc
+  #      bound: 0xbbb
+  #    - base: 0x123
+  #      bound: 0x1234
+  distinct: [0x123, 0x1234]
 Vendorid: 0xabc

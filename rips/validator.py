@@ -3,6 +3,7 @@
 """
 
 from cerberus import Validator
+from collections import OrderedDict
 import oyaml as yaml
 import sys
 import os
@@ -13,11 +14,34 @@ logger= logging.getLogger(__name__)
 
 def specific_checks(foo):
 
+    xlen = int(foo['ISA'][:4][2:])
+    ######################### ISA field checks #########################
+    if 'D' in foo['ISA'] and 'F' not in foo['ISA']:
+        logger.error('D cannot be supported without F')
+        sys.exit(0)
+    if 'Q' in foo['ISA'] and ('F' not in foo['ISA'] or 'D' not in foo['ISA']):
+        logger.error('Q cannot be supported without D/F')
+        sys.exit(0)
+    if 'N' in foo['ISA'] and 'U' not in foo['ISA']:
+        logger.error('N cannot be supported without U')
+        sys.exit(0)
+    if 'S' in foo['ISA'] and 'U' not in foo['ISA']:
+        logger.error('S canoot be supported without U')
+        sys.exit(0)
     #########################  MISA field checks #######################
-    if 2**(max(foo['MISA_MXL'])+4) != foo['XLEN']:
+    
+    if len(foo['MISA_MXL'])==0:
+        if xlen==32:
+            foo['MISA_MXL']= [1]
+        elif xlen==64:
+            foo['MISA_MXL']= [2]
+        else:
+            foo['MISA_MXL']= [3]
+
+    if 2**(max(foo['MISA_MXL'])+4) != xlen:
         logger.error('For max MXL value of '+str(max(foo['MISA_MXL']))+' XLEN\
  should be '+str(2**(max(foo['MISA_MXL'])+4))+' but is set as '+
-        str(foo['XLEN']))
+        str(xlen))
         sys.exit(0)
 
     if 1 in foo['MISA_D'] and 1 not in foo['MISA_F']:
@@ -50,7 +74,7 @@ def specific_checks(foo):
  be empty i.e not defined')
         sys.exit(0)
     # in RV32 systems SXL should be empty
-    if foo['XLEN']==32 and  (len(foo['MSTATUS_SXL'])!=0):
+    if xlen==32 and  (len(foo['MSTATUS_SXL'])!=0):
         logger.error('For RV32 systems, MSTATUS_SXL field should not exist')
         sys.exit(0)
     
@@ -61,20 +85,37 @@ def specific_checks(foo):
         sys.exit(0)
 
     # in RV32 systems UXL should be empty
-    if foo['XLEN']==32 and  (len(foo['MSTATUS_UXL'])!=0):
+    if xlen==32 and  (len(foo['MSTATUS_UXL'])!=0):
         logger.error('For RV32 systems, MSTATUS_UXL field should not exist')
         sys.exit(0)
     
-    # Max supported width SXL <= XLEN
-    if len(foo['MSTATUS_SXL'])!=0 and 2**(max(foo['MSTATUS_SXL'])+4) > foo['XLEN']:
-        logger.error('Max MSTATUS_SXL value exceeds the encoding for XLEN: '+ 
-        str(foo['XLEN']))
-        sys.exit(0)
+    if len(foo['MSTATUS_SXL'])==0:
+        if '32' in foo['ISA']:
+            foo['MSTATUS_SXL']= [0]
+        elif '64' in foo['ISA']:
+            foo['MSTATUS_SXL']= [2]
+        else:
+            foo['MSTATUS_SXL']= [3]
 
+    
+    # Max supported width SXL <= XLEN
+    if len(foo['MSTATUS_SXL'])!=0 and 2**(max(foo['MSTATUS_SXL'])+4) > xlen:
+        logger.error('Max MSTATUS_SXL value exceeds the encoding for XLEN: '+ 
+        str(xlen))
+        sys.exit(0)
+   
+    if len(foo['MSTATUS_UXL'])==0:
+        if '32' in foo['ISA']:
+            foo['MSTATUS_UXL']= [0]
+        elif '64' in foo['ISA']:
+            foo['MSTATUS_UXL']= [2]
+        else:
+            foo['MSTATUS_UXL']= [3]
+    
     # Max supported width in UXL <= XLEN
-    if len(foo['MSTATUS_UXL'])!=0 and 2**(max(foo['MSTATUS_UXL'])+4) > foo['XLEN']:
+    if len(foo['MSTATUS_UXL'])!=0 and 2**(max(foo['MSTATUS_UXL'])+4) > xlen:
         logger.error('Max MSTATUS_UXL value exceeds the encoding for XLEN: '+ 
-        str(foo['XLEN']))
+        str(xlen))
         sys.exit(0)
 
     ####################### MIDELEG field checks #########################
@@ -141,3 +182,4 @@ def load_and_validate(foo, schema):
     outfile=open(output_filename,'w')
     logger.info('Dumping out Normalized Checked YAML: '+output_filename)
     yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
+
