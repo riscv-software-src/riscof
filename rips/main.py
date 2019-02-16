@@ -1,18 +1,18 @@
 import logging
 import rips.validator
-import rips.utils
+import common.utils
     
 def main():
     # Set up the parser
-    parser=rips.utils.cmdline_args()
+    parser=common.utils.cmdline_args()
     args=parser.parse_args()
 
     # Set up the logger 
-    rips.utils.setup_logging(args.verbose)
+    common.utils.setup_logging(args.verbose)
     logger=logging.getLogger()
     logger.handlers = []
     ch=logging.StreamHandler()
-    ch.setFormatter(rips.utils.ColoredFormatter())
+    ch.setFormatter(common.utils.ColoredFormatter())
     logger.addHandler(ch)
 
     logger.info('Running RIPS Checker on Input file')

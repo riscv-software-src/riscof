@@ -105,6 +105,47 @@ Hartids:
 ## ================================================================
 ## Features: MSTATUS fields
 
+MSTATUS_MPP:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            excludes: [distinct, range]
+            required: True
+            schema:
+                base:
+                    type: integer
+                mask:
+                    type: integer
+        distinct:
+            type: dict
+            excludes: [bitmask, range]
+            required: True
+            schema:
+                values:
+                    type: list
+                    schema:
+                        type: integer
+                modes:
+                    type: string
+                    allowed: ['unchanged', 'next_l', 'next_s']
+        range:
+            type: dict
+            excludes: [bitmask, distinct]
+            required: True
+            schema:
+                base:
+                    type: integer
+                bound: 
+                    type: integer
+                mode:
+                    type: string
+                    allowed: ['saturate', 'unchanged']
+    default:
+        bitmask:
+            base: 0xFFFFFFFF
+            mask: 0x00000000
+
 MSTATUS_SXL:
     type: list
     allowed: [1,  2,  3]
@@ -119,32 +160,32 @@ MSTATUS_UXL:
 
 ## ================================================================
 ## Features: MTVEC WARL functions
-MTVEC:
-    type: dict
-    schema:
-      readonly:
-        type: integer
-        excludes: [range , distinct]
-        required: True
-      range:
-          type: list
-          schema:
-              type: dict
-              valueschema:
-                type: integer
-          excludes: [readonly, distinct]
-          required: True
-      distinct:
-          type: list
-          valueschema:
-              type: integer
-          excludes: [readonly, range]
-          required: True
-    default:
-        range:
-          - base: 0x0
-            bound: 0xFFFFFFFF
-
+#MTVEC_BASE:
+#    type: dict
+#    schema:
+#      readonly:
+#        type: integer
+#        excludes: [range , distinct]
+#        required: True
+#      range:
+#          type: list
+#          schema:
+#              type: dict
+#              valueschema:
+#                type: integer
+#          excludes: [readonly, distinct]
+#          required: True
+#      distinct:
+#          type: list
+#          valueschema:
+#              type: integer
+#          excludes: [readonly, range]
+#          required: True
+#    default:
+#        range:
+#          - base: 0x0
+#            bound: 0xFFFFFFFF
+#
 ## ================================================================
 ## Features: MIDELEG and MEDELEG WARL functions
 
