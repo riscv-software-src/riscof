@@ -1,10 +1,10 @@
 import logging
-import rips.validator
 import common.utils
+import framework.test_execute
     
 def main():
     # Set up the parser
-    parser=common.utils.rips_cmdline_args()
+    parser=common.utils.fw_cmdline_args()
     args=parser.parse_args()
 
     # Set up the logger 
@@ -15,10 +15,7 @@ def main():
     ch.setFormatter(common.utils.ColoredFormatter())
     logger.addHandler(ch)
 
-    logger.info('Running RIPS Checker on Input file')
-
-    # Initiate check
-    rips.validator.load_and_validate(args.input, args.schema)
+    framework.test_execute.load_yaml(args.input)
 
 if __name__ == '__main__':
   main()

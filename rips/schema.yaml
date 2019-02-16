@@ -115,8 +115,10 @@ MSTATUS_MPP:
             schema:
                 base:
                     type: integer
+                    allowed: [0, 1, 2, 3]
                 mask:
                     type: integer
+                    allowed: [0, 1, 2, 3]
         distinct:
             type: dict
             excludes: [bitmask, range]
@@ -126,6 +128,7 @@ MSTATUS_MPP:
                     type: list
                     schema:
                         type: integer
+                        allowed: [0, 1, 2, 3]
                 modes:
                     type: string
                     allowed: ['unchanged', 'next_l', 'next_s']
@@ -136,15 +139,17 @@ MSTATUS_MPP:
             schema:
                 base:
                     type: integer
+                    allowed: [0, 1, 2, 3]
                 bound: 
                     type: integer
+                    allowed: [0, 1, 2, 3]
                 mode:
                     type: string
                     allowed: ['saturate', 'unchanged']
     default:
-        bitmask:
-            base: 0xFFFFFFFF
-            mask: 0x00000000
+        distinct:
+            values: [0,3]
+            modes: 'unchanged'
 
 MSTATUS_SXL:
     type: list
@@ -221,75 +226,30 @@ MIE:
   type: integer
   max: 0xFFF
 
-## ================================================================
-## Features: addresses for memory-mapped MSIP, MTIME and MTIMECMP
-#MSIP_address:
-#    type: integer
-#    required: True
-#MTIME_address:
-#    type: integer
-#    required: True
-#MTIMECMP_address:
-#    type: integer
-#    required: True
-#
-## ================================================================
-## Features: MTVEC implementation choices
-#MTVEC_is_read_only:
-#    type: boolean
-#    required: True
-#
-#MTVEC_reset_value: # TODO extra checks
-#    type:
-#
-## ================================================================
-## Features: Hardware Performance Monitor CSRs
-#
-#MHPM3_exists:
-#    type: boolean
-#    default: False
-#
-#MHPMEVENT3_WARL_fn
-#
-## ================================================================
-## Features: MEPC WARL function
-#MEPC:
-#    type: integer
-#    required: True
-#
-## ================================================================
-## Features: MCAUSE value on reset and NMI
-#
-#MCAUSE_on_reset:
-#    type: integer
-#    required: True
-#
-#MCAUSE_on_NMI: #TODO This cannot be 0 
-#    type: integer
-#    default: 0
-## ================================================================
-## Features: SATP WARL functions
-#
-## ================================================================
-## Features: Virtual memory schemes
-#Sv32:
-#    type: boolean
-#    default: False # TODO extra checks
-#Sv39:
-#    type: boolean
-#    default: False # TODO extra checks
-#Sv48:
-#    type: boolean
-#    default: False # TODO extra checks
-#PTE_A_trap:
-#    type: boolean
-#    required: True # TODO extra checks
-#PTE_D_trap:
-#    type: boolean
-#    required: True # TODO extra checks
-## ================================================================
-## Features: misc. implementation choices
-#
-## ================================================================
-## Features: Memory system implementation choices
+# Platform environment
+# Name of the Target
+USER_TARGET:
+    type: string
+    required: True
+# Directory containing the platform specific headers
+USER_ENV_DIR:
+    type: string
+    required: True
+# Linker script to be used during compilation of test
+USER_LINKER:
+    type: string
+    required: True
+# User defined ABI to be used during compilation
+USER_ABI:
+    type: string
+    required: True
+USER_EXECUTABLE:
+    type: string
+    required: True
+
+# Execution Enviornment
+RISCV-PREFIX:
+    type: string
+    default: riscv64-unknown-elf-
+    required: True
 

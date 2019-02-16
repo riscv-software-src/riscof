@@ -60,13 +60,13 @@ class SortingHelpFormatter(argparse.HelpFormatter):
         actions = sorted(actions, key=operator.attrgetter('option_strings'))
         super(SortingHelpFormatter, self).add_arguments(actions)
 
-def cmdline_args():
+def rips_cmdline_args():
 
     parser = argparse.ArgumentParser(
         formatter_class=SortingHelpFormatter,
-        prog="RIFFL Checker",
+        prog="RIPS Checker",
         description="This Program checks an input YAML for compatibility with\
- RIFFL format"
+ RIPS format"
     )
     parser.add_argument(
         '--input',
@@ -82,6 +82,32 @@ def cmdline_args():
         type=str,
         metavar='YAML',
         help='Input Schema file',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--verbose',
+        action= 'store',
+        default='info',
+        help='debug | info | warning | error', 
+        metavar=""
+    )
+    return parser
+
+def fw_cmdline_args():
+
+    parser = argparse.ArgumentParser(
+        formatter_class=SortingHelpFormatter,
+        prog="Compliance Framework",
+        description="This program will run the tests from RISC-V compliance \
+suite based on the standard-input yaml file"
+    )
+    parser.add_argument(
+        '--input',
+        type=str,
+        metavar='YAML',
+        help='Input Standard YAML file',
         default=None,
         required=True
     )

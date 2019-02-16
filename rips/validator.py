@@ -3,7 +3,6 @@
 """
 
 from cerberus import Validator
-from collections import OrderedDict
 import oyaml as yaml
 import sys
 import os
