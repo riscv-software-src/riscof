@@ -131,7 +131,7 @@ MSTATUS_MPP:
                         allowed: [0, 1, 2, 3]
                 modes:
                     type: string
-                    allowed: ['unchanged', 'next_l', 'next_s']
+                    allowed: ['unchanged', 'saturate_s', 'saturate_l','next_l', 'next_s']
         range:
             type: dict
             excludes: [bitmask, distinct]
@@ -252,4 +252,10 @@ RISCV-PREFIX:
     type: string
     default: riscv64-unknown-elf-
     required: True
-
+USER_SIGN:
+    type: string
+    required: True
+USER_POST_SIM:
+    type: string
+    default: ''
+    required: False

@@ -1,21 +1,27 @@
 # Example: demonstrate check for missing required fields
 
 # Standard
-ISA: RV64IMSU
-MISA_F: [1]
-MISA_D: [0]
+ISA: RV64IMAFDSU
+MISA_F: [0,1]
+MISA_D: [0,1]
 MSTATUS_MPP:
   distinct:
     values:
     - 0
+    - 1
     - 3
-    modes: unchanged
+    modes: saturate_s
 Vendorid: 0xabc
+HWALIGN_LDST: True
+
+# USER ENVIRONMENT
 USER_ENV_DIR: 'env'
 USER_LINKER: 'env/link.ld'
 USER_TARGET: 'MyDevice'
 USER_EXECUTABLE: 'spike -c +signature=sign '
-USER_ABI: lp64
+USER_ABI: 'lp64'
+USER_SIGN: 'sign'
 RISCV_PREFIX: riscv64-unknown-elf-
-
+USER_POST_SIM: 'sign_fix.sh'
+#USER_SIGN_FIX: "cat | sed 's/.\{8\}/& /g' | awk '\{print $$4 " " $$3 " " $$2 " " $$1\}' | sed 's/ /\n/g' > temp; mv temp"
 

@@ -1,21 +1,27 @@
-ISA: RV64IMSU
+ISA: RV64IMAFDSU
 MISA_F:
+- 0
 - 1
 MISA_D:
 - 0
+- 1
 MSTATUS_MPP:
   distinct:
     values:
     - 0
+    - 1
     - 3
-    modes: unchanged
+    modes: saturate_s
 Vendorid: 2748
+HWALIGN_LDST: true
 USER_ENV_DIR: env
 USER_LINKER: env/link.ld
 USER_TARGET: MyDevice
 USER_EXECUTABLE: 'spike -c +signature=sign '
 USER_ABI: lp64
+USER_SIGN: sign
 RISCV_PREFIX: riscv64-unknown-elf-
+USER_POST_SIM: sign_fix.sh
 User_Spec_Version: 2.2
 Privilege_Spec_Version: 1.1
 MISA_MXL:

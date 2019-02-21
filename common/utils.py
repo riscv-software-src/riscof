@@ -4,7 +4,9 @@ import os
 import sys
 import subprocess
 import operator
+import shlex
 
+logger= logging.getLogger(__name__)
 
 class ColoredFormatter(logging.Formatter):                                      
     """                                                                         
@@ -59,6 +61,17 @@ class SortingHelpFormatter(argparse.HelpFormatter):
     def add_arguments(self, actions):
         actions = sorted(actions, key=operator.attrgetter('option_strings'))
         super(SortingHelpFormatter, self).add_arguments(actions)
+
+def execute_command(execute):
+    logger.debug(execute)
+    x=subprocess.Popen(shlex.split(execute), stdout=subprocess.PIPE,
+                                                stderr=subprocess.PIPE)
+    out, err=x.communicate()
+    if(err):
+        logger.error(err.rstrip().decode('ascii'))
+        sys.exit(0)
+    if(out):
+        logger.debug(out.rstrip().decode('ascii'))
 
 def rips_cmdline_args():
 
