@@ -1,4 +1,4 @@
-priv_test_list = [
+warl_test_list = [
     'mpp_warl'
 ]
 

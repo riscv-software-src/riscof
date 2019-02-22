@@ -40,7 +40,6 @@ def load_yaml(inp_file):
     logger.info('Loading input file: '+str(inp_file))
     foo=yaml.safe_load(inputfile)
     logger.debug('Input YAML:\n\t\t '+str(foo))
-    logger.debug('Suite List '+str(priv_test_list))
     
     # exrtact user env and compile env
     root_dir=os.getcwd()+'/'
@@ -76,7 +75,7 @@ def load_yaml(inp_file):
     objdump = foo['RISCV_PREFIX']+'objdump -D {0} > {1}'
 
     test_unprivilege(foo)
-#    test_priv(foo)
+    test_warl(foo)
 
 def compare_signature():
     global user_sign
@@ -128,7 +127,9 @@ def test_unprivilege(foo):
     global compile_cmd
 
     unprivilege_target_pool=collect_unprivilege(foo)
-    logger.info('Following '+str(len(unprivilege_target_pool))+' tests will be run on '+user_target+':\n')
+    logger.info("\n--------------------------------------------------\n")
+    logger.info('Following '+str(len(unprivilege_target_pool))+' Unprivileged \
+ tests will be run on '+user_target+':\n')
     simulator = foo['USER_EXECUTABLE']
     for x in unprivilege_target_pool:
         logger.info(x)
@@ -152,25 +153,34 @@ def test_unprivilege(foo):
         logger.info('Test Passed')
 
 
-def test_priv (foo):
+def test_warl (foo):
     global compile_cmd
     global root_dir
     global objdump
     global user_sign
     # test of MPP_WARL
     simulator = foo['USER_EXECUTABLE']
-    for asm in priv_test_list:
+
+    logger.info("\n--------------------------------------------------\n")
+    logger.info('Following '+str(len(warl_test_list))+' WARL tests will be run on '+user_target+':\n')
+    for x in warl_test_list:
+        logger.info(x)
+    logger.info("\n")
+
+    for asm in warl_test_list:
         test = root_dir+'suite/'+asm+'.S'
         elf = work_dir+asm
         legal, illegal=warl_resolver_exhaustive(foo['MSTATUS_MPP'], 2)
         cmd=compile_cmd+' '+test+' -o '+elf
+        logger.info('Running WARL Test: {0} with legal-values:{1} and \
+illegal-values:{2}'.format(asm,str(legal),str(illegal)))
         for i in range(len(legal)):
             for j in range(len(illegal)):
                 execute=cmd + ' -DLEGAL=' + str(legal[i]) +\
                                   ' -DILLEGAL=' + str(illegal[j]) +\
                                   ' -DLEGAL_SATURATE_S=' +str(min(legal)) +\
                                   ' -DLEGAL_SATURATE_L=' +str(max(legal))
-                execute = parse_test(test,foo,execute)
+                execute = execute+parse_test(test,foo)
                 common.utils.execute_command(execute)
                 os.chdir(work_dir)
 
@@ -181,7 +191,7 @@ def test_priv (foo):
 
                 os.chdir(root_dir)
                 compare_signature()
-                logger.info('Test Passed')
+        logger.info('Test Passed')
 
     
 def warl_resolver_exhaustive(node, field_size):

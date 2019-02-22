@@ -6,3 +6,5 @@ common/__pycache__/
 framework/__pycache__/
 
 work/
+
+run\.log
