@@ -139,13 +139,7 @@ handle_exception:                                                       \
   1:    ori TESTNUM, TESTNUM, 1337;                                     \
   write_tohost:                                                         \
         sw TESTNUM, tohost, t5;                                         \
-  shakti_end:                                                           \
-      li t6, 0x20000;                                                   \
-      la t5, begin_signature;                                     \
-      sw t5, 0(t6);                                                     \
-      la t5, end_signature;                                       \
-      sw t5, 8(t6);                                                     \
-      sw t5, 12(t6);                                                    \
+        j write_tohost;                                                 \
 reset_vector:                                                           \
         RISCV_MULTICORE_DISABLE;                                        \
         INIT_SPTBR;                                                     \
@@ -223,6 +217,11 @@ end_testcode:                                                           \
         .popsection;                                                    \
         .align 4; .global begin_signature; begin_signature:
 
-#define RVTEST_DATA_END .align 4; .global end_signature; end_signature:
+#define RVTEST_DATA_END                                                 \
+        .align 4; .global end_signature; end_signature:                 \
+        .align 8; .global begin_regstate; begin_regstate:               \
+        .word 128;                                                      \
+        .align 8; .global end_regstate; end_regstate:                   \
+        .word 4;
 
 #endif

@@ -27,91 +27,91 @@ RV_COMPLIANCE_CODE_BEGIN
     // ---------------------------------------------------------------------------------------------   
 
     #ifdef TEST_PART_1
-    RVTEST_PART_START(1, "# Check for  legal value")
+      RVTEST_PART_START(1, "# Check for legal value")
    
-    // write legal
-    li t2, MSTATUS_MPP
-    not t2, t2
-    csrr t5, mstatus
-    and t5, t5, t2
-    li t3, MPP_LEGAL << MSTATUS_MPP_INDEX
-    or t5, t5, t3
-    csrw mstatus, t5
+      // write legal
+      li t2, MSTATUS_MPP
+      not t2, t2
+      csrr t5, mstatus
+      and t5, t5, t2
+      li t3, LEGAL << MSTATUS_MPP_INDEX
+      or t5, t5, t3
+      csrw mstatus, t5
 
-    // check for legal
-    csrr t2, mstatus
-    srli t2, t2, MSTATUS_MPP_INDEX
-    andi t2, t2, 3
-    li t5, MPP_LEGAL
-    bne t2, t5, test_end
+      // check for legal
+      csrr t2, mstatus
+      srli t2, t2, MSTATUS_MPP_INDEX
+      andi t2, t2, 3
+      li t5, LEGAL
+      bne t2, t5, test_end
 
-    RVTEST_PART_END(1)
+      RVTEST_PART_END(1)
     #endif
 
     // ---------------------------------------------------------------------------------------------   
     #ifdef TEST_PART_2
-    RVTEST_PART_START(2, "# Check for  illegal value")
-    RVTEST_PART_RUN(2, "MSTATUS_MPP>distinct>modes:unchanged")
+      RVTEST_PART_START(2, "# Check for  illegal value")
+      RVTEST_PART_RUN(2, "MSTATUS_MPP>distinct>modes:unchanged")
   
-    // write legal
-    li t2, MSTATUS_MPP
-    not t2, t2
-    csrr t5, mstatus
-    and t5, t5, t2
-    li t3, MPP_LEGAL << MSTATUS_MPP_INDEX
-    or t5, t5, t3
-    csrw mstatus, t5
-    csrr t2, mstatus
-    // write illegal
-    li t2, MSTATUS_MPP
-    not t2, t2
-    csrr t5, mstatus
-    and t5, t5, t2
-    li t3, MPP_ILLEGAL << MSTATUS_MPP_INDEX
-    or t5, t5, t3
-    csrw mstatus, t5
+      // write legal
+      li t2, MSTATUS_MPP
+      not t2, t2
+      csrr t5, mstatus
+      and t5, t5, t2
+      li t3, LEGAL << MSTATUS_MPP_INDEX
+      or t5, t5, t3
+      csrw mstatus, t5
+      csrr t2, mstatus
+      // write illegal
+      li t2, MSTATUS_MPP
+      not t2, t2
+      csrr t5, mstatus
+      and t5, t5, t2
+      li t3, ILLEGAL << MSTATUS_MPP_INDEX
+      or t5, t5, t3
+      csrw mstatus, t5
 
-    // check for legal
-    csrr t2, mstatus
-    srli t2, t2, MSTATUS_MPP_INDEX
-    andi t2, t2, 3
-    li t5, MPP_LEGAL
-    bne t2, t5, test_end
+      // check for legal
+      csrr t2, mstatus
+      srli t2, t2, MSTATUS_MPP_INDEX
+      andi t2, t2, 3
+      li t5, LEGAL
+      bne t2, t5, test_end
 
-    RVTEST_PART_END(2)
+      RVTEST_PART_END(2)
     #endif
 
     // ---------------------------------------------------------------------------------------------   
     #ifdef TEST_PART_3
-    RVTEST_PART_START(3, "# Check for  illegal value")
-    RVTEST_PART_RUN(3, "MSTATUS_MPP>distinct>modes:saturate_s")
+      RVTEST_PART_START(3, "# Check for illegal value")
+      RVTEST_PART_RUN(3, "MSTATUS_MPP>distinct>modes:saturate_s")
 
-     // write legal
-    li t2, MSTATUS_MPP
-    not t2, t2
-    csrr t5, mstatus
-    and t5, t5, t2
-    li t3, MPP_LEGAL << MSTATUS_MPP_INDEX
-    or t5, t5, t3
-    csrw mstatus, t5
-    csrr t2, mstatus
-    // write illegal
-    li t2, MSTATUS_MPP
-    not t2, t2
-    csrr t5, mstatus
-    and t5, t5, t2
-    li t3, MPP_ILLEGAL << MSTATUS_MPP_INDEX
-    or t5, t5, t3
-    csrw mstatus, t5
+       // write legal
+      li t2, MSTATUS_MPP
+      not t2, t2
+      csrr t5, mstatus
+      and t5, t5, t2
+      li t3, LEGAL << MSTATUS_MPP_INDEX
+      or t5, t5, t3
+      csrw mstatus, t5
+      csrr t2, mstatus
+      // write illegal
+      li t2, MSTATUS_MPP
+      not t2, t2
+      csrr t5, mstatus
+      and t5, t5, t2
+      li t3, ILLEGAL << MSTATUS_MPP_INDEX
+      or t5, t5, t3
+      csrw mstatus, t5
    
-    // check for legal
-    csrr t2, mstatus
-    srli t2, t2, MSTATUS_MPP_INDEX
-    andi t2, t2, 3
-    li t5, MPP_LEGAL_SATURATE_S
-    bne t2, t5, test_end
+      // check for legal
+      csrr t2, mstatus
+      srli t2, t2, MSTATUS_MPP_INDEX
+      andi t2, t2, 3
+      li t5, LEGAL_SATURATE_S
+      bne t2, t5, test_end
 
-    RVTEST_PART_END(3)
+      RVTEST_PART_END(3)
     #endif
 // --------------------------------------------------------------------------------------------- 
 test_end:

@@ -1,9 +1,10 @@
 # Example: demonstrate check for missing required fields
 
 # Standard
-ISA: RV64IMAFDSU
-MISA_F: [0,1]
-MISA_D: [0,1]
+ISA: RV32IMU
+MISA_F: [0]
+MISA_D: [0]
+MISA_M: [0]
 MSTATUS_MPP:
   distinct:
     values:
@@ -17,11 +18,11 @@ HWALIGN_LDST: True
 # USER ENVIRONMENT
 USER_ENV_DIR: 'env'
 USER_LINKER: 'env/link.ld'
-USER_TARGET: 'MyDevice'
-USER_EXECUTABLE: 'spike -c +signature=sign '
-USER_ABI: 'lp64'
+USER_TARGET: 'SPIKE'
+USER_EXECUTABLE: 'spike -c --isa=rv32im +signature=sign '
+USER_ABI: 'ilp32d'
 USER_SIGN: 'sign'
-RISCV_PREFIX: riscv64-unknown-elf-
+RISCV_PREFIX: riscv32-unknown-elf-
 USER_POST_SIM: 'sign_fix.sh'
 #USER_SIGN_FIX: "cat | sed 's/.\{8\}/& /g' | awk '\{print $$4 " " $$3 " " $$2 " " $$1\}' | sed 's/ /\n/g' > temp; mv temp"
 

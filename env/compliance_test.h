@@ -48,6 +48,9 @@ test_part_ ## test_num ##:;      \
         sw t1, (x2);                                                     \
         addi x2, x2, 4;                                                  \
         RVTEST_IO_WRITE_STR("- Success\n");                                       \
+
+#define RVTEST_UPD_SIGNATURE                                           \
+  RVTEST_PART_END                                                     \
       
 #define RVTEST_PART_RUN(test_num, _STR)           \
         RVTEST_IO_WRITE_STR(_STR);                                       \

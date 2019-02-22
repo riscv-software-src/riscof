@@ -40,7 +40,7 @@ def load_yaml(inp_file):
     logger.info('Loading input file: '+str(inp_file))
     foo=yaml.safe_load(inputfile)
     logger.debug('Input YAML:\n\t\t '+str(foo))
-    logger.debug('Suite List '+str(test_list))
+    logger.debug('Suite List '+str(priv_test_list))
     
     # exrtact user env and compile env
     root_dir=os.getcwd()+'/'
@@ -71,11 +71,12 @@ def load_yaml(inp_file):
         logger.info('Creating new work directory: '+work_dir)
         os.mkdir(work_dir)
     
-    compile_cmd = gcc + ' -march=' + march + ' -mabi=' + mabi + compile_flags +\
+    compile_cmd = gcc + ' -march=' + march + ' -mabi=ilp32'  + compile_flags +\
     ' -I' + env_dir + ' -T'+linker
     objdump = foo['RISCV_PREFIX']+'objdump -D {0} > {1}'
 
-    test_priv(foo)
+    test_unprivilege(foo)
+#    test_priv(foo)
 
 def compare_signature():
     global user_sign
@@ -95,6 +96,62 @@ def compare_signature():
             print(fin.read())
         sys.exit(0)
 
+def collect_unprivilege(foo):
+    global user_target
+    dut_test_pool = []
+    for test in unprivilege_test_pool:
+        if(len(test)==1):
+            dut_test_pool.append(test[0])
+        else:
+            criteria = test[1:]
+            select = True
+            for c in criteria:
+                if 'in' in c:
+                    x = c.split();
+                    if (len(x)!=3):
+                        logger.error('Wrong Criteria Syntax for test: '+\
+                                    str(test[0]))
+                        sys.exit(0)
+
+                    if x[0].isdigit():
+                        if int(x[0]) not in foo[x[2]]:
+                            select=False
+                    elif x[0] not in foo[x[2]]:
+                        select=False
+            if select:
+                dut_test_pool.append(test[0])
+    return dut_test_pool
+
+def test_unprivilege(foo):
+    global work_dir
+    global root_dir
+    global compile_cmd
+
+    unprivilege_target_pool=collect_unprivilege(foo)
+    logger.info('Following '+str(len(unprivilege_target_pool))+' tests will be run on '+user_target+':\n')
+    simulator = foo['USER_EXECUTABLE']
+    for x in unprivilege_target_pool:
+        logger.info(x)
+    logger.info("\n")
+    for asm in unprivilege_target_pool:
+        logger.info('Running Unprivileged Test: '+asm)
+        test = root_dir+'suite/'+asm+'.S'
+        elf = work_dir+asm
+        cmd=compile_cmd+' '+test+' -o '+elf
+
+        execute = cmd+parse_test(test,foo)
+        common.utils.execute_command(execute)
+        os.chdir(work_dir)
+
+        common.utils.execute_command(simulator+elf)
+        post_sim_fix=env_dir+foo['USER_POST_SIM']
+        common.utils.execute_command(post_sim_fix)
+
+        os.chdir(root_dir)
+        compare_signature()
+        logger.info('Test Passed')
+
+
 def test_priv (foo):
     global compile_cmd
     global root_dir
@@ -102,17 +159,17 @@ def test_priv (foo):
     global user_sign
     # test of MPP_WARL
     simulator = foo['USER_EXECUTABLE']
-    for asm in test_list:
+    for asm in priv_test_list:
         test = root_dir+'suite/'+asm+'.S'
         elf = work_dir+asm
         legal, illegal=warl_resolver_exhaustive(foo['MSTATUS_MPP'], 2)
-        compile_cmd=compile_cmd+' '+test+' -o '+elf
+        cmd=compile_cmd+' '+test+' -o '+elf
         for i in range(len(legal)):
             for j in range(len(illegal)):
-                execute=compile_cmd + ' -DMPP_LEGAL=' + str(legal[i]) +\
-                                  ' -DMPP_ILLEGAL=' + str(illegal[j]) +\
-                                  ' -DMPP_LEGAL_SATURATE_S=' +str(min(legal)) +\
-                                  ' -DMPP_LEGAL_SATURATE_L=' +str(max(legal))
+                execute=cmd + ' -DLEGAL=' + str(legal[i]) +\
+                                  ' -DILLEGAL=' + str(illegal[j]) +\
+                                  ' -DLEGAL_SATURATE_S=' +str(min(legal)) +\
+                                  ' -DLEGAL_SATURATE_L=' +str(max(legal))
                 execute = parse_test(test,foo,execute)
                 common.utils.execute_command(execute)
                 os.chdir(work_dir)
@@ -150,15 +207,17 @@ def warl_resolver_random(node, field_size):
             illegal.append(rand_illegal)
     return legal, illegal
 
-def parse_test(file_name, foo, compile_cmd):
+def parse_test(file_name, foo):
     global work_dir
+    macro=''
     fout = open(work_dir+'reference','w')
     test_part_flag = False
-    test_val = False
+    test_val = True
     fin = open(file_name,'r') 
     
     test_part_flag = False
-    test_case_number = '0'
+    signature_entries= 0
+    test_part_number = '0'
     line_number = 0
     test_part_skipped = 0
 
@@ -174,79 +233,73 @@ def parse_test(file_name, foo, compile_cmd):
 
         if "RVTEST_PART_START" in line:
             if test_part_flag == True:
-                print("{}:{}: Did not finish ({}) start".format(file_in, line_number, test_case_number))
-                exit()
+                logger.error("{}:{}: Did not finish ({}) start".format(file_name, line_number, test_part_number))
+                sys.exit(0)
             args = [temp.strip() for temp in (line.strip()).replace('RVTEST_PART_START','')[1:-1].split(',')]
             
-            if int(test_case_number) >= int(args[0]):
-                print("{}:{}: Incorrect Nameing of Test Case after ({})".format(file_in, line_number, test_case_number))
-                exit()
+            if int(test_part_number) >= int(args[0]):
+                logger.error("{}:{}: Incorrect Naming of Test Case after ({})".format(file_name, line_number, test_part_number))
+                sys.exit(0)
             
-            test_case_number = args[0]                
+            test_part_number = args[0]                
             test_part_flag = True
         
         
         elif "RVTEST_PART_RUN" in line:
             if bool(re.match(r"RVTEST_PART_RUN\((.*)[0-9](.*):(.*)\s*\)", line)) == False:
-                print("{}:{}: Incorrect Syntax in {}".format(file_in, line_number, test_case_number))
-                exit()
+                logger.error("{}:{}: Incorrect Syntax in {}".format(file_name, line_number, test_part_number))
+                sys.exit(0)
             
             args = re.search(r'RVTEST_PART_RUN\(\s*(.*)\s*,\s*\"(.*):(.*)\"\)', line)
 
-            if args.group(1) != test_case_number:
-               print("{}:{}: Wrong Test Case Numbering in ({})".format(file_in, line_number, test_case_number))
-               exit()
+            if args.group(1) != test_part_number:
+               logger.error("{}:{}: Wrong Test Case Numbering in ({})".format(file_name, line_number, test_part_number))
+               sys.exit(0)
             
             key=args.group(2).split('>')
             compare=foo[key[0]]
             for k in range(1,len(key)):
                 compare=compare[key[k]]
-            if(compare == args.group(3)):
-                test_val=True
-                compile_cmd=compile_cmd+ ' -DTEST_PART_'+test_case_number+'=True'
+            if(args.group(3) not in compare):
+                test_val=False
+        
+        elif "RVTEST_UPD_SIGNATURE" in line and test_part_flag == True:
+            args = [temp.strip() for temp in (line.strip()).replace('RVTEST_UPD_SIGNATURE','')[1:-1].split(',')]
             
-            
-#            skip_config = args.group(2)
-#            skip_config = re.sub(r"\s*","", skip_config) 
-#            if skip_config in config_list.keys():
-#                config_value = args.group(3)
-#                config_value = re.sub(r"\s*","", config_value) 
-#                config_value = re.sub(r'\"',"", config_value)
-#                value = str(config_list[skip_config])
-#                if value == config_value:
-#                    #print("{}: {} ??  {}".format(skip_config, config_value, value[0]))
-#                    test_val = False
-#            else:
-#               print("{}:{}: Wrong Skip config in test case({})".format(file_in, line_number, test_case_number))
-#               exit(1)
+            temp = hex(int(args[0]))[2:]
+            fout.write(temp.zfill(8) + "\n")
+            signature_entries=signature_entries+1
         
         elif "RVTEST_PART_END" in line and test_part_flag == True:
             args = [temp.strip() for temp in (line.strip()).replace('RVTEST_PART_END','')[1:-1].split(',')]
-            if args[0] != test_case_number:
-                print("{}:{}: Wrong Test Case Numbering in ({})".format(file_in, line_number, test_case_number))
-                exit()
+            if args[0] != test_part_number:
+                logger.error("{}:{}: Wrong Test Case Numbering in ({})".format(file_name, line_number, test_part_number))
+                sys.exit(0)
             
             if test_val == False:
                 test_part_skipped = test_part_skipped + 1
             else:
-                #print(test_case_number.zfill(8))
-                fout.write(test_case_number.zfill(8) + "\n")
+                temp = hex(int(test_part_number))[2:]
+                fout.write(temp.zfill(8) + "\n")
+                signature_entries=signature_entries+1
+                macro=macro+ ' -DTEST_PART_'+test_part_number+'=True'
                 
             test_part_flag = False
-            test_val = False
+            test_val = True
         
         elif "RV_COMPLIANCE_CODE_END" in line:
             while(test_part_skipped > 0):
                 fout.write("f"*8 + "\n")
+                signature_entries=signature_entries+1
                 test_part_skipped = test_part_skipped - 1
 
-            fill_signatures = int(test_case_number) % 4
+            fill_signatures = int(signature_entries) % 4
             if (fill_signatures != 0):
                 fill_signatures = 4 - fill_signatures;
                 for i in range(0, fill_signatures):
                     fout.write("0"*8 + "\n")
         
     if test_part_flag != False:
-        print("{}:{}: Did not finish ({}) start".format(file_in, line_number, test_case_number))
-    return compile_cmd
+        logger.error("{}:{}: Did not finish ({}) start".format(file_name, line_number, test_part_number))
+    return macro
     

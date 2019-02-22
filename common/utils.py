@@ -35,7 +35,8 @@ class ColoredFormatter(logging.Formatter):
                 msg,                                                            
                 self.reset)                 
 
-
+def hasNumbers(inputString):
+    return any(char.isdigit() for char in inputString)
 
 def setup_logging(log_level):                                                   
     """Setup logging                                                            
@@ -71,7 +72,7 @@ def execute_command(execute):
         logger.error(err.rstrip().decode('ascii'))
         sys.exit(0)
     if(out):
-        logger.debug(out.rstrip().decode('ascii'))
+        logger.warning(out.rstrip().decode('ascii'))
 
 def rips_cmdline_args():
 

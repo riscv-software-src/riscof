@@ -14,6 +14,8 @@ def main():
     ch=logging.StreamHandler()
     ch.setFormatter(common.utils.ColoredFormatter())
     logger.addHandler(ch)
+    fh=logging.FileHandler('run.log','w')
+    logger.addHandler(fh)
 
     framework.test_execute.load_yaml(args.input)
 
