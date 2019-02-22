@@ -42,7 +42,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-
+  #ifdef TEST_PART_1
+    RVTEST_PART_START(1)
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test, instruction should not change any register\n");
 
@@ -185,7 +186,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-
+    RVTEST_PART_END(1)
+  #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT
@@ -201,7 +203,7 @@ RV_COMPLIANCE_DATA_BEGIN
     .align 4
 
 test_A1_res:
-    .fill 31, 4, -1
+    .fill 30, 4, -1
 test_A2_res:
     .fill 1, 4, -1
 

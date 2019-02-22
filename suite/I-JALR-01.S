@@ -42,7 +42,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-
+  #ifdef TEST_PART_1
+    RVTEST_PART_START(1)
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of JALR\n");
 
@@ -188,7 +189,7 @@ B1b_link:
     RVTEST_IO_ASSERT_GPR_EQ(x31, x2, 0x11111111)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x3, 0x22222222)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x4, 0x33333333)
-    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x00000000)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x44444444)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x6, 0x55555555)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x7, 0x00000000)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x8, 0x00000000)
@@ -266,7 +267,7 @@ B2c_link:
     RVTEST_IO_ASSERT_GPR_EQ(x31, x2, 0x66666666)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x3, 0x77777777)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x4, 0x88888888)
-    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x00000000)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x99999999)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x6, 0xAAAAAAAA)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x7, 0x00000000)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x8, 0x00000000)
@@ -318,7 +319,8 @@ B2c_link:
     RVTEST_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-
+    RVTEST_PART_END(1)
+  #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT

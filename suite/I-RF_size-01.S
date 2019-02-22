@@ -42,7 +42,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-
+  #ifdef TEST_PART_1
+    RVTEST_PART_START(1)
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - test registers x0 - x15\n");
 
@@ -94,7 +95,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ(x31, x2, 0x2D562052)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x3, 0x52697363)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x4, 0x736B7920)
-    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x6E204E6F)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x73746572)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x6, 0x6E204E6F)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x7, 0x4D696C61)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x8, 0x6F646173)
@@ -177,11 +178,17 @@ RV_COMPLIANCE_CODE_BEGIN
     sw      x1, 4(x4)
     sw      x2, 8(x4)
     sw      x3, 12(x4)
+    
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x1, 0x56333249)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x2, 0x2D562052)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x3, 0x52697363)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-
+    RVTEST_PART_END(1)
+  #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT
@@ -199,7 +206,7 @@ RV_COMPLIANCE_DATA_BEGIN
 test_A1_res:
     .fill 16, 4, -1
 test_A2_res:
-    .fill 16, 4, -1
+    .fill 15, 4, -1
 test_A3_res:
     .fill 4, 4, -1
 

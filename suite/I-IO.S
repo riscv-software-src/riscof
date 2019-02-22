@@ -46,6 +46,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
 
+  #ifdef TEST_PART_1
+    RVTEST_PART_START(1)
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, 1, -1, MIN, MAX register values\n");
 
@@ -84,7 +86,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_CHECK()
     RVTEST_IO_ASSERT_GPR_EQ(x31, x3, 0x00000000)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x4, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x00000000)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x00000001)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x6, 0xFFFFFFFF)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x7, 0x7FFFFFFF)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x8, 0x80000000)
@@ -124,7 +126,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     RVTEST_IO_ASSERT_GPR_EQ(x31, x8,  0x00000001)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x9,  0x00000001)
-  //RVTEST_IO_ASSERT_GPR_EQ(x31, x10, 0x00000000)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x10, 0x00000002)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x11, 0x00000000)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x12, 0x80000000)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x13, 0x80000001)
@@ -292,7 +294,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Supplementary x31 test
     add     x31, x30, x27
-    sw      x31, 16(x26)
+    sw      x31, 32(x26)
     RVTEST_IO_ASSERT_GPR_EQ(x30, x31, 0x0000ABD0)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part B - Complete\n");
@@ -341,7 +343,7 @@ RV_COMPLIANCE_CODE_BEGIN
     sw      x5, 4(x2)
 
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0,  0x00000000)
-  //RVTEST_IO_ASSERT_GPR_EQ(x31, x5,  0x00000000)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x5,  0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test part D - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
@@ -376,7 +378,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part E - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-
+    RVTEST_PART_END(1)
+  #endif
     # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT
@@ -419,7 +422,7 @@ test_A4_res:
 test_A5_res:
     .fill 6, 4, -1
 test_B_res:
-    .fill 8, 4, -1
+    .fill 9, 4, -1
 test_C_res:
     .fill 1, 4, -1
 test_D_res:

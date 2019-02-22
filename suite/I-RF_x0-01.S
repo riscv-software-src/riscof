@@ -42,7 +42,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-
+  #ifdef TEST_PART_1
+    RVTEST_PART_START(1)
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - test computational instructions - register-immediate\n");
 
@@ -117,15 +118,19 @@ RV_COMPLIANCE_CODE_BEGIN
     # Test and store
     slt     x0, x1, x2
     sw      x0, 0(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     sltu    x0, x1, x2
     sw      x0, 4(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     slti    x0, x1, 2
     sw      x0, 8(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     sltiu   x0, x1, 2
     sw      x0, 12(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
@@ -139,11 +144,13 @@ RV_COMPLIANCE_CODE_BEGIN
     jal     x0, 1f
 1:
     sw      x0, 0(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     la      x1, 1f
     jalr    x0, x1, 0
 1:
     sw      x0, 4(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
 
@@ -157,20 +164,25 @@ RV_COMPLIANCE_CODE_BEGIN
     # Test and store
     lw      x0, 0(x1)
     sw      x0, 0(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     lh      x0, 0(x1)
     sw      x0, 4(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     lb      x0, 0(x1)
     sw      x0, 8(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     lbu     x0, 0(x1)
     sw      x0, 12(x21)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-
+    RVTEST_PART_END(1)
+  #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT

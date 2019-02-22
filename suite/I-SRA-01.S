@@ -42,7 +42,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-
+  #ifdef TEST_PART_1
+    RVTEST_PART_START(1)
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, 1, -1, MIN, MAX (5bit) register values\n");
 
@@ -370,14 +371,15 @@ RV_COMPLIANCE_CODE_BEGIN
     sw      x7, 12(x2)
 
     RVTEST_IO_ASSERT_GPR_EQ(x31, x4, 0x87654321)
-    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0x00000000)
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x5, 0xC3B2A190)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x6, 0xFFFF0ECA)
     RVTEST_IO_ASSERT_GPR_EQ(x31, x7, 0xFFFFFFFF)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part E  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-
+    RVTEST_PART_END(1)
+  #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT
