@@ -37,13 +37,13 @@ RV_COMPLIANCE_RV32M
 RV_COMPLIANCE_CODE_BEGIN
 
 	RVTEST_IO_INIT
-	RVTEST_IO_ASSERT_GPR_EQ(x0, 0x00000000)
-	RVTEST_IO_WRITE_STR("Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+	RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
   RVTEST_START
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 1 - corner cases\n")
+	RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
   #ifdef TEST_PART_1
     RVTEST_PART_START(1, "# Corner Case -1")
@@ -75,7 +75,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 2 - corner cases\n")
+	RVTEST_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
 
   #ifdef TEST_PART_6
@@ -107,7 +107,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 3 - corner cases\n")
+	RVTEST_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
 
   #ifdef TEST_PART_11
     RVTEST_PART_START(11, "# Corner Case -11")
@@ -137,7 +137,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 4 - corner cases\n")
+	RVTEST_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
 
   #ifdef TEST_PART_16
     RVTEST_PART_START(16, "# Corner Case -16")
@@ -167,7 +167,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 5 - corner cases\n")
+	RVTEST_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
 
   #ifdef TEST_PART_21
     RVTEST_PART_START(21, "# Corner Case -21")
@@ -196,7 +196,7 @@ RV_COMPLIANCE_CODE_BEGIN
   #endif
 
 test_end:
-	RVTEST_IO_WRITE_STR("Test End\n")
+	RVTEST_IO_WRITE_STR(x31, "Test End\n")
 
 	# ---------------------------------------------------------------------------------------------
 

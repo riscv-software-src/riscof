@@ -36,6 +36,7 @@
 // Base function for integer operations
 #define TEST_CASE(destreg, correctval, swreg, offset, code... ) \
     code; \
+    sw destreg, offset(swreg); \
     RVTEST_IO_ASSERT_GPR_EQ(destreg, correctval) \
 
 // Base functions for single precision floating point operations
@@ -231,8 +232,6 @@
       li reg, MASK_XLEN(val1); \
       li destreg, MASK_XLEN(val2); \
       inst destreg, reg, destreg; \
-      li reg, MASK_XLEN(correctval); \
-      bne reg, destreg, test_end; \
     )
 
 #define TEST_RR_SRC12( inst, destreg, correctval, val, swreg, offset) \

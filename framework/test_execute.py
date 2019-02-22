@@ -75,7 +75,7 @@ def load_yaml(inp_file):
     objdump = foo['RISCV_PREFIX']+'objdump -D {0} > {1}'
 
     test_unprivilege(foo)
-    test_warl(foo)
+#    test_warl(foo)
 
 def compare_signature():
     global user_sign
@@ -280,6 +280,12 @@ def parse_test(file_name, foo):
             fout.write(temp.zfill(8) + "\n")
             signature_entries=signature_entries+1
         
+        elif "RVTEST_IO_ASSERT_GPR_EQ" in line and test_part_flag == True:
+            args = [temp.strip() for temp in (line.strip()).replace('RVTEST_IO_ASSERT_GPR_EQ','')[1:-1].split(',')]
+            temp = hex(int(args[2],16))[2:]
+            fout.write(temp.zfill(8) + "\n")
+            signature_entries=signature_entries+1
+        
         elif "RVTEST_PART_END" in line and test_part_flag == True:
             args = [temp.strip() for temp in (line.strip()).replace('RVTEST_PART_END','')[1:-1].split(',')]
             if args[0] != test_part_number:
@@ -290,8 +296,8 @@ def parse_test(file_name, foo):
                 test_part_skipped = test_part_skipped + 1
             else:
                 temp = hex(int(test_part_number))[2:]
-                fout.write(temp.zfill(8) + "\n")
-                signature_entries=signature_entries+1
+            #    fout.write(temp.zfill(8) + "\n")
+            #    signature_entries=signature_entries+1
                 macro=macro+ ' -DTEST_PART_'+test_part_number+'=True'
                 
             test_part_flag = False
