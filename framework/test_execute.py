@@ -273,13 +273,6 @@ def parse_test(file_name, foo):
             if(args.group(3) not in compare):
                 test_val=False
         
-        elif "RVTEST_UPD_SIGNATURE" in line and test_part_flag == True:
-            args = [temp.strip() for temp in (line.strip()).replace('RVTEST_UPD_SIGNATURE','')[1:-1].split(',')]
-            
-            temp = hex(int(args[0]))[2:]
-            fout.write(temp.zfill(8) + "\n")
-            signature_entries=signature_entries+1
-        
         elif "RVTEST_IO_ASSERT_GPR_EQ" in line and test_part_flag == True:
             args = [temp.strip() for temp in (line.strip()).replace('RVTEST_IO_ASSERT_GPR_EQ','')[1:-1].split(',')]
             temp = hex(int(args[2],16))[2:]
