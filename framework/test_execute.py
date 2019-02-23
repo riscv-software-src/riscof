@@ -85,6 +85,7 @@ def compare_signature():
     x=subprocess.Popen(shlex.split(check_sign), stdout=subprocess.PIPE,
                                                 stderr=subprocess.PIPE)
     out, err=x.communicate()
+    status='Passed'
     if(err or out):
         print('Signatures do not match')
         print('Expected signature:')
@@ -93,7 +94,8 @@ def compare_signature():
         print('Signature from '+user_target+':')
         with open(user_sign, 'r') as fin:
             print(fin.read())
-        sys.exit(0)
+        status='Failed'
+    return status
 
 def collect_unprivilege(foo):
     global user_target
@@ -127,15 +129,13 @@ def test_unprivilege(foo):
     global compile_cmd
 
     unprivilege_target_pool=collect_unprivilege(foo)
-    logger.info("\n--------------------------------------------------\n")
-    logger.info('Following '+str(len(unprivilege_target_pool))+' Unprivileged \
- tests will be run on '+user_target+':\n')
+    unprivilege_target_status=[]
     simulator = foo['USER_EXECUTABLE']
-    for x in unprivilege_target_pool:
-        logger.info(x)
-    logger.info("\n")
+    logger.info("\n--------------------------------------------------\n")
+    logger.info("Running UnPrivileged Tests")
+    logger.info("\n--------------------------------------------------\n")
     for asm in unprivilege_target_pool:
-        logger.info('Running Unprivileged Test: '+asm)
+        logger.debug('Running Unprivileged Test: '+asm)
         test = root_dir+'suite/'+asm+'.S'
         elf = work_dir+asm
         cmd=compile_cmd+' '+test+' -o '+elf
@@ -149,8 +149,14 @@ def test_unprivilege(foo):
         common.utils.execute_command(post_sim_fix)
 
         os.chdir(root_dir)
-        compare_signature()
-        logger.info('Test Passed')
+        status=compare_signature()
+        unprivilege_target_status.append(status)
+
+    logger.info('Following '+str(len(unprivilege_target_pool))+' Unprivileged \
+ tests have been run '+user_target+':\n')
+    for x in range(0,len(unprivilege_target_pool)):
+        logger.info('{0:<25s}: {1}'.format(unprivilege_target_pool[x],
+                                            unprivilege_target_status[x]))
 
 
 def test_warl (foo):
@@ -161,6 +167,8 @@ def test_warl (foo):
     # test of MPP_WARL
     simulator = foo['USER_EXECUTABLE']
 
+    logger.info("\n--------------------------------------------------\n")
+    logger.info("Running WARL Tests")
     logger.info("\n--------------------------------------------------\n")
     logger.info('Following '+str(len(warl_test_list))+' WARL tests will be run on '+user_target+':\n')
     for x in warl_test_list:
@@ -191,7 +199,7 @@ illegal-values:{2}'.format(asm,str(legal),str(illegal)))
                 common.utils.execute_command(post_sim_fix)
 
                 os.chdir(root_dir)
-                compare_signature()
+                status=compare_signature()
         logger.info('Test Passed')
 
     
