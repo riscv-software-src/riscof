@@ -75,7 +75,7 @@ def load_yaml(inp_file):
     objdump = foo['RISCV_PREFIX']+'objdump -D {0} > {1}'
 
     test_unprivilege(foo)
-#    test_warl(foo)
+    test_warl(foo)
 
 def compare_signature():
     global user_sign
@@ -140,7 +140,7 @@ def test_unprivilege(foo):
         elf = work_dir+asm
         cmd=compile_cmd+' '+test+' -o '+elf
 
-        execute = cmd+parse_test(test,foo)
+        execute = cmd+parse_test(test,foo, 0, 0, 0, 0)
         common.utils.execute_command(execute)
         os.chdir(work_dir)
 
@@ -180,7 +180,8 @@ illegal-values:{2}'.format(asm,str(legal),str(illegal)))
                                   ' -DILLEGAL=' + str(illegal[j]) +\
                                   ' -DLEGAL_SATURATE_S=' +str(min(legal)) +\
                                   ' -DLEGAL_SATURATE_L=' +str(max(legal))
-                execute = execute+parse_test(test,foo)
+                execute = execute+parse_test(test,foo, legal[i], illegal[j], 
+                            min(legal), max(legal))
                 common.utils.execute_command(execute)
                 os.chdir(work_dir)
 
@@ -217,7 +218,8 @@ def warl_resolver_random(node, field_size):
             illegal.append(rand_illegal)
     return legal, illegal
 
-def parse_test(file_name, foo):
+def parse_test(file_name, foo, legal, illegal, legal_saturate_s,
+        legal_saturate_l):
     global work_dir
     macro=''
     fout = open(work_dir+'reference','w')
@@ -272,11 +274,25 @@ def parse_test(file_name, foo):
                 compare=compare[key[k]]
             if(args.group(3) not in compare):
                 test_val=False
+                test_part_flag=False
         
         elif "RVTEST_IO_ASSERT_GPR_EQ" in line and test_part_flag == True:
             args = [temp.strip() for temp in (line.strip()).replace('RVTEST_IO_ASSERT_GPR_EQ','')[1:-1].split(',')]
-            temp = hex(int(args[2],16))[2:]
-            fout.write(temp.zfill(8) + "\n")
+            if args[2][:2] == '0x':
+                temp = hex(int(args[2],16))[2:]
+                fout.write(temp.zfill(8) + "\n")
+            elif args[2] == 'LEGAL':
+                fout.write(hex(legal)[2:].zfill(8) + "\n")
+            elif args[2] == 'LEGAL_SATURATE_S':
+                fout.write(hex(legal_saturate_s)[2:].zfill(8) + "\n")
+            elif args[2] == 'LEGAL_SATURATE_L':
+                fout.write(hex(legal_saturate_l)[2:].zfill(8) + "\n")
+            elif args[2] == 'ILLEGAL':
+                fout.write(hex(illegal)[2:].zfill(8) + "\n")
+            else:
+                logger.error('Wrong syntax in Line: '+str(line_number)+'. ' +
+                        args[2]+' Not a valid Argument')
+                sys.exit(0)
             signature_entries=signature_entries+1
         
         elif "RVTEST_PART_END" in line and test_part_flag == True:
@@ -285,22 +301,14 @@ def parse_test(file_name, foo):
                 logger.error("{}:{}: Wrong Test Case Numbering in ({})".format(file_name, line_number, test_part_number))
                 sys.exit(0)
             
-            if test_val == False:
-                test_part_skipped = test_part_skipped + 1
-            else:
+            if test_val:
                 temp = hex(int(test_part_number))[2:]
-            #    fout.write(temp.zfill(8) + "\n")
-            #    signature_entries=signature_entries+1
                 macro=macro+ ' -DTEST_PART_'+test_part_number+'=True'
                 
             test_part_flag = False
             test_val = True
         
         elif "RV_COMPLIANCE_CODE_END" in line:
-            while(test_part_skipped > 0):
-                fout.write("f"*8 + "\n")
-                signature_entries=signature_entries+1
-                test_part_skipped = test_part_skipped - 1
 
             fill_signatures = int(signature_entries) % 4
             if (fill_signatures != 0):

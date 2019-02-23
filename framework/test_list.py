@@ -2,6 +2,13 @@ warl_test_list = [
     'mpp_warl'
 ]
 
+privilege_test_pool = [
+    #['I-EBREAK-01' , 'I in ISA'],
+    #['I-ECALL-01' , 'I in ISA'],
+    #['I-ISALIGN_JMP-01' , 'I in ISA'],
+    #['I-ISALIGN_LDST-02' , 'I in ISA'],
+]
+
 unprivilege_test_pool = [
     ['I-ADD-01' , 'I in ISA'],
     ['I-ADDI-01' , 'I in ISA'],
@@ -22,12 +29,8 @@ unprivilege_test_pool = [
     ['I-CSRRSI-01' , 'I in ISA'],
     ['I-DELAY_SLOTS-01' , 'I in ISA'],
     ['I-ENDIANESS-01' , 'I in ISA'],
-    #['I-EBREAK-01' , 'I in ISA'],
-    #['I-ECALL-01' , 'I in ISA'],
     ['I-FENCE.I-01' , 'I in ISA'],
     ['I-IO' , 'I in ISA'],
-    #['I-ISALIGN_JMP-01' , 'I in ISA'],
-    #['I-ISALIGN_LDST-02' , 'I in ISA'],
     ['I-JAL-01' , 'I in ISA'],
     ['I-JALR-01' , 'I in ISA'],
     ['I-LB-01' , 'I in ISA'],

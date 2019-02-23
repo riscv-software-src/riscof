@@ -35,8 +35,6 @@
         RVTEST_DATA_END                                                 \
 
 #define RVTEST_START                                                    \
-        li TESTNUM, 0;                                                   \
-        la x2, test_res;                                                 \
 
 #define RVTEST_PART_START(test_num)                               \
 
@@ -46,8 +44,6 @@
   RVTEST_PART_END(signature)                                            \
       
 #define RVTEST_PART_RUN(test_num, _STR)           \
-        RVTEST_IO_WRITE_STR(_STR);                                       \
-        RVTEST_IO_WRITE_STR("- Test Skipped\n");                                       \
 
 #endif
 

@@ -14,8 +14,8 @@ RV_COMPLIANCE_RV32M
 RV_COMPLIANCE_CODE_BEGIN
 
     RVTEST_IO_INIT
-    RVTEST_IO_ASSERT_GPR_EQ(x0, 0x00000000)
-    RVTEST_IO_WRITE_STR("# Test Begin Reserved regs ra(x1) a0(x10) a1(x11) t0(x5) t1(x6) gp(x3) sp(x2) \n")
+    RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+    RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) a1(x11) t0(x5) t1(x6) gp(x3) sp(x2) \n")
 
     // Initialize part number and signature address
     RVTEST_START
@@ -27,7 +27,9 @@ RV_COMPLIANCE_CODE_BEGIN
     // ---------------------------------------------------------------------------------------------   
 
     #ifdef TEST_PART_1
-      RVTEST_PART_START(1, "# Check for legal value")
+      RVTEST_PART_START(1)
+
+      la x2, test_part1_res
    
       // write legal
       li t2, MSTATUS_MPP
@@ -42,16 +44,20 @@ RV_COMPLIANCE_CODE_BEGIN
       csrr t2, mstatus
       srli t2, t2, MSTATUS_MPP_INDEX
       andi t2, t2, 3
-      li t5, LEGAL
-      bne t2, t5, test_end
+
+      sw t2, 0(x2)
+
+      RVTEST_IO_ASSERT_GPR_EQ(x31, t2, LEGAL)
 
       RVTEST_PART_END(1)
     #endif
 
     // ---------------------------------------------------------------------------------------------   
     #ifdef TEST_PART_2
-      RVTEST_PART_START(2, "# Check for  illegal value")
+      RVTEST_PART_START(2)
       RVTEST_PART_RUN(2, "MSTATUS_MPP>distinct>modes:unchanged")
+      
+      la x2, test_part2_res
   
       // write legal
       li t2, MSTATUS_MPP
@@ -75,16 +81,20 @@ RV_COMPLIANCE_CODE_BEGIN
       csrr t2, mstatus
       srli t2, t2, MSTATUS_MPP_INDEX
       andi t2, t2, 3
-      li t5, LEGAL
-      bne t2, t5, test_end
+      
+      sw t2, 0(x2)
+
+      RVTEST_IO_ASSERT_GPR_EQ(x31, t2, LEGAL)
 
       RVTEST_PART_END(2)
     #endif
 
     // ---------------------------------------------------------------------------------------------   
     #ifdef TEST_PART_3
-      RVTEST_PART_START(3, "# Check for illegal value")
+      RVTEST_PART_START(3)
       RVTEST_PART_RUN(3, "MSTATUS_MPP>distinct>modes:saturate_s")
+      
+      la x2, test_part3_res
 
        // write legal
       li t2, MSTATUS_MPP
@@ -108,15 +118,18 @@ RV_COMPLIANCE_CODE_BEGIN
       csrr t2, mstatus
       srli t2, t2, MSTATUS_MPP_INDEX
       andi t2, t2, 3
-      li t5, LEGAL_SATURATE_S
-      bne t2, t5, test_end
+      
+      sw t2, 0(x2)
+      addi  x2, x2, 4
+
+      RVTEST_IO_ASSERT_GPR_EQ(x31, t2, LEGAL_SATURATE_S)
 
       RVTEST_PART_END(3)
     #endif
 // --------------------------------------------------------------------------------------------- 
 test_end:
   
-    RVTEST_IO_WRITE_STR("# Test End\n")
+    RVTEST_IO_WRITE_STR(x31,"# Test End\n")
 
 // ---------------------------------------------------------------------------------------------
     // HALT
@@ -132,7 +145,17 @@ RV_COMPLIANCE_CODE_END
 RV_COMPLIANCE_DATA_BEGIN
     .align 4
 
-test_res:
-    .fill 3, 4, -1
+#ifdef TEST_PART_1
+  test_part1_res:
+      .fill 1, 4, -1
+#endif
+#ifdef TEST_PART_2
+  test_part2_res:
+      .fill 1, 4, -1
+#endif
+#ifdef TEST_PART_3
+  test_part3_res:
+      .fill 1, 4, -1
+#endif
 
 RV_COMPLIANCE_DATA_END
