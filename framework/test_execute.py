@@ -148,7 +148,7 @@ def test_unprivilege(foo):
         os.chdir(work_dir)
 
         common.utils.execute_command(simulator+elf)
-        post_sim_fix=foo['USER_POST_SIM']
+        post_sim_fix=env_dir+foo['USER_POST_SIM']
         common.utils.execute_command(post_sim_fix)
 
         os.chdir(root_dir)
