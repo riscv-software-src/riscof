@@ -5,11 +5,12 @@ warl_test_list = [
 privilege_test_pool = [
     #['I-EBREAK-01' , 'I in ISA'],
     #['I-ECALL-01' , 'I in ISA'],
-    #['I-ISALIGN_JMP-01' , 'I in ISA'],
+    #['I-MISALIGN_JMP-01' , 'I in ISA'],
     #['I-ISALIGN_LDST-02' , 'I in ISA'],
 ]
 
 unprivilege_test_pool = [
+#    ['DIV', 'M in ISA'],
     ['I-ADD-01' , 'I in ISA'],
     ['I-ADDI-01' , 'I in ISA'],
     ['I-AND-01' , 'I in ISA'],

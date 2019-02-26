@@ -156,7 +156,7 @@ def test_unprivilege(foo):
         unprivilege_target_status.append(status)
 
     logger.info('Following '+str(len(unprivilege_target_pool))+' Unprivileged \
- tests have been run '+user_target+':\n')
+tests have been run '+user_target+':\n')
     for x in range(0,len(unprivilege_target_pool)):
         if(unprivilege_target_status[x]=='Passed'):
             logger.info('{0:<25s}: {1}'.format(unprivilege_target_pool[x],

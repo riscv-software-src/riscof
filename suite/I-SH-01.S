@@ -41,7 +41,8 @@ RV_COMPLIANCE_CODE_BEGIN
 
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-    RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+    RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
+
   #ifdef TEST_PART_1
     RVTEST_PART_START(1)
     # ---------------------------------------------------------------------------------------------
@@ -51,8 +52,8 @@ RV_COMPLIANCE_CODE_BEGIN
     la      x1, test_A1_res
 
     # Set memory
-    li      x9, 0xAAAABBBB
-    sw      x9, 0(x1)
+    li      x31, 0xAAAABBBB
+    sw      x31, 0(x1)
 
     # Test
     li      x2, 0x11F1F222
@@ -95,8 +96,8 @@ RV_COMPLIANCE_CODE_BEGIN
     sw      x0, 1(x8)
 
     # Test
-    li      x9, 0x55F5F666
-    sh      x9, +1(x8)
+    li      x31, 0x55F5F666
+    sh      x31, +1(x8)
     lw      x10, +1(x8)
 
     RVTEST_IO_ASSERT_GPR_EQ(x31, x10, 0x0000F666)
