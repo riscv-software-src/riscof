@@ -28,10 +28,9 @@ class ColoredFormatter(logging.Formatter):
         level_name = str(record.levelname)                                      
         name = str(record.name)                                                 
         color_prefix = self.colors[level_name]                                  
-        return '{0}{1:<9s} - {2:<25s} : {3}{4}'.format(                         
+        return '{0}{1:<9s} : {2}{3}'.format(                         
                 color_prefix,                                                   
-                '[' + level_name + ']',                                         
-                name,                                                           
+                '[' + level_name + ']',                                                                                              
                 msg,                                                            
                 self.reset)                 
 

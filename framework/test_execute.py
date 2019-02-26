@@ -37,9 +37,7 @@ def load_yaml(inp_file):
     """
     inputfile=open(inp_file,'r')
     # Load input YAML file
-    logger.info('Loading input file: '+str(inp_file))
     foo=yaml.safe_load(inputfile)
-    logger.debug('Input YAML:\n\t\t '+str(foo))
     
     # exrtact user env and compile env
     root_dir=os.getcwd()+'/'
@@ -52,22 +50,26 @@ def load_yaml(inp_file):
     user_target=foo['USER_TARGET']
     
     # Display Info about User Variables
-    logger.info('Target Name: '+foo['USER_TARGET'])
-    logger.info('Target Env Dir: '+env_dir)
-    logger.info('Target GCC: '+gcc)
-    logger.info('Target Linker Script: '+linker)
-    logger.info('Target MARCH: '+march)
-    logger.info('Target ABI: '+mabi)
+    logger.info("--------------------------------------------------\n")
+    logger.info("Target Information")
+    logger.info("--------------------------------------------------\n")
+    logger.info('Target-YAML-Input: '+str(inp_file))
+    logger.info('Target-Name: '+foo['USER_TARGET'])
+    logger.info('Target-Env-Dir: '+env_dir)
+    logger.info('Target-GCC: '+gcc)
+    logger.info('Target-Linker-script: '+linker)
+    logger.info('Target-MARCH: '+march)
+    logger.info('Target-ABI: '+mabi)
 
     work_dir=root_dir+'work/'
     user_sign = work_dir+foo['USER_SIGN']
     if not os.path.exists(work_dir):
-        logger.info('Creating new work directory: '+work_dir)
+        logger.debug('Creating new work directory: '+work_dir)
         os.mkdir(work_dir)
     else:
-        logger.info('Removing old work directory: '+work_dir)
+        logger.debug('Removing old work directory: '+work_dir)
         shutil.rmtree(work_dir)
-        logger.info('Creating new work directory: '+work_dir)
+        logger.debug('Creating new work directory: '+work_dir)
         os.mkdir(work_dir)
     
     compile_cmd = gcc + ' -march=' + march + ' -mabi=ilp32'  + compile_flags +\
@@ -87,13 +89,13 @@ def compare_signature():
     out, err=x.communicate()
     status='Passed'
     if(err or out):
-        print('Signatures do not match')
-        print('Expected signature:')
-        with open(work_dir+'reference', 'r') as fin:
-            print(fin.read())
-        print('Signature from '+user_target+':')
-        with open(user_sign, 'r') as fin:
-            print(fin.read())
+       # print('Signatures do not match')
+       # print('Expected signature:')
+       # with open(work_dir+'reference', 'r') as fin:
+       #     print(fin.read())
+       # print('Signature from '+user_target+':')
+       # with open(user_sign, 'r') as fin:
+       #     print(fin.read())
         status='Failed'
     return status
 
@@ -131,10 +133,11 @@ def test_unprivilege(foo):
     unprivilege_target_pool=collect_unprivilege(foo)
     unprivilege_target_status=[]
     simulator = foo['USER_EXECUTABLE']
-    logger.info("\n--------------------------------------------------\n")
+    logger.info("--------------------------------------------------\n")
     logger.info("Running UnPrivileged Tests")
-    logger.info("\n--------------------------------------------------\n")
+    logger.info("--------------------------------------------------\n")
     for asm in unprivilege_target_pool:
+        logger.debug("\n")
         logger.debug('Running Unprivileged Test: '+asm)
         test = root_dir+'suite/'+asm+'.S'
         elf = work_dir+asm
@@ -145,7 +148,7 @@ def test_unprivilege(foo):
         os.chdir(work_dir)
 
         common.utils.execute_command(simulator+elf)
-        post_sim_fix=env_dir+foo['USER_POST_SIM']
+        post_sim_fix=foo['USER_POST_SIM']
         common.utils.execute_command(post_sim_fix)
 
         os.chdir(root_dir)
@@ -155,7 +158,11 @@ def test_unprivilege(foo):
     logger.info('Following '+str(len(unprivilege_target_pool))+' Unprivileged \
  tests have been run '+user_target+':\n')
     for x in range(0,len(unprivilege_target_pool)):
-        logger.info('{0:<25s}: {1}'.format(unprivilege_target_pool[x],
+        if(unprivilege_target_status[x]=='Passed'):
+            logger.info('{0:<25s}: {1}'.format(unprivilege_target_pool[x],
+                                            unprivilege_target_status[x]))
+        else:
+            logger.error('{0:<25s}: {1}'.format(unprivilege_target_pool[x],
                                             unprivilege_target_status[x]))
 
 
@@ -170,20 +177,18 @@ def test_warl (foo):
     logger.info("\n--------------------------------------------------\n")
     logger.info("Running WARL Tests")
     logger.info("\n--------------------------------------------------\n")
-    logger.info('Following '+str(len(warl_test_list))+' WARL tests will be run on '+user_target+':\n')
-    for x in warl_test_list:
-        logger.info(x)
-    logger.info("\n")
-
+    test_name=[]
+    test_status=[]
     for asm in warl_test_list:
         test = root_dir+'suite/'+asm+'.S'
         elf = work_dir+asm
         legal, illegal=warl_resolver_exhaustive(foo['MSTATUS_MPP'], 2)
         cmd=compile_cmd+' '+test+' -o '+elf
-        logger.info('Running WARL Test: {0} with legal-values:{1} and \
-illegal-values:{2}'.format(asm,str(legal),str(illegal)))
         for i in range(len(legal)):
             for j in range(len(illegal)):
+                logger.debug("\n")
+                logger.debug('Running WARL Test: {0} with legal-values:{1} and \
+#illegal-values:{2}'.format(asm,str(legal[i]),str(illegal[j])))
                 execute=cmd + ' -DLEGAL=' + str(legal[i]) +\
                                   ' -DILLEGAL=' + str(illegal[j]) +\
                                   ' -DLEGAL_SATURATE_S=' +str(min(legal)) +\
@@ -200,7 +205,19 @@ illegal-values:{2}'.format(asm,str(legal),str(illegal)))
 
                 os.chdir(root_dir)
                 status=compare_signature()
-        logger.info('Test Passed')
+                test_name.append(asm+' legal: '+str(legal[i]) + ' illegal: ' +\
+                        str(illegal[j]))
+                test_status.append(status)
+                
+    logger.info('Following '+str(len(test_name))+' WARL tests have been run ' +\
+            user_target+':\n')
+    for x in range(0,len(test_name)):
+        if(test_status[x]=='Passed'):
+            logger.info('{0:<25s}: {1}'.format(test_name[x],
+                                            test_status[x]))
+        else:
+            logger.error('{0:<25s}: {1}'.format(test_name[x],
+                                            test_status[x]))
 
     
 def warl_resolver_exhaustive(node, field_size):
