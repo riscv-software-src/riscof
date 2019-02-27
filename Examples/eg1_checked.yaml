@@ -18,7 +18,7 @@ USER_ENV_DIR: env
 USER_LINKER: env/link.ld
 USER_TARGET: SPIKE
 USER_EXECUTABLE: 'spike -c --isa=rv32im +signature=sign '
-USER_ABI: ilp32d
+USER_ABI: ilp32
 USER_SIGN: sign
 RISCV_PREFIX: riscv32-unknown-elf-
 USER_POST_SIM: sign_fix.sh

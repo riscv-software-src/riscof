@@ -18,6 +18,7 @@ global work_dir
 global user_sign
 global user_target
 global env_dir
+global user_abi
 
 logger= logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ def load_yaml(inp_file):
     global user_sign
     global user_target
     global env_dir
+    global user_abi
     compile_flags=' -static -mcmodel=medany -fvisibility=hidden -nostdlib \
  -nostartfiles '
   
@@ -46,7 +48,7 @@ def load_yaml(inp_file):
     linker = root_dir+foo['USER_LINKER']
     env_dir = root_dir+foo['USER_ENV_DIR']+'/'
     march = re.sub('[nsu]','',foo['ISA'].lower())
-    mabi  = foo['USER_ABI'].lower()
+    user_abi  = foo['USER_ABI'].lower()
     user_target=foo['USER_TARGET']
     
     # Display Info about User Variables
@@ -58,8 +60,8 @@ def load_yaml(inp_file):
     logger.info('Target-Env-Dir: '+env_dir)
     logger.info('Target-GCC: '+gcc)
     logger.info('Target-Linker-script: '+linker)
-    logger.info('Target-MARCH: '+march)
-    logger.info('Target-ABI: '+mabi)
+    logger.info('Target-Architecture: '+foo['ISA'])
+    logger.info('Target-ABI: '+user_abi)
 
     work_dir=root_dir+'work/'
     user_sign = work_dir+foo['USER_SIGN']
@@ -71,9 +73,9 @@ def load_yaml(inp_file):
         shutil.rmtree(work_dir)
         logger.debug('Creating new work directory: '+work_dir)
         os.mkdir(work_dir)
-    
-    compile_cmd = gcc + ' -march=' + march + ' -mabi=ilp32'  + compile_flags +\
-    ' -I' + env_dir + ' -T'+linker
+   
+    compile_cmd = gcc+ ' -march={0} -mabi={1} '+compile_flags+'-I' + env_dir +\
+            ' -T'+linker
     objdump = foo['RISCV_PREFIX']+'objdump -D {0} > {1}'
 
     test_unprivilege(foo)
@@ -103,10 +105,14 @@ def collect_unprivilege(foo):
     global user_target
     dut_test_pool = []
     for test in unprivilege_test_pool:
-        if(len(test)==1):
-            dut_test_pool.append(test[0])
+        if(len(test)<2):
+            logger.error('Test list should be atleast 2 entries: Test name and\
+ march')
+            sys.exit(0)
+        if(len(test)==2):
+            dut_test_pool.append([test[0],test[1]])
         else:
-            criteria = test[1:]
+            criteria = test[2:]
             select = True
             for c in criteria:
                 if 'in' in c:
@@ -122,13 +128,14 @@ def collect_unprivilege(foo):
                     elif x[0] not in foo[x[2]]:
                         select=False
             if select:
-                dut_test_pool.append(test[0])
+                dut_test_pool.append([test[0],test[1]])
     return dut_test_pool
 
 def test_unprivilege(foo):
     global work_dir
     global root_dir
     global compile_cmd
+    global user_abi
 
     unprivilege_target_pool=collect_unprivilege(foo)
     unprivilege_target_status=[]
@@ -138,10 +145,10 @@ def test_unprivilege(foo):
     logger.info("--------------------------------------------------\n")
     for asm in unprivilege_target_pool:
         logger.debug("\n")
-        logger.debug('Running Unprivileged Test: '+asm)
-        test = root_dir+'suite/'+asm+'.S'
-        elf = work_dir+asm
-        cmd=compile_cmd+' '+test+' -o '+elf
+        logger.debug('Running Unprivileged Test: '+str(asm[0]))
+        test = root_dir+'suite/'+str(asm[0])+'.S'
+        elf = work_dir+str(asm[0])
+        cmd=compile_cmd.format(asm[1],user_abi)+' '+test+' -o '+elf
 
         execute = cmd+parse_test(test,foo, 0, 0, 0, 0)
         common.utils.execute_command(execute)
@@ -157,13 +164,16 @@ def test_unprivilege(foo):
 
     logger.info('Following '+str(len(unprivilege_target_pool))+' Unprivileged \
 tests have been run '+user_target+':\n')
+    logger.info('{0:<25s}: {1:<15s}: {2}\n'.format('TEST NAME','MARCH','STATUS'))
     for x in range(0,len(unprivilege_target_pool)):
         if(unprivilege_target_status[x]=='Passed'):
-            logger.info('{0:<25s}: {1}'.format(unprivilege_target_pool[x],
-                                            unprivilege_target_status[x]))
+            logger.info('{0:<25s}: {1:<15s}: {2}'.format(\
+                unprivilege_target_pool[x][0], unprivilege_target_pool[x][1],\
+                unprivilege_target_status[x]))
         else:
-            logger.error('{0:<25s}: {1}'.format(unprivilege_target_pool[x],
-                                            unprivilege_target_status[x]))
+            logger.error('{0:<25s}: {1:<15s}: {2}'.format(\
+                unprivilege_target_pool[x][0], unprivilege_target_pool[x][1],\
+                unprivilege_target_status[x]))
 
 
 def test_warl (foo):
@@ -171,6 +181,7 @@ def test_warl (foo):
     global root_dir
     global objdump
     global user_sign
+    global user_abi
     # test of MPP_WARL
     simulator = foo['USER_EXECUTABLE']
 
@@ -183,7 +194,7 @@ def test_warl (foo):
         test = root_dir+'suite/'+asm+'.S'
         elf = work_dir+asm
         legal, illegal=warl_resolver_exhaustive(foo['MSTATUS_MPP'], 2)
-        cmd=compile_cmd+' '+test+' -o '+elf
+        cmd=compile_cmd.format('rv32im',user_abi)+' '+test+' -o '+elf
         for i in range(len(legal)):
             for j in range(len(illegal)):
                 logger.debug("\n")
