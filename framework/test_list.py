@@ -10,7 +10,14 @@ privilege_test_pool = [
 ]
 
 unprivilege_test_pool = [
-#    ['DIV', 'M in ISA'],
+    ['DIV', 'M in ISA'],
+    ['DIVU', 'M in ISA'],
+    ['MULH', 'M in ISA'],
+    ['MULHSU', 'M in ISA'],
+    ['MULHU', 'M in ISA'],
+    ['MUL', 'M in ISA'],
+    ['REM', 'M in ISA'],
+    ['REMU', 'M in ISA'],
     ['I-ADD-01' , 'I in ISA'],
     ['I-ADDI-01' , 'I in ISA'],
     ['I-AND-01' , 'I in ISA'],

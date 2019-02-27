@@ -37,75 +37,204 @@ RV_COMPLIANCE_RV32M
 RV_COMPLIANCE_CODE_BEGIN
 
 	RVTEST_IO_INIT
-	RVTEST_IO_ASSERT_GPR_EQ(x0, 0x00000000)
-	RVTEST_IO_WRITE_STR("Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+	RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 1 - corner cases\n")
+	RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
+  #ifdef TEST_PART_1
+    RVTEST_PART_START(1)
 
-	# address for test results
-	la	x2, test_1_res
+	  # address for test results
+	  la	x2, test_1_res
 
-	TEST_RR_SRC2(div, x17, x18, 0xffffffff, 0x0, 0x0, x2, 0)
-	TEST_RR_SRC2(div, x19, x20, 0, 0x0, 0x1, x2, 4)
-	TEST_RR_SRC2(div, x21, x22, 0, 0x0, -0x1, x2, 8)
-	TEST_RR_SRC2(div, x23, x24, 0, 0x0, 0x7fffffff, x2, 12)
-	TEST_RR_SRC2(div, x25, x26, 0, 0x0, 0x80000000, x2, 16)
+    li  x18, MASK_XLEN( 0x0)
+    li  x17, MASK_XLEN( 0x0)
+    div  x17,  x18,  x17
+    sw  x17,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x17,0xffffffff)
 
-	# ---------------------------------------------------------------------------------------------
+    li  x20, MASK_XLEN( 0x0)
+    li  x19, MASK_XLEN( 0x1)
+    div  x19,  x20,  x19
+    sw  x19,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x19,0x00000000)
 
-	RVTEST_IO_WRITE_STR("# Test number 2 - corner cases\n")
+    li  x22, MASK_XLEN( 0x0)
+    li  x21, MASK_XLEN( -0x1)
+    div  x21,  x22,  x21
+    sw  x21,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x21,0x00000000)
 
-	# address for test results
-	la	x2, test_2_res
+    li  x24, MASK_XLEN( 0x0)
+    li  x23, MASK_XLEN( 0x7fffffff)
+    div  x23,  x24,  x23
+    sw  x23,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x23,0x00000000)
 
-	TEST_RR_SRC2(div, x27, x28, 0xffffffff, 0x1, 0x0, x2, 0)
-	TEST_RR_SRC2(div, x29, x30, 0x1, 0x1, 0x1, x2, 4)
-	TEST_RR_SRC2(div, x31, x3, 0xffffffff, 0x1, -0x1, x2, 8)
-	TEST_RR_SRC2(div, x4, x8, 0, 0x1, 0x7fffffff, x2, 12)
-	TEST_RR_SRC2(div, x9, x11, 0, 0x1, 0x80000000, x2, 16)
+    li  x26, MASK_XLEN( 0x0)
+    li  x25, MASK_XLEN( 0x80000000)
+    div  x25,  x26,  x25
+    sw  x25,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x25,0x00000000)
 
-	# ---------------------------------------------------------------------------------------------
-
-	RVTEST_IO_WRITE_STR("# Test number 3 - corner cases\n")
-
-	# address for test results
-	la	x2, test_3_res
-
-	TEST_RR_SRC2(div, x12, x13, 0xffffffff, -0x1, 0x0, x2, 0)
-	TEST_RR_SRC2(div, x14, x15, 0xffffffff, -0x1, 0x1, x2, 4)
-	TEST_RR_SRC2(div, x16, x17, 0x1, -0x1, -0x1, x2, 8)
-	TEST_RR_SRC2(div, x18, x19, 0, -0x1, 0x7fffffff, x2, 12)
-	TEST_RR_SRC2(div, x20, x21, 0, -0x1, 0x80000000, x2, 16)
-
-	# ---------------------------------------------------------------------------------------------
-
-	RVTEST_IO_WRITE_STR("# Test number 4 - corner cases\n")
-
-	# address for test results
-	la	x2, test_4_res
-
-	TEST_RR_SRC2(div, x22, x23, 0xffffffff, 0x7fffffff, 0x0, x2, 0)
-	TEST_RR_SRC2(div, x24, x25, 0x7fffffff, 0x7fffffff, 0x1, x2, 4)
-	TEST_RR_SRC2(div, x26, x27, 0x80000001, 0x7fffffff, -0x1, x2, 8)
-	TEST_RR_SRC2(div, x28, x29, 0x1, 0x7fffffff, 0x7fffffff, x2, 12)
-	TEST_RR_SRC2(div, x30, x31, 0, 0x7fffffff, 0x80000000, x2, 16)
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 5 - corner cases\n")
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
-	# address for test results
-	la	x2, test_5_res
+	  # address for test results
+	  la	x2, test_2_res
 
-	TEST_RR_SRC2(div, x3, x4, 0xffffffff, 0x80000000, 0x0, x2, 0)
-	TEST_RR_SRC2(div, x8, x9, 0x80000000, 0x80000000, 0x1, x2, 4)
-	TEST_RR_SRC2(div, x11, x12, 0x80000000, 0x80000000, -0x1, x2, 8)
-	TEST_RR_SRC2(div, x13, x14, 0xffffffff, 0x80000000, 0x7fffffff, x2, 12)
-	TEST_RR_SRC2(div, x15, x16, 0x1, 0x80000000, 0x80000000, x2, 16)
+    li  x28, MASK_XLEN( 0x1)
+    li  x27, MASK_XLEN( 0x0)
+    div  x27,  x28,  x27
+    sw  x27,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x27,0xffffffff)
 
-	RVTEST_IO_WRITE_STR("Test End\n")
+    li  x30, MASK_XLEN( 0x1)
+    li  x29, MASK_XLEN( 0x1)
+    div  x29,  x30,  x29
+    sw  x29,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x29,0x00000001)
+
+    li  x3, MASK_XLEN( 0x1)
+    li  x21, MASK_XLEN( -0x1)
+    div  x21,  x3,  x21
+    sw  x21,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x21,0xffffffff)
+
+    li  x8, MASK_XLEN( 0x1)
+    li  x4, MASK_XLEN( 0x7fffffff)
+    div  x4,  x8,  x4
+    sw  x4,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x4,0x00000000)
+
+    li  x11, MASK_XLEN( 0x1)
+    li  x9, MASK_XLEN( 0x80000000)
+    div  x9,  x11,  x9
+    sw  x9,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x9,0x00000000)
+
+
+	# ---------------------------------------------------------------------------------------------
+
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_3_res
+
+    li  x13, MASK_XLEN( -0x1)
+    li  x12, MASK_XLEN( 0x0)
+    div  x12,  x13,  x12
+    sw  x12,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x12,0xffffffff)
+
+    li  x15, MASK_XLEN( -0x1)
+    li  x14, MASK_XLEN( 0x1)
+    div  x14,  x15,  x14
+    sw  x14,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x14,0xffffffff)
+
+    li  x17, MASK_XLEN( -0x1)
+    li  x16, MASK_XLEN( -0x1)
+    div  x16,  x17,  x16
+    sw  x16,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x16,0x00000001)
+
+    li  x19, MASK_XLEN( -0x1)
+    li  x18, MASK_XLEN( 0x7fffffff)
+    div  x18,  x19,  x18
+    sw  x18,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x18,0x00000000)
+
+    li  x21, MASK_XLEN( -0x1)
+    li  x20, MASK_XLEN( 0x80000000)
+    div  x20,  x21,  x20
+    sw  x20,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x20,0x00000000)
+
+
+	# ---------------------------------------------------------------------------------------------
+
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_4_res
+
+    li  x23, MASK_XLEN( 0x7fffffff)
+    li  x22, MASK_XLEN( 0x0)
+    div  x22,  x23,  x22
+    sw  x22,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x22,0xffffffff)
+
+    li  x25, MASK_XLEN( 0x7fffffff)
+    li  x24, MASK_XLEN( 0x1)
+    div  x24,  x25,  x24
+    sw  x24,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x24,0x7fffffff)
+
+    li  x27, MASK_XLEN( 0x7fffffff)
+    li  x26, MASK_XLEN( -0x1)
+    div  x26,  x27,  x26
+    sw  x26,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x26,0x80000001)
+
+    li  x29, MASK_XLEN( 0x7fffffff)
+    li  x28, MASK_XLEN( 0x7fffffff)
+    div  x28,  x29,  x28
+    sw  x28,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x28,0x00000001)
+
+    li  x21, MASK_XLEN( 0x7fffffff)
+    li  x30, MASK_XLEN( 0x80000000)
+    div  x30,  x21,  x30
+    sw  x30,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x30,0x00000000)
+
+
+	# ---------------------------------------------------------------------------------------------
+
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_5_res
+
+    li  x4, MASK_XLEN( 0x80000000)
+    li  x3, MASK_XLEN( 0x0)
+    div  x3,  x4,  x3
+    sw  x3,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x3,0xffffffff)
+
+    li  x9, MASK_XLEN( 0x80000000)
+    li  x8, MASK_XLEN( 0x1)
+    div  x8,  x9,  x8
+    sw  x8,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x8,0x80000000)
+
+    li  x12, MASK_XLEN( 0x80000000)
+    li  x11, MASK_XLEN( -0x1)
+    div  x11,  x12,  x11
+    sw  x11,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x11,0x80000000)
+
+    li  x14, MASK_XLEN( 0x80000000)
+    li  x13, MASK_XLEN( 0x7fffffff)
+    div  x13,  x14,  x13
+    sw  x13,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x13,0xffffffff)
+
+    li  x16, MASK_XLEN( 0x80000000)
+    li  x15, MASK_XLEN( 0x80000000)
+    div  x15,  x16,  x15
+    sw  x15,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x15,0x00000001)
+
+
+	  RVTEST_IO_WRITE_STR(x31, "Test End\n")
+    RVTEST_PART_END(1)
+  #endif
 
 	# ---------------------------------------------------------------------------------------------
 
@@ -127,16 +256,6 @@ test_3_res:
 test_4_res:
 	.fill 5, 4, -1
 test_5_res:
-	.fill 5, 4, -1
-test_6_res:
-	.fill 5, 4, -1
-test_7_res:
-	.fill 5, 4, -1
-test_8_res:
-	.fill 5, 4, -1
-test_9_res:
-	.fill 5, 4, -1
-test_10_res:
 	.fill 5, 4, -1
 
 RV_COMPLIANCE_DATA_END

@@ -53,6 +53,7 @@ RV_COMPLIANCE_CODE_BEGIN
     #endif
 
     // ---------------------------------------------------------------------------------------------   
+    // This test will be run on DUTs whose MPP WARL encoding follows the distinct:unchanged behavior
     #ifdef TEST_PART_2
       RVTEST_PART_START(2)
       RVTEST_PART_RUN(2, "MSTATUS_MPP>distinct>modes:unchanged")
@@ -90,6 +91,8 @@ RV_COMPLIANCE_CODE_BEGIN
     #endif
 
     // ---------------------------------------------------------------------------------------------   
+    // This test will be run on DUTs whose MPP WARL encoding follows the distinct:saturate_s
+    // behavior
     #ifdef TEST_PART_3
       RVTEST_PART_START(3)
       RVTEST_PART_RUN(3, "MSTATUS_MPP>distinct>modes:saturate_s")

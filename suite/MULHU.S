@@ -37,163 +37,206 @@ RV_COMPLIANCE_RV32M
 RV_COMPLIANCE_CODE_BEGIN
 
 	RVTEST_IO_INIT
-	RVTEST_IO_ASSERT_GPR_EQ(x0, 0x00000000)
-	RVTEST_IO_WRITE_STR("Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-  RVTEST_START
-	# ---------------------------------------------------------------------------------------------
+	RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
 
-	RVTEST_IO_WRITE_STR("# Test number 1 - corner cases\n")
-  
+	# ---------------------------------------------------------------------------------------------
   #ifdef TEST_PART_1
-    RVTEST_PART_START(1, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x17, x18, 0, 0x0, 0x0, x2, 0)
-    RVTEST_PART_END(1)
-  #endif
-  #ifdef TEST_PART_2
-    RVTEST_PART_START(2, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x19, x20, 0, 0x0, 0x1, x2, 4)
-    RVTEST_PART_END(2)
-  #endif
-  #ifdef TEST_PART_3
-    RVTEST_PART_START(3, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x21, x22, 0, 0x0, -0x1, x2, 8)
-    RVTEST_PART_END(3)
-  #endif
-  #ifdef TEST_PART_4
-    RVTEST_PART_START(4, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x23, x24, 0, 0x0, 0x7fffffff, x2, 12)
-    RVTEST_PART_END(4)
-  #endif
-  #ifdef TEST_PART_5
-    RVTEST_PART_START(5, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x25, x26, 0, 0x0, 0x80000000, x2, 16)
-    RVTEST_PART_END(5)
+    RVTEST_PART_START(1)
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_1_res
+
+    li  x18, MASK_XLEN( 0x0)
+    li  x17, MASK_XLEN( 0x0)
+    mulhu  x17,  x18,  x17
+    sw  x17,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x17,0x00000000)
+
+    li  x20, MASK_XLEN( 0x0)
+    li  x19, MASK_XLEN( 0x1)
+    mulhu  x19,  x20,  x19
+    sw  x19,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x19,0x00000000)
+
+    li  x22, MASK_XLEN( 0x0)
+    li  x21, MASK_XLEN( -0x1)
+    mulhu  x21,  x22,  x21
+    sw  x21,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x21,0x00000000)
+
+    li  x24, MASK_XLEN( 0x0)
+    li  x23, MASK_XLEN( 0x7fffffff)
+    mulhu  x23,  x24,  x23
+    sw  x23,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x23,0x00000000)
+
+    li  x26, MASK_XLEN( 0x0)
+    li  x25, MASK_XLEN( 0x80000000)
+    mulhu  x25,  x26,  x25
+    sw  x25,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x25,0x00000000)
+
+
+	  # ---------------------------------------------------------------------------------------------
+
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_2_res
+
+    li  x28, MASK_XLEN( 0x1)
+    li  x27, MASK_XLEN( 0x0)
+    mulhu  x27,  x28,  x27
+    sw  x27,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x27,0x00000000)
+
+    li  x30, MASK_XLEN( 0x1)
+    li  x29, MASK_XLEN( 0x1)
+    mulhu  x29,  x30,  x29
+    sw  x29,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x29,0x00000000)
+
+    li  x3, MASK_XLEN( 0x1)
+    li  x21, MASK_XLEN( -0x1)
+    mulhu  x21,  x3,  x21
+    sw  x21,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x21,0x00000000)
+
+    li  x8, MASK_XLEN( 0x1)
+    li  x4, MASK_XLEN( 0x7fffffff)
+    mulhu  x4,  x8,  x4
+    sw  x4,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x4,0x00000000)
+
+    li  x11, MASK_XLEN( 0x1)
+    li  x9, MASK_XLEN( 0x80000000)
+    mulhu  x9,  x11,  x9
+    sw  x9,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x9,0x00000000)
+
+
+	  # ---------------------------------------------------------------------------------------------
+
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_3_res
+
+    li  x13, MASK_XLEN( -0x1)
+    li  x12, MASK_XLEN( 0x0)
+    mulhu  x12,  x13,  x12
+    sw  x12,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x12,0x00000000)
+
+    li  x15, MASK_XLEN( -0x1)
+    li  x14, MASK_XLEN( 0x1)
+    mulhu  x14,  x15,  x14
+    sw  x14,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x14,0x00000000)
+
+    li  x17, MASK_XLEN( -0x1)
+    li  x16, MASK_XLEN( -0x1)
+    mulhu  x16,  x17,  x16
+    sw  x16,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x16,0xfffffffe)
+
+    li  x19, MASK_XLEN( -0x1)
+    li  x18, MASK_XLEN( 0x7fffffff)
+    mulhu  x18,  x19,  x18
+    sw  x18,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x18,0x7ffffffe)
+
+    li  x21, MASK_XLEN( -0x1)
+    li  x20, MASK_XLEN( 0x80000000)
+    mulhu  x20,  x21,  x20
+    sw  x20,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x20,0x7fffffff)
+
+
+	  # ---------------------------------------------------------------------------------------------
+
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_4_res
+
+    li  x23, MASK_XLEN( 0x7fffffff)
+    li  x22, MASK_XLEN( 0x0)
+    mulhu  x22,  x23,  x22
+    sw  x22,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x22,0x00000000)
+
+    li  x25, MASK_XLEN( 0x7fffffff)
+    li  x24, MASK_XLEN( 0x1)
+    mulhu  x24,  x25,  x24
+    sw  x24,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x24,0x00000000)
+
+    li  x27, MASK_XLEN( 0x7fffffff)
+    li  x26, MASK_XLEN( -0x1)
+    mulhu  x26,  x27,  x26
+    sw  x26,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x26,0x7ffffffe)
+
+    li  x29, MASK_XLEN( 0x7fffffff)
+    li  x28, MASK_XLEN( 0x7fffffff)
+    mulhu  x28,  x29,  x28
+    sw  x28,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x28,0x3fffffff)
+
+    li  x21, MASK_XLEN( 0x7fffffff)
+    li  x30, MASK_XLEN( 0x80000000)
+    mulhu  x30,  x21,  x30
+    sw  x30,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x30,0x3fffffff)
+
+
+	  # ---------------------------------------------------------------------------------------------
+
+	  RVTEST_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
+
+	  # address for test results
+	  la	x2, test_5_res
+
+    li  x4, MASK_XLEN( 0x80000000)
+    li  x3, MASK_XLEN( 0x0)
+    mulhu  x3,  x4,  x3
+    sw  x3,  0( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x3,0x00000000)
+
+    li  x9, MASK_XLEN( 0x80000000)
+    li  x8, MASK_XLEN( 0x1)
+    mulhu  x8,  x9,  x8
+    sw  x8,  4( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x8,0x00000000)
+
+    li  x12, MASK_XLEN( 0x80000000)
+    li  x11, MASK_XLEN( -0x1)
+    mulhu  x11,  x12,  x11
+    sw  x11,  8( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x11,0x7fffffff)
+
+    li  x14, MASK_XLEN( 0x80000000)
+    li  x13, MASK_XLEN( 0x7fffffff)
+    mulhu  x13,  x14,  x13
+    sw  x13,  12( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x13,0x3fffffff)
+
+    li  x16, MASK_XLEN( 0x80000000)
+    li  x15, MASK_XLEN( 0x80000000)
+    mulhu  x15,  x16,  x15
+    sw  x15,  16( x2)
+    RVTEST_IO_ASSERT_GPR_EQ( x2, x15,0x40000000)
+
+
+	  RVTEST_IO_WRITE_STR(x31, "Test End\n")
+    RVTEST_PART_END(1)  
   #endif
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVTEST_IO_WRITE_STR("# Test number 2 - corner cases\n")
-
-  #ifdef TEST_PART_6
-    RVTEST_PART_START(6, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x27, x28, 0, 0x1, 0x0, x2, 0)
-    RVTEST_PART_END(6)
-  #endif
-  #ifdef TEST_PART_7
-    RVTEST_PART_START(7, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x29, x30, 0, 0x1, 0x1, x2, 4)
-    RVTEST_PART_END(7)
-  #endif
-  #ifdef TEST_PART_8
-    RVTEST_PART_START(8, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x31, x3, 0, 0x1, -0x1, x2, 8)
-    RVTEST_PART_END(8)
-  #endif
-  #ifdef TEST_PART_9
-    RVTEST_PART_START(9, "# Corner Case -1")
-	    TEST_RR_SRC2(mulhu, x4, x8, 0, 0x1, 0x7fffffff, x2, 12)
-    RVTEST_PART_END(9)
-  #endif
-  #ifdef TEST_PART_10
-    RVTEST_PART_START(10, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x9, x11, 0, 0x1, 0x80000000, x2, 16)
-    RVTEST_PART_END(10)
-  #endif
-
-	# ---------------------------------------------------------------------------------------------
-
-	RVTEST_IO_WRITE_STR("# Test number 3 - corner cases\n")
-
-  #ifdef TEST_PART_11
-    RVTEST_PART_START(11, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x12, x13, 0, -0x1, 0x0, x2, 0)
-    RVTEST_PART_END(11)
-  #endif
-  #ifdef TEST_PART_12
-    RVTEST_PART_START(12, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x14, x15, 0, -0x1, 0x1, x2, 4)
-    RVTEST_PART_END(12)
-  #endif
-  #ifdef TEST_PART_13
-    RVTEST_PART_START(13, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x16, x17, 0xfffffffe, -0x1, -0x1, x2, 8)
-    RVTEST_PART_END(13)
-  #endif
-  #ifdef TEST_PART_14
-    RVTEST_PART_START(14, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x18, x19, 0x7ffffffe, -0x1, 0x7fffffff, x2, 12)
-    RVTEST_PART_END(14)
-  #endif
-  #ifdef TEST_PART_15
-    RVTEST_PART_START(15, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x20, x21, 0x7fffffff, -0x1, 0x80000000, x2, 16)
-    RVTEST_PART_END(15)
-  #endif
-
-	# ---------------------------------------------------------------------------------------------
-
-	RVTEST_IO_WRITE_STR("# Test number 4 - corner cases\n")
-
-  #ifdef TEST_PART_16
-    RVTEST_PART_START(16, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x22, x23, 0, 0x7fffffff, 0x0, x2, 0)
-    RVTEST_PART_END(16)
-  #endif
-  #ifdef TEST_PART_17
-    RVTEST_PART_START(17, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x24, x25, 0, 0x7fffffff, 0x1, x2, 4)
-    RVTEST_PART_END(17)
-  #endif
-  #ifdef TEST_PART_18
-    RVTEST_PART_START(18, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x26, x27, 0x7ffffffe, 0x7fffffff, -0x1, x2, 8)
-    RVTEST_PART_END(18)
-  #endif
-  #ifdef TEST_PART_19
-    RVTEST_PART_START(19, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x28, x29, 0x3fffffff, 0x7fffffff, 0x7fffffff, x2, 12)
-    RVTEST_PART_END(19)
-  #endif
-  #ifdef TEST_PART_20
-    RVTEST_PART_START(20, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x30, x31, 0x3fffffff, 0x7fffffff, 0x80000000, x2, 16)
-    RVTEST_PART_END(20)
-  #endif
-
-	# ---------------------------------------------------------------------------------------------
-
-	RVTEST_IO_WRITE_STR("# Test number 5 - corner cases\n")
-
-  #ifdef TEST_PART_21
-    RVTEST_PART_START(21, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x3, x4, 0, 0x80000000, 0x0, x2, 0)
-    RVTEST_PART_END(21)
-  #endif
-  #ifdef TEST_PART_22
-    RVTEST_PART_START(22, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x8, x9, 0, 0x80000000, 0x1, x2, 4)
-    RVTEST_PART_END(22)
-  #endif
-  #ifdef TEST_PART_23
-    RVTEST_PART_START(23, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x11, x12, 0x7fffffff, 0x80000000, -0x1, x2, 8)
-    RVTEST_PART_END(23)
-  #endif
-  #ifdef TEST_PART_24
-    RVTEST_PART_START(24, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x13, x14, 0x3fffffff, 0x80000000, 0x7fffffff, x2, 12)
-    RVTEST_PART_END(24)
-  #endif
-  #ifdef TEST_PART_25
-    RVTEST_PART_START(25, "# Corner Case 0")
-	    TEST_RR_SRC2(mulhu, x15, x16, 0x40000000, 0x80000000, 0x80000000, x2, 16)
-    RVTEST_PART_END(25)
-  #endif
-
-	RVTEST_IO_WRITE_STR("Test End\n")
-
-	# ---------------------------------------------------------------------------------------------
-test_end:
 	RV_COMPLIANCE_HALT
 
 RV_COMPLIANCE_CODE_END
@@ -203,13 +246,15 @@ RV_COMPLIANCE_CODE_END
 
 # Output data section.
 RV_COMPLIANCE_DATA_BEGIN
-test_res:
-	.fill 4, 4, -1
-	.fill 4, 4, -1
-	.fill 4, 4, -1
-	.fill 4, 4, -1
-	.fill 4, 4, -1
-	.fill 4, 4, -1
-	.fill 1, 4, -1
+test_1_res:
+	.fill 5, 4, -1
+test_2_res:
+	.fill 5, 4, -1
+test_3_res:
+	.fill 5, 4, -1
+test_4_res:
+	.fill 5, 4, -1
+test_5_res:
+	.fill 5, 4, -1
 
 RV_COMPLIANCE_DATA_END
