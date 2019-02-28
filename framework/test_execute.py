@@ -10,6 +10,7 @@ from framework.test_list import *
 import random
 import common.utils
 import shlex
+import filecmp
 
 global compile_cmd
 global objdump
@@ -84,20 +85,11 @@ def load_yaml(inp_file):
 def compare_signature():
     global user_sign
     global user_target
-    check_sign='diff -iqw '+user_sign+' '+work_dir+'reference'
-    logger.debug(check_sign)
-    x=subprocess.Popen(shlex.split(check_sign), stdout=subprocess.PIPE,
-                                                stderr=subprocess.PIPE)
-    out, err=x.communicate()
-    status='Passed'
-    if(err or out):
-       # print('Signatures do not match')
-       # print('Expected signature:')
-       # with open(work_dir+'reference', 'r') as fin:
-       #     print(fin.read())
-       # print('Signature from '+user_target+':')
-       # with open(user_sign, 'r') as fin:
-       #     print(fin.read())
+    signature=open(user_sign,'r')
+    reference=open(work_dir+'reference','r')
+    if( filecmp.cmp(user_sign,work_dir+'reference') ):
+        status='Passed'
+    else:
         status='Failed'
     return status
 
