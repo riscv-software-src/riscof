@@ -22,6 +22,9 @@
 #define RV_COMPLIANCE_RV32M                                             \
     RVTEST_RV32M                                                        \
 
+#define RV_COMPLIANCE_RV32U                                             \
+    RVTEST_RV32U                                                        \
+
 #define RV_COMPLIANCE_CODE_BEGIN                                        \
    RVTEST_CODE_BEGIN                                                    \
                                                                      

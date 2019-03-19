@@ -1,0 +1,56 @@
+ISA: RV32IMACU
+MISA_F:
+- 0
+MISA_D:
+- 0
+MISA_M:
+- 0
+MSTATUS_MPP:
+  distinct:
+    values:
+    - 0
+    - 1
+    - 3
+    modes: saturate_s
+Vendorid: 2748
+HWALIGN_LDST: true
+USER_ENV_DIR: env
+USER_LINKER: env/link.ld
+USER_TARGET: SPIKE
+USER_EXECUTABLE: 'spike -c --isa=rv32imac +signature=sign '
+USER_ABI: ilp32
+USER_SIGN: sign
+RISCV_PREFIX: riscv32-unknown-elf-
+USER_POST_SIM: sign_fix.sh
+User_Spec_Version: 2.2
+Privilege_Spec_Version: 1.1
+MISA_MXL:
+- 1
+MISA_A:
+- 0
+MISA_C:
+- 0
+MISA_G:
+- 0
+MISA_I:
+- 1
+MISA_N:
+- 0
+MISA_Q:
+- 0
+MISA_S:
+- 0
+MISA_U:
+- 0
+MISA_X:
+- 0
+Hartids:
+- 0
+MSTATUS_SXL:
+- 0
+MSTATUS_UXL:
+- 0
+MIDELEG: 4095
+MEDELEG: 2047
+MIP: 4095
+RISCV-PREFIX: riscv64-unknown-elf-

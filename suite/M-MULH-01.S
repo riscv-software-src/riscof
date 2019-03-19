@@ -36,17 +36,17 @@ RV_COMPLIANCE_RV32M
 
 RV_COMPLIANCE_CODE_BEGIN
 
-	RVTEST_IO_INIT
-	RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-	RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+  RVTEST_IO_INIT
+  RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+  RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
 
-	# ---------------------------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------------------------
   #ifdef TEST_PART_1
     RVTEST_PART_START(1)
-	  RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
+    RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
-	  # address for test results
-	  la	x2, test_1_res
+    # address for test results
+    la	x2, test_1_res
 
     li  x18, MASK_XLEN( 0x0)
     li  x17, MASK_XLEN( 0x0)
@@ -79,12 +79,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ( x2, x25,0x00000000)
 
 
-	  # ---------------------------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------
 
-	  RVTEST_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
+    RVTEST_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
-	  # address for test results
-	  la	x2, test_2_res
+    # address for test results
+    la	x2, test_2_res
 
     li  x28, MASK_XLEN( 0x1)
     li  x27, MASK_XLEN( 0x0)
@@ -117,12 +117,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ( x2, x9,0xffffffff)
 
 
-	  # ---------------------------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------
 
-	  RVTEST_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
+    RVTEST_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
 
-	  # address for test results
-	  la	x2, test_3_res
+    # address for test results
+    la	x2, test_3_res
 
     li  x13, MASK_XLEN( -0x1)
     li  x12, MASK_XLEN( 0x0)
@@ -155,12 +155,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ( x2, x20,0x00000000)
 
 
-	  # ---------------------------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------
 
-	  RVTEST_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
+    RVTEST_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
 
-	  # address for test results
-	  la	x2, test_4_res
+    # address for test results
+    la	x2, test_4_res
 
     li  x23, MASK_XLEN( 0x7fffffff)
     li  x22, MASK_XLEN( 0x0)
@@ -193,12 +193,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ( x2, x30,0xc0000000)
 
 
-	  # ---------------------------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------
 
-	  RVTEST_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
+    RVTEST_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
 
-	  # address for test results
-	  la	x2, test_5_res
+    # address for test results
+    la	x2, test_5_res
 
     li  x4, MASK_XLEN( 0x80000000)
     li  x3, MASK_XLEN( 0x0)
@@ -231,30 +231,30 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ( x2, x15,0x40000000)
 
 
-	  RVTEST_IO_WRITE_STR(x31, "Test End\n")
+    RVTEST_IO_WRITE_STR(x31, "Test End\n")
     RVTEST_PART_END(1)
   #endif
 
-	# ---------------------------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------------------------
 
-	RV_COMPLIANCE_HALT
+  RV_COMPLIANCE_HALT
 
 RV_COMPLIANCE_CODE_END
 
 # Input data section.
-	.data
+  .data
 
 # Output data section.
 RV_COMPLIANCE_DATA_BEGIN
 test_1_res:
-	.fill 5, 4, -1
+  .fill 5, 4, -1
 test_2_res:
-	.fill 5, 4, -1
+  .fill 5, 4, -1
 test_3_res:
-	.fill 5, 4, -1
+  .fill 5, 4, -1
 test_4_res:
-	.fill 5, 4, -1
+  .fill 5, 4, -1
 test_5_res:
-	.fill 5, 4, -1
+  .fill 5, 4, -1
 
 RV_COMPLIANCE_DATA_END
