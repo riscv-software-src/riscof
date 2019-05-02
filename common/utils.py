@@ -73,6 +73,11 @@ def execute_command(execute):
     if(out):
         logger.warning(out.rstrip().decode('ascii'))
 
+def execute_command_log(execute, logfile):
+    execute = execute + '> {}'.format(logfile)
+    logger.debug(execute)
+    os.system(execute)
+
 def rips_cmdline_args():
 
     parser = argparse.ArgumentParser(
