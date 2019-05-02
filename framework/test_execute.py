@@ -65,7 +65,7 @@ def load_yaml(inp_file):
     logger.info('Target-ABI: '+user_abi)
 
     work_dir=root_dir+'work/'
-    user_sign = work_dir+foo['USER_SIGN']
+    user_sign = foo['USER_SIGN']
     if not os.path.exists(work_dir):
         logger.debug('Creating new work directory: '+work_dir)
         os.mkdir(work_dir)
@@ -77,17 +77,17 @@ def load_yaml(inp_file):
    
     compile_cmd = gcc+ ' -march={0} -mabi={1} '+compile_flags+'-I' + env_dir +\
             ' -T'+linker
-    objdump = foo['RISCV_PREFIX']+'objdump -D {0} > {1}'
+    objdump = foo['RISCV_PREFIX']+'objdump -D '
 
     test_unprivilege(foo)
     test_warl(foo)
 
-def compare_signature():
+def compare_signature(test_dir):
     global user_sign
     global user_target
-    signature=open(user_sign,'r')
-    reference=open(work_dir+'reference','r')
-    if( filecmp.cmp(user_sign,work_dir+'reference') ):
+    signature=open(test_dir+user_sign,'r')
+    reference=open(test_dir+'reference','r')
+    if( filecmp.cmp(user_sign,test_dir+'reference') ):
         status='Passed'
     else:
         status='Failed'
@@ -128,30 +128,36 @@ def test_unprivilege(foo):
     global root_dir
     global compile_cmd
     global user_abi
+    global objdump
 
     unprivilege_target_pool=collect_unprivilege(foo)
     unprivilege_target_status=[]
     simulator = foo['USER_EXECUTABLE']
-    logger.info("--------------------------------------------------\n")
+    logger.info("--------------------------------------------------")
     logger.info("Running UnPrivileged Tests")
-    logger.info("--------------------------------------------------\n")
+    logger.info("--------------------------------------------------")
     for asm in unprivilege_target_pool:
         logger.debug("\n")
         logger.debug('Running Unprivileged Test: '+str(asm[0]))
         test = root_dir+'suite/'+str(asm[0])+'.S'
-        elf = work_dir+str(asm[0])
+        test_dir = work_dir+str(asm[0])+'/'
+        shutil.rmtree(test_dir, ignore_errors=True)
+        os.mkdir(test_dir)
+        os.chdir(test_dir)
+        elf = test_dir+str(asm[0])+'.elf'
         cmd=compile_cmd.format(asm[1],user_abi)+' '+test+' -o '+elf
-
-        execute = cmd+parse_test(test,foo, 0, 0, 0, 0)
+        execute = cmd+parse_test(test,test_dir,foo, 0, 0, 0, 0)
         common.utils.execute_command(execute)
-        os.chdir(work_dir)
+        cmd=objdump.format(asm[1],user_abi)+' '+elf
+        common.utils.execute_command_log(cmd, '{}.disass'.format(str(asm[0])))
+#        os.chdir(work_dir)
 
         common.utils.execute_command(simulator+elf)
         post_sim_fix=env_dir+foo['USER_POST_SIM']
         common.utils.execute_command(post_sim_fix)
 
-        os.chdir(root_dir)
-        status=compare_signature()
+        #os.chdir(root_dir)
+        status=compare_signature(test_dir)
         unprivilege_target_status.append(status)
 
     logger.info('Following '+str(len(unprivilege_target_pool))+' Unprivileged \
@@ -184,7 +190,11 @@ def test_warl (foo):
     test_status=[]
     for asm in warl_test_list:
         test = root_dir+'suite/'+asm+'.S'
-        elf = work_dir+asm
+        test_dir = work_dir+str(asm[0])+'/'
+        shutil.rmtree(test_dir, ignore_errors=True)
+        os.mkdir(test_dir)
+        os.chdir(test_dir)
+        elf = test_dir+str(asm[0])+'.elf'
         legal, illegal=warl_resolver_exhaustive(foo['MSTATUS_MPP'], 2)
         cmd=compile_cmd.format('rv32im',user_abi)+' '+test+' -o '+elf
         for i in range(len(legal)):
@@ -196,18 +206,19 @@ def test_warl (foo):
                                   ' -DILLEGAL=' + str(illegal[j]) +\
                                   ' -DLEGAL_SATURATE_S=' +str(min(legal)) +\
                                   ' -DLEGAL_SATURATE_L=' +str(max(legal))
-                execute = execute+parse_test(test,foo, legal[i], illegal[j], 
+                execute = execute+parse_test(test,test_dir,foo, legal[i], illegal[j], 
                             min(legal), max(legal))
                 common.utils.execute_command(execute)
-                os.chdir(work_dir)
+
+                #os.chdir(test_dir)
 
                 common.utils.execute_command(simulator+elf)
 
                 post_sim_fix=env_dir+foo['USER_POST_SIM']
                 common.utils.execute_command(post_sim_fix)
 
-                os.chdir(root_dir)
-                status=compare_signature()
+                #os.chdir(root_dir)
+                status=compare_signature(test_dir)
                 test_name.append(asm+' legal: '+str(legal[i]) + ' illegal: ' +\
                         str(illegal[j]))
                 test_status.append(status)
@@ -246,11 +257,11 @@ def warl_resolver_random(node, field_size):
             illegal.append(rand_illegal)
     return legal, illegal
 
-def parse_test(file_name, foo, legal, illegal, legal_saturate_s,
+def parse_test(file_name, test_dir, foo, legal, illegal, legal_saturate_s,
         legal_saturate_l):
     global work_dir
     macro=''
-    fout = open(work_dir+'reference','w')
+    fout = open(test_dir+'reference','w')
     test_part_flag = False
     test_val = True
     fin = open(file_name,'r') 
