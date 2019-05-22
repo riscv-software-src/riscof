@@ -111,7 +111,7 @@ mvendorid:
         readOnly:
             type: boolean
             default: True
-            allowed: True
+            allowed: [True]
 
 marchid:
     type: dict
@@ -126,7 +126,7 @@ marchid:
         readOnly:
             type: boolean
             default: True
-            allowed: True
+            allowed: [True]
 
 mimpid:
     type: dict
@@ -141,7 +141,7 @@ mimpid:
         readOnly:
             type: boolean
             default: True
-            allowed: True
+            allowed: [True]
 
 mhartids:
     type: dict
@@ -156,7 +156,7 @@ mhartids:
         readOnly:
             type: boolean
             default: True
-            allowed: True
+            allowed: [True]
 ## ================================================================
 ## Features: MSTATUS fields
 MSTATUS:
