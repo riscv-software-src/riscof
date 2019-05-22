@@ -40,11 +40,6 @@
 #                     type: string
 #                     allowed: ['saturate', 'unchanged']
 
-width:
-    type: integer
-    allowed: [32, 64, 128]
-    check_with: set_xlen
-    default: 32
 # ISA Supported
 ISA: 
     type: string
@@ -75,17 +70,24 @@ misa:
             allowed: [1, 2, 3]
             default: []
             check_with: len_check
-        #Base and Offset for the Extensions fields for the MISA register. 26 bits wide
-        Base:
-            type: integer
-            min: 0x00
-            max: 0x3FFFFFF
-            default: 0x00
-        Value:
-            type: integer
-            min: 0x10
-            max: 0x3FFFFFF
-            default: 0x100
+            readonly: 
+        Extensions:
+            schema:
+            #Base and Offset for the Extensions fields for the MISA register. 26 bits wide
+            base:
+                type: integer
+                min: 0x00
+                max: 0x3FFFFFF
+                default: 0x00
+            value:
+                type: integer
+                min: 0x10
+                max: 0x3FFFFFF
+                default: 0x100
+            readonly:
+                type: boolean
+                default: False
+
 # ================================================================
 # Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
 
