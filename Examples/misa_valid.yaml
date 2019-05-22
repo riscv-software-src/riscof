@@ -1,0 +1,14 @@
+ISA: "RV32IFD"
+User_Spec_Version: 2.2
+Privilege_Spec_Version: 1.10
+misa:
+  implemented: True
+  MXL:
+    values: [1]
+    readonly: True
+  Extensions:
+    base: 0x08
+    value: 0x120
+mvendorid:
+  implemented: True
+  value: 0x05

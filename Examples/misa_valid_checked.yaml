@@ -1,0 +1,33 @@
+ISA: RV32IFD
+User_Spec_Version: 2.2
+Privilege_Spec_Version: 1.1
+misa:
+  implemented: true
+  MXL:
+    values:
+    - 1
+    readonly: true
+  Extensions:
+    base: 8
+    value: 288
+    readonly: false
+mvendorid:
+  implemented: true
+  value: 5
+  readonly: true
+marchid:
+  implemented: false
+  value: 0
+  readonly: true
+mimpid:
+  implemented: false
+  value: 0
+  readonly: true
+mhartids:
+  implemented: false
+  value:
+  - 0
+  readonly: true
+MIDELEG: 4095
+MEDELEG: 2047
+MIP: 4095

@@ -45,20 +45,23 @@ ISA:
     type: string
     regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Zam)*'
     required: True
+    check_with: capture_isa_specifics
 
 # Version number of User Level ISA specification
 User_Spec_Version:
     type: float
     min: 2.2 
     default: 2.2
+    required: True
 
 # Version number of Privileged Architecture specification
 Privilege_Spec_Version:
     type: float
     min: 1.10
     default: 1.10
+    required: True
 
-#MISA register
+#MISA register MXL implemented as a distinct type and Extensions as a bitmask
 misa:
     type: dict
     schema: 
@@ -79,7 +82,6 @@ misa:
         Extensions:
             type: dict
             schema:
-                #Base and Offset for the Extensions fields for the MISA register. 26 bits wide
                 base:
                     type: integer
                     min: 0x00
@@ -93,7 +95,7 @@ misa:
                 readonly:
                     type: boolean
                     default: False
-            # check_with: ext_check
+            check_with: ext_check
 
 # ================================================================
 # Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
@@ -108,7 +110,7 @@ mvendorid:
             type: integer
             default: 0
             check_with: max_length
-        readOnly:
+        readonly:
             type: boolean
             default: True
             allowed: [True]
@@ -121,12 +123,16 @@ marchid:
             default: False
         value:
             type: integer
-            default: 0
+            default: 0x00
             check_with: max_length
-        readOnly:
+        readonly:
             type: boolean
             default: True
             allowed: [True]
+    default:
+        implemented: False
+        value: 0x00
+        readonly: True
 
 mimpid:
     type: dict
@@ -138,10 +144,14 @@ mimpid:
             type: integer
             default: 0x00
             check_with: max_length
-        readOnly:
+        readonly:
             type: boolean
             default: True
             allowed: [True]
+    default:
+        implemented: False
+        value: 0x00
+        readonly: True
 
 mhartids:
     type: dict
@@ -152,11 +162,15 @@ mhartids:
         value:
             type: list
             default: [0]
-            # check_with: hart_check
-        readOnly:
+            check_with: hart_check
+        readonly:
             type: boolean
             default: True
             allowed: [True]
+    default:
+        implemented: False
+        value: [0]
+        readonly: True
 ## ================================================================
 ## Features: MSTATUS fields
 MSTATUS:
@@ -261,36 +275,37 @@ MIE:
   type: integer
   max: 0xFFF
 
-# Platform environment
-# Name of the Target
-USER_TARGET:
-    type: string
-    required: True
-# Directory containing the platform specific headers
-USER_ENV_DIR:
-    type: string
-    required: True
-# Linker script to be used during compilation of test
-USER_LINKER:
-    type: string
-    required: True
-# User defined ABI to be used during compilation
-USER_ABI:
-    type: string
-    required: True
-USER_EXECUTABLE:
-    type: string
-    required: True
 
-# Execution Enviornment
-RISCV-PREFIX:
-    type: string
-    default: riscv64-unknown-elf-
-    required: True
-USER_SIGN:
-    type: string
-    required: True
-USER_POST_SIM:
-    type: string
-    default: ''
-    required: False
+# # Platform environment
+# # Name of the Target
+# USER_TARGET:
+#     type: string
+#     required: True
+# # Directory containing the platform specific headers
+# USER_ENV_DIR:
+#     type: string
+#     required: True
+# # Linker script to be used during compilation of test
+# USER_LINKER:
+#     type: string
+#     required: True
+# # User defined ABI to be used during compilation
+# USER_ABI:
+#     type: string
+#     required: True
+# USER_EXECUTABLE:
+#     type: string
+#     required: True
+
+# # Execution Enviornment
+# RISCV-PREFIX:
+#     type: string
+#     default: riscv64-unknown-elf-
+#     required: True
+# USER_SIGN:
+#     type: string
+#     required: True
+# USER_POST_SIM:
+#     type: string
+#     default: ''
+#     required: False
