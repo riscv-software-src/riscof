@@ -40,10 +40,15 @@
 #                     type: string
 #                     allowed: ['saturate', 'unchanged']
 
+width:
+    type: integer
+    allowed: [32, 64, 128]
+    check_with: set_xlen
+    default: 32
 # ISA Supported
 ISA: 
     type: string
-    regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Counters|Zam)*'
+    regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Zam)*'
     required: True
 
 # Version number of User Level ISA specification
@@ -59,17 +64,17 @@ Privilege_Spec_Version:
     default: 1.10
 
 #MISA register
-MISA:
+misa:
     type: dict
     schema: 
         implemented:
             type: boolean
             default: False
-            required: True
         MXL:
             type: list
             allowed: [1, 2, 3]
             default: []
+            check_with: len_check
         #Base and Offset for the Extensions fields for the MISA register. 26 bits wide
         Base:
             type: integer
@@ -81,11 +86,10 @@ MISA:
             min: 0x10
             max: 0x3FFFFFF
             default: 0x100
-    required: True
 # ================================================================
 # Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
 
-Vendorid:
+mvendorid:
     type: dict
     schema: 
         implemented: 
@@ -94,8 +98,13 @@ Vendorid:
         value:
             type: integer
             default: 0x00
+            check_with: max_check
+        readOnly:
+            type: boolean
+            default: True
+            allowed: True
 
-Archid:
+marchid:
     type: dict
     schema: 
         implemented: 
@@ -104,8 +113,13 @@ Archid:
         value:
             type: integer
             default: 0x00
+            check_with: max_check
+        readOnly:
+            type: boolean
+            default: True
+            allowed: True
 
-Impid:
+mimpid:
     type: dict
     schema: 
         implemented: 
@@ -114,11 +128,26 @@ Impid:
         value:
             type: integer
             default: 0x00
+            check_with: max_check
+        readOnly:
+            type: boolean
+            default: True
+            allowed: True
 
-Hartids:
-    type: list
-    default: [0]
-
+mhartids:
+    type: dict
+    schema: 
+        implemented: 
+            type: boolean
+            default: False
+        value:
+            type: list
+            default: [0]
+            check_with: hart_check
+        readOnly:
+            type: boolean
+            default: True
+            allowed: True
 ## ================================================================
 ## Features: MSTATUS fields
 MSTATUS:
@@ -157,6 +186,7 @@ MSTATUS:
                     type: list
                     allowed: [1, 2, 3]
                     default: [2]
+MTVEC
 # TODO: TW and XS as per nikhil's def
 
 
