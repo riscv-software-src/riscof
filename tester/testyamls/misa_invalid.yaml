@@ -4,8 +4,10 @@ Privilege_Spec_Version: 1.10
 misa:
   implemented: True
   MXL:
-    values: [1,2]
-    readonly: True
+    distinct:
+      values: [1,2]
+      readonly: True
   Extensions:
-    base: 0x08
-    value: 0x123
+    bitmask:
+      base: 0x08
+      value: 0x123

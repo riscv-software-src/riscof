@@ -140,8 +140,9 @@ Privilege_Spec_Version:
 #               - base:   0x12D
 #               - value:  0x000
 # **Dependencies**: 
-#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA field
-#   - All extensions defined in the ISA field, cannot be infered as read-only-0 values.
+#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA
+#   field
+#   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
 #
 misa:
@@ -154,39 +155,41 @@ misa:
             type: dict
             schema:
                 distinct:
-                type: dict
-                schema:
-                  values:
-                      type: list
-                      allowed: [1, 2, 3]
-                      default: []
-                      check_with: len_check
-                  modes:
-                      type: list
-                      allowed: ['UnChd','Largest','Smallest']
-                  readonly:
-                      type: boolean
-                      default: False 
+                    type: dict
+                    schema:
+                        values:
+                            type: list
+                            allowed: [1, 2, 3]
+                            default: []
+                            check_with: len_check
+                        modes:
+                            type: list
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
+                            default: ["UnChd"]
+                        readonly:
+                            type: boolean
+                            default: False 
+                allow_unknown: False
         Extensions:
             type: dict
             schema:
                 bitmask:
-                type: dict
-                schema:
-                    base:
-                        type: integer
-                        min: 0x00
-                        max: 0x3FFFFFF
-                        default: 0x00
-                    value:
-                        type: integer
-                        min: 0x10
-                        max: 0x3FFFFFF
-                        default: 0x100
+                    type: dict
+                    schema:
+                        base:
+                            type: integer
+                            min: 0x00
+                            max: 0x3FFFFFF
+                            default: 0x00
+                        value:
+                            type: integer
+                            min: 0x10
+                            max: 0x3FFFFFF
+                            default: 0x100
+                    check_with: ext_check
                 readonly:
                     type: boolean
                     default: False
-            check_with: ext_check
     default:
         implemented: False
 ###
