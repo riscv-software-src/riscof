@@ -9,8 +9,8 @@ import re
 
 testyamldir = "tester/testyamls/"
 testpool =  {
-    "misa_valid.yaml": False,
-    "misa_invalid.yaml": True
+    "misa_valid.yaml": True,
+    "misa_invalid.yaml": False
 }
 schema = "rips/schema.yaml"
 

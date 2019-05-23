@@ -58,73 +58,119 @@
 #         In the value(FixedVal) the values for the Read only bits are given and the rest of the bits are cleared.
 
 ###
-# ISA Supported
+# **Description**: Takes input a string representing the ISA supported by the implementation. All extension names
+# (other than Zext) should be mentioned in upper-case. Z extensions should begin with an upper-case
+# 'Z' followed by lower-case extension name (without Camel casing)
+#
+# **Examples**: 
+#   - ISA: RV32IMA 
+#   - ISA: RV64IMAFDCZifencei
+#
+# **Dependencies**: 
+#   - Certain extensions are only valid in certain user-spec version. For, eg. Zifencei is available only in user-spec 2.3 and above.
 ISA: 
     type: string
     regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Zam)*'
     required: True
     check_with: capture_isa_specifics
 
-### Version number of User Level ISA specification
+### 
+# **Description**: Version number of User/Non-priveleged ISA specification
+#
+# **Examples**:
+#   - User_Spec_Version: 2.1
+#   - User_Spec_Version: 2.3
+#
+# **Dependencies**:
+#   - None 
 User_Spec_Version:
     type: float
     min: 2.2 
     default: 2.2
     required: True
 
-### Version number of Privileged Architecture specification
+### 
+# **Description**: Version number of Priveleged ISA specification
+#
+# **Examples**:
+#   - Privilege_Spec_Version: 1.10
+#   - Privilege_Spec_Version: 1.11
+#
+# **Dependencies**:
+#   - None 
 Privilege_Spec_Version:
     type: float
     min: 1.10
     default: 1.10
     required: True
 
-###
-#     *** MXL ***
-#         This stores the list of allowed values of xlen in machine mode. It is a WARL field and is treated as a distinct
-#         type because the values which are allowed by the ISA for this field are only 3.
-#     Extensions 
-#         This indicate which of the extensions are enabled/present in the implementation. This is a WARL field and is treated
-#         as a bitmask as each individual bit has a significance in the ISA and almost 
+### 
+# **Description**: Describes the fields of the *misa* CSR. A user needs to provide the following
+# fields:
+#   - implemented: A boolean value indicating if the *misa* has been implemented or not.
+#   - MXL: needs to be described as *distinct-warl-func* provinding a list of legal values in int
+#       - dintinct:
+#           - values: a list of legal values that the MXL field can take
+#           - modes : a string describing one of the *distinct-warl-func*
+#   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
+#       - bitmask
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*
+# **Examples**:
+#   - misa:
+#       - implemented: True
+#       - MXL:
+#           - distinct:
+#               - values : [1, 2]
+#               - modes  : 'UnChd'
+#       - Extensions:
+#           - bitmask:
+#               - base:   0x12D
+#               - value:  0x000
+# **Dependencies**: 
+#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA
+#   field
+#   - All extensions defined in the ISA field, cannot be infered as read-only-0 values. 
+#   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
 misa:
     type: dict
     schema: 
         implemented:
             type: boolean
             default: False
-        ###
-        #   This stores the list of allowed values of xlen in machine mode. It is a WARL field and is treated as a distinct
-        #   type because the values which are allowed by the ISA for this field are only 3.
         MXL:
             type: dict
             schema:
-                values:
-                    type: list
-                    allowed: [1, 2, 3]
-                    default: []
-                    check_with: len_check
-                modes:
-                    type: list
-                    allowed: ['UnChd','Largest','Smallest']
-                readonly:
-                    type: boolean
-                    default: False 
-        ### 
-        #   This indicate which of the extensions are enabled/present in the implementation. This is a WARL field and is treated
-        #   as a bitmask as each individual bit has a significance in the ISA and has to be defined appropriately.
+                distinct:
+                type: dict
+                schema:
+                  values:
+                      type: list
+                      allowed: [1, 2, 3]
+                      default: []
+                      check_with: len_check
+                  modes:
+                      type: list
+                      allowed: ['UnChd','Largest','Smallest']
+                  readonly:
+                      type: boolean
+                      default: False 
         Extensions:
             type: dict
             schema:
-                base:
-                    type: integer
-                    min: 0x00
-                    max: 0x3FFFFFF
-                    default: 0x00
-                value:
-                    type: integer
-                    min: 0x10
-                    max: 0x3FFFFFF
-                    default: 0x100
+                bitmask:
+                type: dict
+                schema:
+                    base:
+                        type: integer
+                        min: 0x00
+                        max: 0x3FFFFFF
+                        default: 0x00
+                    value:
+                        type: integer
+                        min: 0x10
+                        max: 0x3FFFFFF
+                        default: 0x100
                 readonly:
                     type: boolean
                     default: False
