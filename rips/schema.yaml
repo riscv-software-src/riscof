@@ -56,43 +56,36 @@
 #     3.bitmask-
 #         For the bits which are Read only, the corresponding bits are cleared in the base(Base) and the rest of the bits are set.
 #         In the value(FixedVal) the values for the Read only bits are given and the rest of the bits are cleared.
-###
-### ISA Supported ###
+### ISA Supported
 ISA: 
     type: string
     regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Zam)*'
     required: True
     check_with: capture_isa_specifics
 
-### Version number of User Level ISA specification ###
+### Version number of User Level ISA specification
 User_Spec_Version:
     type: float
     min: 2.2 
     default: 2.2
     required: True
 
-### Version number of Privileged Architecture specification ###
+### Version number of Privileged Architecture specification
 Privilege_Spec_Version:
     type: float
     min: 1.10
     default: 1.10
     required: True
 
-###
-# misa
-#     MXl 
-#         This stores the list of allowed values of xlen in machine mode. It is a WARL field and is treated as a distinct
-#         type because the values which are allowed by the ISA for this field are only 3.
-#     Extensions 
-#         This indicate which of the extensions are enabled/present in the implementation. This is a WARL field and is treated
-#         as a bitmask as each individual bit has a significance in the ISA and almost 
-###
 misa:
     type: dict
     schema: 
         implemented:
             type: boolean
             default: False
+        ###
+        #   This stores the list of allowed values of xlen in machine mode. It is a WARL field and is treated as a distinct
+        #   type because the values which are allowed by the ISA for this field are only 3.
         MXL:
             type: dict
             schema:
@@ -107,6 +100,9 @@ misa:
                 readonly:
                     type: boolean
                     default: False 
+        ### 
+        #   This indicate which of the extensions are enabled/present in the implementation. This is a WARL field and is treated
+        #   as a bitmask as each individual bit has a significance in the ISA and has to be defined appropriately.
         Extensions:
             type: dict
             schema:
@@ -127,8 +123,7 @@ misa:
     default:
         implemented: False
 ###
-# Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
-###
+# Read only register to store Vendor Id
 mvendorid:
     type: dict
     schema: 
@@ -143,7 +138,8 @@ mvendorid:
             type: boolean
             default: True
             allowed: [True]
-
+###
+# Read only register to store Architecture Id
 marchid:
     type: dict
     schema: 
@@ -163,6 +159,8 @@ marchid:
         value: 0x00
         readonly: True
 
+###
+# Read only register to store Implementation Id
 mimpid:
     type: dict
     schema: 
@@ -182,6 +180,8 @@ mimpid:
         value: 0x00
         readonly: True
 
+###
+# Read only register to store Hart Ids
 mhartids:
     type: dict
     schema: 
