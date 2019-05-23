@@ -92,6 +92,9 @@ misa:
         implemented:
             type: boolean
             default: False
+        ###
+        #   This stores the list of allowed values of xlen in machine mode. It is a WARL field and is treated as a distinct
+        #   type because the values which are allowed by the ISA for this field are only 3.
         MXL:
             type: dict
             schema:
@@ -106,6 +109,9 @@ misa:
                 readonly:
                     type: boolean
                     default: False 
+        ### 
+        #   This indicate which of the extensions are enabled/present in the implementation. This is a WARL field and is treated
+        #   as a bitmask as each individual bit has a significance in the ISA and has to be defined appropriately.
         Extensions:
             type: dict
             schema:
@@ -126,7 +132,7 @@ misa:
     default:
         implemented: False
 ###
-# Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
+# Read only register to store Vendor Id
 mvendorid:
     type: dict
     schema: 
@@ -141,7 +147,8 @@ mvendorid:
             type: boolean
             default: True
             allowed: [True]
-
+###
+# Read only register to store Architecture Id
 marchid:
     type: dict
     schema: 
@@ -161,6 +168,8 @@ marchid:
         value: 0x00
         readonly: True
 
+###
+# Read only register to store Implementation Id
 mimpid:
     type: dict
     schema: 
@@ -180,6 +189,8 @@ mimpid:
         value: 0x00
         readonly: True
 
+###
+# Read only register to store Hart Ids
 mhartids:
     type: dict
     schema: 
