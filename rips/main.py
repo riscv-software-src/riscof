@@ -44,7 +44,8 @@ def main():
 
     # Perform Validation
     logger.info('Initiating Validation')
-    valid = validator.validate(inp_yaml)
+    valid=validator.validate(inp_yaml)
+    
     # Print out errors
     if valid:
         logger.info('No Syntax errors in Input Yaml. :)')
