@@ -63,8 +63,11 @@
 # 'Z' followed by lower-case extension name (without Camel casing)
 #
 # **Examples**: 
-#   - ISA: RV32IMA 
-#   - ISA: RV64IMAFDCZifencei
+#
+# .. code-block:: none
+#
+#   ISA: RV32IMA 
+#   ISA: RV64IMAFDCZifencei
 #
 # **Dependencies**: 
 #   - Certain extensions are only valid in certain user-spec version. For, eg. Zifencei is available only in user-spec 2.3 and above.
@@ -78,8 +81,11 @@ ISA:
 # **Description**: Version number of User/Non-priveleged ISA specification
 #
 # **Examples**:
-#   - User_Spec_Version: 2.1
-#   - User_Spec_Version: 2.3
+#
+# .. code-block:: none
+#
+#   User_Spec_Version: 2.1
+#   User_Spec_Version: 2.3
 #
 # **Dependencies**:
 #   - None 
@@ -93,8 +99,11 @@ User_Spec_Version:
 # **Description**: Version number of Priveleged ISA specification
 #
 # **Examples**:
-#   - Privilege_Spec_Version: 1.10
-#   - Privilege_Spec_Version: 1.11
+#
+# .. code-block:: none
+#
+#   Privilege_Spec_Version: 1.10
+#   Privilege_Spec_Version: 1.11
 #
 # **Dependencies**:
 #   - None 
@@ -117,7 +126,10 @@ Privilege_Spec_Version:
 #           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*
 #           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*
 # **Examples**:
-#   - misa:
+#
+# .. code-block:: none
+#
+#     misa:
 #       - implemented: True
 #       - MXL:
 #           - distinct:
@@ -128,10 +140,10 @@ Privilege_Spec_Version:
 #               - base:   0x12D
 #               - value:  0x000
 # **Dependencies**: 
-#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA
-#   field
-#   - All extensions defined in the ISA field, cannot be infered as read-only-0 values. 
+#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA field
+#   - All extensions defined in the ISA field, cannot be infered as read-only-0 values.
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
+#
 misa:
     type: dict
     schema: 
