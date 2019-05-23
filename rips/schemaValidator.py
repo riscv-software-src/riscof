@@ -9,9 +9,12 @@ class schemaValidator(Validator):
         global extensions
         super(schemaValidator, self).__init__(*args, **kwargs)
 
-    '''Function to extract and store ISA specific information(such as xlen,user spec version and extensions present)
-        and check whether the dependencies in ISA extensions are satisfied.'''
     def _check_with_capture_isa_specifics(self,field,value):
+        '''
+        Function to extract and store ISA specific information(such as xlen,user 
+        spec version and extensions present)
+        and check whether the dependencies in ISA extensions are satisfied.
+        '''
         global xlen
         global extensions
         extension_enc = list("00000000000000000000000000")
@@ -48,8 +51,8 @@ class schemaValidator(Validator):
                 extension_enc[25-int(ord(x)- ord('A'))] = "1"
         extensions = int("".join(extension_enc),2)
 
-    '''Function to check whether the given value is less than the maximum value that can be stored(2^xlen-1).'''
     def _check_with_max_length(self,field,value):
+        '''Function to check whether the given value is less than the maximum value that can be stored(2^xlen-1).'''
         global xlen
         global extensions
         if value > (2**xlen)-1:
@@ -62,23 +65,23 @@ class schemaValidator(Validator):
             if max(value) > xlen/32:
                 self._error(field,"Max value allowed is greater than " + str(int(xlen/32)))
 
-    '''Function to check whether the hart ids are valid and atleast one is 0.'''
     def _check_with_hart_check(self,field,value):
+        '''Function to check whether the hart ids are valid and atleast one is 0.'''
         if max(value) > xlen/32:
             self._error(field, "Max width allowed is greater than xlen.")
         if 0 not in value:
             self.error(field,"Atleast one hart must have id as 0.")
     
-    '''Function to check whether the bitmask given for the Extensions field in misa is valid.'''
     def _check_with_ext_check(self,field,value):
+        '''Function to check whether the bitmask given for the Extensions field in misa is valid.'''
         global xlen
         global extensions
         val = value['base'] ^ value['value'] ^ extensions
         if(val > 0):
             self._error(field,"Extension Bitmask error.")
     
-    '''Function to check whether the modes specified in MPP field in mstatus is supported'''
     def _check_with_mpp_check(self,field,value):
+        '''Function to check whether the modes specified in MPP field in mstatus is supported'''
         global extensions
         if(0 in value) and extensions ^ int("0100000",16) == 0:
             self._error(field,"0 not a valid entry as U extension is not supported.")
