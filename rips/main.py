@@ -51,8 +51,6 @@ def main():
     else:
       error_list = validator.errors
       logger.error(str(error_list))
-      # for key in error_list:
-      #   logger.error(key+"".join(error_list[key]))
       sys.exit(0)
 
     logger.info('Performing Additional Checks')
