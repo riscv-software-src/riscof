@@ -7,16 +7,17 @@ import sys
 import os
 import re
 
+
 def main():
     # Set up the parser
-    parser=common.utils.rips_cmdline_args()
-    args=parser.parse_args()
+    parser = common.utils.rips_cmdline_args()
+    args = parser.parse_args()
 
-    # Set up the logger 
+    # Set up the logger
     common.utils.setup_logging(args.verbose)
-    logger=logging.getLogger()
+    logger = logging.getLogger()
     logger.handlers = []
-    ch=logging.StreamHandler()
+    ch = logging.StreamHandler()
     ch.setFormatter(common.utils.ColoredFormatter())
     logger.addHandler(ch)
 
@@ -28,19 +29,18 @@ def main():
       Read the input foo (yaml file) and validate with schema for feature values
       and constraints
     """
-    inputfile=open(foo,'r')
-    schemafile=open(schema,'r')
+    inputfile = open(foo, 'r')
+    schemafile = open(schema, 'r')
     # Load input YAML file
     logger.info('Loading input file: '+str(foo))
-    inp_yaml=yaml.safe_load(inputfile)
-
+    inp_yaml = yaml.safe_load(inputfile)
 
     # instantiate validator
     logger.info('Load Schema '+str(schema))
-    schema_yaml=yaml.safe_load(schemafile)
-    validator=schemaValidator(schema_yaml)
+    schema_yaml = yaml.safe_load(schemafile)
+    validator = schemaValidator(schema_yaml)
     validator.allow_unknown = True
-    normalized=validator.normalized(inp_yaml,schema_yaml)
+    normalized = validator.normalized(inp_yaml, schema_yaml)
 
     # Perform Validation
     logger.info('Initiating Validation')
@@ -48,11 +48,11 @@ def main():
     
     # Print out errors
     if valid:
-      logger.info('No Syntax errors in Input Yaml. :)')
+        logger.info('No Syntax errors in Input Yaml. :)')
     else:
-      error_list = validator.errors
-      logger.error(str(error_list))
-      sys.exit(0)
+        error_list = validator.errors
+        logger.error(str(error_list))
+        sys.exit(0)
 
     file_name_split=foo.split('.')
     output_filename=file_name_split[0]+'_checked.'+file_name_split[1]
@@ -60,5 +60,6 @@ def main():
     logger.info('Dumping out Normalized Checked YAML: '+output_filename)
     yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
 
+
 if __name__ == '__main__':
-  main()
+    main()
