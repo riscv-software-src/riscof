@@ -86,6 +86,7 @@ class schemaValidator(Validator):
     '''Function to check whether the bitmask given for the Extensions field in misa is valid.'''
         global xlen
         global extensions
+        # value=value['bitmask']
         val = value['base'] ^ value['value'] ^ extensions
         if(val > 0):
             self._error(field, "Extension Bitmask error.")
