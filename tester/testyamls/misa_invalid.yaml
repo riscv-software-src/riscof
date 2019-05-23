@@ -1,4 +1,4 @@
-ISA: "RV32ID"
+ISA: "RV32IDZicsrZam"
 User_Spec_Version: 2.2
 Privilege_Spec_Version: 1.10
 misa:

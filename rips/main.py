@@ -45,6 +45,7 @@ def main():
     # Perform Validation
     logger.info('Initiating Validation')
     valid=validator.validate(inp_yaml)
+    
     # Print out errors
     if valid:
       logger.info('No Syntax errors in Input Yaml. :)')
@@ -52,8 +53,6 @@ def main():
       error_list = validator.errors
       logger.error(str(error_list))
       sys.exit(0)
-
-    logger.info('Performing Additional Checks')
 
     file_name_split=foo.split('.')
     output_filename=file_name_split[0]+'_checked.'+file_name_split[1]

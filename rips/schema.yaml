@@ -1,4 +1,3 @@
-
 #=========================================
 #WARL defination types example
 # bitmask:
@@ -40,28 +39,54 @@
 #                     type: string
 #                     allowed: ['saturate', 'unchanged']
 
-# ISA Supported
+###
+# The readonly field specifies that the fields corresponding to that particular field(register) is implemented as read only.
+# The implemented field specifies that the corresponding optional feature is implemented in the DUT.
+
+# Information for WARL fields
+#     These fields can be implemented as one of the following three types.
+#     1.distinct-
+#         A set of distinct values which are considered as legal and any other value is considered as illegal.
+#         The update modes on illegal value write for this type are as follows-
+#             UnChgd,NextUp,NextDown,NearUp,NearDown,Largest,Smallest
+#     2.range-
+#         The values >= base(Lower) and <= bound(Upper) are considered legal and anything else as illegal.
+#         The update modes on illegal value write for this type are as follows-
+#             Saturate,UnChgd,Addr
+#     3.bitmask-
+#         For the bits which are Read only, the corresponding bits are cleared in the base(Base) and the rest of the bits are set.
+#         In the value(FixedVal) the values for the Read only bits are given and the rest of the bits are cleared.
+###
+### ISA Supported ###
 ISA: 
     type: string
     regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Zam)*'
     required: True
     check_with: capture_isa_specifics
 
-# Version number of User Level ISA specification
+### Version number of User Level ISA specification ###
 User_Spec_Version:
     type: float
     min: 2.2 
     default: 2.2
     required: True
 
-# Version number of Privileged Architecture specification
+### Version number of Privileged Architecture specification ###
 Privilege_Spec_Version:
     type: float
     min: 1.10
     default: 1.10
     required: True
 
-#MISA register MXL implemented as a distinct type and Extensions as a bitmask
+###
+# misa
+#     MXl 
+#         This stores the list of allowed values of xlen in machine mode. It is a WARL field and is treated as a distinct
+#         type because the values which are allowed by the ISA for this field are only 3.
+#     Extensions 
+#         This indicate which of the extensions are enabled/present in the implementation. This is a WARL field and is treated
+#         as a bitmask as each individual bit has a significance in the ISA and almost 
+###
 misa:
     type: dict
     schema: 
@@ -76,6 +101,9 @@ misa:
                     allowed: [1, 2, 3]
                     default: []
                     check_with: len_check
+                modes:
+                    type: list
+                    allowed: ['UnChd','Largest','Smallest']
                 readonly:
                     type: boolean
                     default: False 
@@ -96,10 +124,11 @@ misa:
                     type: boolean
                     default: False
             check_with: ext_check
-
-# ================================================================
+    default:
+        implemented: False
+###
 # Values of read-only Machine-level CSRs mvendorid, marchid, mimpid, hartids
-
+###
 mvendorid:
     type: dict
     schema: 
@@ -173,7 +202,7 @@ mhartids:
         readonly: True
 ## ================================================================
 ## Features: MSTATUS fields
-MSTATUS:
+mstatus:
     type: dict
     schema:
         MPP:
