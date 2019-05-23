@@ -38,7 +38,7 @@ def main():
     # instantiate validator
     logger.info('Load Schema '+str(schema))
     schema_yaml=yaml.safe_load(schemafile)
-    validator=schemaValidator(schema_yaml,xlen=32,extensions=0)
+    validator=schemaValidator(schema_yaml)
     validator.allow_unknown = True
     normalized=validator.normalized(inp_yaml,schema_yaml)
 
