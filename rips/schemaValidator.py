@@ -41,6 +41,14 @@ class schemaValidator(Validator):
             if(x in ext):
                 extension_enc[25-int(ord(x)- ord('A'))] = "1"
         extensions = int("".join(extension_enc),2)
+    def _check_with_mpp_check(self,field,value):
+        global extensions
+        if(0 in value) and extensions ^ int("0100000",16) == 0:
+            self._error(field,"0 not a valid entry as U extension is not supported.")
+        if(1 in value) and extensions ^ int("0040000",16) == 0:
+            self._error(field,"1 not a valid entry as S extension is not supported.")
+        
+
     def _check_with_max_length(self,field,value):
         global xlen
         global extensions

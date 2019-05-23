@@ -184,6 +184,7 @@ MSTATUS:
                     schema:
                         type: integer
                         allowed: [0, 1, 3]
+                    check_with: mpp_check
                 modes:
                     type: string
                     allowed: ['unchanged', 'saturate_s', 'saturate_l','next_l', 'next_s']
