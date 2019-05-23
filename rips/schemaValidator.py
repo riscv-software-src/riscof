@@ -10,8 +10,11 @@ class schemaValidator(Validator):
         super(schemaValidator, self).__init__(*args, **kwargs)
 
     def _check_with_capture_isa_specifics(self,field,value):
-        '''Function to extract and store ISA specific information(such as xlen,user spec version and extensions present)
-        and check whether the dependencies in ISA extensions are satisfied.'''
+        '''
+        Function to extract and store ISA specific information(such as xlen,user 
+        spec version and extensions present)
+        and check whether the dependencies in ISA extensions are satisfied.
+        '''
         global xlen
         global extensions
         extension_enc = list("00000000000000000000000000")

@@ -56,7 +56,9 @@
 #     3.bitmask-
 #         For the bits which are Read only, the corresponding bits are cleared in the base(Base) and the rest of the bits are set.
 #         In the value(FixedVal) the values for the Read only bits are given and the rest of the bits are cleared.
-### ISA Supported
+
+###
+# ISA Supported
 ISA: 
     type: string
     regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Zam)*'
