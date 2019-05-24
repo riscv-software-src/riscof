@@ -14,3 +14,7 @@ misa:
 mvendorid:
   implemented: True
   value: 0x05
+mstatus:
+  MPP:
+    distinct:
+      values: [0]

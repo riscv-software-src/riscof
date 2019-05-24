@@ -190,12 +190,8 @@ misa:
                     check_with: ext_check
                 readonly:
                     type: boolean
-                    default_setter: lambda doc:extreaddefset(doc)
+                    # default_setter: <lambda doc:extreaddefset(doc)>
                     readonly: True
-        readonly:
-            type: boolean
-            readonly: True
-            # default_setter: lamda doc: misaset(doc)
     default:
         implemented: False
 ### 
@@ -226,6 +222,7 @@ mvendorid:
         readonly:
             type: boolean
             default: True
+            readonly: True
 ### 
 # **Description**: Stores the ArchitectureId.
 #       - implemented: A boolean field indicating that the register has been implemented.
@@ -355,12 +352,14 @@ mstatus:
                 values:
                     type: list
                     allowed: [1, 2, 3]
-                    default: [0]
+                    default: [1]
                     check_with: len_check
                 implemented:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: sset()
+            default:
+                hardwired: ['No']
         UXL:
             type: dict
             schema:
@@ -376,6 +375,26 @@ mstatus:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: uset()
+            default:
+                hardwired: ['No']
+        SD:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    readonly: True
+                    default: True
+                hardwired:
+                    type: boolean
+                    # default_setter: lambda doc:kk()
+                    readonly: True
+                    default: False
+        TSR:
+            type: dict
+            schema:
+                type: list
+                # default_setter: tsrset
+        
 # TODO: TW and XS as per nikhil's def
 
 mtvec:
