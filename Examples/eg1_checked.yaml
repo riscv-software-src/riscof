@@ -24,33 +24,21 @@ RISCV_PREFIX: riscv32-unknown-elf-
 USER_POST_SIM: sign_fix.sh
 User_Spec_Version: 2.2
 Privilege_Spec_Version: 1.1
-MISA_MXL:
-- 1
-MISA_A:
-- 0
-MISA_C:
-- 0
-MISA_G:
-- 0
-MISA_I:
-- 1
-MISA_N:
-- 0
-MISA_Q:
-- 0
-MISA_S:
-- 0
-MISA_U:
-- 0
-MISA_X:
-- 0
-Hartids:
-- 0
-MSTATUS_SXL:
-- 0
-MSTATUS_UXL:
-- 0
+misa:
+  implemented: false
+marchid:
+  implemented: false
+  value: 0
+  readonly: true
+mimpid:
+  implemented: false
+  value: 0
+  readonly: true
+mhartids:
+  implemented: false
+  value:
+  - 0
+  readonly: true
 MIDELEG: 4095
 MEDELEG: 2047
 MIP: 4095
-RISCV-PREFIX: riscv64-unknown-elf-

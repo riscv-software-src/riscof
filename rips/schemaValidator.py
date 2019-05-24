@@ -69,6 +69,7 @@ class schemaValidator(Validator):
             self._error(field, "Max value is greater than "+str(2**xlen-1))
 
     def _check_with_len_check(self, field, value):
+        '''Function to check whether the given value is less than XLEN/32(For check).'''
         global xlen
         global extensions
         if(len(value) > 0):
