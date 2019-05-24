@@ -8,6 +8,12 @@ import os
 import re
 
 
+# class exset(yaml.YAMLObject):
+#   yaml_tag = '!exset'
+
+#   def __init__(self, name):
+#     self.name = eval(name)
+
 def main():
     # Set up the parser
     parser = common.utils.rips_cmdline_args()
@@ -37,7 +43,9 @@ def main():
 
     # instantiate validator
     logger.info('Load Schema '+str(schema))
+    # yaml.add_path_resolver('!exset',"lambda doc: extreaddefset(doc)")
     schema_yaml = yaml.safe_load(schemafile)
+    
     validator = schemaValidator(schema_yaml)
     validator.allow_unknown = True
     normalized = validator.normalized(inp_yaml, schema_yaml)

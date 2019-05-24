@@ -59,11 +59,12 @@ class schemaValidator(Validator):
             self._error(field, "Max value is greater than "+str(2**xlen-1))
 
     def _check_with_len_check(self, field, value):
+        '''Function to check whether the given value is less than XLEN/32(For check).'''
         global xlen
         global extensions
         if(len(value) > 0):
             if max(value) > xlen/32:
-                self._error(field,"Max value allowed is greater than " + str(int(xlen/32)))
+                self._error(field,"Max value is greater than " + str(int(xlen/32)))
 
     def _check_with_hart_check(self,field,value):
         '''Function to check whether the hart ids are valid and atleast one is 0.'''
@@ -88,3 +89,29 @@ class schemaValidator(Validator):
             self._error(field,"0 not a valid entry as U extension is not supported.")
         if(1 in value) and extensions ^ int("0040000",16) == 0:
             self._error(field,"1 not a valid entry as S extension is not supported.")
+
+exset = 'lambda doc: extreaddefset(doc)'
+
+def extreaddefset(doc):
+    if doc['misa']['Extensions']['base'] > 0:
+        return False
+    else:
+        return True
+
+def misaset(doc):
+    if doc['misa']['Extensions']['readonly'] and doc['misa']['MXL']['readonly'] and doc['misa']['implemented']:
+        return True
+    else:
+        return False
+
+def sset():
+    if extensions ^ int('40000',16) > 0:
+        return True
+    else:
+        return False
+
+def uset():
+    if extensions ^ int('100000',16) > 0:
+        return True
+    else:
+        return False
