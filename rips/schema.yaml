@@ -342,6 +342,10 @@ mstatus:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
                             default: "UnChgd"
+                readonly:
+                    type: boolean
+                    default: False
+                    readonly: True
         SXL:
             type: dict
             schema:
@@ -358,6 +362,9 @@ mstatus:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: sset()
+                readonly:
+                    type: boolean
+                    default: False
             default:
                 hardwired: ['No']
         UXL:
@@ -375,6 +382,9 @@ mstatus:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: uset()
+                readonly:
+                    type: boolean
+                    default: False
             default:
                 hardwired: ['No']
         SD:
@@ -382,19 +392,129 @@ mstatus:
             schema:
                 readonly:
                     type: boolean
-                    readonly: True
                     default: True
                 hardwired:
-                    type: boolean
-                    # default_setter: lambda doc:kk()
-                    readonly: True
-                    default: False
+                    type: integer
+                    default: 0
         TSR:
             type: dict
             schema:
-                type: list
-                # default_setter: tsrset
-        
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        TW:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        TVM:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        MXR:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        SUM:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        SPP:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        MPRV:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        MPIE:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+            default:
+                readonly: False
+        SPIE:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        UPIE:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+        MIE:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+            default:
+                readonly: False
+        SIE:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
+            readonly: True
+        UIE:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    default: False
+                hardwired:
+                    type: integer
 # TODO: TW and XS as per nikhil's def
 
 mtvec:

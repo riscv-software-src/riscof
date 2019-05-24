@@ -24,16 +24,56 @@ mstatus:
       values:
       - 0
       modes: UnChgd
+    readonly: false
   SXL:
     hardwired:
     - 'No'
     values:
     - 1
+    readonly: false
     implemented: false
   UXL:
     hardwired:
     - 'No'
+    readonly: false
     implemented: false
+  MPIE:
+    readonly: false
+  MIE:
+    readonly: false
+  TSR:
+    readonly: true
+    hardwired: 0
+  TW:
+    readonly: true
+    hardwired: 0
+  TVM:
+    readonly: true
+    hardwired: 0
+  MXR:
+    readonly: true
+    hardwired: 0
+  SUM:
+    readonly: true
+    hardwired: 0
+  SPP:
+    readonly: true
+    hardwired: 0
+  MPRV:
+    readonly: true
+    hardwired: 0
+  SPIE:
+    readonly: true
+    hardwired: 0
+  UPIE:
+    readonly: true
+    hardwired: 0
+  SIE:
+    readonly: true
+    hardwired: 0
+  UIE:
+    readonly: true
+    hardwired: 0
 marchid:
   implemented: false
   value: 0
