@@ -15,7 +15,7 @@ import re
 #     self.name = eval(name)
 
 
-def extreaddefset(doc):
+def extreaddefset():
     global inp_yaml
     # print("kk")
     # print(inp_yaml['misa']['Extensions']['bitmask']['base'])
@@ -24,14 +24,14 @@ def extreaddefset(doc):
     else:
         return True
 
-def sset(doc):
+def sset():
     global inp_yaml
     if 'S' in inp_yaml['ISA']:
         return True
     else:
         return False
 
-def uset(doc):
+def uset():
     # global extensions
     global inp_yaml
     if 'U' in inp_yaml['ISA']:
@@ -39,11 +39,61 @@ def uset(doc):
     else:
         return False
 
+def nosset():
+    global inp_yaml
+    if 'S' not in inp_yaml['ISA']:
+        return {'readonly':True,'hardwired':0}
+    else:
+        return {'readonly':False}
+    
+def nouset():
+    global inp_yaml
+    if 'U' not in inp_yaml['ISA']:
+        return {'readonly':True,'hardwired':0}
+    else:
+        return {'readonly':False}
+
+def upieset(doc):
+    global inp_yaml
+    if 'U' not in inp_yaml['ISA']:
+        return {'readonly':True,'hardwired':0}
+    elif 'UPIE' not in doc.keys():
+        return {'readonly':False}
+    else:
+        return doc['UPIE']
+
+def uieset(doc):
+    global inp_yaml
+    if 'U' not in inp_yaml['ISA']:
+        return {'readonly':True,'hardwired':0}
+    elif 'UPIE' not in doc.keys():
+        return {'readonly':False}
+    else:
+        return doc['UPIE']
+
+def twset():
+    global inp_yaml
+    if 'S' not in inp_yaml['ISA'] and 'U' not in inp_yaml['ISA']:
+        return {'readonly':True,'hardwired':0}
+    else:
+        return {'readonly':False}
+
 def add_def_setters(schema_yaml):
     # print(schema_yaml['misa'])
-    schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset(doc)
-    schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset(doc)
-    schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset(doc)
+    schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
+    schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset()
+    schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset()
+    schema_yaml['mstatus']['schema']['TVM']['default_setter'] = lambda doc: nosset()
+    schema_yaml['mstatus']['schema']['TSR']['default_setter'] = lambda doc: nosset()
+    schema_yaml['mstatus']['schema']['MXR']['default_setter'] = lambda doc: nosset()
+    schema_yaml['mstatus']['schema']['SUM']['default_setter'] = lambda doc: nosset()
+    schema_yaml['mstatus']['schema']['SPP']['default_setter'] = lambda doc: nosset()
+    schema_yaml['mstatus']['schema']['SPIE']['default_setter'] = lambda doc: nosset()
+    schema_yaml['mstatus']['schema']['SIE']['default_setter'] = lambda doc: nosset()
+    schema_yaml['mstatus']['schema']['UPIE']['default_setter'] = lambda doc: upieset(doc)
+    schema_yaml['mstatus']['schema']['UIE']['default_setter'] = lambda doc: uieset(doc)
+    schema_yaml['mstatus']['schema']['MPRV']['default_setter'] = lambda doc: nouset()
+    schema_yaml['mstatus']['schema']['TW']['default_setter'] = lambda doc: twset()
     return schema_yaml
 
 def main():
