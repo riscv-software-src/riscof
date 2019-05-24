@@ -99,6 +99,14 @@ mtvec:
       - 0
       mode: UnChgd
       readonly: false
-MIDELEG: 4095
-MEDELEG: 2047
+mideleg:
+  bitmask:
+    base: 4294967295
+    value: 0
+  implemented: false
+medeleg:
+  bitmask:
+    base: 4294965247
+    value: 0
+  implemented: false
 MIP: 4095

@@ -326,6 +326,29 @@ mhartids:
 mstatus:
     type: dict
     schema:
+        XS:
+            type: dict
+            schema:
+                readonly:
+                    type: boolean
+                    readonly: True
+                    default: True
+                hardwired:
+                    type: integer
+                    allowed: [0]
+        FS:
+            type: dict
+            schema:
+                distinct:
+                    type: dict
+                    schema:
+                        values:
+                            type: list
+                            allowed: [0,1,2,3]
+                        modes:
+                            type: string
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
+                            default: "UnChgd"
         MPP:
             type: dict
             schema:
@@ -573,8 +596,60 @@ mtvec:
                 bound: 0xFFFFFFFC
         MODE:
             distinct:
-                values: [0]    
-                    
+                values: [0]
+
+## ================================================================
+## Features: MIDELEG and MEDELEG WARL functions
+
+# This field will specify which of the interrupts in the machine mode
+# can delegated to a lower level privilege. A 0-bit indicates that
+# particular interrupt cannot be delegated.
+
+mideleg:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    check_with: max_length
+                value:
+                    type: integer
+                    default: 0x000
+                    check_with: max_length
+        implemented:
+            type: boolean    
+    check_with: midelegcheck
+    default:
+        bitmask:
+            base: 0xFFFFFFFF
+            value: 0x00
+# This field will specify which of the exceptions in the machine mode
+# can delegated to a lower level privilege. A 0-bit indicates that
+# particular exception cannot be delegated.
+medeleg:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    check_with: max_length
+                value:
+                    type: integer
+                    default: 0x000
+                    check_with: max_length
+        implemented:
+            type: boolean    
+    check_with: medelegcheck
+    default:
+        bitmask:
+            base: 0xFFFFF7FF
+            value: 0x00                    
 
 ## ================================================================
 ## Features: MTVEC WARL functions
@@ -603,25 +678,8 @@ mtvec:
 #        range:
 #          - base: 0x0
 #            bound: 0xFFFFFFFF
-#
-## ================================================================
-## Features: MIDELEG and MEDELEG WARL functions
-
-# This field will specify which of the interrupts in the machine mode
-# can delegated to a lower level privilege. A 0-bit indicates that
-# particular interrupt cannot be delegated.
-MIDELEG:
-    type: integer
-    max: 0xFFF
-    default: 0xFFF
 
 
-# This field will specify which of the exceptions in the machine mode
-# can delegated to a lower level privilege. A 0-bit indicates that
-# particular exception cannot be delegated.
-MEDELEG:
-    type: integer
-    default: 0x7FF
 
 ## ================================================================
 ## Features: MIP and MIE WARL functions
