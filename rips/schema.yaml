@@ -686,11 +686,48 @@ medeleg:
 
 # This field will describe all valid bits of MIP register which can be 
 # interpreted as Interrupts by the system in Machine Mode.
-MIP:
-  type: integer
-  default: 0xFFF
-  max: 0xFFF
-
+mip:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0xFFFFFFFF
+                    check_with: max_length
+                value:
+                    type: integer
+                    default: 0x000
+                    check_with: max_length
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        bitmask:
+            base: 0xFFFFFFFF
+mie:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0xFFFFFFFF
+                    check_with: max_length
+                value:
+                    type: integer
+                    default: 0x000
+                    check_with: max_length
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        bitmask:
+            base: 0xFFFFFFFF
 # This field will describe all valid bits of MIE register which can be 
 # used to enable or disable Interrupts in Machine Mode.
 MIE:
