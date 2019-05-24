@@ -59,7 +59,7 @@
 
 ###
 # **Description**: Takes input a string representing the ISA supported by the implementation. All extension names
-# (other than Zext) should be mentioned in upper-case. Z extensions should begin with an upper-case
+# (other than Zext) should be mentioned in upper-case. Z extensions should begin with abitmaskn upper-case
 # 'Z' followed by lower-case extension name (without Camel casing)
 #
 # **Examples**: 
@@ -707,6 +707,9 @@ mip:
     default:
         bitmask:
             base: 0xFFFFFFFF
+
+# This field will describe all valid bits of MIE register which can be 
+# used to enable or disable Interrupts in Machine Mode.
 mie:
     type: dict
     schema:
@@ -728,11 +731,1798 @@ mie:
     default:
         bitmask:
             base: 0xFFFFFFFF
-# This field will describe all valid bits of MIE register which can be 
-# used to enable or disable Interrupts in Machine Mode.
-MIE:
-  type: integer
-  max: 0xFFF
+
+mscratch:
+    type: dict
+    schema:
+        implemented:
+            type: boolean
+        readonly:
+            type: boolean
+    default:
+        implemented: True
+        readonly: False
+    readonly: True
+
+mcause:
+    type: dict
+    schema:
+        implemented:
+            type: boolean
+        readonly:
+            type: boolean
+    default:
+        implemented: True
+        readonly: False
+    readonly: True
+
+mcountinhibit:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mcounteren:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mcycle:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+minstret:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter3:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent3:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter4:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent4:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter5:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent5:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter6:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent6:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter7:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent7:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter8:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent8:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter9:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent9:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter10:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent10:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter11:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent11:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter12:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent12:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter13:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent13:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter14:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent14:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter15:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent15:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter16:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent16:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter17:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent17:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter18:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent18:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter19:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent19:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent20:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter20:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent21:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter21:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent22:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter22:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent23:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter23:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent24:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter24:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent25:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter25:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent26:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter26:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent27:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter27:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent28:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter28:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent29:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter29:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent30:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter30:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mphmevent31:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                value:
+                    type: integer
+                    default: 0x00
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
+mhpmcounter31:
+    type: dict
+    schema:
+        range:
+            type: dict
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    readonly: True
+                bound:
+                    type: integer
+                    default: 0xFFFFFFFFFFFFFFFF
+                    readonly: True
+                mode:
+                    type: string
+                    allowed: ['Saturate','Unchgd','Addr']
+                    default: 'Unchgd'
+                    readonly: True
+        readonly:
+            type: boolean
+            default: False
+        hardwired:
+            type: integer
+        implemented:
+            type: boolean
+            default: True
+            readonly: True
+    default:
+        readonly: True
+        hardwired: 0
+
 
 
 # # Platform environment
