@@ -87,6 +87,18 @@ mhartids:
   value:
   - 0
   readonly: true
+mtvec:
+  BASE:
+    range:
+      base: 0
+      bound: 4294967292
+      mode: Unchgd
+  MODE:
+    distinct:
+      values:
+      - 0
+      mode: UnChgd
+      readonly: false
 MIDELEG: 4095
 MEDELEG: 2047
 MIP: 4095

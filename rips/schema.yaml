@@ -535,12 +535,14 @@ mtvec:
                             type: string
                             allowed: ['Saturate','Unchgd','Addr']
                             default: 'Unchgd'
+                    check_with: mtveccheck
                 distinct:
                     type: dict
                     excludes: ['range']
                     schema:
                         values:
                             type: list
+                            check_with: mtvecdist
                         mode:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
@@ -548,10 +550,6 @@ mtvec:
                         readonly:
                             type: boolean
                             default: False
-            default:
-                range:
-                    base: 0x00
-                    bound: 0x3FFFFFFF
         MODE:
             type: dict
             schema:
@@ -568,8 +566,15 @@ mtvec:
                         readonly:
                             type: boolean
                             default: False
-                
-                        
+    default:
+        BASE:
+            range:
+                base: 0x00
+                bound: 0xFFFFFFFC
+        MODE:
+            distinct:
+                values: [0]    
+                    
 
 ## ================================================================
 ## Features: MTVEC WARL functions
