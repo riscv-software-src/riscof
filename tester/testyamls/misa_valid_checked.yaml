@@ -109,4 +109,13 @@ medeleg:
     base: 4294965247
     value: 0
   implemented: false
-MIP: 4095
+mip:
+  bitmask:
+    base: 4294967295
+    value: 0
+  implemented: true
+mie:
+  bitmask:
+    base: 4294967295
+    value: 0
+  implemented: true
