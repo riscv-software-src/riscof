@@ -4,17 +4,36 @@ Privilege_Spec_Version: 1.1
 misa:
   implemented: true
   MXL:
-    values:
-    - 1
-    readonly: true
+    distinct:
+      values:
+      - 1
+      readonly: true
+      modes: UnChgd
   Extensions:
-    base: 8
-    value: 288
+    bitmask:
+      base: 8
+      value: 288
     readonly: false
 mvendorid:
   implemented: true
   value: 5
   readonly: true
+mstatus:
+  MPP:
+    distinct:
+      values:
+      - 0
+      modes: UnChgd
+  SXL:
+    hardwired:
+    - 'No'
+    values:
+    - 1
+    implemented: false
+  UXL:
+    hardwired:
+    - 'No'
+    implemented: false
 marchid:
   implemented: false
   value: 0

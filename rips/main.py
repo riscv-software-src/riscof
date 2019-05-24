@@ -14,7 +14,40 @@ import re
 #   def __init__(self, name):
 #     self.name = eval(name)
 
+
+def extreaddefset(doc):
+    global inp_yaml
+    # print("kk")
+    # print(inp_yaml['misa']['Extensions']['bitmask']['base'])
+    if inp_yaml['misa']['Extensions']['bitmask']['base'] > 0:
+        return False
+    else:
+        return True
+
+def sset(doc):
+    global inp_yaml
+    if 'S' in inp_yaml['ISA']:
+        return True
+    else:
+        return False
+
+def uset(doc):
+    # global extensions
+    global inp_yaml
+    if 'U' in inp_yaml['ISA']:
+        return True
+    else:
+        return False
+
+def add_def_setters(schema_yaml):
+    # print(schema_yaml['misa'])
+    schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset(doc)
+    schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset(doc)
+    schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset(doc)
+    return schema_yaml
+
 def main():
+    global inp_yaml
     # Set up the parser
     parser = common.utils.rips_cmdline_args()
     args = parser.parse_args()
@@ -46,10 +79,11 @@ def main():
     # yaml.add_path_resolver('!exset',"lambda doc: extreaddefset(doc)")
     schema_yaml = yaml.safe_load(schemafile)
     
+    schema_yaml=add_def_setters(schema_yaml)
     validator = schemaValidator(schema_yaml)
     validator.allow_unknown = True
     normalized = validator.normalized(inp_yaml, schema_yaml)
-
+    # print(normalized)
     # Perform Validation
     logger.info('Initiating Validation')
     valid=validator.validate(inp_yaml)
@@ -71,3 +105,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
