@@ -78,6 +78,15 @@ def twset():
     else:
         return {'readonly':False}
 
+def miedelegset():
+    global inp_yaml
+    if 'U' not in inp_yaml['ISA']:
+        return False
+    elif 'U' in inp_yaml['ISA'] and not any('N' in inp_yaml['ISA'] or 'S' in inp_yaml['ISA']):
+        return False
+    else:
+        return True
+
 def add_def_setters(schema_yaml):
     # print(schema_yaml['misa'])
     schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
@@ -94,6 +103,8 @@ def add_def_setters(schema_yaml):
     schema_yaml['mstatus']['schema']['UIE']['default_setter'] = lambda doc: uieset(doc)
     schema_yaml['mstatus']['schema']['MPRV']['default_setter'] = lambda doc: nouset()
     schema_yaml['mstatus']['schema']['TW']['default_setter'] = lambda doc: twset()
+    schema_yaml['mideleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
+    schema_yaml['medeleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
     return schema_yaml
 
 def main():
