@@ -123,8 +123,8 @@ Platform Schema
 
 .. autoyaml:: ../rips/schema-platform.yaml
 
-SchemaValidator
-^^^^^^^^^^^^^^^
+Custome Schema Validator
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: rips.schemaValidator
    :members: 
