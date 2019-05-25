@@ -124,9 +124,6 @@ mie:
 mscratch:
   implemented: true
   readonly: false
-mcause:
-  implemented: true
-  readonly: false
 mepc:
   range:
     base: 0
@@ -140,19 +137,7 @@ mcounteren:
   readonly: true
   hardwired: '0'
   implemented: true
-mcycle:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-minstret:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter3:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent3:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -160,15 +145,7 @@ mhpmcounter4:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent4:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter5:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent5:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -176,15 +153,7 @@ mhpmcounter6:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent6:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter7:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent7:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -192,15 +161,7 @@ mhpmcounter8:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent8:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter9:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent9:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -208,15 +169,7 @@ mhpmcounter10:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent10:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter11:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent11:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -224,15 +177,7 @@ mhpmcounter12:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent12:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter13:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent13:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -240,15 +185,7 @@ mhpmcounter14:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent14:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter15:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent15:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -256,15 +193,7 @@ mhpmcounter16:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent16:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter17:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent17:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -272,19 +201,7 @@ mhpmcounter18:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent18:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter19:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent19:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent20:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -292,15 +209,7 @@ mhpmcounter20:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent21:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter21:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent22:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -308,15 +217,7 @@ mhpmcounter22:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent23:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter23:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent24:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -324,15 +225,7 @@ mhpmcounter24:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent25:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter25:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent26:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -340,15 +233,7 @@ mhpmcounter26:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent27:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter27:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent28:
   readonly: true
   hardwired: '0'
   implemented: true
@@ -356,23 +241,11 @@ mhpmcounter28:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent29:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter29:
   readonly: true
   hardwired: '0'
   implemented: true
-mphmevent30:
-  readonly: true
-  hardwired: '0'
-  implemented: true
 mhpmcounter30:
-  readonly: true
-  hardwired: '0'
-  implemented: true
-mphmevent31:
   readonly: true
   hardwired: '0'
   implemented: true

@@ -1,9 +1,10 @@
 from cerberus import Validator
 import logging
-# Custom validator for schema having the custom rules necessary for implementation and checks
+
 
 
 class schemaValidator(Validator):
+    ''' Custom validator for schema having the custom rules necessary for implementation and checks.'''
     def __init__(self, *args, **kwargs):
         global xlen
         global extensions
@@ -29,6 +30,7 @@ class schemaValidator(Validator):
             ext = value[5:]
         else:
             self._error(field, "Invalid width in ISA.")
+        #ISA checks
         if any(x in value for x in "EI"):
             if 'D' in value and not 'F' in value:
                 self._error(field, "D cannot exist without F.")
@@ -46,6 +48,7 @@ class schemaValidator(Validator):
                 self._error(field,"Z is not supported in the given version.")
         else:
             self._error(field, "Neither of E or I extensions are present.")
+        #ISA encoding for future use.
         for x in "ACDEFGIJLMNPQSTUVXZ":
             if(x in ext):
                 extension_enc[25-int(ord(x)- ord('A'))] = "1"
@@ -121,3 +124,8 @@ class schemaValidator(Validator):
         maxv = 2**(xlen)-1
         if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
             self._error(field,"Invalid values.")
+    
+    def _check_with_mcause_check(self,field,value):
+        '''Function to verify the inputs for mcause.'''
+        if(min(value)<16):
+            self._error(field,"Invalid platform specific values for exception cause.")
