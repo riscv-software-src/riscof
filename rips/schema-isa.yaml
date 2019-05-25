@@ -1,60 +1,3 @@
-#=========================================
-#WARL defination types example
-# bitmask:
-#             type: dict
-#             excludes: [distinct, range]
-#             required: True
-#             schema:
-#                 base:
-#                     type: integer
-#                     allowed: [0, 1, 2, 3]
-#                 mask:
-#                     type: integer
-#                     allowed: [0, 1, 2, 3]
-#         distinct:
-#             type: dict
-#             excludes: [bitmask, range]
-#             required: True
-#             schema:
-#                 values:
-#                     type: list
-#                     schema:
-#                         type: integer
-#                         allowed: [0, 1, 2, 3]
-#                 mode:
-#                     type: string
-#                     allowed: ['unchanged', 'saturate_s', 'saturate_l','next_l', 'next_s']
-#         range:
-#             type: dict
-#             excludes: [bitmask, distinct]
-#             required: True
-#             schema:
-#                 base:
-#                     type: integer
-#                     allowed: [0, 1, 2, 3]
-#                 bound: 
-#                     type: integer
-#                     allowed: [0, 1, 2, 3]
-#                 mode:
-#                     type: string
-#                     allowed: ['saturate', 'unchanged']
-
-###
-# The readonly field specifies that the fields corresponding to that particular field(register) is implemented as read only.
-# The implemented field specifies that the corresponding optional feature is implemented in the DUT.
-# Information for WARL fields
-#     These fields can be implemented as one of the following three types.
-#     1.distinct-
-#         A set of distinct values which are considered as legal and any other value is considered as illegal.
-#         The update mode on illegal value write for this type are as follows-
-#             UnChgd,NextUp,NextDown,NearUp,NearDown,Largest,Smallest
-#     2.range-
-#         The values >= base(Lower) and <= bound(Upper) are considered legal and anything else as illegal.
-#         The update mode on illegal value write for this type are as follows-
-#             Saturate,UnChgd,Addr
-#     3.bitmask-
-#         For the bits which are Read only, the corresponding bits are cleared in the base(Base) and the rest of the bits are set.
-#         In the value(FixedVal) the values for the Read only bits are given and the rest of the bits are cleared.
 
 ###
 # **Description**: Takes input a string representing the ISA supported by the implementation. All extension names
@@ -121,6 +64,7 @@ Privilege_Spec_Version:
 #           - values: a list of legal values that the MXL field can take.
 #           - mode : a string describing one of the *distinct-update-warl-func*.
 #           - readonly: a boolean stating that the field is read only.
+# 
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
 #           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
@@ -146,6 +90,7 @@ Privilege_Spec_Version:
 #   field
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
+# 
 #
 misa:
     type: dict
@@ -354,6 +299,7 @@ mhartids:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mstatus:
 #      SD:
 #          hardwired: '0'
@@ -635,13 +581,14 @@ mstatus:
 #               - readonly: A boolean value specifying whether the BASE field is read only.
 #       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values in int
 #           - distinct:
-#               - values: A list of legal values that the BASE field can take.
+#               - values: A list of legal values that the MODE field can take.
 #               - mode : A string describing one of the *distinct-update-warl-func*.
-#               - readonly: A boolean value specifying whether the BASE field is read only.
+#               - readonly: A boolean value specifying whether the MODE field is read only.
 # 
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mtvec:
 #      BASE:
 #          distinct:
@@ -723,6 +670,7 @@ mtvec:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mideleg:
 #      bitmask:
 #          base: 0xFFFFFFFF
@@ -761,6 +709,7 @@ mideleg:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   medeleg:
 #      bitmask:
 #          base: 0xFFFFF7FF
@@ -801,6 +750,7 @@ medeleg:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mip:
 #      bitmask:
 #          base: 0xFFFFFFFF
@@ -840,6 +790,7 @@ mip:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mie:
 #      bitmask:
 #          base: 0xFFFFFFFF
@@ -898,6 +849,7 @@ mscratch:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mepc:
 #      range:
 #          bound: 0xFFFFFFFF
@@ -952,6 +904,7 @@ mepc:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mcountinhibit:
 #      bitmask:
 #          base: 0xFFFFFFFF
@@ -996,6 +949,7 @@ mcountinhibit:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mcounteren:
 #      bitmask:
 #          base: 0xFFFFFFFF
@@ -1042,6 +996,7 @@ mcounteren:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mhpmcounter3:
 #      hardwired: '0'
 #      readonly: True

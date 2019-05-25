@@ -21,8 +21,8 @@ sys.setrecursionlimit(1500)
 # -- Project information -----------------------------------------------------
 
 project = 'RISV Compliance Framework'
-copyright = '2019, Neel Gala, Pawan'
-author = 'Neel Gala, Pawan'
+copyright = '2019, Neel Gala, S Pawan Kumar'
+author = 'Neel Gala, S Pawan Kumar'
 
 # The short X.Y version
 version = ''
