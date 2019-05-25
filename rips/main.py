@@ -7,24 +7,17 @@ import sys
 import os
 import re
 
-
-# class exset(yaml.YAMLObject):
-#   yaml_tag = '!exset'
-
-#   def __init__(self, name):
-#     self.name = eval(name)
-
-
 def extreaddefset():
+    '''Function to set readonly in extensions field in misa'''
     global inp_yaml
-    # print("kk")
-    # print(inp_yaml['misa']['Extensions']['bitmask']['base'])
     if inp_yaml['misa']['Extensions']['bitmask']['base'] > 0:
         return False
     else:
         return True
 
 def sset():
+    '''Function to check and set defaults for all fields which are dependent on 
+        the presence of 'S' extension.'''
     global inp_yaml
     if 'S' in inp_yaml['ISA']:
         return True
@@ -32,7 +25,8 @@ def sset():
         return False
 
 def uset():
-    # global extensions
+    '''Function to check and set defaults for all fields which are dependent on 
+        the presence of 'U' extension.'''
     global inp_yaml
     if 'U' in inp_yaml['ISA']:
         return True
@@ -40,6 +34,8 @@ def uset():
         return False
 
 def nosset():
+    '''Function to check and set defaults for all fields which are dependent on 
+        the presence of 'S' extension and have a hardwired value of 0.'''
     global inp_yaml
     if 'S' not in inp_yaml['ISA']:
         return {'readonly':True,'hardwired':'0'}
@@ -47,6 +43,8 @@ def nosset():
         return {'readonly':False}
     
 def nouset():
+    '''Function to check and set defaults for all fields which are dependent on 
+        the presence of 'U' extension and have a hardwired value of 0.'''
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
         return {'readonly':True,'hardwired':'0'}
@@ -54,6 +52,7 @@ def nouset():
         return {'readonly':False}
 
 def upieset(doc):
+    '''Function to check and set value for upie field in misa.'''
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
         return {'readonly':True,'hardwired':'0'}
@@ -63,15 +62,17 @@ def upieset(doc):
         return doc['UPIE']
 
 def uieset(doc):
+    '''Function to check and set value for uie field in misa.'''
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
         return {'readonly':True,'hardwired':'0'}
-    elif 'UPIE' not in doc.keys():
+    elif 'UIE' not in doc.keys():
         return {'readonly':False}
     else:
-        return doc['UPIE']
+        return doc['UIE']
 
 def twset():
+    '''Function to check and set value for tw field in misa.'''
     global inp_yaml
     if 'S' not in inp_yaml['ISA'] and 'U' not in inp_yaml['ISA']:
         return {'readonly':True,'hardwired':'0'}
@@ -79,6 +80,7 @@ def twset():
         return {'readonly':False}
 
 def miedelegset():
+    '''Function to set "implemented" value for mideleg regisrer.'''
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
         return False

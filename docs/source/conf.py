@@ -138,7 +138,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'RISVComplianceFramework.tex', 'RISV Compliance Framework Documentation',
-     'Neel Gala, Pawan', 'manual'),
+     'Neel Gala, S Pawan Kumar', 'manual'),
 ]
 
 
