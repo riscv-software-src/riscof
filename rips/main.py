@@ -42,21 +42,21 @@ def uset():
 def nosset():
     global inp_yaml
     if 'S' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':0}
+        return {'readonly':True,'hardwired':'0'}
     else:
         return {'readonly':False}
     
 def nouset():
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':0}
+        return {'readonly':True,'hardwired':'0'}
     else:
         return {'readonly':False}
 
 def upieset(doc):
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':0}
+        return {'readonly':True,'hardwired':'0'}
     elif 'UPIE' not in doc.keys():
         return {'readonly':False}
     else:
@@ -65,7 +65,7 @@ def upieset(doc):
 def uieset(doc):
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':0}
+        return {'readonly':True,'hardwired':'0'}
     elif 'UPIE' not in doc.keys():
         return {'readonly':False}
     else:
@@ -74,7 +74,7 @@ def uieset(doc):
 def twset():
     global inp_yaml
     if 'S' not in inp_yaml['ISA'] and 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':0}
+        return {'readonly':True,'hardwired':'0'}
     else:
         return {'readonly':False}
 
@@ -88,7 +88,7 @@ def miedelegset():
         return True
 
 def add_def_setters(schema_yaml):
-    # print(schema_yaml['misa'])
+    '''Function to set the default setters for various fields in the schema'''
     schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
     schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset()
     schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset()
