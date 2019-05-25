@@ -42,7 +42,6 @@
 ###
 # The readonly field specifies that the fields corresponding to that particular field(register) is implemented as read only.
 # The implemented field specifies that the corresponding optional feature is implemented in the DUT.
-
 # Information for WARL fields
 #     These fields can be implemented as one of the following three types.
 #     1.distinct-
@@ -199,22 +198,16 @@ misa:
 #       - implemented: A boolean field indicating that the register has been implemented.
 #       - value: A hexa-decimal value equal to the VendorId
 #       - readonly: A boolean field indicating whether the register is read only.( This register is read
-##       - bitmask:
+#       - bitmask:
 #           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
 #           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
-##       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
-##       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
-##       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#
 # .. code-block:: none
+#
 #   mvendorid:
 #       - implemented: True
 #       - value: 0x458
+#
 # **Dependencies**: 
 #       - None
 mvendorid:
@@ -241,9 +234,11 @@ mvendorid:
 # **Examples**:
 #
 # .. code-block:: none
+#
 #   marchid:
 #       - implemented: True
 #       - value: 0x458
+#
 # **Dependencies**: 
 #       - None
 marchid:
