@@ -24,7 +24,7 @@ The following diagram captures the over-flow of RISCOF.
 .. image:: riscof-flow.png
     :width: 800px
     :align: center
-    :height: 400px
+    :height: 500px
     :alt: riscof-flow
 
 The user is required to provide 3 YAML files as input to the flow:
@@ -116,7 +116,7 @@ ISA Schema
 
 .. autoyaml:: ../rips/schema-isa.yaml
 
-.. _platform_schema
+.. _platform_schema:
 
 Platform Schema
 ^^^^^^^^^^^^^^^
