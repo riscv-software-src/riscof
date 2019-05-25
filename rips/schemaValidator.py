@@ -98,17 +98,26 @@ class schemaValidator(Validator):
             self._error(field,"Invalid values.")
     
     def _check_with_mtvecdist(self,field,value):
+        '''Function to check whether the inputs in distinct type in mtvec are valid.'''
         global xlen
-
         if max(value)>2**(xlen-2)-1:
             self._error(field,"Value cant be greater than "+str(2**(xlen)-4))
     
-    def _check_with_midelegcheck(self,field,value):
+    def _check_with_hardwirecheck(self,field,value):
+        '''Function to check that none of the bits in the field are hardwired to 1'''
         if(value['bitmask']['value']>0):
             self._error(field,"No bit can be harwired to 1.")
     
     def _check_with_medelegcheck(self,field,value):
+        '''Function to check that the input given for medeleg satisfies the constraints'''
         if(value['bitmask']['base']&int("800",16)>0):
             self._error(field,"11th bit must be hardwired to 0.")
         if(value['bitmask']['value']>0):
             self._error(field,"No bit can be harwired to 1.")
+    
+    def _check_with_rangecheck(self,field,value):
+        '''Function to check whether the inputs in range type in WARL fields are valid.'''
+        global xlen
+        maxv = 2**(xlen)-1
+        if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
+            self._error(field,"Invalid values.")

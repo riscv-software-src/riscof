@@ -21,7 +21,7 @@
 #                     schema:
 #                         type: integer
 #                         allowed: [0, 1, 2, 3]
-#                 modes:
+#                 mode:
 #                     type: string
 #                     allowed: ['unchanged', 'saturate_s', 'saturate_l','next_l', 'next_s']
 #         range:
@@ -47,11 +47,11 @@
 #     These fields can be implemented as one of the following three types.
 #     1.distinct-
 #         A set of distinct values which are considered as legal and any other value is considered as illegal.
-#         The update modes on illegal value write for this type are as follows-
+#         The update mode on illegal value write for this type are as follows-
 #             UnChgd,NextUp,NextDown,NearUp,NearDown,Largest,Smallest
 #     2.range-
 #         The values >= base(Lower) and <= bound(Upper) are considered legal and anything else as illegal.
-#         The update modes on illegal value write for this type are as follows-
+#         The update mode on illegal value write for this type are as follows-
 #             Saturate,UnChgd,Addr
 #     3.bitmask-
 #         For the bits which are Read only, the corresponding bits are cleared in the base(Base) and the rest of the bits are set.
@@ -120,10 +120,10 @@ Privilege_Spec_Version:
 #   - MXL: needs to be described as *distinct-warl-func* provinding a list of legal values in int
 #       - distinct:
 #           - values: a list of legal values that the MXL field can take.
-#           - modes : a string describing one of the *distinct-update-warl-func*.
+#           - mode : a string describing one of the *distinct-update-warl-func*.
 #           - readonly: a boolean stating that the field is read only.
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
-#       - bitmask
+#       - bitmask:
 #           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
 #           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
 # **Examples**:
@@ -135,7 +135,7 @@ Privilege_Spec_Version:
 #       - MXL:
 #           - distinct:
 #               - values : [1, 2]
-#               - modes  : 'UnChd'
+#               - mode  : 'UnChd'
 #       - Extensions:
 #           - bitmask:
 #               - base:   0x12D
@@ -163,7 +163,7 @@ misa:
                             allowed: [1, 2, 3]
                             default: []
                             check_with: len_check
-                        modes:
+                        mode:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
                             default: "UnChgd"
@@ -199,10 +199,18 @@ misa:
 #       - implemented: A boolean field indicating that the register has been implemented.
 #       - value: A hexa-decimal value equal to the VendorId
 #       - readonly: A boolean field indicating whether the register is read only.( This register is read
-#                   only always as mandated by the specifications.)
-# 
-# **Examples**:
-#
+##       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+##       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+##       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+##       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
 # .. code-block:: none
 #   mvendorid:
 #       - implemented: True
@@ -304,6 +312,7 @@ mimpid:
 #       - value: [0,125,458]
 # **Dependencies**: 
 #       - Atleast one id must be equal to zero.
+#       - No value must exceed the maximum value supported by the architecture.
 mhartids:
     type: dict
     schema: 
@@ -321,8 +330,56 @@ mhartids:
     default:
         implemented: False
         value: [0]
-## ================================================================
-## Features: MSTATUS fields
+
+### 
+# **Description**: Specifies the fields of the *mstatus* register.
+#       - XS:
+#           - hardwired: A string field specifying whether the field is hardwired to 0 and if not it is indicated by 'No'.
+#       - FS: needs to be described as *distinct-warl-func* provinding a list of legal values in int
+#           - distinct:
+#               - values: A list of legal values that the FS field can take.
+#               - mode : A string describing one of the *distinct-update-warl-func*.
+#       - MPP: needs to be described as *distinct-warl-func* provinding a list of legal values in int
+#           - distinct:
+#               - values: A list of legal values that the MPP field can take.
+#               - mode : A string describing one of the *distinct-update-warl-func*.
+#       - SXL: This field doesnt exist in systems where XLEN = 32
+#           - hardwired: A string field specifying whether it is hardwired and if yes to what field(like MXL).
+#           - values: A list of legal values which SXL can take when not hardwired.
+#           - readonly: A boolean field stating whether the field is read only.
+#       - UXL: This field doesnt exist in systems where XLEN = 32
+#           - hardwired: A string field specifying whether the bits are hardwired and if yes to what field(like MXL).
+#           - values: A list of legal values which UXL can take when not hardwired.
+#           - readonly: A boolean field stating whether the field is read only.
+#       - SD: 
+#           - hardwired: A string field specifying whether the bits are hardwired and if yes to what value(usually 0).
+# 
+# **Examples**:
+#
+# .. code-block:: none
+#   mstatus:
+#       - SD:
+#           - hardwired: '0'
+#       - XS:
+#           - hardwired: 'No'
+#       - FS:
+#           - distinct:
+#               - values: [0,1,2,3]
+#               - mode: "UnChgd"
+#       - MPP:
+#           -  distinct:
+#               - values: [0,3]
+#               - mode: "UnChgd"
+#       - SXL:
+#           - hardwired: "MXL"
+#           - readonly: True
+#       - UXL:
+#           - values: [1,2]
+#           - readonly: False
+# **Dependencies**: 
+#       - No value in MPP must be unsupported(1 cannot be present without the 'S' extension and '0' 
+#         without the 'U' extension)
+#       - No value in SXL or UXL must exceed XLEN/32.
 mstatus:
     type: dict
     schema:
@@ -334,8 +391,9 @@ mstatus:
                     readonly: True
                     default: True
                 hardwired:
-                    type: integer
-                    allowed: [0]
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
         FS:
             type: dict
             schema:
@@ -345,7 +403,7 @@ mstatus:
                         values:
                             type: list
                             allowed: [0,1,2,3]
-                        modes:
+                        mode:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
                             default: "UnChgd"
@@ -357,11 +415,9 @@ mstatus:
                     schema:
                         values:
                             type: list
-                            schema:
-                                type: integer
-                                allowed: [0, 1, 3]
+                            allowed: [0, 1, 3]
                             check_with: mpp_check
-                        modes:
+                        mode:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
                             default: "UnChgd"
@@ -417,8 +473,9 @@ mstatus:
                     type: boolean
                     default: True
                 hardwired:
-                    type: integer
-                    default: 0
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
         TSR:
             type: dict
             schema:
@@ -426,7 +483,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         TW:
             type: dict
@@ -435,7 +494,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         TVM:
             type: dict
@@ -444,7 +505,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         MXR:
             type: dict
@@ -453,7 +516,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         SUM:
             type: dict
@@ -462,7 +527,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         SPP:
             type: dict
@@ -471,7 +538,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         MPRV:
             type: dict
@@ -480,7 +549,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         MPIE:
             type: dict
@@ -489,10 +560,13 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
             default:
                 readonly: False
+                hardwired: "No"
         SPIE:
             type: dict
             schema:
@@ -500,7 +574,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         UPIE:
             type: dict
@@ -509,7 +585,10 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
+            readonly: True
         MIE:
             type: dict
             schema:
@@ -517,7 +596,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
             default:
                 readonly: False
@@ -528,7 +609,9 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
             readonly: True
         UIE:
             type: dict
@@ -537,9 +620,45 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: integer
-# TODO: TW and XS as per nikhil's def
+                    type: string
+                    allowed: ['No','0']
+                    default: "No"
 
+### 
+# **Description**: Specifies the fields of the *mtvec* register.
+#       - BASE: needs to be described as *distinct-warl-func* provinding a list of legal values in int or as a 
+#               *range-warl-func* providing two integers specifying the range of legal values.
+#           - range:
+#               - base: An integer indicating the lowest legal value.
+#               - bound: An integer indicating the highest legal value.
+#               - mode: A string describing one of the *range-update-warl-func"
+#           - distinct:
+#               - values: A list of legal values that the BASE field can take.
+#               - mode : A string describing one of the *distinct-update-warl-func*.
+#               - readonly: A boolean value specifying whether the BASE field is read only.
+#       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values in int
+#           - distinct:
+#               - values: A list of legal values that the BASE field can take.
+#               - mode : A string describing one of the *distinct-update-warl-func*.
+#               - readonly: A boolean value specifying whether the BASE field is read only.
+# 
+# **Examples**:
+#
+# .. code-block:: none
+#   mtvec:
+#       - BASE:
+#           - distinct:
+#               - values: [1000]
+#               - mode: 'UnChgd'
+#               - readonly: True
+#       - MODE:
+#           -  distinct:
+#               - values: [0,1]
+#               - mode: "UnChgd"
+# **Dependencies**: 
+#       - The maximum in the list of values specified for MODE cannot exceed 1.
+#       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
+#         can exceed 2^(XLEN-1)-4 and the base must be lower than bound.
 mtvec:
     type: dict
     schema:
@@ -556,8 +675,8 @@ mtvec:
                             type: integer
                         mode:
                             type: string
-                            allowed: ['Saturate','Unchgd','Addr']
-                            default: 'Unchgd'
+                            allowed: ['Saturate','UnChgd','Addr']
+                            default: 'UnChgd'
                     check_with: mtveccheck
                 distinct:
                     type: dict
@@ -598,13 +717,22 @@ mtvec:
             distinct:
                 values: [0]
 
-## ================================================================
-## Features: MIDELEG and MEDELEG WARL functions
-
-# This field will specify which of the interrupts in the machine mode
-# can delegated to a lower level privilege. A 0-bit indicates that
-# particular interrupt cannot be delegated.
-
+### 
+# **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
+#       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+# 
+# **Examples**:
+#
+# .. code-block:: none
+#   mideleg:
+#       - bitmask:
+#           - base: 0xFFFFFFFF
+#           - value: 0x00
+# **Dependencies**: 
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
+#       - The base and value cannot exceed the maximum value supported by the ISA.
 mideleg:
     type: dict
     schema:
@@ -620,15 +748,30 @@ mideleg:
                     default: 0x000
                     check_with: max_length
         implemented:
-            type: boolean    
-    check_with: midelegcheck
+            type: boolean
+            readonly: True    
+    check_with: hardwirecheck
     default:
         bitmask:
             base: 0xFFFFFFFF
             value: 0x00
-# This field will specify which of the exceptions in the machine mode
-# can delegated to a lower level privilege. A 0-bit indicates that
-# particular exception cannot be delegated.
+### 
+# **Description**: needs to be described as *bitmask-warl-func* indicating delegatable exceptions
+#       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+# 
+# **Examples**:
+#
+# .. code-block:: none
+#   medeleg:
+#       - bitmask:
+#           - base: 0xFFFFF7FF
+#           - value: 0x00
+# **Dependencies**: 
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
+#       - The base and value cannot exceed the maximum value supported by the ISA.
+#       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both base and value.
 medeleg:
     type: dict
     schema:
@@ -644,48 +787,29 @@ medeleg:
                     default: 0x000
                     check_with: max_length
         implemented:
-            type: boolean    
+            type: boolean 
+            readonly: True  
     check_with: medelegcheck
     default:
         bitmask:
             base: 0xFFFFF7FF
             value: 0x00                    
 
-## ================================================================
-## Features: MTVEC WARL functions
-#MTVEC_BASE:
-#    type: dict
-#    schema:
-#      readonly:
-#        type: integer
-#        excludes: [range , distinct]
-#        required: True
-#      range:
-#          type: list
-#          schema:
-#              type: dict
-#              valueschema:
-#                type: integer
-#          excludes: [readonly, distinct]
-#          required: True
-#      distinct:
-#          type: list
-#          valueschema:
-#              type: integer
-#          excludes: [readonly, range]
-#          required: True
-#    default:
-#        range:
-#          - base: 0x0
-#            bound: 0xFFFFFFFF
-
-
-
-## ================================================================
-## Features: MIP and MIE WARL functions
-
-# This field will describe all valid bits of MIP register which can be 
-# interpreted as Interrupts by the system in Machine Mode.
+### 
+# **Description**: needs to be described as *bitmask-warl-func* indicating pending interrupts.
+#       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+# **Examples**:
+#
+# .. code-block:: none
+#   mip:
+#       - bitmask:
+#           - base: 0xFFFFFFFF
+#           - value: 0x00
+# **Dependencies**: 
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
+#       - The base and value cannot exceed the maximum value supported by the ISA.
 mip:
     type: dict
     schema:
@@ -704,12 +828,26 @@ mip:
             type: boolean
             default: True
             readonly: True
+    check_with: hardwirecheck
     default:
         bitmask:
             base: 0xFFFFFFFF
 
-# This field will describe all valid bits of MIE register which can be 
-# used to enable or disable Interrupts in Machine Mode.
+### 
+# **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
+#       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+# **Examples**:
+#
+# .. code-block:: none
+#   mie:
+#       - bitmask:
+#           - base: 0xFFFFFFFF
+#           - value: 0x00
+# **Dependencies**: 
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
+#       - The base and value cannot exceed the maximum value supported by the ISA.
 mie:
     type: dict
     schema:
@@ -728,6 +866,7 @@ mie:
             type: boolean
             default: True
             readonly: True
+    check_with: hardwirecheck
     default:
         bitmask:
             base: 0xFFFFFFFF
@@ -756,6 +895,78 @@ mcause:
         readonly: False
     readonly: True
 
+### 
+# **Description**: needs to be described as *bitmask-warl-func* or a *range-warl-func* indicating the range of 
+#                  legal values allowed
+#       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#       - range:
+#           - base: An integer indicating the lowest legal value.
+#           - bound: An integer indicating the highest legal value.
+#           - mode: A string describing one of the *range-update-warl-func"
+# **Examples**:
+#
+# .. code-block:: none
+#   mepc:
+#       - range:
+#           - bound: 0xFFFFFFFF
+#           - base: 0x00
+# **Dependencies**: 
+#       - The base and value cannot exceed the maximum value supported by the ISA (in case of *bitmask-warl-func*).
+#       - The base and bound cannot exceed the maximum value supported by the ISA (in case of *range-warl-func*) 
+#         and the base should be lower than the bound.
+mepc:
+    type: dict
+    schema:
+        bitmask:
+            type: dict
+            excludes: ['range']
+            schema:
+                base:
+                    type: integer
+                    default: 0x00
+                    check_with: max_length
+                value:
+                    type: integer
+                    default: 0x000
+                    check_with: max_length
+        range:
+            type: dict
+            excludes: ['bitmask']
+            schema:
+                base:
+                    type: integer
+                bound:
+                    type: integer
+                mode:
+                    type: string
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
+            check_with: rangecheck
+    default:
+        range:
+            base: 0x00
+            bound: 0xFFFFFFFF
+            mode: "UnChgd"
+
+
+### 
+# **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
+#       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#       - readonly: a boolean value indicating whether the register is read only.
+#       - hardwired: a string indicating whether the register is hardwired to 0 or not.
+# **Examples**:
+#
+# .. code-block:: none
+#   mcountinhibit:
+#       - bitmask:
+#           - base: 0xFFFFFFFF
+#           - value: 0x00
+# **Dependencies**: 
+#       - The base and value cannot exceed the maximum value supported by the ISA.
 mcountinhibit:
     type: dict
     schema:
@@ -772,15 +983,33 @@ mcountinhibit:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
+### 
+# **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
+#       - bitmask:
+#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#       - readonly: a boolean value indicating whether the register is read only.
+#       - hardwired: a string indicating whether the register is hardwired to 0 or not.
+# **Examples**:
+#
+# .. code-block:: none
+#   mcountinhibit:
+#       - bitmask:
+#           - base: 0xFFFFFFFF
+#           - value: 0x00
+# **Dependencies**: 
+#       - The base and value cannot exceed the maximum value supported by the ISA.
 mcounteren:
     type: dict
     schema:
@@ -797,14 +1026,16 @@ mcounteren:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mcycle:
     type: dict
@@ -822,21 +1053,23 @@ mcycle:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 minstret:
     type: dict
@@ -854,21 +1087,23 @@ minstret:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter3:
     type: dict
@@ -886,21 +1121,23 @@ mhpmcounter3:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent3:
     type: dict
@@ -918,14 +1155,16 @@ mphmevent3:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter4:
     type: dict
@@ -943,21 +1182,23 @@ mhpmcounter4:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent4:
     type: dict
@@ -975,14 +1216,16 @@ mphmevent4:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter5:
     type: dict
@@ -1000,21 +1243,23 @@ mhpmcounter5:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent5:
     type: dict
@@ -1032,14 +1277,16 @@ mphmevent5:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter6:
     type: dict
@@ -1057,21 +1304,23 @@ mhpmcounter6:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent6:
     type: dict
@@ -1089,14 +1338,16 @@ mphmevent6:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter7:
     type: dict
@@ -1114,21 +1365,23 @@ mhpmcounter7:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent7:
     type: dict
@@ -1146,14 +1399,16 @@ mphmevent7:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter8:
     type: dict
@@ -1171,21 +1426,23 @@ mhpmcounter8:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent8:
     type: dict
@@ -1203,14 +1460,16 @@ mphmevent8:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter9:
     type: dict
@@ -1228,21 +1487,23 @@ mhpmcounter9:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent9:
     type: dict
@@ -1260,14 +1521,16 @@ mphmevent9:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter10:
     type: dict
@@ -1285,21 +1548,23 @@ mhpmcounter10:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent10:
     type: dict
@@ -1317,14 +1582,16 @@ mphmevent10:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter11:
     type: dict
@@ -1342,21 +1609,23 @@ mhpmcounter11:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent11:
     type: dict
@@ -1374,14 +1643,16 @@ mphmevent11:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter12:
     type: dict
@@ -1399,21 +1670,23 @@ mhpmcounter12:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent12:
     type: dict
@@ -1431,14 +1704,16 @@ mphmevent12:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter13:
     type: dict
@@ -1456,21 +1731,23 @@ mhpmcounter13:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent13:
     type: dict
@@ -1488,14 +1765,16 @@ mphmevent13:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter14:
     type: dict
@@ -1513,21 +1792,23 @@ mhpmcounter14:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent14:
     type: dict
@@ -1545,14 +1826,16 @@ mphmevent14:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter15:
     type: dict
@@ -1570,21 +1853,23 @@ mhpmcounter15:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent15:
     type: dict
@@ -1602,14 +1887,16 @@ mphmevent15:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter16:
     type: dict
@@ -1627,21 +1914,23 @@ mhpmcounter16:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent16:
     type: dict
@@ -1659,14 +1948,16 @@ mphmevent16:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter17:
     type: dict
@@ -1684,21 +1975,23 @@ mhpmcounter17:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent17:
     type: dict
@@ -1716,14 +2009,16 @@ mphmevent17:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter18:
     type: dict
@@ -1741,21 +2036,23 @@ mhpmcounter18:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent18:
     type: dict
@@ -1773,14 +2070,16 @@ mphmevent18:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter19:
     type: dict
@@ -1798,21 +2097,23 @@ mhpmcounter19:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent19:
     type: dict
@@ -1830,14 +2131,16 @@ mphmevent19:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent20:
     type: dict
@@ -1855,14 +2158,16 @@ mphmevent20:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter20:
     type: dict
@@ -1880,21 +2185,23 @@ mhpmcounter20:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent21:
     type: dict
@@ -1912,14 +2219,16 @@ mphmevent21:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter21:
     type: dict
@@ -1937,21 +2246,23 @@ mhpmcounter21:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent22:
     type: dict
@@ -1969,14 +2280,16 @@ mphmevent22:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter22:
     type: dict
@@ -1994,21 +2307,23 @@ mhpmcounter22:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent23:
     type: dict
@@ -2026,14 +2341,16 @@ mphmevent23:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter23:
     type: dict
@@ -2051,21 +2368,23 @@ mhpmcounter23:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent24:
     type: dict
@@ -2083,14 +2402,16 @@ mphmevent24:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter24:
     type: dict
@@ -2108,21 +2429,23 @@ mhpmcounter24:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent25:
     type: dict
@@ -2140,14 +2463,16 @@ mphmevent25:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter25:
     type: dict
@@ -2165,21 +2490,23 @@ mhpmcounter25:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent26:
     type: dict
@@ -2197,14 +2524,16 @@ mphmevent26:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter26:
     type: dict
@@ -2222,21 +2551,23 @@ mhpmcounter26:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent27:
     type: dict
@@ -2254,14 +2585,16 @@ mphmevent27:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter27:
     type: dict
@@ -2279,21 +2612,23 @@ mhpmcounter27:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent28:
     type: dict
@@ -2311,14 +2646,16 @@ mphmevent28:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter28:
     type: dict
@@ -2336,21 +2673,23 @@ mhpmcounter28:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent29:
     type: dict
@@ -2368,14 +2707,16 @@ mphmevent29:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter29:
     type: dict
@@ -2393,21 +2734,23 @@ mhpmcounter29:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent30:
     type: dict
@@ -2425,14 +2768,16 @@ mphmevent30:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter30:
     type: dict
@@ -2450,21 +2795,23 @@ mhpmcounter30:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mphmevent31:
     type: dict
@@ -2482,14 +2829,16 @@ mphmevent31:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 mhpmcounter31:
     type: dict
@@ -2507,21 +2856,23 @@ mhpmcounter31:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','Unchgd','Addr']
-                    default: 'Unchgd'
+                    allowed: ['Saturate','UnChgd','Addr']
+                    default: 'UnChgd'
                     readonly: True
         readonly:
             type: boolean
             default: False
         hardwired:
-            type: integer
+            type: string
+            allowed: ['No','0']
+            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
         readonly: True
-        hardwired: 0
+        hardwired: '0'
 
 
 
