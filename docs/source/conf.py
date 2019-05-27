@@ -21,8 +21,8 @@ sys.setrecursionlimit(1500)
 # -- Project information -----------------------------------------------------
 
 project = 'RISV Compliance Framework'
-copyright = '2019, Neel Gala, S Pawan Kumar'
-author = 'Neel Gala, S Pawan Kumar'
+copyright = '2019 InCore Semiconductors, IIT Madras'
+author = 'Neel Gala, S Pawan Kumar, Lavanya Jagan'
 
 # The short X.Y version
 version = ''
@@ -139,7 +139,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'RISVComplianceFramework.tex', 'RISV Compliance Framework Documentation',
-     'Neel Gala, S Pawan Kumar', 'manual'),
+     'Neel Gala, S Pawan Kumar, Lavanya Jagan', 'manual'),
 ]
 
 
