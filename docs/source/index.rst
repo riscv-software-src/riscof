@@ -195,6 +195,10 @@ Custom Schema Validator
    :special-members:
    :private-members:
 
+.. automodule:: rips.main
+   :members: 
+   :special-members:
+   :private-members:
 
 Indices and tables
 ------------------
