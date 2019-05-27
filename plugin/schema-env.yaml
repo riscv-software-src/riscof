@@ -1,0 +1,37 @@
+# Platform environment
+# Name of the Target
+USER_TARGET:
+    type: string
+    required: True
+# Directory containing the platform specific headers
+USER_ENV_DIR:
+    type: string
+    required: True
+# Linker script to be used during compilation of test
+USER_LINKER:
+    type: string
+    required: True
+# User defined ABI to be used during compilation
+USER_ABI:
+    type: string
+    required: True
+USER_EXECUTABLE:
+    type: string
+    required: True
+
+# Execution Enviornment
+RISCV-PREFIX:
+    type: string
+    default: riscv64-unknown-elf-
+    required: True
+USER_SIGN:
+    type: string
+    required: True
+USER_POST_SIM:
+    type: string
+    default: ''
+    required: False
+USER_PRE_SIM:
+    type: string
+    default: ''
+    required: False
