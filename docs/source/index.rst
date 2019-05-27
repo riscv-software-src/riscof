@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to RISCOF [`source <https://gitlab.com/incoresemi/riscof/tree/1-general-improvements-and-standardisation-of-schema-yaml>`_]
+Welcome to RISCOF 
 =================
 
 .. toctree::
@@ -15,6 +15,8 @@ Welcome to RISCOF [`source <https://gitlab.com/incoresemi/riscof/tree/1-general-
 **Caution**: This is still a work in progress and non-backward compatible changes are expected to happen. 
 
 For more information on the official RISC-V compliance and test suite please visit: `Github <https://github.com/riscv/riscv-compliance>`_
+
+RISCOF [`Repository <https://gitlab.com/incoresemi/riscof/tree/1-general-improvements-and-standardisation-of-schema-yaml>`_]
 
 Quickstart
 ----------

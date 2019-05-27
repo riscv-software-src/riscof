@@ -20,7 +20,7 @@ sys.setrecursionlimit(1500)
 
 # -- Project information -----------------------------------------------------
 
-project = 'RISV Compliance Framework'
+project = 'RISC-V Compliance Framework'
 copyright = '2019 InCore Semiconductors, IIT Madras'
 author = 'Neel Gala, S Pawan Kumar, Lavanya Jagan'
 
@@ -90,7 +90,21 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+#html_theme_options = {
+#'canonical_url': '',
+#'analytics_id': 'UA-XXXXXXX-1',  #  Provided by Google in your dashboard
+#'logo_only': False,
+#'display_version': True,
+#'prev_next_buttons_location': 'bottom',
+#'style_external_links': False,
+#'vcs_pageview_mode': '',
+#'style_nav_header_background': 'white',
+## Toc options
+#'collapse_navigation': False,
+#'sticky_navigation': True,
+#'navigation_depth': 4,
+#'includehidden': True,
+#'titles_only': False }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -111,7 +125,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'RISVComplianceFrameworkdoc'
+htmlhelp_basename = 'RISCVComplianceFrameworkdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -138,7 +152,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'RISVComplianceFramework.tex', 'RISV Compliance Framework Documentation',
+    (master_doc, 'RISCVComplianceFramework.tex', 'RISC-V Compliance Framework Documentation',
      'Neel Gala, S Pawan Kumar, Lavanya Jagan', 'manual'),
 ]
 
@@ -148,7 +162,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'risvcomplianceframework', 'RISV Compliance Framework Documentation',
+    (master_doc, 'risvcomplianceframework', 'RISCV Compliance Framework Documentation',
      [author], 1)
 ]
 
@@ -159,8 +173,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'RISVComplianceFramework', 'RISV Compliance Framework Documentation',
-     author, 'RISVComplianceFramework', 'One line description of project.',
+    (master_doc, 'RISCVComplianceFramework', 'RISC-V Compliance Framework Documentation',
+     author, 'RISCVComplianceFramework', 'One line description of project.',
      'Miscellaneous'),
 ]
 
