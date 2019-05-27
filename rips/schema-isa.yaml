@@ -86,8 +86,7 @@ Privilege_Spec_Version:
 #              value:  0x000
 # 
 # **Dependencies**: 
-#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA
-#   field
+#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA field.
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
 # 
@@ -261,7 +260,7 @@ mhartids:
         implemented: 
             type: boolean
             default: False
-        value:
+        values:
             type: list
             default: [0]
             check_with: hart_check
@@ -275,6 +274,8 @@ mhartids:
 
 ### 
 # **Description**: Specifies the fields of the *mstatus* register.
+#       - SD: 
+#           - hardwired: A string field specifying whether the bits are hardwired and if yes to what value(usually 0).
 #       - XS:
 #           - hardwired: A string field specifying whether the field is hardwired to 0 and if not it is indicated by 'No'.
 #       - FS: needs to be described as *distinct-warl-func* provinding a list of legal values in int
@@ -293,8 +294,6 @@ mhartids:
 #           - hardwired: A string field specifying whether the bits are hardwired and if yes to what field(like MXL).
 #           - values: A list of legal values which UXL can take when not hardwired.
 #           - readonly: A boolean field stating whether the field is read only.
-#       - SD: 
-#           - hardwired: A string field specifying whether the bits are hardwired and if yes to what value(usually 0).
 # 
 # **Examples**:
 #
@@ -569,12 +568,11 @@ mstatus:
 
 ### 
 # **Description**: Specifies the fields of the *mtvec* register.
-#       - BASE: needs to be described as *distinct-warl-func* provinding a list of legal values in int or as a 
-#               *range-warl-func* providing two integers specifying the range of legal values.
+#       - BASE: needs to be described as *distinct-warl-func* provinding a list of legal values in int or as a *range-warl-func* providing two integers specifying the range of legal values.       
 #           - range:
 #               - base: An integer indicating the lowest legal value.
 #               - bound: An integer indicating the highest legal value.
-#               - mode: A string describing one of the *range-update-warl-func"
+#               - mode: A string describing one of the *range-update-warl-func*
 #           - distinct:
 #               - values: A list of legal values that the BASE field can take.
 #               - mode : A string describing one of the *distinct-update-warl-func*.
@@ -742,7 +740,7 @@ medeleg:
             value: 0x00                    
 
 ### 
-# **Description**: needs to be described as *bitmask-warl-func* indicating pending interrupts.
+# **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
 #           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
 #           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
@@ -988,7 +986,7 @@ mcounteren:
 #       - range:
 #           - base: An integer indicating the lowest legal value.
 #           - bound: An integer indicating the highest legal value.
-#           - mode: A string describing one of the *range-update-warl-func"
+#           - mode: A string describing one of the *range-update-warl-func*
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 #  The other counters(from 4 till 31 can be defined in the same way as shown below.)

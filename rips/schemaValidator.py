@@ -71,7 +71,7 @@ class schemaValidator(Validator):
 
     def _check_with_hart_check(self,field,value):
         '''Function to check whether the hart ids are valid and atleast one is 0.'''
-        if max(value) > xlen/32:
+        if max(value) > (2**xlen)-1:
             self._error(field, "Max width allowed is greater than xlen.")
         if 0 not in value:
             self.error(field,"Atleast one hart must have id as 0.")
