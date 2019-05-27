@@ -8,6 +8,7 @@ class schemaValidator(Validator):
     def __init__(self, *args, **kwargs):
         global xlen
         global extensions
+        xlen = kwargs.get('xlen')
         super(schemaValidator, self).__init__(*args, **kwargs)
 
     def _check_with_capture_isa_specifics(self,field,value):

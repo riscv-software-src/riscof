@@ -87,19 +87,37 @@ def rips_cmdline_args():
  RIPS format"
     )
     parser.add_argument(
-        '--input',
+        '--input_isa','-ii',
         type=str,
         metavar='YAML',
-        help='Input YAML file',
+        help='Input YAML file containing ISA specs.',
         default=None,
         required=True
     )
     
     parser.add_argument(
-        '--schema',
+        '--input_platform','-pi',
         type=str,
         metavar='YAML',
-        help='Input Schema file',
+        help='Input YAML file containing platform specs.',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--schema_isa','-is',
+        type=str,
+        metavar='YAML',
+        help='Input ISA Schema file',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--schema_platform','-ps',
+        type=str,
+        metavar='YAML',
+        help='Input ISA Schema file',
         default=None,
         required=True
     )

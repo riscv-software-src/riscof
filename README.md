@@ -18,7 +18,7 @@ python3 -m framework.main --help
 
 ## Example 
 ```
-python3 -m rips.main --input Examples/eg1.yaml --schema rips/schema.yaml --verbose info
+python3 -m rips.main -ii Examples/eg_elaborate_isa.yaml -pi Examples/eg_elaborate_platform.yaml -is rips/schema-isa.yaml -ps rips/schema-platform.yaml --verbose debug
 python3 -m framework.main --input Examples/eg1_checked.yaml --verbose info
 ```
 
