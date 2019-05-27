@@ -124,12 +124,12 @@ def main():
     ch.setFormatter(common.utils.ColoredFormatter())
     logger.addHandler(ch)
 
-    logger.info('Running RIPS Checker on Input file')
+    logger.info('Running RIPS Checker on Input-ISA file')
 
-    foo = args.input
-    schema = args.schema
+    foo = args.input_isa
+    schema = args.schema_isa
     """
-      Read the input foo (yaml file) and validate with schema for feature values
+      Read the input-isa foo (yaml file) and validate with schema-isa for feature values
       and constraints
     """
     inputfile = open(foo, 'r')
@@ -140,11 +140,58 @@ def main():
 
     # instantiate validator
     logger.info('Load Schema '+str(schema))
-    # yaml.add_path_resolver('!exset',"lambda doc: extreaddefset(doc)")
     schema_yaml = yaml.safe_load(schemafile)
     
+    #Extract xlen
+    if "32" in inp_yaml['ISA']:
+            xlen = 32
+    elif "64" in inp_yaml['ISA']:
+        xlen = 64
+    elif "128" in inp_yaml['ISA']:
+        xlen = 128
+
     schema_yaml=add_def_setters(schema_yaml)
-    validator = schemaValidator(schema_yaml)
+    validator = schemaValidator(schema_yaml,xlen=xlen)
+    validator.allow_unknown = True
+    normalized = validator.normalized(inp_yaml, schema_yaml)
+    
+    # Perform Validation
+    logger.info('Initiating Validation')
+    valid=validator.validate(inp_yaml)
+    # xlen = validator.xlen
+    # Print out errors
+    if valid:
+        logger.info('No Syntax errors in Input ISA Yaml. :)')
+    else:
+        error_list = validator.errors
+        logger.error(str(error_list))
+        sys.exit(0)
+
+    file_name_split=foo.split('.')
+    output_filename=file_name_split[0]+'_checked.'+file_name_split[1]
+    outfile=open(output_filename,'w')
+    logger.info('Dumping out Normalized Checked YAML: '+output_filename)
+    yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
+
+    logger.info('Running RIPS Checker on Input-ISA file')
+
+    foo = args.input_platform
+    schema = args.schema_platform
+    """
+      Read the input-platform foo (yaml file) and validate with schema-platform for feature values
+      and constraints
+    """
+    inputfile = open(foo, 'r')
+    schemafile = open(schema, 'r')
+    # Load input YAML file
+    logger.info('Loading input file: '+str(foo))
+    inp_yaml = yaml.safe_load(inputfile)
+
+    # instantiate validator
+    logger.info('Load Schema '+str(schema))
+    schema_yaml = yaml.safe_load(schemafile)
+
+    validator = schemaValidator(schema_yaml,xlen=xlen)
     validator.allow_unknown = True
     normalized = validator.normalized(inp_yaml, schema_yaml)
     # print(normalized)
@@ -154,7 +201,7 @@ def main():
     
     # Print out errors
     if valid:
-        logger.info('No Syntax errors in Input Yaml. :)')
+        logger.info('No Syntax errors in Input ISA Yaml. :)')
     else:
         error_list = validator.errors
         logger.error(str(error_list))
