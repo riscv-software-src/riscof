@@ -458,8 +458,8 @@ mstatus:
                     type: boolean
                     default: False
                 hardwired:
-                    type: string
                     allowed: ['No','0']
+                    type: string
                     default: "No"
             readonly: True
         SUM:

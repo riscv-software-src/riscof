@@ -12,7 +12,7 @@ testpool =  {
     "misa_valid.yaml": True,
     "misa_invalid.yaml": False
 }
-schema = "rips/schema.yaml"
+schema = "rips/schema-isa.yaml"
 
 def expectedverdict(val):
     if val:
@@ -30,8 +30,6 @@ def test():
     output = ["File Name\tExpected\tResult"]
     schemafile = open(schema, 'r')
     schema_yaml = yaml.safe_load(schemafile)
-    validator = schemaValidator(schema_yaml)
-    validator.allow_unknown = True
     common.utils.setup_logging("debug")
     logger = logging.getLogger()
     logger.handlers = []
@@ -41,6 +39,14 @@ def test():
     for file in testpool:
         infile = open(testyamldir+file)
         inp_yaml = yaml.safe_load(infile)
+        if "32" in inp_yaml['ISA']:
+            xlen = 32
+        elif "64" in inp_yaml['ISA']:
+            xlen = 64
+        elif "128" in inp_yaml['ISA']:
+            xlen = 128
+        validator = schemaValidator(schema_yaml,xlen=xlen)
+        validator.allow_unknown = True
         normalized = validator.normalized(inp_yaml, schema_yaml)
         valid=validator.validate(inp_yaml)
         logger.info("Checking "+str(file))
