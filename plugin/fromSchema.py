@@ -38,6 +38,7 @@ class fromSchema():
     def presim(self,file):
         print(self.pre)
     def postsim(self,file):
+        os.chdir(self.work_dir+str(file)+'/')
         post_sim_fix = self.env_dir+self.post
         subprocess.Popen(shlex.split(post_sim_fix))
     def execute(self,file,macros):
