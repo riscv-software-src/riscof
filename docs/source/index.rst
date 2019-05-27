@@ -16,6 +16,54 @@ Welcome to RISCOF [`source <https://gitlab.com/incoresemi/riscof/tree/1-general-
 
 For more information on the official RISC-V compliance and test suite please visit: `Github <https://github.com/riscv/riscv-compliance>`_
 
+Quickstart
+----------
+
+Install dependencies
+^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+    sudo apt-get install python3 pip3 # make sure to use python3.5 or above
+    git clone https://gitlab.com/incoresemi/riscof.git
+    pip3 install -r requirements.txt
+
+Usage
+^^^^^
+
+.. code-block:: bash
+
+  python3 -m rips.main --help
+
+    usage: RIPS Checker [-h] --input_isa YAML --input_platform YAML --schema_isa
+                        YAML --schema_platform YAML [--verbose]
+    
+    This Program checks an input YAML for compatibility with RIPS format
+    
+    optional arguments:
+      --input_isa YAML, -ii YAML
+                            Input YAML file containing ISA specs.
+      --input_platform YAML, -pi YAML
+                            Input YAML file containing platform specs.
+      --schema_isa YAML, -is YAML
+                            Input ISA Schema file
+      --schema_platform YAML, -ps YAML
+                            Input ISA Schema file
+      --verbose             debug | info | warning | error
+      -h, --help            show this help message and exit
+
+Example:
+
+.. code-block:: bash
+
+  
+    python3 -m rips.main -ii Examples/eg_elaborate_isa.yaml \
+      -pi Examples/eg_elaborate_platform.yaml \
+      -is rips/schema-isa.yaml \
+      -ps rips/schema-platform.yaml \
+      --verbose debug
+
+
 Overall RISCOF Flow
 -------------------
 
@@ -114,6 +162,12 @@ These fields can be implemented as one of the following three types.
 ISA Schema
 ^^^^^^^^^^
 
+This section describes each node of the ISA-YAML. For each node, we have identified the fields required
+from the user and also the various constraints involved.
+
+An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/eg_elaborate_isa.yaml>`_
+
+
 .. autoyaml:: ../rips/schema-isa.yaml
 
 .. _platform_schema:
@@ -121,9 +175,19 @@ ISA Schema
 Platform Schema
 ^^^^^^^^^^^^^^^
 
+This section describes each node of the PLATFORM-YAML. For each node, we have identified the fields required
+from the user and also the various constraints involved.
+
+An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/eg_elaborate_platform.yaml>`_
+
+
 .. autoyaml:: ../rips/schema-platform.yaml
 
-Custome Schema Validator
+
+Code Documentation
+------------------
+
+Custom Schema Validator
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: rips.schemaValidator
