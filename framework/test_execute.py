@@ -107,6 +107,7 @@ def collect_unprivilege(foo):
             criteria = test[2:]
             select = True
             for c in criteria:
+
                 if 'in' in c:
                     x = c.split();
                     if (len(x)!=3):
@@ -146,7 +147,9 @@ def test_unprivilege(foo):
         os.chdir(test_dir)
         elf = test_dir+str(asm[0])+'.elf'
         cmd=compile_cmd.format(asm[1],user_abi)+' '+test+' -o '+elf
+        # print(cmd)
         execute = cmd+parse_test(test,test_dir,foo, 0, 0, 0, 0)
+        # print(execute)
         common.utils.execute_command(execute)
         cmd=objdump.format(asm[1],user_abi)+' '+elf
         common.utils.execute_command_log(cmd, '{}.disass'.format(str(asm[0])))
