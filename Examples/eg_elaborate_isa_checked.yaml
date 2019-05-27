@@ -1,0 +1,285 @@
+User_Spec_Version: 2.3
+ISA: RV64IMFADCZifenceiZicsrUS
+Privilege_Spec_Version: 1.11
+misa:
+  implemented: true
+  MXL:
+    distinct:
+      values:
+      - 1
+      - 2
+      mode: UnChgd
+      readonly: false
+  Extensions:
+    bitmask:
+      base: 34869293
+      value: 256
+    readonly: false
+mvendorid:
+  implemented: true
+  value: 5658198
+  readonly: true
+marchid:
+  implemented: true
+  value: 5675157
+  readonly: true
+mimpid:
+  implemented: true
+  value: 9991522
+  readonly: true
+mhartids:
+  implemented: true
+  values:
+  - 0
+  - 1
+  - 25
+  - 669994
+  readonly: true
+mstatus:
+  XS:
+    hardwired: 'No'
+    readonly: true
+  SD:
+    hardwired: 'No'
+    readonly: true
+  FS:
+    distinct:
+      values:
+      - 0
+      - 1
+      - 2
+      - 3
+      update: UnChgd
+      mode: UnChgd
+  MPP:
+    distinct:
+      values:
+      - 0
+      - 1
+      - 3
+      mode: NextDown
+    readonly: false
+  SXL:
+    values:
+    - 1
+    - 2
+    hardwired:
+    - 'No'
+    readonly: false
+    implemented: true
+  UXL:
+    values:
+    - 1
+    hardwired:
+    - 'No'
+    readonly: false
+    implemented: true
+  MPIE:
+    readonly: false
+    hardwired: 'No'
+  MIE:
+    readonly: false
+    hardwired: 'No'
+  TSR:
+    readonly: false
+    hardwired: 'No'
+  TW:
+    readonly: false
+    hardwired: 'No'
+  TVM:
+    readonly: false
+    hardwired: 'No'
+  MXR:
+    readonly: false
+    hardwired: 'No'
+  SUM:
+    readonly: false
+    hardwired: 'No'
+  SPP:
+    readonly: false
+    hardwired: 'No'
+  MPRV:
+    readonly: false
+    hardwired: 'No'
+  SPIE:
+    readonly: false
+    hardwired: 'No'
+  UPIE:
+    readonly: false
+    hardwired: 'No'
+  SIE:
+    readonly: false
+    hardwired: 'No'
+  UIE:
+    readonly: false
+    hardwired: 'No'
+mtvec:
+  BASE:
+    range:
+      base: 4096
+      bound: 8192
+      mode: Addr
+  MODE:
+    distinct:
+      values:
+      - 1
+      readonly: true
+      mode: UnChgd
+mideleg:
+  bitmask:
+    base: 18442521949058891775
+    value: 0
+  implemented: true
+medeleg:
+  bitmask:
+    base: 18446744073709549567
+    value: 0
+  implemented: true
+mip:
+  bitmask:
+    base: 17847765323269275647
+    value: 0
+  implemented: true
+mie:
+  bitmask:
+    base: 17847765323269275647
+    value: 0
+  implemented: true
+mepc:
+  range:
+    base: 0
+    bound: 18446744073709551615
+    mode: UnChgd
+mcountinhibit:
+  bitmask:
+    base: 31
+    value: 0
+  readonly: false
+  hardwired: 'No'
+  implemented: true
+mcounteren:
+  bitmask:
+    base: 31
+    value: 0
+  readonly: false
+  hardwired: 'No'
+  implemented: true
+mhpmcounter3:
+  readonly: false
+  hardwired: 'No'
+  implemented: true
+mhpmcounter4:
+  readonly: false
+  hardwired: 'No'
+  implemented: true
+mhpmcounter5:
+  readonly: false
+  hardwired: 'No'
+  implemented: true
+mscratch:
+  implemented: true
+  readonly: false
+mhpmcounter6:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter7:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter8:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter9:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter10:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter11:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter12:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter13:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter14:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter15:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter16:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter17:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter18:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter19:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter20:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter21:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter22:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter23:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter24:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter25:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter26:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter27:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter28:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter29:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter30:
+  readonly: true
+  hardwired: '0'
+  implemented: true
+mhpmcounter31:
+  readonly: true
+  hardwired: '0'
+  implemented: true

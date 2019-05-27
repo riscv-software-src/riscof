@@ -81,10 +81,11 @@ def twset():
 
 def miedelegset():
     '''Function to set "implemented" value for mideleg regisrer.'''
+    # return True
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
         return False
-    elif 'U' in inp_yaml['ISA'] and not any('N' in inp_yaml['ISA'] or 'S' in inp_yaml['ISA']):
+    elif (('U' in inp_yaml['ISA']) and not ('N' in inp_yaml['ISA'] or 'S' in inp_yaml['ISA'])):
         return False
     else:
         return True

@@ -55,13 +55,12 @@ mtimecmp:
       default: False
     readonly:
       type: boolean
-      default: True
-      readonly: True
+      default: False
   default:
     implemented: False
 
 ### 
-# **Description**: Stores the fields for memory mapped *mcause* register.
+# **Description**: Stores the fields for the *mcause* register.
 #       - implemented: A boolean field indicating that the register has been implemented.
 #       - values: The list of exception values greater than 16 as assumed by the platform as integers.
 # 
@@ -71,7 +70,7 @@ mtimecmp:
 #
 #   mcause:
 #      implemented: True
-#      value: [0,1,3]
+#      value: [16,17,20]
 #
 # **Dependencies**: 
 #       - None
@@ -201,7 +200,7 @@ mtval:
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
 #         can exceed the maximum value supported by ISA.   
 
-mphmevent3:
+mhpmevent3:
   type: dict
   schema:
     bitmask:
@@ -257,7 +256,7 @@ mphmevent3:
     readonly: True
     hardwired: '0'
 
-mphmevent4:
+mhpmevent4:
   type: dict
   schema:
     bitmask:
@@ -313,7 +312,7 @@ mphmevent4:
     readonly: True
     hardwired: '0'
 
-mphmevent5:
+mhpmevent5:
   type: dict
   schema:
     bitmask:
@@ -369,7 +368,7 @@ mphmevent5:
     readonly: True
     hardwired: '0'
 
-mphmevent6:
+mhpmevent6:
   type: dict
   schema:
     bitmask:
@@ -425,7 +424,7 @@ mphmevent6:
     readonly: True
     hardwired: '0'
 
-mphmevent7:
+mhpmevent7:
   type: dict
   schema:
     bitmask:
@@ -481,7 +480,7 @@ mphmevent7:
     readonly: True
     hardwired: '0'
 
-mphmevent8:
+mhpmevent8:
   type: dict
   schema:
     bitmask:
@@ -537,7 +536,7 @@ mphmevent8:
     readonly: True
     hardwired: '0'
 
-mphmevent9:
+mhpmevent9:
   type: dict
   schema:
     bitmask:
@@ -593,7 +592,7 @@ mphmevent9:
     readonly: True
     hardwired: '0'
 
-mphmevent10:
+mhpmevent10:
   type: dict
   schema:
     bitmask:
@@ -649,7 +648,7 @@ mphmevent10:
     readonly: True
     hardwired: '0'
 
-mphmevent11:
+mhpmevent11:
   type: dict
   schema:
     bitmask:
@@ -705,7 +704,7 @@ mphmevent11:
     readonly: True
     hardwired: '0'
 
-mphmevent12:
+mhpmevent12:
   type: dict
   schema:
     bitmask:
@@ -761,7 +760,7 @@ mphmevent12:
     readonly: True
     hardwired: '0'
 
-mphmevent13:
+mhpmevent13:
   type: dict
   schema:
     bitmask:
@@ -817,7 +816,7 @@ mphmevent13:
     readonly: True
     hardwired: '0'
 
-mphmevent14:
+mhpmevent14:
   type: dict
   schema:
     bitmask:
@@ -873,7 +872,7 @@ mphmevent14:
     readonly: True
     hardwired: '0'
 
-mphmevent15:
+mhpmevent15:
   type: dict
   schema:
     bitmask:
@@ -929,7 +928,7 @@ mphmevent15:
     readonly: True
     hardwired: '0'
 
-mphmevent16:
+mhpmevent16:
   type: dict
   schema:
     bitmask:
@@ -985,7 +984,7 @@ mphmevent16:
     readonly: True
     hardwired: '0'
 
-mphmevent17:
+mhpmevent17:
   type: dict
   schema:
     bitmask:
@@ -1041,7 +1040,7 @@ mphmevent17:
     readonly: True
     hardwired: '0'
 
-mphmevent18:
+mhpmevent18:
   type: dict
   schema:
     bitmask:
@@ -1097,7 +1096,7 @@ mphmevent18:
     readonly: True
     hardwired: '0'
 
-mphmevent19:
+mhpmevent19:
   type: dict
   schema:
     bitmask:
@@ -1153,7 +1152,7 @@ mphmevent19:
     readonly: True
     hardwired: '0'
 
-mphmevent20:
+mhpmevent20:
   type: dict
   schema:
     bitmask:
@@ -1209,7 +1208,7 @@ mphmevent20:
     readonly: True
     hardwired: '0'
 
-mphmevent21:
+mhpmevent21:
   type: dict
   schema:
     bitmask:
@@ -1265,7 +1264,7 @@ mphmevent21:
     readonly: True
     hardwired: '0'
 
-mphmevent22:
+mhpmevent22:
   type: dict
   schema:
     bitmask:
@@ -1321,7 +1320,7 @@ mphmevent22:
     readonly: True
     hardwired: '0'
 
-mphmevent23:
+mhpmevent23:
   type: dict
   schema:
     bitmask:
@@ -1377,7 +1376,7 @@ mphmevent23:
     readonly: True
     hardwired: '0'
 
-mphmevent24:
+mhpmevent24:
   type: dict
   schema:
     bitmask:
@@ -1433,7 +1432,7 @@ mphmevent24:
     readonly: True
     hardwired: '0'
 
-mphmevent25:
+mhpmevent25:
   type: dict
   schema:
     bitmask:
@@ -1489,7 +1488,7 @@ mphmevent25:
     readonly: True
     hardwired: '0'
 
-mphmevent26:
+mhpmevent26:
   type: dict
   schema:
     bitmask:
@@ -1545,7 +1544,7 @@ mphmevent26:
     readonly: True
     hardwired: '0'
 
-mphmevent27:
+mhpmevent27:
   type: dict
   schema:
     bitmask:
@@ -1601,7 +1600,7 @@ mphmevent27:
     readonly: True
     hardwired: '0'
 
-mphmevent28:
+mhpmevent28:
   type: dict
   schema:
     bitmask:
@@ -1657,7 +1656,7 @@ mphmevent28:
     readonly: True
     hardwired: '0'
 
-mphmevent29:
+mhpmevent29:
   type: dict
   schema:
     bitmask:
@@ -1713,7 +1712,7 @@ mphmevent29:
     readonly: True
     hardwired: '0'
 
-mphmevent30:
+mhpmevent30:
   type: dict
   schema:
     bitmask:
@@ -1769,7 +1768,7 @@ mphmevent30:
     readonly: True
     hardwired: '0'
 
-mphmevent31:
+mhpmevent31:
   type: dict
   schema:
     bitmask:
