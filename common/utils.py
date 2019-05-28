@@ -73,6 +73,17 @@ def execute_command(execute):
     if(out):
         logger.warning(out.rstrip().decode('ascii'))
 
+def execute_shell_command(execute):
+    logger.debug(execute)
+    x=subprocess.Popen(execute,shell=True, stdout=subprocess.PIPE,
+                                                stderr=subprocess.PIPE)
+    out, err=x.communicate()
+    if(err):
+        logger.error(err.rstrip().decode('ascii'))
+        sys.exit(0)
+    if(out):
+        logger.warning(out.rstrip().decode('ascii'))
+
 def execute_command_log(execute, logfile):
     execute = execute + '> {}'.format(logfile)
     logger.debug(execute)

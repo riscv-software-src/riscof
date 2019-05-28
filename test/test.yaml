@@ -5,6 +5,7 @@ USER_EXECUTABLE: 'spike -c --isa=rv32im +signature=sign '
 USER_ABI: ilp32
 USER_SIGN: sign
 RISCV_PREFIX: riscv32-unknown-elf-
-USER_PRE_SIM: presim
-USER_POST_SIM: sign_fix.sh
+USER_PRE_SIM: presim script
+USER_POST_SIM: cat sign | sed 's/.\{8\}/& /g' | awk '{print $4 " " $3 " " $2 " " $1}' | sed 's/ /\n/g' > temp; mv \temp sign; exit 0
 ISA: RV32I
+BUILD: build script
