@@ -13,7 +13,6 @@ misa:
     bitmask:
       base: 8
       value: 288
-    readonly: false
 mvendorid:
   implemented: true
   value: 5
@@ -24,58 +23,53 @@ mstatus:
       values:
       - 0
       mode: UnChgd
-    readonly: false
+  SD:
+    is_hardwired: false
+    hardwired_val: 0
+  XS:
+    is_hardwired: false
+    hardwired_val: 0
   SXL:
-    hardwired:
-    - 'No'
-    values:
-    - 1
-    readonly: false
+    is_hardwired: true
+    hardwired_field: MXL
     implemented: false
   UXL:
-    hardwired:
-    - 'No'
-    readonly: false
+    is_hardwired: true
+    hardwired_field: MXL
     implemented: false
-  MPIE:
-    readonly: false
-    hardwired: 'No'
-  MIE:
-    readonly: false
-    hardwired: 'No'
   TSR:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   TW:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   TVM:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   MXR:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   SUM:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   SPP:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   MPRV:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   SPIE:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   UPIE:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   SIE:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
   UIE:
-    readonly: true
-    hardwired: '0'
+    is_hardwired: true
+    hardwired_val: 0
 marchid:
   implemented: false
   value: 0
@@ -86,7 +80,7 @@ mimpid:
   readonly: true
 mhartids:
   implemented: false
-  value:
+  values:
   - 0
   readonly: true
 mtvec:
@@ -130,8 +124,9 @@ mepc:
     bound: 4294967295
     mode: UnChgd
 mcountinhibit:
-  readonly: true
-  hardwired: '0'
+  bitmask:
+    base: 0
+    value: 0
   implemented: true
 mcounteren:
   readonly: true
