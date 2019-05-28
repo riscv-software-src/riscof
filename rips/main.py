@@ -38,26 +38,26 @@ def nosset():
         the presence of 'S' extension and have a hardwired value of 0.'''
     global inp_yaml
     if 'S' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':'0'}
+        return {'is_hardwired':True,'hardwired_val':0}
     else:
-        return {'readonly':False}
+        return {'is_hardwired':False}
     
 def nouset():
     '''Function to check and set defaults for all fields which are dependent on 
         the presence of 'U' extension and have a hardwired value of 0.'''
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':'0'}
+        return {'is_hardwired':True,'hardwired_val':0}
     else:
-        return {'readonly':False}
+        return {'is_hardwired':False}
 
 def upieset(doc):
     '''Function to check and set value for upie field in misa.'''
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':'0'}
+        return {'is_hardwired':True,'hardwired_val':0}
     elif 'UPIE' not in doc.keys():
-        return {'readonly':False}
+        return {'is_hardwired':False}
     else:
         return doc['UPIE']
 
@@ -65,9 +65,9 @@ def uieset(doc):
     '''Function to check and set value for uie field in misa.'''
     global inp_yaml
     if 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':'0'}
+        return {'is_hardwired':True,'hardwired_val':0}
     elif 'UIE' not in doc.keys():
-        return {'readonly':False}
+        return {'is_hardwired':False}
     else:
         return doc['UIE']
 
@@ -75,9 +75,9 @@ def twset():
     '''Function to check and set value for tw field in misa.'''
     global inp_yaml
     if 'S' not in inp_yaml['ISA'] and 'U' not in inp_yaml['ISA']:
-        return {'readonly':True,'hardwired':'0'}
+        return {'is_hardwired':True,'hardwired_val':0}
     else:
-        return {'readonly':False}
+        return {'is_hardwired':False}
 
 def miedelegset():
     '''Function to set "implemented" value for mideleg regisrer.'''
@@ -92,7 +92,7 @@ def miedelegset():
 
 def add_def_setters(schema_yaml):
     '''Function to set the default setters for various fields in the schema'''
-    schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
+    # schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
     schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset()
     schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset()
     schema_yaml['mstatus']['schema']['TVM']['default_setter'] = lambda doc: nosset()

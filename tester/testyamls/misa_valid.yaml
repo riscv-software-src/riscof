@@ -18,3 +18,5 @@ mstatus:
   MPP:
     distinct:
       values: [0]
+  SD:
+    is_hardwired: False

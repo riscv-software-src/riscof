@@ -112,10 +112,7 @@ misa:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
                             default: "UnChgd"
-                        readonly:
-                            type: boolean
-                            default: False 
-            allowed: [distinct]
+            allowed: ['distinct']
         Extensions:
             type: dict
             schema:
@@ -133,10 +130,7 @@ misa:
                             max: 0x3FFFFFF
                             default: 0x100
                     check_with: ext_check
-                readonly:
-                    type: boolean
-                    # default_setter: <lambda doc:extreaddefset(doc)>
-                    readonly: True
+            allowed: ['bitmask']
     default:
         implemented: False
 ### 
@@ -266,7 +260,7 @@ mhartids:
             readonly: True
     default:
         implemented: False
-        value: [0]
+        values: [0]
 
 ### 
 # **Description**: Specifies the fields of the *mstatus* register.
@@ -275,7 +269,6 @@ mhartids:
 #       - XS:
 #           - is_hardwired:  A boolean value indicating if platform has hardwired this field to 0.
 #       - FS: 
-#           - is_hardwired:  A boolean value indicating if platform has hardwired this field to 0.
 #           - distinct: (distinct-warl-func)
 #               - values: A list of legal values that the FS field can take.
 #               - mode : A string describing one of the *distinct-update-warl-func*.
@@ -284,13 +277,13 @@ mhartids:
 #               - values: A list of legal values that the MPP field can take.
 #               - mode : A string describing one of the *distinct-update-warl-func*.
 #       - SXL: This field doesnt exist in systems where XLEN = 32
-#           - is_hardwired : A boolean value indicating if platform has hardwired this field to MXL.
-#           - readonly: A boolean field stating whether the field is read only by user.
+#           - is_hardwired : A boolean value indicating if platform has hardwired this field to some other field.
+#           - hardwired_field: A string field indicating to which field SXL is hardwired. (Allowed MXL)
 #           - values: A list of legal values that SXL can take when not hardwired to MXL. Allowed values are [1, 2, 3]
 #       - UXL: This field doesnt exist in systems where XLEN = 32
-#           - hardwired: A string field specifying whether the bits are hardwired and if yes to what field(like MXL).
-#           - values: A list of legal values which UXL can take when not hardwired.
-#           - readonly: A boolean field stating whether the field is read only.
+#           - is_hardwired : A boolean value indicating if platform has hardwired this field to some other field.
+#           - hardwired_field: A string field indicating to which field UXL is hardwired. (Allowed [MXL,SXL])
+#           - values: A list of legal values that SXL can take when not hardwired to MXL. Allowed values are [1, 2, 3]
 # 
 # **Examples**:
 #
@@ -298,9 +291,9 @@ mhartids:
 # 
 #   mstatus:
 #      SD:
-#          hardwired: '0'
+#          is_hardwired: False
 #      XS:
-#          hardwired: 'No'
+#          is_hardwired: False
 #      FS:
 #          distinct:
 #              values: [0,1,2,3]
@@ -310,11 +303,11 @@ mhartids:
 #              values: [0,3]
 #              mode: "UnChgd"
 #      SXL:
-#          hardwired: "MXL"
-#          readonly: True
+#           is_hardwired: False
+#           hardwired_field: "MXL"
 #      UXL:
-#          values: [1,2]
-#          readonly: False
+#           is_hardwired: False
+#           hardwired_field: "MXL"
 # **Dependencies**:
 #       - if XS is hardwired to 0 and FS is hardwired to 0, then SD should also be hardwired to 0
 #       - if FS field is_hardwired is True, then the distinct field is ignored by the tests.
@@ -326,14 +319,16 @@ mstatus:
         XS:
             type: dict
             schema:
-                readonly:
-                    type: boolean
+                hardwired_val:
+                    type: integer
+                    default: 0
+                    dependencies: ['is_hardwired']
                     readonly: True
-                    default: True
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
+                is_hardwired:
+                    type: boolean
+                    default: False
+            default:
+                is_hardwired: False
         FS:
             type: dict
             schema:
@@ -361,38 +356,39 @@ mstatus:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
                             default: "UnChgd"
-                readonly:
-                    type: boolean
-                    default: False
-                    readonly: True
         SXL:
             type: dict
             schema:
-                hardwired:
-                    type: list
-                    allowed: ['No', 'MXL']
-                    default: ['No']
+                is_hardwired: 
+                    type: boolean
+                    default: False
+                hardwired_field:
+                    type: string
+                    dependencies: ['is_hardwired']
+                    allowed: ["MXL"]
+                    default: "MXL"
                 values:
                     type: list
                     allowed: [1, 2, 3]
-                    default: [1]
                     check_with: len_check
                 implemented:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: sset()
-                readonly:
-                    type: boolean
-                    default: False
             default:
-                hardwired: ['No']
+                is_hardwired: True
+                hardwired_field: "MXL"
         UXL:
             type: dict
             schema:
-                hardwired:
-                    type: list
-                    allowed: ['No', 'MXL', 'SXL']
-                    default: ['No']
+                is_hardwired: 
+                    type: boolean
+                    default: False
+                hardwired_field:
+                    type: string
+                    dependencies: ['is_hardwired']
+                    default: "MXl"
+                    allowed: ["MXL","SXL"]
                 values:
                     type: list
                     allowed: [1, 2, 3]
@@ -400,12 +396,10 @@ mstatus:
                 implemented:
                     type: boolean
                     readonly: True
-                    # default_setter: lamda doc: uset()
-                readonly:
-                    type: boolean
-                    default: False
+                    # default_setter: lamda doc: sset()
             default:
-                hardwired: ['No']
+                is_hardwired: True
+                hardwired_field: "MXL"
         SD:
             type: dict
             schema:
@@ -415,154 +409,117 @@ mstatus:
                 hardwired_val:
                     readonly: True
                     default: 0
-                    type: int
+                    type: integer
+            default:
+                is_hardwired: False
         TSR:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
         TW:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
         TVM:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
         MXR:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    allowed: ['No','0']
-                    type: string
-                    default: "No"
             readonly: True
         SUM:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
         SPP:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
         MPRV:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
-        MPIE:
-            type: dict
-            schema:
-                readonly:
-                    type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
-            readonly: True
-            default:
-                readonly: False
-                hardwired: "No"
+        # MPIE:
+        #     type: dict
+        #     schema:
+        #         hardwired_val:
+        #             type: integer
+        #         is_hardwired:
+        #             type: boolean
+        #     readonly: True
+        #     default:
+        #         is_hardwired: False
         SPIE:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
         UPIE:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
-        MIE:
-            type: dict
-            schema:
-                readonly:
-                    type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
-            readonly: True
-            default:
-                readonly: False
+        # MIE:
+        #     type: dict
+        #     schema:
+        #         hardwired_val:
+        #             type: integer
+        #         is_hardwired:
+        #             type: boolean
+        #     readonly: True
+        #     default:
+        #         is_hardwired: False
         SIE:
             type: dict
             schema:
-                readonly:
+                hardwired_val:
+                    type: integer
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
             readonly: True
         UIE:
             type: dict
             schema:
+                hardwired_val:
+                    type: integer
                 is_hardwired:
                     type: boolean
-                    default: True
-                hardwired_val:
-                    readonly: True
-                    default: 0
-                    type: int
+            readonly: True
 
 ### 
 # **Description**: Specifies the fields of the *mtvec* register.
@@ -919,20 +876,14 @@ mcountinhibit:
                 value:
                     type: integer
                     default: 0x00
-        readonly:
-            type: boolean
-            default: False
-        hardwired:
-            type: string
-            allowed: ['No','0']
-            default: 'No'
         implemented:
             type: boolean
             default: True
             readonly: True
     default:
-        readonly: True
-        hardwired: '0'
+        bitmask:
+            base: 0x00
+            value: 0x00
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
