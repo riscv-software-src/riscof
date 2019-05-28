@@ -25,9 +25,9 @@ mhartids:
   values: [0,1,25,669994]
 mstatus:
   XS:
-    hardwired: "No"
+    is_hardwired: False
   SD:
-    hardwired: "No"
+    is_hardwired: False
   FS:
     distinct:
       values: [0,1,2,3]
@@ -37,12 +37,12 @@ mstatus:
       values: [0,1,3]
       mode: "NextDown"
   SXL:
-    # hardwired: "MXL"
-    # readonly: True
+    # is_hardwired: True
+    # hardwired_field: "MXL"
     values: [1,2]
   UXL:
-    # hardwired: "MXL"
-    # readonly: True
+    #is_hardwired: True
+    # hardwired_field: "MXL"
     values: [1]
 mtvec:
   BASE:
@@ -56,7 +56,6 @@ mtvec:
   MODE:
     distinct:
       values: [1]
-      readonly: True
 mideleg:
   bitmask:
     base: 0xFFF0FFFFFFFFFFFF
@@ -84,20 +83,17 @@ mcountinhibit:
   bitmask:
     base: 0x1F
     value: 0x00
-  # readonly: True
-  # hardwired: '0'
+  # is_hardwired: True
+  # hardwired_val: 0
 mcounteren:
     bitmask:
       base: 0x1F
       value: 0x00
-  # readonly: True
-  # hardwired: '0'
+  # is_hardwired: True
+  # hardwired_val: 0
 mhpmcounter3:
-  readonly: False
-  hardwired: "No"
+  is_hardwired: False
 mhpmcounter4:
-  readonly: False
-  hardwired: "No"
+  is_hardwired: False
 mhpmcounter5:
-  readonly: False
-  hardwired: "No"
+  is_hardwired: False

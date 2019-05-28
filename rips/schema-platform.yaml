@@ -22,10 +22,6 @@ mtime:
     implemented:
       type: boolean
       default: False
-    readonly:
-      type: boolean
-      default: True
-      readonly: True
   default:
     implemented: False
 
@@ -51,9 +47,6 @@ mtimecmp:
       type: integer
       check_with: max_length
     implemented:
-      type: boolean
-      default: False
-    readonly:
       type: boolean
       default: False
   default:
@@ -180,16 +173,14 @@ mtval:
 #       - distinct:
 #           - values: A list of legal values that the register can take.
 #           - mode : A string describing one of the *distinct-update-warl-func*.
-#       - readonly: a boolean value indicating whether the register is read only.
-#       - hardwired: a string indicating whether the register is hardwired to 0 or not.
+#       - is_hardwired: A boolean field indicating whether the register is hardwired or not.
 #  The other event registers(mhpmcounter*) for counters(from 4 till 31 can be defined in the same way as shown below.)
 # 
 # **Examples**:
 #
 # .. code-block:: none
 #   mhpmevent3:
-#      hardwired: '0'
-#      readonly: True
+#      is_hardwired: True
 # 
 #   mhpmevent3:
 #      distinct:
@@ -224,7 +215,7 @@ mhpmevent3:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -241,20 +232,19 @@ mhpmevent3:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent4:
   type: dict
@@ -280,7 +270,7 @@ mhpmevent4:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -297,20 +287,19 @@ mhpmevent4:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent5:
   type: dict
@@ -336,7 +325,7 @@ mhpmevent5:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -353,20 +342,19 @@ mhpmevent5:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent6:
   type: dict
@@ -392,7 +380,7 @@ mhpmevent6:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -409,20 +397,20 @@ mhpmevent6:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
+
 
 mhpmevent7:
   type: dict
@@ -448,7 +436,7 @@ mhpmevent7:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -465,20 +453,19 @@ mhpmevent7:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent8:
   type: dict
@@ -504,7 +491,7 @@ mhpmevent8:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -521,20 +508,19 @@ mhpmevent8:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent9:
   type: dict
@@ -560,7 +546,7 @@ mhpmevent9:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -577,20 +563,19 @@ mhpmevent9:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent10:
   type: dict
@@ -616,7 +601,7 @@ mhpmevent10:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -633,20 +618,19 @@ mhpmevent10:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent11:
   type: dict
@@ -672,7 +656,7 @@ mhpmevent11:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -689,20 +673,19 @@ mhpmevent11:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent12:
   type: dict
@@ -728,7 +711,7 @@ mhpmevent12:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -745,20 +728,19 @@ mhpmevent12:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent13:
   type: dict
@@ -784,7 +766,7 @@ mhpmevent13:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -801,20 +783,19 @@ mhpmevent13:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent14:
   type: dict
@@ -840,7 +821,7 @@ mhpmevent14:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -857,20 +838,19 @@ mhpmevent14:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent15:
   type: dict
@@ -896,7 +876,7 @@ mhpmevent15:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -913,20 +893,19 @@ mhpmevent15:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent16:
   type: dict
@@ -952,7 +931,7 @@ mhpmevent16:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -969,20 +948,19 @@ mhpmevent16:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent17:
   type: dict
@@ -1008,7 +986,7 @@ mhpmevent17:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1025,20 +1003,19 @@ mhpmevent17:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent18:
   type: dict
@@ -1064,7 +1041,7 @@ mhpmevent18:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1081,20 +1058,19 @@ mhpmevent18:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent19:
   type: dict
@@ -1120,7 +1096,7 @@ mhpmevent19:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1137,20 +1113,19 @@ mhpmevent19:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent20:
   type: dict
@@ -1176,7 +1151,7 @@ mhpmevent20:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1193,20 +1168,19 @@ mhpmevent20:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent21:
   type: dict
@@ -1232,7 +1206,7 @@ mhpmevent21:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1249,20 +1223,19 @@ mhpmevent21:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent22:
   type: dict
@@ -1288,7 +1261,7 @@ mhpmevent22:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1305,20 +1278,19 @@ mhpmevent22:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent23:
   type: dict
@@ -1344,7 +1316,7 @@ mhpmevent23:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1361,20 +1333,19 @@ mhpmevent23:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent24:
   type: dict
@@ -1400,7 +1371,7 @@ mhpmevent24:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1417,20 +1388,19 @@ mhpmevent24:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent25:
   type: dict
@@ -1456,7 +1426,7 @@ mhpmevent25:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1473,20 +1443,19 @@ mhpmevent25:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent26:
   type: dict
@@ -1512,7 +1481,7 @@ mhpmevent26:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1529,20 +1498,19 @@ mhpmevent26:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent27:
   type: dict
@@ -1568,7 +1536,7 @@ mhpmevent27:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1585,20 +1553,19 @@ mhpmevent27:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent28:
   type: dict
@@ -1624,7 +1591,7 @@ mhpmevent28:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1641,20 +1608,19 @@ mhpmevent28:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent29:
   type: dict
@@ -1680,7 +1646,7 @@ mhpmevent29:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1697,20 +1663,19 @@ mhpmevent29:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent30:
   type: dict
@@ -1736,7 +1701,7 @@ mhpmevent30:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1753,20 +1718,19 @@ mhpmevent30:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
+    is_hardwired: True
+    hardwired_val: 0
 
 mhpmevent31:
   type: dict
@@ -1792,7 +1756,7 @@ mhpmevent31:
           default: 0x00
         bound:
           type: integer
-          default: 0xFFFFFFFFFFFFFFFF
+          default: 0xFFFFFFFF
         mode:
           type: string
           allowed: ['Saturate','UnChgd','Addr']
@@ -1809,18 +1773,16 @@ mhpmevent31:
           type: string
           allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
           default: "UnChgd"
-    readonly:
+    is_hardwired:
       type: boolean
       default: False
-    hardwired:
-      type: string
-      allowed: ['No','0']
-      default: 'No'
+    hardwired_val:
+      type: integer
+      default: 0
     implemented:
       type: boolean
       default: True
       readonly: True
   default:
-    readonly: True
-    hardwired: '0'
-
+    is_hardwired: True
+    hardwired_val: 0
