@@ -1,7 +1,7 @@
 
 ###
 # **Description**: Takes input a string representing the ISA supported by the implementation. All extension names
-# (other than Zext) should be mentioned in upper-case. Z extensions should begin with abitmaskn upper-case
+# (other than Zext) should be mentioned in upper-case. Z extensions should begin with an upper-case
 # 'Z' followed by lower-case extension name (without Camel casing)
 #
 # **Examples**: 
@@ -30,7 +30,7 @@ ISA:
 #   User_Spec_Version: 2.3
 #
 # **Dependencies**:
-#   - None 
+#   - should be greater than or equal to 2.2
 User_Spec_Version:
     type: float
     min: 2.2 
@@ -48,7 +48,7 @@ User_Spec_Version:
 #   Privilege_Spec_Version: 1.11
 #
 # **Dependencies**:
-#   - None 
+#   - should be greater than or equal to 1.10 
 Privilege_Spec_Version:
     type: float
     min: 1.10
@@ -63,7 +63,6 @@ Privilege_Spec_Version:
 #       - distinct:
 #           - values: a list of legal values that the MXL field can take.
 #           - mode : a string describing one of the *distinct-update-warl-func*.
-#           - readonly: a boolean stating that the field is read only.
 # 
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
@@ -79,16 +78,17 @@ Privilege_Spec_Version:
 #      MXL:
 #          distinct:
 #              values : [1, 2]
-#              mode  : 'UnChd'
+#              mode  : 'UnChgd'
 #      Extensions:
 #          bitmask:
 #              base:   0x12D
 #              value:  0x000
 # 
 # **Dependencies**: 
-#   - The maximum value specified in MXL should not be greater than the XLEn/32 specified in the ISA field.
+#   - The maximum value specified in MXL should not be greater than the XLEN/32 specified in the ISA field.
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
+#   - The value and base fields of Extensions should be only 26-bits wide.
 # 
 #
 misa:
@@ -153,7 +153,7 @@ misa:
 #      value: 0x458
 #
 # **Dependencies**: 
-#       - None
+#       - This field should be only XLEN bits wide 
 mvendorid:
     type: dict
     schema: 
@@ -177,14 +177,14 @@ mvendorid:
 # 
 # **Examples**:
 #
-# .. code-block:: none
+# .. code-block:: python
 #
 #   marchid:
 #      implemented: True
 #      value: 0x458
 #
 # **Dependencies**: 
-#       - None
+#       - This field should be only XLEN bits wide 
 marchid:
     type: dict
     schema: 
@@ -203,12 +203,10 @@ marchid:
         implemented: False
         value: 0x00
 
-#       - readonly: A boolean field indicating whether the register is read only.( This register is read
 ### 
 # **Description**: Stores the ImplementationId.
 #       - implemented: A boolean field indicating that the register has been implemented.
 #       - value: A hexa-decimal value equal to the ImplementationId
-#                   only always as mandated by the specifications.)
 # 
 # **Examples**:
 #
@@ -218,7 +216,7 @@ marchid:
 #      implemented: True
 #      value: 0x458
 # **Dependencies**: 
-#       - None
+#       - This field should be only XLEN bits wide 
 mimpid:
     type: dict
     schema: 
@@ -241,19 +239,17 @@ mimpid:
 # **Description**: Specifies the Hart Ids in multi-core systems.
 #       - implemented: A boolean field indicating that the register has been implemented.
 #       - value: a list of integer values equal to the Hart Ids.
-#       - readonly: A boolean field indicating whether the register is read only.( This register is read
-#                   only always as mandated by the specifications.)
 # 
 # **Examples**:
 #
 # .. code-block:: none
 # 
-#   mhartid:
+#   mhartids:
 #      implemented: True
 #      value: [0,125,458]
 # **Dependencies**: 
 #       - Atleast one id must be equal to zero.
-#       - No value must exceed the maximum value supported by the architecture.
+#       - The value field should be only XLEN bits wide 
 mhartids:
     type: dict
     schema: 
@@ -275,21 +271,22 @@ mhartids:
 ### 
 # **Description**: Specifies the fields of the *mstatus* register.
 #       - SD: 
-#           - hardwired: A string field specifying whether the bits are hardwired and if yes to what value(usually 0).
+#           - is_hardwired:  A boolean value indicating if platform has hardwired this field to 0.
 #       - XS:
-#           - hardwired: A string field specifying whether the field is hardwired to 0 and if not it is indicated by 'No'.
-#       - FS: needs to be described as *distinct-warl-func* provinding a list of legal values in int
-#           - distinct:
+#           - is_hardwired:  A boolean value indicating if platform has hardwired this field to 0.
+#       - FS: 
+#           - is_hardwired:  A boolean value indicating if platform has hardwired this field to 0.
+#           - distinct: (distinct-warl-func)
 #               - values: A list of legal values that the FS field can take.
 #               - mode : A string describing one of the *distinct-update-warl-func*.
-#       - MPP: needs to be described as *distinct-warl-func* provinding a list of legal values in int
-#           - distinct:
+#       - MPP: 
+#           - distinct: (distinct-warl-func)
 #               - values: A list of legal values that the MPP field can take.
 #               - mode : A string describing one of the *distinct-update-warl-func*.
 #       - SXL: This field doesnt exist in systems where XLEN = 32
-#           - hardwired: A string field specifying whether it is hardwired and if yes to what field(like MXL).
-#           - values: A list of legal values which SXL can take when not hardwired.
-#           - readonly: A boolean field stating whether the field is read only.
+#           - is_hardwired : A boolean value indicating if platform has hardwired this field to MXL.
+#           - readonly: A boolean field stating whether the field is read only by user.
+#           - values: A list of legal values that SXL can take when not hardwired to MXL. Allowed values are [1, 2, 3]
 #       - UXL: This field doesnt exist in systems where XLEN = 32
 #           - hardwired: A string field specifying whether the bits are hardwired and if yes to what field(like MXL).
 #           - values: A list of legal values which UXL can take when not hardwired.
@@ -318,9 +315,10 @@ mhartids:
 #      UXL:
 #          values: [1,2]
 #          readonly: False
-# **Dependencies**: 
-#       - No value in MPP must be unsupported(1 cannot be present without the 'S' extension and '0' 
-#         without the 'U' extension)
+# **Dependencies**:
+#       - if XS is hardwired to 0 and FS is hardwired to 0, then SD should also be hardwired to 0
+#       - if FS field is_hardwired is True, then the distinct field is ignored by the tests.
+#       - No mode corresponding to a value in MPP must be unsupported (i.e. 1 cannot be present without the 'S' extension and '0' without the 'U' extension)
 #       - No value in SXL or UXL must exceed XLEN/32.
 mstatus:
     type: dict
@@ -411,13 +409,13 @@ mstatus:
         SD:
             type: dict
             schema:
-                readonly:
+                is_hardwired:
                     type: boolean
                     default: True
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
+                hardwired_val:
+                    readonly: True
+                    default: 0
+                    type: int
         TSR:
             type: dict
             schema:
@@ -558,13 +556,13 @@ mstatus:
         UIE:
             type: dict
             schema:
-                readonly:
+                is_hardwired:
                     type: boolean
-                    default: False
-                hardwired:
-                    type: string
-                    allowed: ['No','0']
-                    default: "No"
+                    default: True
+                hardwired_val:
+                    readonly: True
+                    default: 0
+                    type: int
 
 ### 
 # **Description**: Specifies the fields of the *mtvec* register.
