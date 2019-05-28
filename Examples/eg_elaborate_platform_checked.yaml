@@ -1,11 +1,9 @@
 mtime:
   address: 20480
   implemented: true
-  readonly: true
 mtimecmp:
   address: 20488
   implemented: true
-  readonly: false
 mcause:
   values:
   - 16
@@ -19,16 +17,16 @@ mhpmevent3:
   bitmask:
     base: 252
     value: 0
-  readonly: false
-  hardwired: 'No'
+  is_hardwired: false
+  hardwired_val: 0
   implemented: true
 mhpmevent4:
   range:
     base: 256
     bound: 18446744073709551360
     mode: Saturate
-  readonly: false
-  hardwired: 'No'
+  is_hardwired: false
+  hardwired_val: 0
   implemented: true
 mhpmevent5:
   distinct:
@@ -36,114 +34,114 @@ mhpmevent5:
     - 0
     - 2
     mode: UnChgd
-  readonly: false
-  hardwired: 'No'
+  is_hardwired: false
+  hardwired_val: 0
   implemented: true
 mtval:
   hardwired: '0'
   readonly: true
   implemented: true
 mhpmevent6:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent7:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent8:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent9:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent10:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent11:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent12:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent13:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent14:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent15:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent16:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent17:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent18:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent19:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent20:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent21:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent22:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent23:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent24:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent25:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent26:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent27:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent28:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent29:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent30:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
 mhpmevent31:
-  readonly: true
-  hardwired: '0'
+  is_hardwired: true
+  hardwired_val: 0
   implemented: true
