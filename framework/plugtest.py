@@ -2,9 +2,6 @@ import oyaml as yaml
 import importlib
 import common.utils
 import logging
-# import plugin.fromSchema as module
-def kk():
-    print('k')
 
 def test():
     # Set up the logger
@@ -15,7 +12,7 @@ def test():
     ch.setFormatter(common.utils.ColoredFormatter())
     logger.addHandler(ch)
 
-    file = open("framework/test.yaml","r")
+    file = open("Examples/template_env.yaml","r")
     schema_yaml = yaml.safe_load(file)
     module = importlib.import_module('plugin.fromSchema')
     my_class = getattr(module, 'model_from_yaml')

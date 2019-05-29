@@ -47,10 +47,10 @@ Usage
                             Input YAML file containing ISA specs.
       --input_platform YAML, -pi YAML
                             Input YAML file containing platform specs.
-      --schema_isa YAML, -is YAML
+      --schema_isa ISA, -is ISA
                             Input ISA Schema file
-      --schema_platform YAML, -ps YAML
-                            Input ISA Schema file
+      --schema_platform PLATFORM, -ps PLATFORM
+                            Input PLATFORM Schema file
       --verbose             debug | info | warning | error
       -h, --help            show this help message and exit
 
@@ -59,8 +59,8 @@ Example:
 .. code-block:: bash
 
   
-    python3 -m rips.main -ii Examples/eg_elaborate_isa.yaml \
-      -pi Examples/eg_elaborate_platform.yaml \
+    python3 -m rips.main -ii Examples/template_isa.yaml \
+      -pi Examples/template_platform.yaml \
       -is rips/schema-isa.yaml \
       -ps rips/schema-platform.yaml \
       --verbose debug
@@ -109,7 +109,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 1. **Distinct** (*distinct-warl-func*) 
 
   * A list of distinct values which are considered as legal and any value not in the list is considered as illegal.
-  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes:
+  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*distinct-warl-update-func*):
       * UnChgd: The value remains unchanged
       * NextUp: ceiling(*WriteVal*) i.e. the next larger or the largest element of the list
       * NextDown: floor(*WriteVal*) i.e. the next smalles or the smallest element of the list
@@ -122,7 +122,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 2. **Range** (*range-warl-func*)
 
   * Legal values are defined as all values that lie within the set: *[Lower, Upper]* inclusive
-  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes:
+  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*range-warl-update-func*):
       * Saturate: 
 
         .. code-block:: python 
@@ -189,21 +189,10 @@ An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `P
 
 Environment YAML Spec
 ^^^^^^^^^^^^^^^^^^^^^
-- USER_ENV_DIR: Path to the directory containing the environment set up.
-- USER_LINKER: Path to the linker file.
-- USER_TARGET: The name of the target for simulation.
-- USER_EXECUTABLE: The command to run the simulation.
-- USER_ABI: The name of the application binary interface for compilation.
-- USER_SIGN: The name of the signature file which would be generated.
-- RISCV_PREFIX: The prefix of the risc-v command for compilation. 
-- USER_PRE_SIM:
-    - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
-    - command: command string for pre-simulation processing.
-- USER_POST_SIM: 
-    - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
-    - command: command string for post-simulation processing.
-- ISA: The isa to be used for compilation.
-- BUILD: The build script for the environment.
+
+This section describes each node of the ENVIRONMENT-YAML. 
+
+.. autoyaml:: ../Examples/template_env.yaml
 
 
 Code Documentation
