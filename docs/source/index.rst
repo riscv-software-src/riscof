@@ -159,10 +159,10 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 
 These fields can be implemented as one of the following three types.
 
-.. _isa_schema:
+.. _isa_yaml_spec:
 
-ISA Schema
-^^^^^^^^^^
+ISA YAML Spec
+^^^^^^^^^^^^^^^^^
 
 This section describes each node of the ISA-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
@@ -172,10 +172,10 @@ An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YA
 
 .. autoyaml:: ../rips/schema-isa.yaml
 
-.. _platform_schema:
+.. _platform_yaml_spec:
 
-Platform Schema
-^^^^^^^^^^^^^^^
+Platform YAML Spec
+^^^^^^^^^^^^^^^^^^^^^^
 
 This section describes each node of the PLATFORM-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
@@ -184,6 +184,26 @@ An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `P
 
 
 .. autoyaml:: ../rips/schema-platform.yaml
+
+.. _environment_yaml_spec:
+
+Environment YAML Spec
+^^^^^^^^^^^^^^^^^^^^^
+- USER_ENV_DIR: Path to the directory containing the environment set up.
+- USER_LINKER: Path to the linker file.
+- USER_TARGET: The name of the target for simulation.
+- USER_EXECUTABLE: The command to run the simulation.
+- USER_ABI: The name of the application binary interface for compilation.
+- USER_SIGN: The name of the signature file which would be generated.
+- RISCV_PREFIX: The prefix of the risc-v command for compilation. 
+- USER_PRE_SIM:
+    - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
+    - command: command string for pre-simulation processing.
+- USER_POST_SIM: 
+    - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
+    - command: command string for post-simulation processing.
+- ISA: The isa to be used for compilation.
+- BUILD: The build script for the environment.
 
 
 Code Documentation
