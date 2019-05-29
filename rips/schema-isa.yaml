@@ -506,7 +506,7 @@ mstatus:
 
 ### 
 # **Description**: Specifies the fields of the *mtvec* register.
-#       - BASE: needs to be described as *distinct-warl-func* provinding a list of legal values in int or as a *range-warl-func* providing two integers specifying the range of legal values.       
+#       - BASE: needs to be described as *distinct-warl-func* providing a list of legal values in int or as a *range-warl-func* providing two integers specifying the range of legal values.       
 #           - range:
 #               - base: An integer indicating the lowest legal value.
 #               - bound: An integer indicating the highest legal value.(less than 2^XLEN-4)
@@ -535,7 +535,7 @@ mstatus:
 # **Constraints**: 
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
-#         can exceed 2^(XLEN-1)-4 and the base must be lower than bound.
+#         can exceed 2^XLEN-4 and the base must be lower than bound.
 mtvec:
     type: dict
     schema:
@@ -604,7 +604,7 @@ mtvec:
 #          value: 0x00
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value supported by the ISA.
+#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mideleg:
     type: dict
     schema:
@@ -643,7 +643,7 @@ mideleg:
 #          value: 0x00
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value supported by the ISA.
+#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 #       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both base and value.
 medeleg:
     type: dict
@@ -684,7 +684,7 @@ medeleg:
 #          value: 0x00
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value supported by the ISA.
+#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mip:
     type: dict
     schema:
@@ -724,7 +724,7 @@ mip:
 #          value: 0x00
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value supported by the ISA.
+#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mie:
     type: dict
     schema:
@@ -768,8 +768,8 @@ mie:
 #          bound: 0xFFFFFFFF
 #          base: 0x00
 # **Constraints**: 
-#       - The base and value cannot exceed the maximum value supported by the ISA (in case of *bitmask-warl-func*).
-#       - The base and bound cannot exceed the maximum value supported by the ISA (in case of *range-warl-func*) 
+#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
+#       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*) 
 #         and the base should be lower than the bound.
 mepc:
     type: dict
@@ -823,7 +823,7 @@ mepc:
 #          base: 0xFFFFFFFF
 #          value: 0x00
 # **Constraints**: 
-#       - The base and value cannot exceed the maximum value supported by the ISA.
+#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mcountinhibit:
     type: dict
     schema:
@@ -864,7 +864,7 @@ mcountinhibit:
 #          base: 0xFFFFFFFF
 #          value: 0x00
 # **Constraints**: 
-#       - The base and value cannot exceed the maximum value supported by the ISA.
+#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mcounteren:
     type: dict
     schema:

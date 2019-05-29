@@ -109,7 +109,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 1. **Distinct** (*distinct-warl-func*) 
 
   * A list of distinct values which are considered as legal and any value not in the list is considered as illegal.
-  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*distinct-warl-update-func*):
+  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*distinct-update-warl-func*):
       * UnChgd: The value remains unchanged
       * NextUp: ceiling(*WriteVal*) i.e. the next larger or the largest element of the list
       * NextDown: floor(*WriteVal*) i.e. the next smalles or the smallest element of the list
@@ -122,7 +122,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 2. **Range** (*range-warl-func*)
 
   * Legal values are defined as all values that lie within the set: *[Lower, Upper]* inclusive
-  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*range-warl-update-func*):
+  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*range-update-warl-func*):
       * Saturate: 
 
         .. code-block:: python 
