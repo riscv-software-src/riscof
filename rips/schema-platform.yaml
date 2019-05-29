@@ -166,7 +166,7 @@ mtval:
 #           - values: A list of legal values that the register can take.(Less than 2^XLEN)
 #           - mode : A string describing one of the *distinct-update-warl-func*.
 #       - is_hardwired: A boolean field indicating whether the register is hardwired or not.
-#  The other event registers(mhpmcounter*) for counters(from 4 till 31 can be defined in the same way as shown below.)
+#  Other event registers (mhpmevent4 - mhpmevent31) are analogously defined.
 # 
 # **Examples**:
 #

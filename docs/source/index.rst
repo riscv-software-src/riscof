@@ -79,8 +79,8 @@ The following diagram captures the over-flow of RISCOF.
 
 The user is required to provide 3 YAML files as input to the flow:
 
-1. **ISA Spec**: This YAML file is meant to capture the ISA related features implemented by the user. Details of this input file can be found here : isa_schema_. 
-2. **Platform Spec**: This YAML file is meant to capture the platform specific features implemented by the user. Details of this input file can be found here : platform_schema_.
+1. **ISA Spec**: This YAML file is meant to capture the ISA related features implemented by the user. Details of this input file can be found here : isa_yaml_spec_. 
+2. **Platform Spec**: This YAML file is meant to capture the platform specific features implemented by the user. Details of this input file can be found here : platform_yaml_spec_.
 3. **Env Spec**: This YAML file is meant to capture the options and spec of how the user provided implementation is to be executed/run and how the signature should be extracted for each test. This spec is used to create a python-based plugin for executing the implementation. By using the plugin feature, one can use the same plugin for implementations varying in ISA and Platform spec. Details: *[WIP]*
 
 Working:
