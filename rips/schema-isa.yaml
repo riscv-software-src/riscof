@@ -164,8 +164,6 @@ mvendorid:
 # **Description**: Stores the ArchitectureId.
 #       - implemented: A boolean field indicating that the register has been implemented.
 #       - value: A XLEN bit wide value in hexa-decimal equal to the ArchitectureId
-#       - readonly: A boolean field indicating whether the register is read only.( This register is read
-#                   only always as mandated by the specifications.)
 # 
 # **Examples**:
 #
