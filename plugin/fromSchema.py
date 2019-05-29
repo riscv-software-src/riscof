@@ -16,8 +16,10 @@ class model_from_yaml():
         self.simulator = foo['USER_EXECUTABLE']
         self.signature = foo['USER_SIGN']
         self.pref = foo['RISCV_PREFIX']
-        self.post = foo['USER_POST_SIM']
-        self.pre = foo['USER_PRE_SIM']
+        self.post = foo['USER_POST_SIM']['command']
+        self.is_post_shell = foo['USER_POST_SIM']['is_shell']
+        self.pre = foo['USER_PRE_SIM']['command']
+        self.is_pre_shell = foo['USER_PRE_SIM']['is_shell']
         self.root_dir=os.getcwd()+'/'
         self.gcc = foo['RISCV_PREFIX']+'gcc'
         self.ld  = foo['RISCV_PREFIX']+'ld'
@@ -58,14 +60,7 @@ class model_from_yaml():
         logger.debug("Changing directory to "+self.work_dir+str(file)+'/')
         os.chdir(self.work_dir+str(file)+'/')
         logger.info("Running post-sim for "+file)
-        post_sim_fix = self.env_dir+self.post
-        utils.execute_command(post_sim_fix)
-
-    def postsimshell(self,file):
-        logger.debug("Changing directory to "+self.work_dir+str(file)+'/')
-        os.chdir(self.work_dir+str(file)+'/')
-        logger.info("Running post-sim for "+file)
-        utils.execute_shell_command(self.post)
+        utils.execute_sim_command(self.env_dir,self.post,self.is_post_shell)
 
     def execute(self,file,macros):
         logger.info("Running "+file+" test")

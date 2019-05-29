@@ -73,9 +73,11 @@ def execute_command(execute):
     if(out):
         logger.warning(out.rstrip().decode('ascii'))
 
-def execute_shell_command(execute):
+def execute_sim_command(dir,execute,shell):
     logger.debug(execute)
-    x=subprocess.Popen(execute,shell=True, stdout=subprocess.PIPE,
+    if(not shell):
+        execute = shlex(dir+execute)
+    x=subprocess.Popen(execute,shell=shell, stdout=subprocess.PIPE,
                                                 stderr=subprocess.PIPE)
     out, err=x.communicate()
     if(err):

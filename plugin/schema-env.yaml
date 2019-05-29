@@ -28,10 +28,22 @@ USER_SIGN:
     type: string
     required: True
 USER_POST_SIM:
-    type: string
-    default: ''
-    required: False
+    type: dict
+    schema:
+        is_shell:
+            type: boolean
+            default: False
+        command:
+            type: string
+            default: ''
+            required: False
 USER_PRE_SIM:
-    type: string
-    default: ''
-    required: False
+    type: dict
+    schema:
+        is_shell:
+            type: boolean
+            default: False
+        command:
+            type: string
+            default: ''
+            required: False

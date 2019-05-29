@@ -9,7 +9,7 @@
 #
 #   mtime:
 #      implemented: True
-#      value: 0x458
+#      address: 0x458
 #
 # **Dependencies**: 
 #       - None
@@ -18,7 +18,6 @@ mtime:
   schema:
     address:
       type: integer
-      check_with: max_length
     implemented:
       type: boolean
       default: False
@@ -34,9 +33,9 @@ mtime:
 # 
 # .. code-block:: none
 #
-#   mtime:
+#   mtimecmp:
 #      implemented: True
-#      value: 0x458
+#      address: 0x458
 #
 # **Dependencies**: 
 #       - None
@@ -45,7 +44,6 @@ mtimecmp:
   schema:
     address:
       type: integer
-      check_with: max_length
     implemented:
       type: boolean
       default: False
@@ -166,10 +164,10 @@ mtval:
 #       - range:
 #           - base: An integer indicating the lowest legal value.
 #           - bound: An integer indicating the highest legal value.
-#           - mode: A string describing one of the *range-update-warl-func"
+#           - mode: A string describing one of the *range-update-warl-func*
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : an XLEN bit wide hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
+#           - value : a XLEN bit wide hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
 #       - distinct:
 #           - values: A list of legal values that the register can take.
 #           - mode : A string describing one of the *distinct-update-warl-func*.
@@ -179,6 +177,7 @@ mtval:
 # **Examples**:
 #
 # .. code-block:: none
+# 
 #   mhpmevent3:
 #      is_hardwired: True
 # 
@@ -187,10 +186,9 @@ mtval:
 #         values: [0,5,6,9,8]
 #         mode: "UnChgd"
 # **Dependencies**: 
-#       - The base and value (incase of bitmask func) cannot exceed the maximum value supported by the ISA.
+#       - The base and value (incase of bitmask func) cannot exceed the maximum value which can be represented by XLEN bits.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
-#         can exceed the maximum value supported by ISA.   
-
+#         can exceed the maximum value which can be represented by XLEN bits.   
 mhpmevent3:
   type: dict
   schema:

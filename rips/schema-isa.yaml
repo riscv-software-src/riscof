@@ -11,7 +11,7 @@
 #   ISA: RV32IMA 
 #   ISA: RV64IMAFDCZifencei
 #
-# **Dependencies**: 
+# **Constraints**: 
 #   - Certain extensions are only valid in certain user-spec version. For, eg. Zifencei is available only in user-spec 2.3 and above.
 ISA: 
     type: string
@@ -29,7 +29,7 @@ ISA:
 #   User_Spec_Version: 2.1
 #   User_Spec_Version: 2.3
 #
-# **Dependencies**:
+# **Constraints**:
 #   - should be greater than or equal to 2.2
 User_Spec_Version:
     type: float
@@ -47,7 +47,7 @@ User_Spec_Version:
 #   Privilege_Spec_Version: 1.10
 #   Privilege_Spec_Version: 1.11
 #
-# **Dependencies**:
+# **Constraints**:
 #   - should be greater than or equal to 1.10 
 Privilege_Spec_Version:
     type: float
@@ -59,15 +59,15 @@ Privilege_Spec_Version:
 # **Description**: Describes the fields of the *misa* CSR. A user needs to provide the following
 # fields:
 #   - implemented: A boolean value indicating if the *misa* has been implemented or not.
-#   - MXL: needs to be described as *distinct-warl-func* provinding a list of legal values in int
+#   - MXL: needs to be described as *distinct-warl-func* providing a list of 2 bit legal values in int
 #       - distinct:
-#           - values: a list of legal values that the MXL field can take.
+#           - values: a list of legal values that the MXL field can take.(Allowed [1,2,3])
 #           - mode : a string describing one of the *distinct-update-warl-func*.
 # 
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a 26 bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a 26 bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -84,7 +84,7 @@ Privilege_Spec_Version:
 #              base:   0x12D
 #              value:  0x000
 # 
-# **Dependencies**: 
+# **Constraints**: 
 #   - The maximum value specified in MXL should not be greater than the XLEN/32 specified in the ISA field.
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
@@ -136,7 +136,7 @@ misa:
 ### 
 # **Description**: Stores the VendorId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - value: A hexa-decimal value equal to the VendorId
+#       - value: A XLEN bit wide value in hexa-decimal equal to the VendorId
 # 
 # **Examples**: 
 # 
@@ -146,7 +146,7 @@ misa:
 #      implemented: True
 #      value: 0x458
 #
-# **Dependencies**: 
+# **Constraints**: 
 #       - This field should be only XLEN bits wide 
 mvendorid:
     type: dict
@@ -163,7 +163,7 @@ mvendorid:
 ### 
 # **Description**: Stores the ArchitectureId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - value: A hexa-decimal value equal to the ArchitectureId
+#       - value: A XLEN bit wide value in hexa-decimal equal to the ArchitectureId
 #       - readonly: A boolean field indicating whether the register is read only.( This register is read
 #                   only always as mandated by the specifications.)
 # 
@@ -175,7 +175,7 @@ mvendorid:
 #      implemented: True
 #      value: 0x458
 #
-# **Dependencies**: 
+# **Constraints**: 
 #       - This field should be only XLEN bits wide 
 marchid:
     type: dict
@@ -202,7 +202,7 @@ marchid:
 #   mimpid:
 #      implemented: True
 #      value: 0x458
-# **Dependencies**: 
+# **Constraints**: 
 #       - This field should be only XLEN bits wide 
 mimpid:
     type: dict
@@ -229,9 +229,9 @@ mimpid:
 #   mhartids:
 #      implemented: True
 #      value: [0,125,458]
-# **Dependencies**: 
+# **Constraints**: 
 #       - Atleast one id must be equal to zero.
-#       - The value field should be only XLEN bits wide 
+#       - The values field should be only XLEN bits wide.
 mhartids:
     type: dict
     schema: 
@@ -291,7 +291,7 @@ mhartids:
 #      UXL:
 #           is_hardwired: False
 #           hardwired_field: "MXL"
-# **Dependencies**:
+# **Constraints**:
 #       - if XS is hardwired to 0 and FS is hardwired to 0, then SD should also be hardwired to 0
 #       - if FS field is_hardwired is True, then the distinct field is ignored by the tests.
 #       - No mode corresponding to a value in MPP must be unsupported (i.e. 1 cannot be present without the 'S' extension and '0' without the 'U' extension)
@@ -516,7 +516,7 @@ mstatus:
 #               - mode : A string describing one of the *distinct-update-warl-func*.
 #       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values in int
 #           - distinct:
-#               - values: A list of legal values that the MODE field can take.
+#               - values: A list of legal values that the MODE field can take.(Allowed [0,1])
 #               - mode : A string describing one of the *distinct-update-warl-func*.
 # 
 # **Examples**:
@@ -532,7 +532,7 @@ mstatus:
 #           distinct:
 #              values: [0,1]
 #              mode: "UnChgd"
-# **Dependencies**: 
+# **Constraints**: 
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
 #         can exceed 2^(XLEN-1)-4 and the base must be lower than bound.
@@ -591,8 +591,8 @@ mtvec:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a XLEN bit wide value in hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -602,7 +602,7 @@ mtvec:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
-# **Dependencies**: 
+# **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value supported by the ISA.
 mideleg:
@@ -641,7 +641,7 @@ mideleg:
 #      bitmask:
 #          base: 0xFFFFF7FF
 #          value: 0x00
-# **Dependencies**: 
+# **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value supported by the ISA.
 #       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both base and value.
@@ -671,8 +671,8 @@ medeleg:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -682,7 +682,7 @@ medeleg:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
-# **Dependencies**: 
+# **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value supported by the ISA.
 mip:
@@ -711,8 +711,8 @@ mip:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -722,7 +722,7 @@ mip:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
-# **Dependencies**: 
+# **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value supported by the ISA.
 mie:
@@ -748,26 +748,12 @@ mie:
         bitmask:
             base: 0xFFFFFFFF
 
-mscratch:
-    type: dict
-    schema:
-        implemented:
-            type: boolean
-        readonly:
-            type: boolean
-    default:
-        implemented: True
-        readonly: False
-    readonly: True
-
-
-
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* or a *range-warl-func* indicating the range of 
 #                  legal values allowed
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 #       - range:
 #           - base: An integer indicating the lowest legal value.
 #           - bound: An integer indicating the highest legal value.
@@ -781,7 +767,7 @@ mscratch:
 #      range:
 #          bound: 0xFFFFFFFF
 #          base: 0x00
-# **Dependencies**: 
+# **Constraints**: 
 #       - The base and value cannot exceed the maximum value supported by the ISA (in case of *bitmask-warl-func*).
 #       - The base and bound cannot exceed the maximum value supported by the ISA (in case of *range-warl-func*) 
 #         and the base should be lower than the bound.
@@ -823,8 +809,8 @@ mepc:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -836,7 +822,7 @@ mepc:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
-# **Dependencies**: 
+# **Constraints**: 
 #       - The base and value cannot exceed the maximum value supported by the ISA.
 mcountinhibit:
     type: dict
@@ -862,8 +848,8 @@ mcountinhibit:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -875,7 +861,7 @@ mcountinhibit:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
-# **Dependencies**: 
+# **Constraints**: 
 #       - The base and value cannot exceed the maximum value supported by the ISA.
 mcounteren:
     type: dict
@@ -905,10 +891,6 @@ mcounteren:
 
 ### 
 # **Description**: needs to be described as *range-warl-func* indicating allowed range for the register.
-#       - range:
-#           - base: An integer indicating the lowest legal value.
-#           - bound: An integer indicating the highest legal value.
-#           - mode: A string describing one of the *range-update-warl-func*
 #       - is_hardwired: a string indicating whether the register is hardwired or not.
 #  The other counters(from 4 till 31 can be defined in the same way as shown below.)
 # 
@@ -919,7 +901,7 @@ mcounteren:
 #   mhpmcounter3:
 #       is_hardwired: True
 #       hardwired_val: 0
-# **Dependencies**: 
+# **Constraints**: 
 #       - The base and value cannot exceed value (2^63)-1.
 mhpmcounter3:
     type: dict

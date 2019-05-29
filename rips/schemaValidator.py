@@ -62,11 +62,11 @@ class schemaValidator(Validator):
         if value > (2**xlen)-1:
             self._error(field, "Max value is greater than "+str(2**xlen-1))
 
-    def _check_with_max_length_64(self,field,value):
-        '''Function to check whether the given value is less than the maximum value that can be stored(2^64-1) for 
-        registers which are 64 bits wide irrespective of XLEN.'''
-        if value > (2**64)-1:
-            self._error(field, "Max value is greater than "+str(2**64-1))
+    # def _check_with_max_length_64(self,field,value):
+    #     '''Function to check whether the given value is less than the maximum value that can be stored(2^64-1) for 
+    #     registers which are 64 bits wide irrespective of XLEN.'''
+    #     if value > (2**64)-1:
+    #         self._error(field, "Max value is greater than "+str(2**64-1))
     
     def _check_with_len_check(self, field, value):
         '''Function to check whether the given value is less than XLEN/32(For check).'''
@@ -132,11 +132,11 @@ class schemaValidator(Validator):
         if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
             self._error(field,"Invalid values.")
 
-    def _check_with_rangecheck_64(self,field,value):
-        '''Function to check whether the inputs in range type in 64 bit WARL fields are valid.'''
-        maxv = 2**64-1
-        if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
-            self._error(field,"Invalid values.")
+    # def _check_with_rangecheck_64(self,field,value):
+    #     '''Function to check whether the inputs in range type in 64 bit WARL fields are valid.'''
+    #     maxv = 2**64-1
+    #     if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
+    #         self._error(field,"Invalid values.")
     
     def _check_with_mcause_check(self,field,value):
         '''Function to verify the inputs for mcause.'''

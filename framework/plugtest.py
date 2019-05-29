@@ -15,7 +15,7 @@ def test():
     ch.setFormatter(common.utils.ColoredFormatter())
     logger.addHandler(ch)
 
-    file = open("test/test.yaml","r")
+    file = open("framework/test.yaml","r")
     schema_yaml = yaml.safe_load(file)
     module = importlib.import_module('plugin.fromSchema')
     my_class = getattr(module, 'model_from_yaml')
@@ -24,7 +24,7 @@ def test():
     my_instance.initialise(schema_yaml)
     my_instance.presim("I-SB-01")
     my_instance.execute("I-SB-01"," -DTEST_PART_1=True")
-    my_instance.postsimshell("I-SB-01")
+    my_instance.postsim("I-SB-01")
 
 if __name__ == '__main__':
     test()
