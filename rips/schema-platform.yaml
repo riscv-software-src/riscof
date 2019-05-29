@@ -1,7 +1,7 @@
 ### 
 # **Description**: Stores the fields for memory mapped *mtime* register.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - address: A hexa-decimal value equal to the address at which the register is present.
+#       - address: A hexa-decimal value equal to the physical address at which the register is present.
 # 
 # **Examples**: 
 # 
@@ -11,7 +11,7 @@
 #      implemented: True
 #      address: 0x458
 #
-# **Dependencies**: 
+# **Constraints**: 
 #       - None
 mtime:
   type: dict
@@ -27,7 +27,7 @@ mtime:
 ### 
 # **Description**: Stores the fields for memory mapped *mtimecmp* register.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - address: A hexa-decimal value equal to the address at which the register is present.
+#       - address: A hexa-decimal value equal to the physical address at which the register is present.
 # 
 # **Examples**: 
 # 
@@ -37,7 +37,7 @@ mtime:
 #      implemented: True
 #      address: 0x458
 #
-# **Dependencies**: 
+# **Constraints**: 
 #       - None
 mtimecmp:
   type: dict
@@ -63,7 +63,7 @@ mtimecmp:
 #      implemented: True
 #      value: [16,17,20]
 #
-# **Dependencies**: 
+# **Constraints**: 
 #       - None
 mcause:
   type: dict
@@ -78,8 +78,7 @@ mcause:
 
 ### 
 # **Description**: Stores the fields for memory mapped *mtval* register.
-#       - implemented: A boolean field indicating that the register has been implemented.
-#       - hardwired: A string field specifying whether the bits are hardwired to 0 or not.
+#       - is_hardwired: A boolean field specifying whether the bits are hardwired to 0 or not.
 #       - behaviour: A dictionary type to specify which of the exceptions modify the mtval reg
 #           - e0: A string type describing the behaviour of exception 0.
 #           - e1: A string type describing the behaviour of exception 1.
@@ -96,28 +95,26 @@ mcause:
 #           - e12: A string type describing the behaviour of exception 12.
 #           - e13: A string type describing the behaviour of exception 13.
 #           - e15: A string type describing the behaviour of exception 15.
-#       - readonly: A boolean field specifying whether the register is read only.
 # **Examples**: 
+#
 # 
 # .. code-block:: none
 #
 #   mtval:
 #      implemented: True
-#      hardwired: '0'
-#      readonly: True
+#      is_hardwired: True
 #
-# **Dependencies**: 
+# **Constraints**: 
 #       - None
 mtval:
   type: dict
   schema:
-    hardwired:
-      type: string
-      allowed: ["No","0"]
-      default: "No"
-    implemented:
+    is_hardwired:
       type: boolean
-      default: True
+      default: False
+    hardwired_val:
+      type: integer
+      default: 0
       readonly: True
     behaviour:
       type: dict
@@ -152,24 +149,21 @@ mtval:
           type: string
         e15:
           type: string
-    readonly:
-      type: boolean
-      default: False
   default:
-    hardwired: '0'
-    readonly: True
+    is_hardwired: True
+    
 
 ### 
 # **Description**: is a *warl-func* and can be specified as any of the three WARL functions.
 #       - range:
-#           - base: An integer indicating the lowest legal value.
-#           - bound: An integer indicating the highest legal value.
+#           - base: An integer indicating the lowest legal value.(Less than 2^XLEN)
+#           - bound: An integer indicating the highest legal value.(Less than 2^XLEN)
 #           - mode: A string describing one of the *range-update-warl-func*
 #       - bitmask:
 #           - base  : an XLEN bit wide hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
 #           - value : a XLEN bit wide hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
 #       - distinct:
-#           - values: A list of legal values that the register can take.
+#           - values: A list of legal values that the register can take.(Less than 2^XLEN)
 #           - mode : A string describing one of the *distinct-update-warl-func*.
 #       - is_hardwired: A boolean field indicating whether the register is hardwired or not.
 #  The other event registers(mhpmcounter*) for counters(from 4 till 31 can be defined in the same way as shown below.)
@@ -185,7 +179,7 @@ mtval:
 #      distinct:
 #         values: [0,5,6,9,8]
 #         mode: "UnChgd"
-# **Dependencies**: 
+# **Constraints**: 
 #       - The base and value (incase of bitmask func) cannot exceed the maximum value which can be represented by XLEN bits.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
 #         can exceed the maximum value which can be represented by XLEN bits.   

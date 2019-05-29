@@ -193,7 +193,7 @@ marchid:
 ### 
 # **Description**: Stores the ImplementationId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - value: A hexa-decimal value equal to the ImplementationId
+#       - value: A XLEN bit wide value in hexa-decimal equal to the ImplementationId
 # 
 # **Examples**:
 #
@@ -253,11 +253,11 @@ mhartids:
 #           - is_hardwired:  A boolean value indicating if platform has hardwired this field to 0.
 #       - FS: 
 #           - distinct: (distinct-warl-func)
-#               - values: A list of legal values that the FS field can take.
+#               - values: A list of 2bit legal values that the FS field can take.(Allowed [0,1,2,3])
 #               - mode : A string describing one of the *distinct-update-warl-func*.
 #       - MPP: 
 #           - distinct: (distinct-warl-func)
-#               - values: A list of legal values that the MPP field can take.
+#               - values: A list of legal values that the MPP field can take.(Allowed [1,2,3])
 #               - mode : A string describing one of the *distinct-update-warl-func*.
 #       - SXL: This field doesnt exist in systems where XLEN = 32
 #           - is_hardwired : A boolean value indicating if platform has hardwired this field to some other field.
@@ -509,10 +509,10 @@ mstatus:
 #       - BASE: needs to be described as *distinct-warl-func* provinding a list of legal values in int or as a *range-warl-func* providing two integers specifying the range of legal values.       
 #           - range:
 #               - base: An integer indicating the lowest legal value.
-#               - bound: An integer indicating the highest legal value.
+#               - bound: An integer indicating the highest legal value.(less than 2^XLEN-4)
 #               - mode: A string describing one of the *range-update-warl-func*
 #           - distinct:
-#               - values: A list of legal values that the BASE field can take.
+#               - values: A list of legal values that the BASE field can take.(all less than 2^XLEN-4)
 #               - mode : A string describing one of the *distinct-update-warl-func*.
 #       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values in int
 #           - distinct:
@@ -630,8 +630,8 @@ mideleg:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable exceptions
 #       - bitmask:
-#           - base  : a hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -809,8 +809,8 @@ mepc:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a 32 bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a 32 bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -832,9 +832,11 @@ mcountinhibit:
             schema:
                 base:
                     type: integer
+                    max: 0xFFFFFFFF
                     default: 0x00
                 value:
                     type: integer
+                    max: 0xFFFFFFFF
                     default: 0x00
         implemented:
             type: boolean
@@ -848,8 +850,8 @@ mcountinhibit:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - base  : XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - base  : a 32 bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
+#           - value : a 32 bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -901,6 +903,7 @@ mcounteren:
 #   mhpmcounter3:
 #       is_hardwired: True
 #       hardwired_val: 0
+# 
 # **Constraints**: 
 #       - The base and value cannot exceed value (2^63)-1.
 mhpmcounter3:
