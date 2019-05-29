@@ -20,7 +20,7 @@ sys.setrecursionlimit(1500)
 
 # -- Project information -----------------------------------------------------
 
-project = 'RISC-V Compliance Framework'
+project = u'RISCOF'
 copyright = '2019 InCore Semiconductors, IIT Madras'
 author = 'Neel Gala, S Pawan Kumar, Lavanya Jagan'
 
@@ -45,9 +45,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
     'sphinxcontrib.autoyaml',
 ]
 
@@ -85,9 +83,27 @@ pygments_style = 'sphinx'
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+#html_theme_options = {
+#        'display_version': True,
+#        'includehidden': False,
+#        'collapse_navigation': False,
+#        'sticky_navigation': True,
+#        'navigation_depth': -1,
+#        'includehidden': False,
+#        'titles_only': False
+#        }
 html_theme_options = {
+    "description": "For RISC-V Compliance",
     "fixed_sidebar": True,
+    "sidebar_includehidden": True,
+    "sidebar_collapse": True,
+    "show_relbars": True,
+    "show_related": True,
 }
+html_sidebars = {
+    "**": ["about.html", "navigation.html", "searchbox.html", "donate.html"]
+}
+
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.

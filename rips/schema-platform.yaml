@@ -95,8 +95,8 @@ mcause:
 #           - e12: A string type describing the behaviour of exception 12.
 #           - e13: A string type describing the behaviour of exception 13.
 #           - e15: A string type describing the behaviour of exception 15.
-# **Examples**: 
 #
+# **Examples**: 
 # 
 # .. code-block:: none
 #
@@ -166,6 +166,7 @@ mtval:
 #           - values: A list of legal values that the register can take.(Less than 2^XLEN)
 #           - mode : A string describing one of the *distinct-update-warl-func*.
 #       - is_hardwired: A boolean field indicating whether the register is hardwired or not.
+#
 #  Other event registers (mhpmevent4 - mhpmevent31) are analogously defined.
 # 
 # **Examples**:
@@ -179,6 +180,7 @@ mtval:
 #      distinct:
 #         values: [0,5,6,9,8]
 #         mode: "UnChgd"
+#
 # **Constraints**: 
 #       - The base and value (incase of bitmask func) cannot exceed the maximum value which can be represented by XLEN bits.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
