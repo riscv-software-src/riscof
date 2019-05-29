@@ -533,7 +533,7 @@ mstatus:
 # **Constraints**: 
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
-#         can exceed 2^XLEN-4 and the base must be lower than bound.
+#         can exceed 2^XLEN-4 .
 mtvec:
     type: dict
     schema:
