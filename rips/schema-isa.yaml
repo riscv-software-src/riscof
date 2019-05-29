@@ -894,7 +894,7 @@ mcounteren:
 ### 
 # **Description**: needs to be described as *range-warl-func* indicating allowed range for the register.
 #       - is_hardwired: a string indicating whether the register is hardwired or not.
-#  The other counters(from 4 till 31 can be defined in the same way as shown below.)
+#  Other counters (mhpmcounter4 - mhpmcounter31) are analogously defined.
 # 
 # **Examples**:
 #
