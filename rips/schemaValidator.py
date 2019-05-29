@@ -104,7 +104,7 @@ class schemaValidator(Validator):
         '''Function to check whether the inputs in range type in mtvec are valid.'''
         global xlen
         maxv = 2**(xlen)-4
-        if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
+        if not(value['base']<=maxv and value['bound']<=maxv):
             self._error(field,"Invalid values.")
     
     def _check_with_mtvecdist(self,field,value):
@@ -130,13 +130,13 @@ class schemaValidator(Validator):
         '''Function to check whether the inputs in range type in WARL fields are valid.'''
         global xlen
         maxv = 2**(xlen)-1
-        if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
+        if not(value['base']<=maxv and value['bound']<=maxv):
             self._error(field,"Invalid values.")
 
     # def _check_with_rangecheck_64(self,field,value):
     #     '''Function to check whether the inputs in range type in 64 bit WARL fields are valid.'''
     #     maxv = 2**64-1
-    #     if not((value['base']<value['bound']) and value['base']<=maxv and value['bound']<=maxv):
+    #     if not(value['base']<=maxv and value['bound']<=maxv):
     #         self._error(field,"Invalid values.")
     
     def _check_with_mcause_check(self,field,value):
