@@ -36,4 +36,4 @@ USER_POST_SIM:
 ISA: RV32I
 ###
 # The build script for the environment.
-BUILD: build script
+BUILD: Build script

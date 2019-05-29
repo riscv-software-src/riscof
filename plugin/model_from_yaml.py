@@ -5,12 +5,18 @@ import subprocess
 import shlex
 import logging
 import common.utils as utils
+from plugin.pluginTemplate import pluginTemplate
+import random
+import string
 
 logger= logging.getLogger(__name__)
 
-class model_from_yaml():
-    def initialise(self,foo):
-        logger.info("Initialising parameters of model.")
+class model_from_yaml(pluginTemplate):
+    def __init__(self,*args, **kwargs):
+        self.name = kwargs.get('name',''.join(random.choices(string.ascii_uppercase + string.digits, k=10)))
+    def initialise_from_file(self,file):
+        foo = utils.loadyaml(file)
+        # logger.info("Initialising parameters of model.")
         compile_flags=' -static -mcmodel=medany -fvisibility=hidden -nostdlib \
         -nostartfiles '
         self.simulator = foo['USER_EXECUTABLE']
@@ -31,7 +37,7 @@ class model_from_yaml():
         self.work_dir=self.root_dir+'work/'
         self.user_sign = foo['USER_SIGN']
         self.objdump = foo['RISCV_PREFIX']+'objdump -D '
-        self.build = foo['BUILD']
+        self.buildsc = foo['BUILD']
         if not os.path.exists(self.work_dir):
             logger.debug('Creating new work directory: '+self.work_dir)
             os.mkdir(self.work_dir)
@@ -45,25 +51,29 @@ class model_from_yaml():
                 ' -T'+self.linker
         self.objdump = foo['RISCV_PREFIX']+'objdump -D '
     
-    def build(self):
-        logger.info("Build initialising")
-        logger.debug(self.build)
+    # def build(self):
+    #     logger.debug(self.buildsc)
     
     def presim(self,file):
         # logger.debug("Changing directory to "+self.work_dir+str(file)+'/')
         # os.chdir(self.work_dir+str(file)+'/')
-        logger.info("Running pre-sim for "+file)
         pre_sim = self.pre + file
         logger.debug(pre_sim)
     
     def postsim(self,file):
         logger.debug("Changing directory to "+self.work_dir+str(file)+'/')
         os.chdir(self.work_dir+str(file)+'/')
-        logger.info("Running post-sim for "+file)
+        # logger.info("Running post-sim for "+file)
         utils.execute_sim_command(self.env_dir,self.post,self.is_post_shell)
 
-    def execute(self,file,macros):
-        logger.info("Running "+file+" test")
+    def simulate(self,file):
+        test_dir = self.work_dir+str(file)+'/'
+        os.chdir(test_dir)
+        elf = test_dir+str(file)+'.elf'
+        utils.execute_command(self.simulator+elf)
+
+    def compile(self,file,macros):
+        # logger.info("Running "+file+" test")
         test = self.root_dir+'suite/'+str(file)+'.S'
         test_dir = self.work_dir+str(file)+'/'
         shutil.rmtree(test_dir, ignore_errors=True)
@@ -80,5 +90,5 @@ class model_from_yaml():
         cmd=self.objdump.format(test,self.user_abi)+' '+elf
         utils.execute_command_log(cmd, '{}.disass'.format(str(file)))
 #        os.chdir(work_dir)
-        logger.info("Initiating Simulation")
-        utils.execute_command(self.simulator+elf)
+        # logger.info("Initiating Simulation")
+        
