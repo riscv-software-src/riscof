@@ -58,6 +58,7 @@ Privilege_Spec_Version:
 ### 
 # **Description**: Describes the fields of the *misa* CSR. A user needs to provide the following
 # fields:
+#
 #   - implemented: A boolean value indicating if the *misa* has been implemented or not.
 #   - MXL: needs to be described as *distinct-warl-func* providing a list of 2 bit legal values in int
 #       - distinct:
@@ -202,8 +203,10 @@ marchid:
 #   mimpid:
 #      implemented: True
 #      value: 0x458
-# **Constraints**: 
-#       - This field should be only XLEN bits wide 
+#
+# **Constraints**:
+#   - This field should be only XLEN bits wide 
+#
 mimpid:
     type: dict
     schema: 
@@ -229,6 +232,7 @@ mimpid:
 #   mhartids:
 #      implemented: True
 #      value: [0,125,458]
+#
 # **Constraints**: 
 #       - Atleast one id must be equal to zero.
 #       - The values field should be only XLEN bits wide.
@@ -291,6 +295,7 @@ mhartids:
 #      UXL:
 #           is_hardwired: False
 #           hardwired_field: "MXL"
+#
 # **Constraints**:
 #       - if XS is hardwired to 0 and FS is hardwired to 0, then SD should also be hardwired to 0
 #       - if FS field is_hardwired is True, then the distinct field is ignored by the tests.
@@ -532,6 +537,7 @@ mstatus:
 #           distinct:
 #              values: [0,1]
 #              mode: "UnChgd"
+#
 # **Constraints**: 
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
@@ -602,6 +608,7 @@ mtvec:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
+#
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
@@ -641,6 +648,7 @@ mideleg:
 #      bitmask:
 #          base: 0xFFFFF7FF
 #          value: 0x00
+#
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
@@ -682,6 +690,7 @@ medeleg:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
+#
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
@@ -722,6 +731,7 @@ mip:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
+#
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
@@ -751,9 +761,11 @@ mie:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* or a *range-warl-func* indicating the range of 
 #                  legal values allowed
+#
 #       - bitmask:
 #           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
 #           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#
 #       - range:
 #           - base: An integer indicating the lowest legal value.
 #           - bound: An integer indicating the highest legal value.
@@ -767,6 +779,7 @@ mie:
 #      range:
 #          bound: 0xFFFFFFFF
 #          base: 0x00
+#
 # **Constraints**: 
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
 #       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*) 
@@ -822,6 +835,7 @@ mepc:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
+#
 # **Constraints**: 
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mcountinhibit:
@@ -863,6 +877,7 @@ mcountinhibit:
 #      bitmask:
 #          base: 0xFFFFFFFF
 #          value: 0x00
+#
 # **Constraints**: 
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mcounteren:
@@ -894,7 +909,8 @@ mcounteren:
 ### 
 # **Description**: needs to be described as *range-warl-func* indicating allowed range for the register.
 #       - is_hardwired: a string indicating whether the register is hardwired or not.
-#  Other counters (mhpmcounter4 - mhpmcounter31) are analogously defined.
+#
+# Other counters (mhpmcounter4 - mhpmcounter31) are analogously defined.
 # 
 # **Examples**:
 #
