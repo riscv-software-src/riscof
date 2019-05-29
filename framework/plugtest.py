@@ -1,26 +1,27 @@
 import oyaml as yaml
 import importlib
-import common.utils
+import common.utils as utils
 import logging
 
 def test():
     # Set up the logger
-    common.utils.setup_logging("debug")
+    utils.setup_logging("debug")
     logger = logging.getLogger()
     logger.handlers = []
     ch = logging.StreamHandler()
-    ch.setFormatter(common.utils.ColoredFormatter())
+    ch.setFormatter(utils.ColoredFormatter())
     logger.addHandler(ch)
 
-    file = open("Examples/template_env.yaml","r")
-    schema_yaml = yaml.safe_load(file)
-    module = importlib.import_module('plugin.fromSchema')
+    schema_yaml = utils.loadyaml("Examples/template_env.yaml")
+    module = importlib.import_module('plugin.model_from_yaml')
     my_class = getattr(module, 'model_from_yaml')
     my_instance = my_class()
 
-    my_instance.initialise(schema_yaml)
+    schema = "Examples/template_env.yaml"
+    my_instance.initialise_from_file(schema)
+    my_instance.compile("I-SB-01"," -DTEST_PART_1=True")
     my_instance.presim("I-SB-01")
-    my_instance.execute("I-SB-01"," -DTEST_PART_1=True")
+    my_instance.simulate("I-SB-01")
     my_instance.postsim("I-SB-01")
 
 if __name__ == '__main__':
