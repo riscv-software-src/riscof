@@ -1,5 +1,5 @@
 User_Spec_Version: 2.3
-ISA: RV32I
+ISA: RV32IMC
 Privilege_Spec_Version: 1.11
 misa:
   implemented: true

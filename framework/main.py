@@ -51,14 +51,15 @@ def main():
       logger.debug("Initialising BASE model with "+args.base_env_file)
       base.initialise_from_file(args.base_env_file,work_dir=work_dir,suite=suite)
 
-    logger.debug("Running Build for DUT")
-    dut.build(args.dut_isa_spec,args.dut_platform_spec)
-    logger.debug("Running Build for Base")
-    base.build(args.dut_isa_spec,args.dut_platform_spec)
-
     #Loading Specs
     ispec=utils.loadyaml(args.dut_isa_spec)
     pspec=utils.loadyaml(args.dut_platform_spec)
+
+    logger.debug("Running Build for DUT")
+    dut.build(args.dut_isa_spec,args.dut_platform_spec,ispec['ISA'].lower())
+    logger.debug("Running Build for Base")
+    base.build(args.dut_isa_spec,args.dut_platform_spec,ispec['ISA'].lower())
+
     test.execute(dut,base,ispec,pspec)
     # framework.test_execute.load_yaml(args.input)
 

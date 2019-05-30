@@ -9,7 +9,7 @@ USER_LINKER: env/link.ld
 USER_TARGET: SPIKE
 ###
 # The command to run the simulation.
-USER_EXECUTABLE: 'spike -c --isa=rv32i +signature=sign $elf'
+USER_EXECUTABLE: 'spike -c --isa=rv32im +signature=sign ${elf}'
 ###
 # The name of the application binary interface for compilation.
 USER_ABI: ilp32
@@ -33,7 +33,7 @@ USER_POST_SIM:
   command: cat sign | sed 's/.\{8\}/& /g' | awk '{print $4 " " $3 " " $2 " " $1}' | sed 's/ /\n/g' > temp; mv \temp sign; exit 0
 ###
 # The isa to be used for compilation.
-ISA: RV32I
+ISA: RV32IM
 ###
 # The build script for the environment.
 BUILD: ''
