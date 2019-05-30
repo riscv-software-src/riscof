@@ -8,6 +8,7 @@ import common.utils as utils
 from plugin.pluginTemplate import pluginTemplate
 import random
 import string
+from string import Template
 
 logger= logging.getLogger(__name__)
 
@@ -41,30 +42,38 @@ class model_from_yaml(pluginTemplate):
         self.buildsc = foo['BUILD']
         self.perform_pre = not self.pre is ''
         self.perform_post = not self.post is ''
+        self.perform_build = not self.buildsc is ''
     
         self.compile_cmd = self.gcc+ ' -march={0} -mabi={1} '+compile_flags+'-I' + self.env_dir +\
                 ' -T'+self.linker
         self.objdump = foo['RISCV_PREFIX']+'objdump -D '
     
-    def build(self):
-        logger.debug(self.name+"Build")
+    def build(self,isa_yaml,platform_yaml):
+        if self.perform_build:
+            logger.debug(self.name+"Build")
+            d = dict(isa=isa_yaml,platform=platform_yaml)
+            utils.execute_command(Template(self.buildsc).safe_substitute(d))
     
     def simulate(self,file):
+        
         test_dir = self.work_dir+str(file)+'/'
         logger.debug(self.name+"Changing directory to "+test_dir)
         os.chdir(test_dir)
         elf = test_dir+str(file)+'.elf'
+        d = dict(elf=elf,testDir=test_dir)
         if self.perform_pre:
-            presim = self.pre.replace("$elf",elf)
             logger.debug(self.name+"Pre Sim")
-            utils.execute_sim_command(self.env_dir,presim,self.is_pre_shell)
+            command = Template(self.pre).safe_substitute(d)
+            utils.execute_sim_command(self.env_dir,command,self.is_pre_shell)
         
         logger.debug(self.name+"Simulate")
-        utils.execute_command(self.simulator.replace("$file",elf))
+        command = Template(self.simulator).safe_substitute(d)
+        utils.execute_command(command)
 
         if self.perform_post:
             logger.debug(self.name+"Post Sim")
-            utils.execute_sim_command(self.env_dir,self.post,self.is_post_shell)
+            command = Template(self.post).safe_substitute(d)
+            utils.execute_sim_command(self.env_dir,command,self.is_post_shell)
 
         sign_file = test_dir+self.name[:-1]+"_"+self.user_target+"_sign"
         cp = "cat "+test_dir+self.signature+" > "+ sign_file
