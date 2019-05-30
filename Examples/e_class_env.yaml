@@ -9,13 +9,13 @@ USER_LINKER: env/link.ld
 USER_TARGET: SPIKE
 ###
 # The command to run the simulation.
-USER_EXECUTABLE: 'spike -c --isa=rv32i +signature=sign $elf'
+USER_EXECUTABLE: './eclass'
 ###
 # The name of the application binary interface for compilation.
 USER_ABI: ilp32
 ###
 # The name of the signature file which would be generated.
-USER_SIGN: sign
+USER_SIGN: signature
 ###
 # The prefix of the risc-v command for compilation. 
 RISCV_PREFIX: riscv32-unknown-elf-
@@ -23,14 +23,14 @@ RISCV_PREFIX: riscv32-unknown-elf-
   # - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
   # - command: command string for pre-simulation processing.
 USER_PRE_SIM: 
-  is_shell: False
-  command: ''
+  is_shell: True
+  command: 'elf2hex 4 524288 $elf 2147483648 > ${testDir}code.mem.MSB ; cp ${testDir}code.mem.MSB ${testDir}code.mem.LSB ; ln -sf /home/dracarys/intern/riscv-compliance/riscv-target/eclass/bin/* ${testDir}.'
 ###
   # - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
   # - command: command string for post-simulation processing.
 USER_POST_SIM:
-  is_shell: True
-  command: cat sign | sed 's/.\{8\}/& /g' | awk '{print $4 " " $3 " " $2 " " $1}' | sed 's/ /\n/g' > temp; mv \temp sign; exit 0
+  is_shell: False
+  command: ''
 ###
 # The isa to be used for compilation.
 ISA: RV32I
