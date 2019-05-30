@@ -9,7 +9,7 @@ USER_LINKER: env/link.ld
 USER_TARGET: SPIKE
 ###
 # The command to run the simulation.
-USER_EXECUTABLE: 'spike -c --isa=rv64i +signature=sign $elf'
+USER_EXECUTABLE: 'spike -c --isa=rv64i +signature=sign ${elf}'
 ###
 # The name of the application binary interface for compilation.
 USER_ABI: ilp32

@@ -52,7 +52,7 @@ def execute(dut,base,ispec,pspec):
     for entry in test_pool:
         logger.info("Test file:"+entry[0])
         logger.info("Initiating Compilation.")
-        dut.compile(entry[0]," -DTEST_PART_1=True")
+        dut.compile(entry[0]," -DTEST_PART_1=True",ispec['ISA'].lower())
         logger.info("Running DUT simulation.")
         res = dut.simulate(entry[0])
         logger.info("Running Base Model simulation")

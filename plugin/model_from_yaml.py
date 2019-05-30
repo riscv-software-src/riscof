@@ -48,11 +48,11 @@ class model_from_yaml(pluginTemplate):
                 ' -T'+self.linker
         self.objdump = foo['RISCV_PREFIX']+'objdump -D '
     
-    def build(self,isa_yaml,platform_yaml):
+    def build(self,isa_yaml,platform_yaml,isa):
         if self.perform_build:
             logger.debug(self.name+"Build")
-            d = dict(isa=isa_yaml,platform=platform_yaml)
-            utils.execute_command(Template(self.buildsc).safe_substitute(d))
+            d = dict(isaf=isa_yaml,platformf=platform_yaml,isa=isa)
+            utils.execute_sim_command("",Template(self.buildsc).safe_substitute(d),True)
     
     def simulate(self,file):
         
@@ -80,7 +80,7 @@ class model_from_yaml(pluginTemplate):
         utils.execute_sim_command("",cp,True)
         return sign_file
     
-    def compile(self,file,macros):
+    def compile(self,file,macros,isa):
         # logger.info("Running "+file+" test")
         logger.debug(self.name+"Compile")
         test = self.suite+str(file)+'.S'
@@ -91,7 +91,7 @@ class model_from_yaml(pluginTemplate):
         os.chdir(test_dir)
         elf = test_dir+str(file)+'.elf'
         # print("kk"+elf)
-        cmd=self.compile_cmd.format("rv32i",self.user_abi)+' '+test+' -o '+elf
+        cmd=self.compile_cmd.format(isa,self.user_abi)+' '+test+' -o '+elf
         # print(cmd)
         execute = cmd+macros
         # logger.debug(execute)

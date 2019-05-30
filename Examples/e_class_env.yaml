@@ -33,7 +33,7 @@ USER_POST_SIM:
   command: ''
 ###
 # The isa to be used for compilation.
-ISA: RV32I
+ISA: RV32IM
 ###
 # The build script for the environment.
-BUILD: ''
+BUILD: 'export RISCV_ISA=${isa} ; export RISCV_DEVICE=${isa} '
