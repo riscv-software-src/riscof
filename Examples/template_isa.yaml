@@ -9,8 +9,8 @@ misa:
       mode: "UnChgd"
   Extensions:
     bitmask:
-      base: 0x214102D
-      value: 0x100
+      mask: 0x214102D
+      def: 0x100
 mvendorid:
   implemented: True
   value: 0x565656
@@ -58,37 +58,37 @@ mtvec:
       values: [1]
 mideleg:
   bitmask:
-    base: 0xFFF0FFFFFFFFFFFF
-    value: 0x00 
+    mask: 0xFFF0FFFFFFFFFFFF
+    def: 0x00 
 medeleg:
   bitmask:
-    base: 0xFFFFFFFFFFFFF7FF
-    value: 0x00
+    mask: 0xFFFFFFFFFFFFF7FF
+    def: 0x00
 mip:
   bitmask:
-    base: 0xF7AFFFFFFFFFFFFF
-    value: 0x00
+    mask: 0xF7AFFFFFFFFFFFFF
+    def: 0x00
 mie:
   bitmask:
-    base: 0xF7AFFFFFFFFFFFFF
-    value: 0x00
+    mask: 0xF7AFFFFFFFFFFFFF
+    def: 0x00
 mepc:
   # bitmask:
-  #   base: 0xFFFFFFFFFFFFFFFE
-  #   value: 0x00
+  #   mask: 0xFFFFFFFFFFFFFFFE
+  #   def: 0x00
   range:
     base: 0x00
     bound: 0xFFFFFFFFFFFFFFFF
 mcountinhibit:
   bitmask:
-    base: 0x1F
-    value: 0x00
+    mask: 0x1F
+    def: 0x00
   # is_hardwired: True
   # hardwired_val: 0
 mcounteren:
     bitmask:
-      base: 0x1F
-      value: 0x00
+      mask: 0x1F
+      def: 0x00
   # is_hardwired: True
   # hardwired_val: 0
 mhpmcounter3:

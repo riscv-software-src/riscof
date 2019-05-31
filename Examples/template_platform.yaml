@@ -9,8 +9,8 @@ mcause:
   implemented: True
 mhpmevent3:
   bitmask:
-    base: 0xFC
-    value: 0x00
+    mask: 0xFC
+    def: 0x00
   # readonly: True
   # hardwired: '0'
 mhpmevent4:

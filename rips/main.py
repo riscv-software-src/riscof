@@ -10,7 +10,7 @@ import re
 def extreaddefset():
     '''Function to set readonly in extensions field in misa'''
     global inp_yaml
-    if inp_yaml['misa']['Extensions']['bitmask']['base'] > 0:
+    if inp_yaml['misa']['Extensions']['bitmask']['mask'] > 0:
         return False
     else:
         return True
@@ -213,6 +213,44 @@ def main():
     logger.info('Dumping out Normalized Checked YAML: '+output_filename)
     yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
 
+    foo = args.input_environment
+    if(foo is not None):
+        """
+          Read the input-platform foo (yaml file) and validate with schema-platform for feature values
+          and constraints
+        """
+        schema=args.schema_environment
+        inputfile = open(foo, 'r')
+        schemafile = open(schema, 'r')
+        # Load input YAML file
+        logger.info('Loading input file: '+str(foo))
+        inp_yaml = yaml.safe_load(inputfile)
+
+        # instantiate validator
+        logger.info('Load Schema '+str(schema))
+        schema_yaml = yaml.safe_load(schemafile)
+
+        validator = Validator(schema_yaml)
+        validator.allow_unknown = True
+        normalized = validator.normalized(inp_yaml, schema_yaml)
+        # print(normalized)
+        # Perform Validation
+        logger.info('Initiating Validation')
+        valid=validator.validate(inp_yaml)
+
+        # Print out errors
+        if valid:
+            logger.info('No Syntax errors in Input ISA Yaml. :)')
+        else:
+            error_list = validator.errors
+            logger.error(str(error_list))
+            sys.exit(0)
+
+        file_name_split=foo.split('.')
+        output_filename=file_name_split[0]+'_checked.'+file_name_split[1]
+        outfile=open(output_filename,'w')
+        logger.info('Dumping out Normalized Checked YAML: '+output_filename)
+        yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
 
 if __name__ == '__main__':
     main()

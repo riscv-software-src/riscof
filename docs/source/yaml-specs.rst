@@ -6,7 +6,7 @@ This section provides details of the ISA and Platform spec YAML files that need 
 WARL field Restriction Proposal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Since the RISC-V privilege spec indicates several CSRs and sub-fields of CSRs to be WARL (Write-Any-Read-Legal), it is now necessary to provide a scheme of WARL functions which can be used to precisely define the functionality of anysuch WARL field/register.
+Since the RISC-V privilege spec indicates several CSRs and sub-fields of CSRs to be WARL (Write-Any-Read-Legal), it is now necessary to provide a scheme of WARL functions which can be used to precisely define the functionality of any such WARL field/register.
 
 The following proposal for WARL functions was made by **Allen Baum (: esperanto)** and has been adopted in this framework.
 
@@ -61,8 +61,6 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
   * In the *Value* field the values for the read only bits are given ( = 0 or 1) and the rest of the bits are cleared (=0).
 
 
-These fields can be implemented as one of the following three types.
-
 .. _isa_yaml_spec:
 
 ISA YAML Spec
@@ -94,11 +92,12 @@ An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `P
 Environment YAML Spec
 ^^^^^^^^^^^^^^^^^^^^^
 
-The following variables are available and will be replaced before execution of command.
-- *$testDir*-The complete path to the test directory containing the generated files for the current test.
-- *$elf*-The complete path to the elf file generated after compilation.
-- *$isa*-The path to the ISA spec yaml for DUT.
-- *$platform*-The path to the Platform spec yaml for DUT.
+The following variables can be used in the commands and will be replaced accordingly before execution of command.
+
+- *$testDir*-The absolute path to the test directory containing the generated files for the current test.
+- *$elf*-The absolute path to the elf file generated after compilation.
+- *$isa*-The absolute path to the ISA spec yaml for DUT.
+- *$platform*-The absolute path to the Platform spec yaml for DUT.
 
 This section describes each node of the ENVIRONMENT-YAML. 
 

@@ -2,6 +2,8 @@ import logging
 import common.utils as utils
 from framework.test_list import *
 import filecmp
+import re
+import sys
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +48,57 @@ def collect_unprivilege(isa):
             #     dut_test_pool.append([test[0],test[1]])
     return dut_test_pool
 
+def parsetest(file):
+    macro=''
+    test_part_flag = False
+    test_val = True
+    fin = open(file,'r') 
+    
+    test_part_flag = False
+    test_part_start_flag = False
+    # signature_entries= 0
+    test_part_number = '0'
+    line_number = 0
+    test_part_skipped = 0
+
+    for line in fin:
+        line_number += 1
+        line = line.strip()
+        
+        if line == "":
+            continue
+        
+        if bool(re.match(r"^#", line)) == True:
+            continue
+
+        if test_part_start_flag:
+            if "RVTEST_PART_RUN" in line:
+                if bool(re.match(r"RVTEST_PART_RUN\((.*)[0-9](.*):(.*)\s*\)", line)) == False:
+                    logger.error("{}:{}: Incorrect Syntax in {}".format(file_name, line_number, test_part_number))
+                    sys.exit(0)
+
+                args = re.search(r'RVTEST_PART_RUN\(\s*(.*)\s*,\s*\"(.*):(.*)\"\)', line)
+
+                if args.group(1) != test_part_number:
+                   logger.error("{}:{}: Wrong Test Case Numbering in ({})".format(file_name, line_number, test_part_number))
+                   sys.exit(0)
+               
+        elif "RVTEST_PART_START" in line:
+            if test_part_flag == True:
+                logger.error("{}:{}: Did not finish ({}) start".format(file_name, line_number, test_part_number))
+                sys.exit(0)
+            args = [temp.strip() for temp in (line.strip()).replace('RVTEST_PART_START','')[1:-1].split(',')]
+            
+            if int(test_part_number) >= int(args[0]):
+                logger.error("{}:{}: Incorrect Naming of Test Case after ({})".format(file_name, line_number, test_part_number))
+                sys.exit(0)
+            
+            test_part_number = args[0]                
+            test_part_start_flag = True
+        
+        
+    if test_part_flag != False:
+        logger.error("{}:{}: Did not finish ({}) start".format(file_name, line_number, test_part_number))
 def execute(dut,base,ispec,pspec):
     test_pool = collect_unprivilege(ispec['ISA'].lower())
     log = []
