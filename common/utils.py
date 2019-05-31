@@ -189,16 +189,6 @@ def rips_cmdline_args():
     )
 
     parser.add_argument(
-        '--schema_environment','-es',
-        type=str,
-        metavar='YAML',
-        help='Input YAML file containing the schema for environment.',
-        default=None,
-        required=True
-    )
-
-
-    parser.add_argument(
         '--schema_isa','-is',
         type=str,
         metavar='YAML',

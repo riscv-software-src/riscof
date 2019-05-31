@@ -103,13 +103,14 @@ def execute(dut,base,ispec,pspec):
     test_pool = collect_unprivilege(ispec['ISA'].lower())
     log = []
     for entry in test_pool:
+        isa = ispec['ISA'].lower()
         logger.info("Test file:"+entry[0])
         logger.info("Initiating Compilation.")
-        dut.compile(entry[0]," -DTEST_PART_1=True",ispec['ISA'].lower())
+        dut.compile(entry[0]," -DTEST_PART_1=True",isa)
         logger.info("Running DUT simulation.")
-        res = dut.simulate(entry[0])
-        logger.info("Running Base Model simulation")
-        ref = base.simulate(entry[0])
+        res = dut.simulate(entry[0],isa)
+        logger.info("Running Base Model simulation.")
+        ref = base.simulate(entry[0],isa)
         logger.info("Initiating check.")
         log.append([entry[0],compare_signature(res,ref)])
     

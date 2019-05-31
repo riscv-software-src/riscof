@@ -77,7 +77,7 @@ Privilege_Spec_Version:
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
 #           - mask  : a 26 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a 26 bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a 26 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -92,13 +92,13 @@ Privilege_Spec_Version:
 #      Extensions:
 #          bitmask:
 #              mask:   0x12D
-#              def:  0x000
+#              default:  0x000
 # 
 # **Constraints**: 
 #   - The maximum value specified in MXL should not be greater than the XLEN/32 specified in the ISA field.
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
-#   - The def and mask fields of Extensions should be only 26-bits wide.
+#   - The default and mask fields of Extensions should be only 26-bits wide.
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -137,7 +137,7 @@ misa:
                             min: 0x00
                             max: 0x3FFFFFF
                             default: 0x00
-                        def:
+                        default:
                             type: integer
                             min: 0x00
                             max: 0x3FFFFFF
@@ -149,7 +149,7 @@ misa:
 ### 
 # **Description**: Stores the VendorId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - value: A XLEN bit wide value in hexa-decimal equal to the VendorId
+#       - id: A XLEN bit wide value in hexa-decimal equal to the VendorId
 # 
 # **Examples**: 
 # 
@@ -157,7 +157,7 @@ misa:
 #
 #   mvendorid:
 #      implemented: True
-#      value: 0x458
+#      id: 0x458
 #
 # **Constraints**: 
 #       - This field should be only XLEN bits wide 
@@ -170,7 +170,7 @@ mvendorid:
         implemented: 
             type: boolean
             default: False
-        value:
+        id:
             type: integer
             default: 0
             check_with: max_length
@@ -179,7 +179,7 @@ mvendorid:
 ### 
 # **Description**: Stores the ArchitectureId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - value: A XLEN bit wide value in hexa-decimal equal to the ArchitectureId
+#       - id: A XLEN bit wide value in hexa-decimal equal to the ArchitectureId
 # 
 # **Examples**:
 #
@@ -187,7 +187,7 @@ mvendorid:
 #
 #   marchid:
 #      implemented: True
-#      value: 0x458
+#      id: 0x458
 #
 # **Constraints**: 
 #       - This field should be only XLEN bits wide 
@@ -200,7 +200,7 @@ marchid:
         implemented: 
             type: boolean
             default: False
-        value:
+        id:
             type: integer
             default: 0x00
             check_with: max_length
@@ -210,7 +210,7 @@ marchid:
 ### 
 # **Description**: Stores the ImplementationId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - value: A XLEN bit wide value in hexa-decimal equal to the ImplementationId
+#       - id: A XLEN bit wide value in hexa-decimal equal to the ImplementationId
 # 
 # **Examples**:
 #
@@ -218,7 +218,7 @@ marchid:
 # 
 #   mimpid:
 #      implemented: True
-#      value: 0x458
+#      id: 0x458
 #
 # **Constraints**:
 #   - This field should be only XLEN bits wide 
@@ -232,7 +232,7 @@ mimpid:
         implemented: 
             type: boolean
             default: False
-        value:
+        id:
             type: integer
             default: 0x00
             check_with: max_length
@@ -242,7 +242,7 @@ mimpid:
 ### 
 # **Description**: Specifies the Hart Ids in multi-core systems.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - value: a list of integer values equal to the Hart Ids.
+#       - id: a list of integer values equal to the Hart Ids.
 # 
 # **Examples**:
 #
@@ -250,7 +250,7 @@ mimpid:
 # 
 #   mhartids:
 #      implemented: True
-#      value: [0,125,458]
+#      id: [0,125,458]
 #
 # **Constraints**: 
 #       - Atleast one id must be equal to zero.
@@ -264,7 +264,7 @@ mhartids:
         implemented: 
             type: boolean
             default: False
-        values:
+        id:
             type: list
             default: [0]
             check_with: hart_check
@@ -626,7 +626,7 @@ mtvec:
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
 #       - bitmask:
 #           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -635,11 +635,11 @@ mtvec:
 #   mideleg:
 #      bitmask:
 #          mask: 0xFFFFFFFF
-#          def: 0x00
+#          default: 0x00
 #
 # **Constraints**: 
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
-#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the default.
+#       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -653,7 +653,7 @@ mideleg:
                     type: integer
                     default: 0x00
                     check_with: max_length
-                def:
+                default:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -664,12 +664,12 @@ mideleg:
     default:
         bitmask:
             mask: 0xFFFFFFFF
-            def: 0x00
+            default: 0x00
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable exceptions
 #       - bitmask:
 #           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -678,12 +678,12 @@ mideleg:
 #   medeleg:
 #      bitmask:
 #          mask: 0xFFFFF7FF
-#          def: 0x00
+#          default: 0x00
 #
 # **Constraints**: 
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
-#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
-#       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both mask and def.
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the default.
+#       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both mask and default.
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -697,7 +697,7 @@ medeleg:
                     type: integer
                     default: 0x00
                     check_with: max_length
-                def:
+                default:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -708,13 +708,13 @@ medeleg:
     default:
         bitmask:
             mask: 0xFFFFF7FF
-            def: 0x00                    
+            default: 0x00                    
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
 #           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -723,11 +723,11 @@ medeleg:
 #   mip:
 #      bitmask:
 #          mask: 0xFFFFFFFF
-#          def: 0x00
+#          default: 0x00
 #
 # **Constraints**: 
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
-#       - The mask and def cannot exceed the maximum def which can be represented by XLEN bits(2^XLEN-1).
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the default.
+#       - The mask and default cannot exceed the maximum default which can be represented by XLEN bits(2^XLEN-1).
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -741,7 +741,7 @@ mip:
                     type: integer
                     default: 0xFFFFFFFF
                     check_with: max_length
-                def:
+                default:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -758,7 +758,7 @@ mip:
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
 #           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -767,13 +767,11 @@ mip:
 #   mie:
 #      bitmask:
 #          mask: 0xFFFFFFFF
-#          def: 0x00
+#          default: 0x00
 #
 # **Constraints**: 
-# `------------------------------------------------------------------------------------------------------------------------------`
-#
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
-#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the default.
+#       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -787,7 +785,7 @@ mie:
                     type: integer
                     default: 0xFFFFFFFF
                     check_with: max_length
-                def:
+                default:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -806,7 +804,7 @@ mie:
 #
 #       - bitmask:
 #           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 #
 #       - range:
 #           - base: An integer indicating the lowest legal value.
@@ -823,9 +821,7 @@ mie:
 #          base: 0x00
 #
 # **Constraints**: 
-# `------------------------------------------------------------------------------------------------------------------------------`
-#
-#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
+#       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
 #       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*).
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
@@ -841,7 +837,7 @@ mepc:
                     type: integer
                     default: 0x00
                     check_with: max_length
-                def:
+                default:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -869,7 +865,7 @@ mepc:
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
 #           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a 32 bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -880,10 +876,10 @@ mepc:
 #   mcountinhibit:
 #      bitmask:
 #          mask: 0xFFFFFFFF
-#          def: 0x00
+#          default: 0x00
 #
 # **Constraints**: 
-#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -897,7 +893,7 @@ mcountinhibit:
                     type: integer
                     max: 0xFFFFFFFF
                     default: 0x00
-                def:
+                default:
                     type: integer
                     max: 0xFFFFFFFF
                     default: 0x00
@@ -908,13 +904,13 @@ mcountinhibit:
     default:
         bitmask:
             mask: 0x00
-            def: 0x00
+            default: 0x00
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
 #           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - def : a 32 bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
+#           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -925,10 +921,10 @@ mcountinhibit:
 #   mcounteren:
 #      bitmask:
 #          mask: 0xFFFFFFFF
-#          def: 0x00
+#          default: 0x00
 #
 # **Constraints**: 
-#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -941,7 +937,7 @@ mcounteren:
                 mask:
                     type: integer
                     default: 0x00
-                def:
+                default:
                     type: integer
                     default: 0x00
         is_hardwired:

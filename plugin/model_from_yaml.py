@@ -33,7 +33,6 @@ class model_from_yaml(pluginTemplate):
         self.root_dir = os.getcwd()+"/"
         self.linker = self.root_dir+foo['USER_LINKER']
         self.env_dir = self.root_dir+foo['USER_ENV_DIR']+'/'
-        self.march = re.sub('[nsu]','',foo['ISA'].lower())
         self.user_abi  = foo['USER_ABI'].lower()
         self.user_target=foo['USER_TARGET']
         self.work_dir=kwargs.get("work_dir")
@@ -54,13 +53,13 @@ class model_from_yaml(pluginTemplate):
             d = dict(isaf=isa_yaml,platformf=platform_yaml,isa=isa)
             utils.execute_sim_command("",Template(self.buildsc).safe_substitute(d),True)
     
-    def simulate(self,file):
-        
+    def simulate(self,file,isa):
+        print(isa)
         test_dir = self.work_dir+str(file)+'/'
         logger.debug(self.name+"Changing directory to "+test_dir)
         os.chdir(test_dir)
         elf = test_dir+str(file)+'.elf'
-        d = dict(elf=elf,testDir=test_dir)
+        d = dict(elf=elf,testDir=test_dir,isa=isa)
         if self.perform_pre:
             logger.debug(self.name+"Pre Sim")
             command = Template(self.pre).safe_substitute(d)
