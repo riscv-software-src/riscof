@@ -61,8 +61,6 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
   * In the *Value* field the values for the read only bits are given ( = 0 or 1) and the rest of the bits are cleared (=0).
 
 
-These fields can be implemented as one of the following three types.
-
 .. _isa_yaml_spec:
 
 ISA YAML Spec

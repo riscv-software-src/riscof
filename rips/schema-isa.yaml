@@ -13,6 +13,9 @@
 #
 # **Constraints**: 
 #   - Certain extensions are only valid in certain user-spec version. For, eg. Zifencei is available only in user-spec 2.3 and above.
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 ISA: 
     type: string
     regex: '^RV(32|64|128)([ACDEFGIJLMNPQSTUVX]|Zifencei|Zicsr|Ztso|Zam)*'
@@ -31,6 +34,9 @@ ISA:
 #
 # **Constraints**:
 #   - should be greater than or equal to 2.2
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 User_Spec_Version:
     type: float
     min: 2.2 
@@ -49,6 +55,9 @@ User_Spec_Version:
 #
 # **Constraints**:
 #   - should be greater than or equal to 1.10 
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 Privilege_Spec_Version:
     type: float
     min: 1.10
@@ -90,6 +99,9 @@ Privilege_Spec_Version:
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
 #   - The value and base fields of Extensions should be only 26-bits wide.
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 # 
 #
 misa:
@@ -149,6 +161,9 @@ misa:
 #
 # **Constraints**: 
 #       - This field should be only XLEN bits wide 
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mvendorid:
     type: dict
     schema: 
@@ -176,6 +191,9 @@ mvendorid:
 #
 # **Constraints**: 
 #       - This field should be only XLEN bits wide 
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 marchid:
     type: dict
     schema: 
@@ -204,6 +222,9 @@ marchid:
 #
 # **Constraints**:
 #   - This field should be only XLEN bits wide 
+#
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
 #
 mimpid:
     type: dict
@@ -234,6 +255,9 @@ mimpid:
 # **Constraints**: 
 #       - Atleast one id must be equal to zero.
 #       - The values field should be only XLEN bits wide.
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mhartids:
     type: dict
     schema: 
@@ -299,6 +323,9 @@ mhartids:
 #       - if FS field is_hardwired is True, then the distinct field is ignored by the tests.
 #       - No mode corresponding to a value in MPP must be unsupported (i.e. 1 cannot be present without the 'S' extension and '0' without the 'U' extension)
 #       - No value in SXL or UXL must exceed XLEN/32.
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mstatus:
     type: dict
     schema:
@@ -540,6 +567,9 @@ mstatus:
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
 #         can exceed 2^XLEN-4 .
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mtvec:
     type: dict
     schema:
@@ -610,6 +640,9 @@ mtvec:
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mideleg:
     type: dict
     schema:
@@ -651,6 +684,9 @@ mideleg:
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 #       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both base and value.
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 medeleg:
     type: dict
     schema:
@@ -692,6 +728,9 @@ medeleg:
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mip:
     type: dict
     schema:
@@ -733,6 +772,9 @@ mip:
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mie:
     type: dict
     schema:
@@ -782,6 +824,9 @@ mie:
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
 #       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*) 
 #         and the base should be lower than the bound.
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mepc:
     type: dict
     schema:
@@ -836,6 +881,9 @@ mepc:
 #
 # **Constraints**: 
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mcountinhibit:
     type: dict
     schema:
@@ -878,6 +926,9 @@ mcountinhibit:
 #
 # **Constraints**: 
 #       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mcounteren:
     type: dict
     schema:
@@ -920,6 +971,9 @@ mcounteren:
 # 
 # **Constraints**: 
 #       - The base and value cannot exceed value (2^63)-1.
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mhpmcounter3:
     type: dict
     schema:
