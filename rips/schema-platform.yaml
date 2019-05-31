@@ -13,6 +13,9 @@
 #
 # **Constraints**: 
 #       - None
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mtime:
   type: dict
   schema:
@@ -39,6 +42,9 @@ mtime:
 #
 # **Constraints**: 
 #       - None
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mtimecmp:
   type: dict
   schema:
@@ -65,6 +71,9 @@ mtimecmp:
 #
 # **Constraints**: 
 #       - None
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mcause:
   type: dict
   schema:
@@ -106,6 +115,9 @@ mcause:
 #
 # **Constraints**: 
 #       - None
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mtval:
   type: dict
   schema:
@@ -185,6 +197,9 @@ mtval:
 #       - The mask and def (incase of bitmask func) cannot exceed the maximum value which can be represented by XLEN bits.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
 #         can exceed the maximum value which can be represented by XLEN bits.   
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mhpmevent3:
   type: dict
   schema:

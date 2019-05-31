@@ -92,7 +92,11 @@ An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `P
 Environment YAML Spec
 ^^^^^^^^^^^^^^^^^^^^^
 
-The following variables can be used in the commands and will be replaced accordingly before execution of command.
+The following variables are available and will be replaced before execution of command.
+  * *$testDir*-The complete path to the test directory containing the generated files for the current test.
+  * *$elf*-The complete path to the elf file generated after compilation.
+  * *$isa*-The path to the ISA spec yaml for DUT.
+  * *$platform*-The path to the Platform spec yaml for DUT.
 
 - *$testDir*-The absolute path to the test directory containing the generated files for the current test.
 - *$elf*-The absolute path to the elf file generated after compilation.
@@ -100,6 +104,7 @@ The following variables can be used in the commands and will be replaced accordi
 - *$platform*-The absolute path to the Platform spec yaml for DUT.
 
 This section describes each node of the ENVIRONMENT-YAML. 
+An example of the ENV yaml for spike is available: `HERE <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/template_env.yaml>`_
 
 .. autoyaml:: ../Examples/template_env.yaml
 
