@@ -88,7 +88,7 @@ class schemaValidator(Validator):
         global xlen
         global extensions
         # value=value['bitmask']
-        val = value['mask'] ^ value['def'] ^ extensions
+        val = value['mask'] ^ value['default'] ^ extensions
         if(val > 0):
             self._error(field,"Extension Bitmask error.")
     
@@ -115,14 +115,14 @@ class schemaValidator(Validator):
     
     def _check_with_hardwirecheck(self,field,value):
         '''Function to check that none of the bits in the field are hardwired to 1'''
-        if(value['bitmask']['def']>0):
+        if(value['bitmask']['default']>0):
             self._error(field,"No bit can be harwired to 1.")
     
     def _check_with_medelegcheck(self,field,value):
         '''Function to check that the input given for medeleg satisfies the constraints'''
         if(value['bitmask']['mask']&int("800",16)>0):
             self._error(field,"11th bit must be hardwired to 0.")
-        if(value['bitmask']['def']>0):
+        if(value['bitmask']['default']>0):
             self._error(field,"No bit can be harwired to 1.")
     
     def _check_with_rangecheck(self,field,value):

@@ -7,14 +7,6 @@ import sys
 import os
 import re
 
-def extreaddefset():
-    '''Function to set readonly in extensions field in misa'''
-    global inp_yaml
-    if inp_yaml['misa']['Extensions']['bitmask']['mask'] > 0:
-        return False
-    else:
-        return True
-
 def sset():
     '''Function to check and set defaults for all fields which are dependent on 
         the presence of 'S' extension.'''
@@ -89,6 +81,7 @@ def miedelegset():
         return False
     else:
         return True
+
 
 def add_def_setters(schema_yaml):
     '''Function to set the default setters for various fields in the schema'''
@@ -216,41 +209,38 @@ def main():
     foo = args.input_environment
     if(foo is not None):
         """
-          Read the input-platform foo (yaml file) and validate with schema-platform for feature values
-          and constraints
+          Read the input-environment foo (yaml file) and perform checks.
         """
-        schema=args.schema_environment
         inputfile = open(foo, 'r')
-        schemafile = open(schema, 'r')
-        # Load input YAML file
         logger.info('Loading input file: '+str(foo))
         inp_yaml = yaml.safe_load(inputfile)
+        logger.info("Checking the environment specs.")
+        environment_check(inp_yaml)
 
-        # instantiate validator
-        logger.info('Load Schema '+str(schema))
-        schema_yaml = yaml.safe_load(schemafile)
+def environment_check(input):
+    logger = logging.getLogger(__name__)
+    key_list = input.keys()
+    keys = ['USER_ENV_DIR', 'USER_LINKER', 'USER_TARGET', 'USER_EXECUTABLE', 'USER_ABI', 'USER_SIGN', 'RISCV_PREFIX', 'USER_PRE_SIM', 'USER_POST_SIM', 'BUILD']
+    for x in keys:
+        if x not in key_list:
+            logger.error(x+" not defined in environment yaml.")
+    try:
+        temp = input['USER_POST_SIM'].keys()
+        if 'is_shell' not in temp:
+            logger.error("is_shell not defined in USER_POST_SIM")
+        if 'command' not in temp:
+            logger.error("command not defined in USER_POST_SIM")
+    except KeyError:
+        pass
 
-        validator = Validator(schema_yaml)
-        validator.allow_unknown = True
-        normalized = validator.normalized(inp_yaml, schema_yaml)
-        # print(normalized)
-        # Perform Validation
-        logger.info('Initiating Validation')
-        valid=validator.validate(inp_yaml)
-
-        # Print out errors
-        if valid:
-            logger.info('No Syntax errors in Input ISA Yaml. :)')
-        else:
-            error_list = validator.errors
-            logger.error(str(error_list))
-            sys.exit(0)
-
-        file_name_split=foo.split('.')
-        output_filename=file_name_split[0]+'_checked.'+file_name_split[1]
-        outfile=open(output_filename,'w')
-        logger.info('Dumping out Normalized Checked YAML: '+output_filename)
-        yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
+    try:
+        temp = input['USER_PRE_SIM'].keys()
+        if 'is_shell' not in temp:
+            logger.error("is_shell not defined in USER_PRE_SIM")
+        if 'command' not in temp:
+            logger.error("command not defined in USER_PRE_SIM")
+    except KeyError:
+        pass
 
 if __name__ == '__main__':
     main()

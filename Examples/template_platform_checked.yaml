@@ -16,7 +16,7 @@ mcause:
 mhpmevent3:
   bitmask:
     mask: 252
-    def: 0
+    default: 0
   is_hardwired: false
   hardwired_val: 0
   implemented: true

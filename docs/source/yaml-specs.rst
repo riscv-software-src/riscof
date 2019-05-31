@@ -22,19 +22,23 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
       * Largest: maximum of all legal values
       * Smallest: minimum of all legal values
 
+.. code-block::python
+  distinct:
+    values: [0,55,658,1026]
+    mode: "UnChgd"
     
 2. **Range** (*range-warl-func*)
 
-  * Legal values are defined as all values that lie within the set: *[Lower, Upper]* inclusive
+  * Legal values are defined as all values that lie within the set: *[base, bound]* inclusive
   * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*range-update-warl-func*):
       * Saturate: 
 
         .. code-block:: python 
 
-          if ( WriteVal < Lower )
-             return Lower; 
-          else if( WriteVal > Upper )
-             return Upper;
+          if ( WriteVal < base )
+             return base; 
+          else if( WriteVal > bound )
+             return bound;
           else 
              return no-change
 
@@ -43,22 +47,32 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 
         .. code-block:: python
     
-          if ( WriteVal < Lower || WriteVal > Upper)
+          if ( WriteVal < base || WriteVal > bound)
              return no-change
 
       * Addr: 
 
         .. code-block:: python
     
-          if ( WriteVal < Lower || WriteVal > Upper)
+          if ( WriteVal < base || WriteVal > bound)
              return Flip-MSB of field
 
+.. code-block::python
+  range:
+    base: 256
+    bound: 0xFFFFFFFFFFFFFF00
+    mode: Saturate
 
 3. **Bitmask** (*bitmask-warl-func*)
 
-  * This function is represented with 2 fields: the *Base* and the *Value*
-  * For the read only positions, the corresponding bits are cleared (=0) in the *Base* and the rest of the bits are set (=1).
-  * In the *Value* field the values for the read only bits are given ( = 0 or 1) and the rest of the bits are cleared (=0).
+  * This function is represented with 2 fields: the *mask* and the *default*
+  * For the read only positions, the corresponding bits are cleared (=0) in the *mask* and the rest of the bits are set (=1).
+  * In the *default* field the values for the read only bits are given ( = 0 or 1) and the rest of the bits are cleared (=0).
+
+.. code-block::python
+  bitmask:
+    mask: 0x214102D
+    default: 0x100
 
 
 .. _isa_yaml_spec:
@@ -93,15 +107,10 @@ Environment YAML Spec
 ^^^^^^^^^^^^^^^^^^^^^
 
 The following variables are available and will be replaced before execution of command.
-  * *$testDir*-The complete path to the test directory containing the generated files for the current test.
-  * *$elf*-The complete path to the elf file generated after compilation.
-  * *$isa*-The path to the ISA spec yaml for DUT.
-  * *$platform*-The path to the Platform spec yaml for DUT.
-
-- *$testDir*-The absolute path to the test directory containing the generated files for the current test.
-- *$elf*-The absolute path to the elf file generated after compilation.
-- *$isa*-The absolute path to the ISA spec yaml for DUT.
-- *$platform*-The absolute path to the Platform spec yaml for DUT.
+  * *${testDir}*-The absolute path to the test directory containing the generated files for the current test.
+  * *${elf}*-The absolute path to the elf file generated after compilation.
+  * *${isa}*-The absolute path to the ISA spec yaml for DUT.
+  * *${platform}*-The absolute path to the Platform spec yaml for DUT.
 
 This section describes each node of the ENVIRONMENT-YAML. 
 An example of the ENV yaml for spike is available: `HERE <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/template_env.yaml>`_

@@ -12,19 +12,19 @@ misa:
   Extensions:
     bitmask:
       mask: 34869293
-      def: 256
+      default: 256
 mvendorid:
   implemented: true
-  value: 5658198
+  id: 5658198
 marchid:
   implemented: true
-  value: 5675157
+  id: 5675157
 mimpid:
   implemented: true
-  value: 9991522
+  id: 9991522
 mhartids:
   implemented: true
-  values:
+  id:
   - 0
   - 1
   - 25
@@ -101,22 +101,22 @@ mtvec:
 mideleg:
   bitmask:
     mask: 18442521949058891775
-    def: 0
+    default: 0
   implemented: true
 medeleg:
   bitmask:
     mask: 18446744073709549567
-    def: 0
+    default: 0
   implemented: true
 mip:
   bitmask:
     mask: 17847765323269275647
-    def: 0
+    default: 0
   implemented: true
 mie:
   bitmask:
     mask: 17847765323269275647
-    def: 0
+    default: 0
   implemented: true
 mepc:
   range:
@@ -126,12 +126,12 @@ mepc:
 mcountinhibit:
   bitmask:
     mask: 31
-    def: 0
+    default: 0
   implemented: true
 mcounteren:
   bitmask:
     mask: 31
-    def: 0
+    default: 0
   is_hardwired: false
   hardwired_val: 0
   implemented: true

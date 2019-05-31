@@ -4,7 +4,7 @@ Quickstart
 Install dependencies
 ^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: bash
+.. code-block::bash
 
     sudo apt-get install python3 pip3 # make sure to use python3.5 or above
     git clone https://gitlab.com/incoresemi/riscof.git
@@ -13,12 +13,12 @@ Install dependencies
 Usage
 ^^^^^
 
-.. code-block:: bash
+.. code-block::bash
 
     python3 -m rips.main -h
     usage: RIPS Checker [-h] --input_isa YAML --input_platform YAML
-                        [--input_environment YAML] --schema_environment YAML
-                        --schema_isa YAML --schema_platform YAML [--verbose]
+                        [--input_environment YAML] --schema_isa YAML
+                        --schema_platform YAML [--verbose]
 
     This Program checks an input YAML for compatibility with RIPS format
 
@@ -29,8 +29,6 @@ Usage
                             Input YAML file containing ISA specs.
       --input_platform YAML, -pi YAML
                             Input YAML file containing platform specs.
-      --schema_environment YAML, -es YAML
-                            Input YAML file containing the schema for environment.
       --schema_isa YAML, -is YAML
                             Input YAML file containing the schema for ISA.
       --schema_platform YAML, -ps YAML
@@ -38,10 +36,9 @@ Usage
       --verbose             debug | info | warning | error
       -h, --help            show this help message and exit
 
-
 Example:
 
-.. code-block:: bash
+.. code-block::bash
 
 
     python3 -m rips.main \
@@ -49,7 +46,6 @@ Example:
     -pi Examples/template_platform.yaml \
     -is rips/schema-isa.yaml \
     -ps rips/schema-platform.yaml \
-    -es rips/schema-env.yaml \
     -ei Examples/template_env.yaml \
     --verbose debug
 

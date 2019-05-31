@@ -10,19 +10,19 @@ misa:
   Extensions:
     bitmask:
       mask: 0x214102D
-      def: 0x100
+      default: 0x100
 mvendorid:
   implemented: True
-  value: 0x565656
+  id: 0x565656
 marchid:
   implemented: True
-  value: 0x569895
+  id: 0x569895
 mimpid:
   implemented: True
-  value: 0x987562
+  id: 0x987562
 mhartids:
   implemented: True
-  values: [0,1,25,669994]
+  id: [0,1,25,669994]
 mstatus:
   XS:
     is_hardwired: False
@@ -59,36 +59,36 @@ mtvec:
 mideleg:
   bitmask:
     mask: 0xFFF0FFFFFFFFFFFF
-    def: 0x00 
+    default: 0x00 
 medeleg:
   bitmask:
     mask: 0xFFFFFFFFFFFFF7FF
-    def: 0x00
+    default: 0x00
 mip:
   bitmask:
     mask: 0xF7AFFFFFFFFFFFFF
-    def: 0x00
+    default: 0x00
 mie:
   bitmask:
     mask: 0xF7AFFFFFFFFFFFFF
-    def: 0x00
+    default: 0x00
 mepc:
   # bitmask:
   #   mask: 0xFFFFFFFFFFFFFFFE
-  #   def: 0x00
+  #   default: 0x00
   range:
     base: 0x00
     bound: 0xFFFFFFFFFFFFFFFF
 mcountinhibit:
   bitmask:
     mask: 0x1F
-    def: 0x00
+    default: 0x00
   # is_hardwired: True
   # hardwired_val: 0
 mcounteren:
     bitmask:
       mask: 0x1F
-      def: 0x00
+      default: 0x00
   # is_hardwired: True
   # hardwired_val: 0
 mhpmcounter3:

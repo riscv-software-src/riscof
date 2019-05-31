@@ -10,7 +10,7 @@ mcause:
 mhpmevent3:
   bitmask:
     mask: 0xFC
-    def: 0x00
+    default: 0x00
   # readonly: True
   # hardwired: '0'
 mhpmevent4:
