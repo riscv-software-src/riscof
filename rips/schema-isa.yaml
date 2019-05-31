@@ -99,6 +99,7 @@ Privilege_Spec_Version:
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
 #   - The def and mask fields of Extensions should be only 26-bits wide.
+#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 # 
@@ -639,6 +640,7 @@ mtvec:
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
 #       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mideleg:
@@ -682,6 +684,7 @@ mideleg:
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
 #       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 #       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both mask and def.
+#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 medeleg:
@@ -725,6 +728,7 @@ medeleg:
 # **Constraints**: 
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
 #       - The mask and def cannot exceed the maximum def which can be represented by XLEN bits(2^XLEN-1).
+#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mip:
@@ -770,6 +774,9 @@ mip:
 #
 #       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
 #       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mie:
     type: dict
     schema:
@@ -820,6 +827,9 @@ mie:
 #
 #       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
 #       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*).
+#
+# `------------------------------------------------------------------------------------------------------------------------------`
+#
 mepc:
     type: dict
     schema:
@@ -874,6 +884,7 @@ mepc:
 #
 # **Constraints**: 
 #       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mcountinhibit:
@@ -918,6 +929,7 @@ mcountinhibit:
 #
 # **Constraints**: 
 #       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mcounteren:
@@ -962,6 +974,7 @@ mcounteren:
 # 
 # **Constraints**: 
 #       - None
+#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mhpmcounter3:
