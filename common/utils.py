@@ -181,10 +181,28 @@ def rips_cmdline_args():
     )
 
     parser.add_argument(
+        '--input_environment','-ei',
+        type=str,
+        metavar='YAML',
+        help='Input YAML file containing environment specs.',
+        default=None,
+    )
+
+    parser.add_argument(
+        '--schema_environment','-es',
+        type=str,
+        metavar='YAML',
+        help='Input YAML file containing the schema for environment.',
+        default=None,
+        required=True
+    )
+
+
+    parser.add_argument(
         '--schema_isa','-is',
         type=str,
         metavar='YAML',
-        help='Input ISA Schema file',
+        help='Input YAML file containing the schema for ISA.',
         default=None,
         required=True
     )
@@ -193,7 +211,7 @@ def rips_cmdline_args():
         '--schema_platform','-ps',
         type=str,
         metavar='YAML',
-        help='Input ISA Schema file',
+        help='Input YAML file containing the schema for Platform.',
         default=None,
         required=True
     )

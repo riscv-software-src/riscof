@@ -172,8 +172,8 @@ mtval:
 #           - bound: An integer indicating the highest legal value.(Less than 2^XLEN)
 #           - mode: A string describing one of the *range-update-warl-func*
 #       - bitmask:
-#           - base  : an XLEN bit wide hexa-decimal value providing the *base* field of the *bitmask-warl-func*.
-#           - value : a XLEN bit wide hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : an XLEN bit wide hexa-decimal value providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a XLEN bit wide hexa-decimal value providing the *def* field of the *bitmask-warl-func*.
 #       - distinct:
 #           - values: A list of legal values that the register can take.(Less than 2^XLEN)
 #           - mode : A string describing one of the *distinct-update-warl-func*.
@@ -194,7 +194,7 @@ mtval:
 #         mode: "UnChgd"
 #
 # **Constraints**: 
-#       - The base and value (incase of bitmask func) cannot exceed the maximum value which can be represented by XLEN bits.
+#       - The mask and def (incase of bitmask func) cannot exceed the maximum value which can be represented by XLEN bits.
 #       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
 #         can exceed the maximum value which can be represented by XLEN bits.   
 #
@@ -207,11 +207,11 @@ mhpmevent3:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -262,11 +262,11 @@ mhpmevent4:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -317,11 +317,11 @@ mhpmevent5:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -372,11 +372,11 @@ mhpmevent6:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -428,11 +428,11 @@ mhpmevent7:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -483,11 +483,11 @@ mhpmevent8:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -538,11 +538,11 @@ mhpmevent9:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -593,11 +593,11 @@ mhpmevent10:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -648,11 +648,11 @@ mhpmevent11:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -703,11 +703,11 @@ mhpmevent12:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -758,11 +758,11 @@ mhpmevent13:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -813,11 +813,11 @@ mhpmevent14:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -868,11 +868,11 @@ mhpmevent15:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -923,11 +923,11 @@ mhpmevent16:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -978,11 +978,11 @@ mhpmevent17:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1033,11 +1033,11 @@ mhpmevent18:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1088,11 +1088,11 @@ mhpmevent19:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1143,11 +1143,11 @@ mhpmevent20:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1198,11 +1198,11 @@ mhpmevent21:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1253,11 +1253,11 @@ mhpmevent22:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1308,11 +1308,11 @@ mhpmevent23:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1363,11 +1363,11 @@ mhpmevent24:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1418,11 +1418,11 @@ mhpmevent25:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1473,11 +1473,11 @@ mhpmevent26:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1528,11 +1528,11 @@ mhpmevent27:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1583,11 +1583,11 @@ mhpmevent28:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1638,11 +1638,11 @@ mhpmevent29:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1693,11 +1693,11 @@ mhpmevent30:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length
@@ -1748,11 +1748,11 @@ mhpmevent31:
       type: dict
       excludes: ['range','distinct']
       schema:
-        base:
+        mask:
           type: integer
           default: 0x00
           check_with: max_length
-        value:
+        def:
           type: integer
           default: 0x00
           check_with: max_length

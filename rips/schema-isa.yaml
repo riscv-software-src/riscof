@@ -76,8 +76,8 @@ Privilege_Spec_Version:
 # 
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
-#           - base  : a 26 bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a 26 bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a 26 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a 26 bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -91,15 +91,14 @@ Privilege_Spec_Version:
 #              mode  : 'UnChgd'
 #      Extensions:
 #          bitmask:
-#              base:   0x12D
-#              value:  0x000
+#              mask:   0x12D
+#              def:  0x000
 # 
 # **Constraints**: 
 #   - The maximum value specified in MXL should not be greater than the XLEN/32 specified in the ISA field.
 #   - All extensions defined in the ISA field, cannot be inferred as read-only-0 values. 
 #   - All extensions not defined in the ISA field should be inferred as read-only-0 values.
-#   - The value and base fields of Extensions should be only 26-bits wide.
-#
+#   - The def and mask fields of Extensions should be only 26-bits wide.
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 # 
@@ -132,12 +131,12 @@ misa:
                 bitmask:
                     type: dict
                     schema:
-                        base:
+                        mask:
                             type: integer
                             min: 0x00
                             max: 0x3FFFFFF
                             default: 0x00
-                        value:
+                        def:
                             type: integer
                             min: 0x00
                             max: 0x3FFFFFF
@@ -625,8 +624,8 @@ mtvec:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
 #       - bitmask:
-#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a XLEN bit wide value in hexa-decimal value providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -634,13 +633,12 @@ mtvec:
 # 
 #   mideleg:
 #      bitmask:
-#          base: 0xFFFFFFFF
-#          value: 0x00
+#          mask: 0xFFFFFFFF
+#          def: 0x00
 #
 # **Constraints**: 
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
-#
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
+#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mideleg:
@@ -649,11 +647,11 @@ mideleg:
         bitmask:
             type: dict
             schema:
-                base:
+                mask:
                     type: integer
                     default: 0x00
                     check_with: max_length
-                value:
+                def:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -663,13 +661,13 @@ mideleg:
     check_with: hardwirecheck
     default:
         bitmask:
-            base: 0xFFFFFFFF
-            value: 0x00
+            mask: 0xFFFFFFFF
+            def: 0x00
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable exceptions
 #       - bitmask:
-#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -677,14 +675,13 @@ mideleg:
 # 
 #   medeleg:
 #      bitmask:
-#          base: 0xFFFFF7FF
-#          value: 0x00
+#          mask: 0xFFFFF7FF
+#          def: 0x00
 #
 # **Constraints**: 
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
-#       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both base and value.
-#
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
+#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
+#       - The 11th bit needs to be hardwired to 0 ie. 0 in position 11 in both mask and def.
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 medeleg:
@@ -693,11 +690,11 @@ medeleg:
         bitmask:
             type: dict
             schema:
-                base:
+                mask:
                     type: integer
                     default: 0x00
                     check_with: max_length
-                value:
+                def:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -707,14 +704,14 @@ medeleg:
     check_with: medelegcheck
     default:
         bitmask:
-            base: 0xFFFFF7FF
-            value: 0x00                    
+            mask: 0xFFFFF7FF
+            def: 0x00                    
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -722,13 +719,12 @@ medeleg:
 # 
 #   mip:
 #      bitmask:
-#          base: 0xFFFFFFFF
-#          value: 0x00
+#          mask: 0xFFFFFFFF
+#          def: 0x00
 #
 # **Constraints**: 
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
-#
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
+#       - The mask and def cannot exceed the maximum def which can be represented by XLEN bits(2^XLEN-1).
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mip:
@@ -737,11 +733,11 @@ mip:
         bitmask:
             type: dict
             schema:
-                base:
+                mask:
                     type: integer
                     default: 0xFFFFFFFF
                     check_with: max_length
-                value:
+                def:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -752,13 +748,13 @@ mip:
     check_with: hardwirecheck
     default:
         bitmask:
-            base: 0xFFFFFFFF
+            mask: 0xFFFFFFFF
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -766,26 +762,25 @@ mip:
 # 
 #   mie:
 #      bitmask:
-#          base: 0xFFFFFFFF
-#          value: 0x00
+#          mask: 0xFFFFFFFF
+#          def: 0x00
 #
 # **Constraints**: 
-#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the base cannot be 1 in the value.
-#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
-#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
+#       - No bit can be hardwired to 1 i.e the any bit which is 0 in the mask cannot be 1 in the def.
+#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 mie:
     type: dict
     schema:
         bitmask:
             type: dict
             schema:
-                base:
+                mask:
                     type: integer
                     default: 0xFFFFFFFF
                     check_with: max_length
-                value:
+                def:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -796,15 +791,15 @@ mie:
     check_with: hardwirecheck
     default:
         bitmask:
-            base: 0xFFFFFFFF
+            mask: 0xFFFFFFFF
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* or a *range-warl-func* indicating the range of 
 #                  legal values allowed
 #
 #       - bitmask:
-#           - base  : a XLEN bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a XLEN bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a XLEN bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 #
 #       - range:
 #           - base: An integer indicating the lowest legal value.
@@ -821,12 +816,10 @@ mie:
 #          base: 0x00
 #
 # **Constraints**: 
-#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
-#       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*) 
-#         and the base should be lower than the bound.
-#
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
+#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
+#       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*).
 mepc:
     type: dict
     schema:
@@ -834,11 +827,11 @@ mepc:
             type: dict
             excludes: ['range']
             schema:
-                base:
+                mask:
                     type: integer
                     default: 0x00
                     check_with: max_length
-                value:
+                def:
                     type: integer
                     default: 0x000
                     check_with: max_length
@@ -865,8 +858,8 @@ mepc:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - base  : a 32 bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a 32 bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a 32 bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -876,12 +869,11 @@ mepc:
 # 
 #   mcountinhibit:
 #      bitmask:
-#          base: 0xFFFFFFFF
-#          value: 0x00
+#          mask: 0xFFFFFFFF
+#          def: 0x00
 #
 # **Constraints**: 
-#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
-#
+#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mcountinhibit:
@@ -890,11 +882,11 @@ mcountinhibit:
         bitmask:
             type: dict
             schema:
-                base:
+                mask:
                     type: integer
                     max: 0xFFFFFFFF
                     default: 0x00
-                value:
+                def:
                     type: integer
                     max: 0xFFFFFFFF
                     default: 0x00
@@ -904,14 +896,14 @@ mcountinhibit:
             readonly: True
     default:
         bitmask:
-            base: 0x00
-            value: 0x00
+            mask: 0x00
+            def: 0x00
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - base  : a 32 bit wide value in hexa-decimal providing the *base* field of the *bitmask-warl-func*.
-#           - value : a 32 bit wide value in hexa-decimal providing the *value* field of the *bitmask-warl-func*.
+#           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
+#           - def : a 32 bit wide value in hexa-decimal providing the *def* field of the *bitmask-warl-func*.
 #       - readonly: a boolean value indicating whether the register is read only.
 #       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
@@ -921,12 +913,11 @@ mcountinhibit:
 # 
 #   mcounteren:
 #      bitmask:
-#          base: 0xFFFFFFFF
-#          value: 0x00
+#          mask: 0xFFFFFFFF
+#          def: 0x00
 #
 # **Constraints**: 
-#       - The base and value cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
-#
+#       - The mask and def cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1).
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mcounteren:
@@ -935,10 +926,10 @@ mcounteren:
         bitmask:
             type: dict
             schema:
-                base:
+                mask:
                     type: integer
                     default: 0x00
-                value:
+                def:
                     type: integer
                     default: 0x00
         is_hardwired:
@@ -970,8 +961,7 @@ mcounteren:
 #       hardwired_val: 0
 # 
 # **Constraints**: 
-#       - The base and value cannot exceed value (2^63)-1.
-#
+#       - None
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
 mhpmcounter3:

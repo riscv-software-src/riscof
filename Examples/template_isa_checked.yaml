@@ -1,5 +1,5 @@
 User_Spec_Version: 2.3
-ISA: RV32IMC
+ISA: RV64IMFADCZifenceiZicsrUS
 Privilege_Spec_Version: 1.11
 misa:
   implemented: true
@@ -11,8 +11,8 @@ misa:
       mode: UnChgd
   Extensions:
     bitmask:
-      base: 34869293
-      value: 256
+      mask: 34869293
+      def: 256
 mvendorid:
   implemented: true
   value: 5658198
@@ -100,23 +100,23 @@ mtvec:
       mode: UnChgd
 mideleg:
   bitmask:
-    base: 18442521949058891775
-    value: 0
+    mask: 18442521949058891775
+    def: 0
   implemented: true
 medeleg:
   bitmask:
-    base: 18446744073709549567
-    value: 0
+    mask: 18446744073709549567
+    def: 0
   implemented: true
 mip:
   bitmask:
-    base: 17847765323269275647
-    value: 0
+    mask: 17847765323269275647
+    def: 0
   implemented: true
 mie:
   bitmask:
-    base: 17847765323269275647
-    value: 0
+    mask: 17847765323269275647
+    def: 0
   implemented: true
 mepc:
   range:
@@ -125,13 +125,13 @@ mepc:
     mode: UnChgd
 mcountinhibit:
   bitmask:
-    base: 31
-    value: 0
+    mask: 31
+    def: 0
   implemented: true
 mcounteren:
   bitmask:
-    base: 31
-    value: 0
+    mask: 31
+    def: 0
   is_hardwired: false
   hardwired_val: 0
   implemented: true
