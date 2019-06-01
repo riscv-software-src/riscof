@@ -1,0 +1,28 @@
+mtime:
+  address: 0x5000
+  implemented: True
+mtimecmp:
+  address: 0x5008
+  implemented: True
+mcause:
+  values: [16,17,18,19,20,21]
+  implemented: True
+mhpmevent3:
+  bitmask:
+    mask: 0xFC
+    default: 0x00
+  # readonly: True
+  # hardwired: '0'
+mhpmevent4:
+  range:
+    base: 256
+    bound: 0xFFFFFFFFFFFFFF00
+    mode: Saturate
+  # readonly: True
+  # hardwired: '0' 
+mhpmevent5:
+  distinct:
+    values: [0,2]
+    mode: "UnChgd"
+  # readonly: True
+  # hardwired: '0'   

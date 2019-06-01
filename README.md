@@ -1,31 +1,21 @@
 # RISC-V Compliance Framework
 The work here is under development and is not stable for consumption .. yet!
 
-## Setup
+## Documentation
+You can find the latest documentation of the work: [here](https://riscof.readthedocs.io/en/latest/)
+
+Sample command for framework (under development)
+
+Spike vs Spike
 ```
-sudo apt-get install python3 pip3
-pip3 intall cerberus oyaml
+python3 -m framework.main -bm model_from_yaml -bf Examples/template_env.yaml -df Examples/template_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
+
+python3 -m framework.main -bm model_from_yaml -bf Examples/template_env_2.yaml -df Examples/template_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
 ```
 
-## Usage
+Eclass vs Spike
 ```
-python3 -m rips.main --help
-python3 -m framework.main --help
+python3 -m framework.main -bm model_from_yaml -bf Examples/template_env_2.yaml -df Examples/e_class_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
+
+python3 -m framework.main -bm model_from_yaml -bf Examples/template_env.yaml -df Examples/e_class_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
 ```
-
-## Example 
-```
-python3 -m rips.main --input Examples/eg1.yaml --schema rips/schema.yaml --verbose info
-python3 -m framework.main --input Examples/eg1_checked.yaml --verbose info
-```
-
-Differences against compliance suite:
-
-* rv32i/I-FENCE.I-01.S: line 81 needs to be added.
-* rv32i/I-IO.S: line 340 needs to be uncommented.
-* rv32i/I-RF_size-01.S: line 186 to line 189 need to be added
-* rv32i/I-RF_x0-01.S: add assertions at line:122, 126, 130, 134, 148, 154, 168, 172, 176, 180. Might
-* need to add lw x1, 0(x31) and the likes to check if sw value is correct?
-* rv32i/I-SLTI-01.S: lines 239 and 238 should be interchanged.
-* rv32i/I-SW-01.S: lines to be added: many many
-

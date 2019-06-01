@@ -5,8 +5,13 @@ import sys
 import subprocess
 import operator
 import shlex
+import oyaml as yaml
 
 logger= logging.getLogger(__name__)
+
+def loadyaml(foo):
+    file = open(foo,"r")
+    return yaml.safe_load(file)
 
 class ColoredFormatter(logging.Formatter):                                      
     """                                                                         
@@ -73,10 +78,81 @@ def execute_command(execute):
     if(out):
         logger.warning(out.rstrip().decode('ascii'))
 
+def execute_sim_command(dir,execute,shell):
+    logger.debug(execute)
+    if(not shell):
+        execute = shlex(dir+execute)
+    x=subprocess.Popen(execute,shell=shell, stdout=subprocess.PIPE,
+                                                stderr=subprocess.PIPE)
+    out, err=x.communicate()
+    if(err):
+        logger.error(err.rstrip().decode('ascii'))
+        sys.exit(0)
+    if(out):
+        logger.warning(out.rstrip().decode('ascii'))
+
 def execute_command_log(execute, logfile):
     execute = execute + '> {}'.format(logfile)
     logger.debug(execute)
     os.system(execute)
+
+def framework_cmdline_args():
+    parser = argparse.ArgumentParser(
+        formatter_class = SortingHelpFormatter,
+        prog="Framework",
+        description="This Program takes in the DUT spec and the comparision model\
+ and tests compliance."
+    )
+    parser.add_argument(
+        '--dut_model','-dm',
+        type=str,
+        metavar='MODEL',
+        help='The MODEL whose compliance is to be verified.',
+        required=True
+    )
+    parser.add_argument(
+        '--dut_env_file','-df',
+        type=str,
+        metavar='FILE',
+        help='The FILE for DUT containing necessary environment parameters.',
+        required=True
+    )
+    parser.add_argument(
+        '--base_model','-bm',
+        type=str,
+        metavar='MODEL',
+        help='The MODEL whose against which the compliance is verified.',
+        required=True
+    )
+    parser.add_argument(
+        '--base_env_file','-bf',
+        type=str,
+        metavar='FILE',
+        help='The FILE for Base model containing necessary environment parameters.'
+    )
+    parser.add_argument(
+        '--dut_isa_spec','-ispec',
+        type=str,
+        metavar='YAML',
+        help='The normalised YAML which contains the ISA specs of the DUT.',
+        required=True
+    )
+    parser.add_argument(
+        '--dut_platform_spec','-pspec',
+        type=str,
+        metavar='YAML',
+        help='The normalised YAML which contains the Platfrorm specs of the DUT.',
+        required=True
+    )
+    parser.add_argument(
+        '--verbose',
+        action= 'store',
+        default='info',
+        help='debug | info | warning | error', 
+        metavar=""
+    )
+    return parser
+    
 
 def rips_cmdline_args():
 
@@ -87,19 +163,45 @@ def rips_cmdline_args():
  RIPS format"
     )
     parser.add_argument(
-        '--input',
+        '--input_isa','-ii',
         type=str,
         metavar='YAML',
-        help='Input YAML file',
+        help='Input YAML file containing ISA specs.',
         default=None,
         required=True
     )
     
     parser.add_argument(
-        '--schema',
+        '--input_platform','-pi',
         type=str,
         metavar='YAML',
-        help='Input Schema file',
+        help='Input YAML file containing platform specs.',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--input_environment','-ei',
+        type=str,
+        metavar='YAML',
+        help='Input YAML file containing environment specs.',
+        default=None,
+    )
+
+    parser.add_argument(
+        '--schema_isa','-is',
+        type=str,
+        metavar='YAML',
+        help='Input YAML file containing the schema for ISA.',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--schema_platform','-ps',
+        type=str,
+        metavar='YAML',
+        help='Input YAML file containing the schema for Platform.',
         default=None,
         required=True
     )
