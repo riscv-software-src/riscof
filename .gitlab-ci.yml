@@ -1,11 +1,10 @@
-#riscof-smoke:
-#    variables:
-#        GIT_SUBMODULE_STRATEGY: recursive
-#    script:
-#      - source /tools/setup.sh
-#      - python3 -m rips.main --input Examples/RV32IMAC.yaml --schema rips/schema.yaml --verbose info
-#      - python3 -m framework.main --input Examples/RV32IMAC_checked.yaml --verbose info
-#    only:
-#        - master 
-#    tags:
-#        - riscof-regress
+release:
+    script:
+        - python3 /scratch/version-update.py
+    only:
+        refs:
+            - master
+    tags:
+        - riscof-regress
+    except:
+      - schedules
