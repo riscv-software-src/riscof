@@ -26,7 +26,7 @@ def main():
             lines = k.read().splitlines()
             code_start=False
             part_start=False
-            part_number = 0
+            part_number = ''
             i=0
             part_dict={}
             while i<len(lines):
@@ -52,10 +52,11 @@ def main():
                         # args.append([(temp.strip()).replace("\")",'') for temp in (line.strip())[:-1]].split)
                         if("\")" in line):
                             break
-                    if(not args[0].isdigit() or int(args[0])<part_number):
+                    if(args[0] in part_dict.keys()):
                         print("{}:{}: Incorrect Naming of Test Case after ({})".format(file, i, part_number))
                         sys.exit(0)
-                    part_number = int(args[0])
+                    part_number = args[0]
+                    # print(part_number)
                     conditions = args[1].split(";")
                     check = []
                     define = []
@@ -67,7 +68,7 @@ def main():
                     part_dict[part_number] = {'check':check,'define':define}
                 if "RVTEST_PART_END" in line:
                     args = [temp.strip() for temp in (line.strip()).replace('RVTEST_PART_END','')[1:-1].split(',')]
-                    if int(args[0]) != part_number:
+                    if args[0] != part_number:
                         print("{}:{}: Wrong Test Case Numbering in ({})".format(file, i, part_number))
                         sys.exit(0)
                     part_start = False
