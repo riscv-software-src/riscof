@@ -1,0 +1,8 @@
+/suite/modified/I-ADD-01.S:
+  commit_id: c4f77591d893ed4513324b1c3d8c0095e4d29783
+  parts:
+    1:
+      check:
+      - check ISA:=regex(RV(32|64|128)[^I]*I[^I]*)
+      define:
+      - def TEST_PART_1=True
