@@ -1,8 +1,16 @@
 /suite/modified/I-ADD-01.S:
-  commit_id: c4f77591d893ed4513324b1c3d8c0095e4d29783
+  commit_id: 68a80618e990951d8a664d4bcbeba42455457c63
   parts:
     '1':
       check:
-      - check ISA:=regex(RV(32|64|128)[^I]*I[^I]*)
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_PART_1=True
+/suite/modified/I-BEQ-01.S:
+  commit_id: f0f427d60190a854546cb38af386542d9409b598
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
       define:
       - def TEST_PART_1=True

@@ -3,6 +3,7 @@ import git
 import sys
 import re
 import oyaml as yaml
+import collections
 
 def dirwalk(dir):
     list = []
@@ -12,69 +13,87 @@ def dirwalk(dir):
         for file in files:
             list.append(path+file)
     return list
+
+def orderdict(dict):
+    ret = collections.OrderedDict()
+    for key in sorted(dict.keys()):
+        ret[key] = dict[key]
+    return ret
+
+def createPartDict(file):
+    with open(file,"r") as k:
+        lines = k.read().splitlines()
+        code_start=False
+        part_start=False
+        part_number = ''
+        i=0
+        part_dict={}
+        while i<len(lines):
+            line = lines[i]
+            i+=1
+            line = line.strip()
+            if line == "":
+                continue
+            if(line.startswith("#") or line.startswith("//")):
+                continue
+            if "RVTEST_PART_START" in line:
+                if part_start == True:
+                    print("{}:{}: Did not finish ({}) start".format(file, i, part_number))
+                    sys.exit(0)
+                args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_PART_START','')[1:-1].split(',')]
+                while(line.endswith('\\')):
+                    line = lines[i]
+                    i+=1
+                    line = (line.strip()).replace("//",'')
+                    args[1]=args[1]+str((line.replace("\")",'')).replace("//",''))
+                    # args.append([(temp.strip()).replace("\")",'') for temp in (line.strip())[:-1]].split)
+                    if("\")" in line):
+                        break
+                if(args[0] in part_dict.keys()):
+                    print("{}:{}: Incorrect Naming of Test Case after ({})".format(file, i, part_number))
+                    sys.exit(0)
+                part_number = args[0]
+                conditions = (args[1].replace("//",'')).split(";")
+                check = []
+                define = []
+                for cond in conditions:
+                    cond = cond.strip()
+                    if(cond.startswith('check')):
+                        check.append(cond)
+                    elif(cond.startswith('def')):
+                        define.append(cond)
+                part_dict[part_number] = {'check':check,'define':define}
+            if "RVTEST_PART_END" in line:
+                args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_PART_END','')[1:-1].split(',')]
+                if args[0] != part_number:
+                    print("{}:{}: Wrong Test Case Numbering in ({})".format(file, i, part_number))
+                    sys.exit(0)
+                part_start = False
+    if len(part_dict.keys()) == 0:
+        print("{}: Atleast one part must exist in the test.",file) 
+    return orderdict(part_dict)
 def main():
     list = dirwalk("/suite/modified")
     repo = git.Repo("./")
     dbfile = "./framework/database.yaml"
     tree = repo.tree()
-    db = {}
+    with open(dbfile,"r") as temp:
+        db = yaml.safe_load(temp)
+        for key in db.keys():
+            if key not in list:
+                del db[key]
     cur_dir = os.getcwd()
-    for file in list:
-        print(file)
+    existing = db.keys()
+    new = [x for x in list if x not in existing]
+    for file in existing:
         commit = next(repo.iter_commits(paths="./"+file,max_count=1))
-        with open(cur_dir+file,"r") as k:
-            lines = k.read().splitlines()
-            code_start=False
-            part_start=False
-            part_number = ''
-            i=0
-            part_dict={}
-            while i<len(lines):
-                line = lines[i]
-                i+=1
-                line = line.strip()
-                if line == "":
-                    continue
-                if(line.startswith("#") or line.startswith("//")):
-                    continue
-                if "RVTEST_PART_START" in line:
-                    if part_start == True:
-                        print("{}:{}: Did not finish ({}) start".format(file, i, part_number))
-                        sys.exit(0)
-                    args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_PART_START','')[1:-1].split(',')]
-                    while(line.endswith('\\')):
-                        line = lines[i]
-                        i+=1
-                        line = line.strip()
-                        if(line.startswith("#") or line.startswith("//")):
-                            break
-                        args[1]=args[1]+str((line.replace("\")",'')).replace("//",''))
-                        # args.append([(temp.strip()).replace("\")",'') for temp in (line.strip())[:-1]].split)
-                        if("\")" in line):
-                            break
-                    if(args[0] in part_dict.keys()):
-                        print("{}:{}: Incorrect Naming of Test Case after ({})".format(file, i, part_number))
-                        sys.exit(0)
-                    part_number = args[0]
-                    # print(part_number)
-                    conditions = args[1].split(";")
-                    check = []
-                    define = []
-                    for cond in conditions:
-                        if(cond.startswith('check')):
-                            check.append(cond)
-                        elif(cond.startswith('def')):
-                            define.append(cond)
-                    part_dict[part_number] = {'check':check,'define':define}
-                if "RVTEST_PART_END" in line:
-                    args = [temp.strip() for temp in (line.strip()).replace('RVTEST_PART_END','')[1:-1].split(',')]
-                    if args[0] != part_number:
-                        print("{}:{}: Wrong Test Case Numbering in ({})".format(file, i, part_number))
-                        sys.exit(0)
-                    part_start = False
-        db[file] = {'commit_id':str(commit),'parts':part_dict}
+        if(str(commit) != db[file]['commit_id']):
+            db[file] = {'commit_id':str(commit),'parts':createPartDict(cur_dir+file)}
+    for file in new:
+        commit = next(repo.iter_commits(paths="./"+file,max_count=1))
+        db[file] = {'commit_id':str(commit),'parts':createPartDict(cur_dir+file)}
     with open(dbfile,"w") as wrfile:
-        yaml.dump(db, wrfile, default_flow_style=False, allow_unicode=True)
+        yaml.dump(orderdict(db), wrfile, default_flow_style=False, allow_unicode=True)
         # print(file+" "+str(commit))
 
 
