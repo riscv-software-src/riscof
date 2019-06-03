@@ -45,7 +45,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # ---------------------------------------------------------------------------------------------
   #ifdef TEST_PART_1
-    RVTEST_PART_START(1,"check ISA:=regex(.*I.*); \
+    RVTEST_PART_START("A1","check ISA:=regex(.*I.*); \
                         def TEST_PART_1=True")
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, 1, -1, MIN, MAX register values\n");
 
@@ -380,7 +380,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part E  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-    RVTEST_PART_END(1)
+    RVTEST_PART_END("A1")
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
