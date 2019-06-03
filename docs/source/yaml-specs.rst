@@ -22,7 +22,10 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
       * Largest: maximum of all legal values
       * Smallest: minimum of all legal values
 
-.. code-block::python
+**Example**:
+
+.. code-block:: python
+
   distinct:
     values: [0,55,658,1026]
     mode: "UnChgd"
@@ -57,11 +60,18 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
           if ( WriteVal < base || WriteVal > bound)
              return Flip-MSB of field
 
-.. code-block::python
+**Example**:
+
+.. code-block:: python
+
   range:
     base: 256
     bound: 0xFFFFFFFFFFFFFF00
     mode: Saturate
+    
+
+*Proposal* (By **Allen Baum (: esperanto)**): 
+To treat this field as a list of lists i.e. take in multiple pairs of base and bounds and a value lying inbetween any one of the pairs is considered legal.
 
 3. **Bitmask** (*bitmask-warl-func*)
 
@@ -69,7 +79,10 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
   * For the read only positions, the corresponding bits are cleared (=0) in the *mask* and the rest of the bits are set (=1).
   * In the *default* field the values for the read only bits are given ( = 0 or 1) and the rest of the bits are cleared (=0).
 
-.. code-block::python
+**Example**:
+
+.. code-block:: python
+
   bitmask:
     mask: 0x214102D
     default: 0x100
