@@ -4,7 +4,7 @@ Quickstart
 Install dependencies
 ^^^^^^^^^^^^^^^^^^^^
 
-.. code-block::bash
+.. code-block:: bash
 
     sudo apt-get install python3 pip3 # make sure to use python3.5 or above
     git clone https://gitlab.com/incoresemi/riscof.git
@@ -13,7 +13,7 @@ Install dependencies
 Usage
 ^^^^^
 
-.. code-block::bash
+.. code-block:: bash
 
     python3 -m rips.main -h
     usage: RIPS Checker [-h] --input_isa YAML --input_platform YAML
@@ -38,7 +38,7 @@ Usage
 
 Example:
 
-.. code-block::bash
+.. code-block:: bash
 
 
     python3 -m rips.main \
