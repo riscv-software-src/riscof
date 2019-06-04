@@ -16,40 +16,6 @@ def compare_signature(file1,file2):
         status='Failed'
     return status
 
-def collect_unprivilege(isa):
-    global user_target
-    dut_test_pool = []
-    for test in unprivilege_test_pool:
-        if(len(test)<2):
-            logger.error('Test list should be atleast 2 entries: Test name and\
- march')
-            sys.exit(0)
-        if(len(test)==2):
-            dut_test_pool.append(test)
-        else:
-            criteria = test[2:]
-            select = True
-            for c in criteria:
-                if not eval(c.lower()):
-                    select=False
-            if select:
-                dut_test_pool.append(test)
-            #     if 'in' in c:
-            #         x = c.split();
-            #         if (len(x)!=3):
-            #             logger.error('Wrong Criteria Syntax for test: '+\
-            #                         str(test[0]))
-            #             sys.exit(0)
-
-            #         if x[0].isdigit():
-            #             if int(x[0]) not in foo[x[2]]:
-            #                 select=False
-            #         elif x[0] not in foo[x[2]]:
-            #             select=False
-            # if select:
-            #     dut_test_pool.append([test[0],test[1]])
-    return dut_test_pool
-
 def eval_cond(condition,spec):
     condition = (condition.replace("check",'')).strip()
     if ':=' in condition:

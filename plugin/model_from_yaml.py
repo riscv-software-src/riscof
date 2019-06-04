@@ -17,7 +17,6 @@ class model_from_yaml(pluginTemplate):
         self.name = kwargs.get('name',''.join(random.choices(string.ascii_uppercase + string.digits, k=10)))+":"
     def initialise_from_file(self,file,*args, **kwargs):
         foo = utils.loadyaml(file)
-        # logger.info("Initialising parameters of model.")
         compile_flags=' -static -mcmodel=medany -fvisibility=hidden -nostdlib \
         -nostartfiles '
         self.simulator = foo['USER_EXECUTABLE']
@@ -90,9 +89,7 @@ class model_from_yaml(pluginTemplate):
         os.mkdir(cur_path+dirs[-1])
 
     def compile(self,file,macros,isa):
-        # logger.info("Running "+file+" test")
         logger.debug(self.name+"Compile")
-        # test = self.suite+str(file)+'.S'
         test = self.root_dir+str(file)
         test_dir = self.work_dir+str(file.replace(self.suite,'')[:-2])+"/"
         self.make_recursive(test_dir)
@@ -101,11 +98,7 @@ class model_from_yaml(pluginTemplate):
         elf = test_dir+str(file.split("/")[-1][:-2])+'.elf'
         cmd=self.compile_cmd.format(isa,self.user_abi)+' '+test+' -o '+elf
         execute = cmd+macros
-        # logger.debug(execute)
-        # x=subprocess.Popen(shlex.split(execute))
         utils.execute_command(execute)
         cmd=self.objdump.format(test,self.user_abi)+' '+elf
         utils.execute_command_log(cmd, '{}.disass'.format(str(file.split("/")[-1][:-2])))
-#        os.chdir(work_dir)
-        # logger.info("Initiating Simulation")
         
