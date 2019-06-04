@@ -71,8 +71,8 @@ Privilege_Spec_Version:
 # 
 # .. code-block:: none
 # 
-# hw_ins_misaligned_support: True
-# hw_ins_misaligned_support: False
+#    hw_ins_misaligned_support: True
+#    hw_ins_misaligned_support: False
 # 
 # **Constraints**:
 # - None
@@ -90,8 +90,8 @@ hw_ins_misaligned_support:
 # 
 # .. code-block:: none
 # 
-# hw_data_misaligned_support: True
-# hw_data_misaligned_support: False
+#    hw_data_misaligned_support: True
+#    hw_data_misaligned_support: False
 # 
 # **Constraints**:
 # - None
