@@ -71,8 +71,7 @@ def execute(dut,base,ispec,pspec):
         logger.info("Initiating check.")
         log.append([entry[0],entry[1],compare_signature(res,ref)])
     
-    logger.info('Following '+str(len(test_pool))+' Unprivileged \
-tests have been run :\n')
+    logger.info('Following '+str(len(test_pool))+' tests have been run :\n')
     logger.info('{0:<50s} : {1:<40s} : {2}'.format('TEST NAME','COMMIT ID','STATUS'))
     # print(log)
     for x in range(0,len(test_pool)):
