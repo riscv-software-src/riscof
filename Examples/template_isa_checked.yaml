@@ -147,6 +147,8 @@ mhpmcounter5:
   is_hardwired: false
   hardwired_val: 0
   implemented: true
+hw_ins_misaligned_support: false
+hw_data_misaligned_support: false
 mhpmcounter6:
   is_hardwired: false
   hardwired_val: 0

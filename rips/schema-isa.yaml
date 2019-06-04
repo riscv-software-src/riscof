@@ -64,6 +64,45 @@ Privilege_Spec_Version:
     default: 1.10
     required: True
 
+###
+# **Description**: A boolean value indicating whether hardware support for misaligned instruction fetch exists.
+# 
+# **Examples**:
+# 
+# .. code-block:: none
+# 
+# hw_ins_misaligned_support: True
+# hw_ins_misaligned_support: False
+# 
+# **Constraints**:
+# - None
+# 
+# `------------------------------------------------------------------------------------------------------------------------------`
+# 
+hw_ins_misaligned_support:
+    type: boolean
+    default: False
+
+###
+# **Description**: A boolean value indicating whether hardware support for misaligned load/store requests exists.
+# 
+# **Examples**:
+# 
+# .. code-block:: none
+# 
+# hw_data_misaligned_support: True
+# hw_data_misaligned_support: False
+# 
+# **Constraints**:
+# - None
+# 
+# `------------------------------------------------------------------------------------------------------------------------------`
+# 
+hw_data_misaligned_support:
+    type: boolean
+    default: False
+
+
 ### 
 # **Description**: Describes the fields of the *misa* CSR. A user needs to provide the following
 # fields:

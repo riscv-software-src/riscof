@@ -109,9 +109,7 @@ mcause:
 # 
 # .. code-block:: none
 #
-#   mtval:
-#      implemented: True
-#      is_hardwired: True
+# TBD: Provide a concrete use-case for the above.
 #
 # **Constraints**: 
 #       - None
