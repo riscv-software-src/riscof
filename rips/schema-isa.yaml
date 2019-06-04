@@ -905,8 +905,6 @@ mepc:
 #       - bitmask:
 #           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
 #           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
-#       - readonly: a boolean value indicating whether the register is read only.
-#       - hardwired: a string indicating whether the register is hardwired to 0 or not.
 # 
 # **Examples**:
 #
@@ -950,8 +948,8 @@ mcountinhibit:
 #       - bitmask:
 #           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
 #           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
-#       - readonly: a boolean value indicating whether the register is read only.
-#       - hardwired: a string indicating whether the register is hardwired to 0 or not.
+#       - is_hardwired: a boolean value indicating whether the register is hardwired or not.
+#       - hardwired_val: an integer indicating to what value the register is hardwired to.
 # 
 # **Examples**:
 #
