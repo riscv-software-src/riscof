@@ -54,11 +54,10 @@ class model_from_yaml(pluginTemplate):
             utils.execute_sim_command("",Template(self.buildsc).safe_substitute(d),True)
     
     def simulate(self,file,isa):
-        print(isa)
-        test_dir = self.work_dir+str(file)+'/'
+        test_dir = self.work_dir+str(file.replace(self.suite,'')[:-2])+"/"
         logger.debug(self.name+"Changing directory to "+test_dir)
         os.chdir(test_dir)
-        elf = test_dir+str(file)+'.elf'
+        elf = test_dir+str(file.split("/")[-1][:-2])+'.elf'
         d = dict(elf=elf,testDir=test_dir,isa=isa)
         if self.perform_pre:
             logger.debug(self.name+"Pre Sim")
@@ -79,25 +78,34 @@ class model_from_yaml(pluginTemplate):
         utils.execute_sim_command("",cp,True)
         return sign_file
     
+    def make_recursive(self,path):
+        cur_path = self.root_dir+"/"
+        dirs = (path.replace(self.root_dir,'')).split("/")
+        for dir in dirs[:-1]:
+            cur_path=cur_path+dir+"/"
+            if not os.path.exists(cur_path):
+                os.mkdir(cur_path)
+        if os.path.exists(cur_path+dirs[-1]):
+            shutil.rmtree(cur_path+dirs[-1],ignore_errors=True)
+        os.mkdir(cur_path+dirs[-1])
+
     def compile(self,file,macros,isa):
         # logger.info("Running "+file+" test")
         logger.debug(self.name+"Compile")
-        test = self.suite+str(file)+'.S'
-        test_dir = self.work_dir+str(file)+'/'
-        shutil.rmtree(test_dir, ignore_errors=True)
-        os.mkdir(test_dir)
+        # test = self.suite+str(file)+'.S'
+        test = self.root_dir+str(file)
+        test_dir = self.work_dir+str(file.replace(self.suite,'')[:-2])+"/"
+        self.make_recursive(test_dir)
         logger.debug(self.name+"Changing directory to "+test_dir)
         os.chdir(test_dir)
-        elf = test_dir+str(file)+'.elf'
-        # print("kk"+elf)
+        elf = test_dir+str(file.split("/")[-1][:-2])+'.elf'
         cmd=self.compile_cmd.format(isa,self.user_abi)+' '+test+' -o '+elf
-        # print(cmd)
         execute = cmd+macros
         # logger.debug(execute)
         # x=subprocess.Popen(shlex.split(execute))
         utils.execute_command(execute)
         cmd=self.objdump.format(test,self.user_abi)+' '+elf
-        utils.execute_command_log(cmd, '{}.disass'.format(str(file)))
+        utils.execute_command_log(cmd, '{}.disass'.format(str(file.split("/")[-1][:-2])))
 #        os.chdir(work_dir)
         # logger.info("Initiating Simulation")
         

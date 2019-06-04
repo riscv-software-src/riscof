@@ -1,5 +1,5 @@
 /suite/modified/I-ADD-01.S:
-  commit_id: 68a80618e990951d8a664d4bcbeba42455457c63
+  commit_id: d9002a1fac22ebd602b99c4eb3aff4e1715d5dc9
   parts:
     '1':
       check:
@@ -12,5 +12,14 @@
     '1':
       check:
       - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_PART_1=True
+/suite/modified/M-DIV-01.S:
+  commit_id: bfabaadefa8b82c29cbc90eab609f8da5475d353
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
       define:
       - def TEST_PART_1=True
