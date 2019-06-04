@@ -44,7 +44,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
   #ifdef TEST_PART_1
-    RVTEST_PART_START(1,"// check ISA:=regex(.*I.*); def TEST_PART_1=True"
+    RVTEST_PART_START(1,"// check ISA:=regex(.*I.*); def TEST_PART_1=True")
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of CSRRS\n");
 

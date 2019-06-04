@@ -1,6 +1,5 @@
 import logging
 import common.utils as utils
-from framework.test_list import *
 import filecmp
 import re
 import sys
@@ -74,13 +73,13 @@ def execute(dut,base,ispec,pspec):
     
     logger.info('Following '+str(len(test_pool))+' Unprivileged \
 tests have been run :\n')
-    logger.info('{0:<25s} : {1:<40s} : {2}\n'.format('TEST NAME','COMMIT ID','STATUS'))
+    logger.info('{0:<50s} : {1:<40s} : {2}'.format('TEST NAME','COMMIT ID','STATUS'))
     # print(log)
     for x in range(0,len(test_pool)):
         if(log[x][2]=='Passed'):
-            logger.info('{0:<25s} : {1:<40s} : {2}\n'.format(\
+            logger.info('{0:<50s} : {1:<40s} : {2}'.format(\
                 log[x][0], log[x][1], log[x][2]))
         else:
-            logger.error('{0:<25s} : {1:<40s} : {2}\n'.format(\
+            logger.error('{0:<50s} : {1:<40s} : {2}'.format(\
                 log[x][0], log[x][1], log[x][2]))
 
