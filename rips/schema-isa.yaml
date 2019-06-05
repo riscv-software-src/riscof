@@ -23,7 +23,7 @@ ISA:
     check_with: capture_isa_specifics
 
 ### 
-# **Description**: Version number of User/Non-priveleged ISA specification
+# **Description**: Version number of User/Non-priveleged ISA specification. Can be specified as a decimal value.
 #
 # **Examples**:
 #
@@ -44,7 +44,7 @@ User_Spec_Version:
     required: True
 
 ### 
-# **Description**: Version number of Priveleged ISA specification
+# **Description**: Version number of Priveleged ISA specification. Can be specified as a decimal value.
 #
 # **Examples**:
 #
