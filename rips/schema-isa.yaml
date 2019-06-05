@@ -362,6 +362,9 @@ mhartids:
 #       - if FS field is_hardwired is True, then the distinct field is ignored by the tests.
 #       - No mode corresponding to a value in MPP must be unsupported (i.e. 1 cannot be present without the 'S' extension and '0' without the 'U' extension)
 #       - No value in SXL or UXL must exceed XLEN/32.
+#       - In 32 bit systems the SXL and UXL fields have no meaning and are ignored while testing.
+#       - In systems other than RV32 if S mode is not supported the SXL field is by default assumed to be hardwired to 0 and any input is ignored.
+#       - In systems other than RV32 if U mode is not supported the UXL field is by default assumed to be hardwired to 0 and any input is ignored.
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -427,6 +430,9 @@ mstatus:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: sset()
+                is_hardwired_to_0:
+                    type: boolean
+                    readonly: True
             default:
                 is_hardwired: True
                 hardwired_field: "MXL"
@@ -449,6 +455,9 @@ mstatus:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: sset()
+                is_hardwired_to_0:
+                    type: boolean
+                    readonly: True
             default:
                 is_hardwired: True
                 hardwired_field: "MXL"
