@@ -80,6 +80,50 @@ class schemaValidator(Validator):
                 if not(val<maxv):
                     self._error(field,"Invalid values.")
 
+    def _check_with_sxl_check(self,field,value):
+        '''Function to check whether the input list for SXL field is valid.'''
+        global extensions
+        global xlen
+        maxv=xlen/32
+        allowed = []
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.") 
+            if(len(list)==2):
+                for x in range(list[0],list[1]+1):
+                    allowed.append(x)
+            else:
+                allowed.append(list[0]) 
+        if any(x>maxv for x in allowed):
+            self._error(field,"Max allowed value is "+str(maxv))
+        if 0 in allowed:
+            if len(allowed) > 1:
+                self._error(field,"0 is not allowed as a legal value with other values")
+            elif extensions & int("0040000",16) == 0:
+                self._error(field,"SXL cannot be hardwired to 0 when S mode is supported")
+
+    def _check_with_uxl_check(self,field,value):
+        '''Function to check whether the input list for UXL field is valid.'''
+        global extensions
+        global xlen
+        maxv=xlen/32
+        allowed = []
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.") 
+            if(len(list)==2):
+                for x in range(list[0],list[1]+1):
+                    allowed.append(x)
+            else:
+                allowed.append(list[0]) 
+        if any(x>maxv for x in allowed):
+            self._error(field,"Max allowed value is "+str(maxv))
+        if 0 in allowed:
+            if len(allowed) > 1:
+                self._error(field,"0 is not allowed as a legal value with other values")
+            elif extensions & int("0100000",16) == 0:
+                self._error(field,"UXL cannot be hardwired to 0 when S mode is supported")
+
     def _check_with_hart_check(self,field,value):
         '''Function to check whether the hart ids are valid and atleast one is 0.'''
         if max(value) > (2**xlen)-1:

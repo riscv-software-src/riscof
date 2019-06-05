@@ -108,10 +108,10 @@ hw_data_misaligned_support:
 # fields:
 #
 #   - implemented: A boolean value indicating if the *misa* has been implemented or not.
-#   - MXL: needs to be described as *distinct-warl-func* providing a list of 2 bit legal values in int
-#       - distinct:
-#           - values: a list of legal values that the MXL field can take.(Allowed [1,2,3])
-#           - mode : a string describing one of the *distinct-update-warl-func*.
+#   - MXL: needs to be described as *range-warl-func* providing a list of 2 bit legal values in int
+#       - range:
+#           - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the range of values MXL field can take.(Allowed [1,2,3])
+#           - mode : a string describing one of the *range-update-warl-func*.
 # 
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
@@ -125,8 +125,8 @@ hw_data_misaligned_support:
 #     misa:
 #      implemented: True
 #      MXL:
-#          distinct:
-#              values : [1, 2]
+#          range:
+#              rangelist : [[1, 2]]
 #              mode  : 'UnChgd'
 #      Extensions:
 #          bitmask:
@@ -319,21 +319,25 @@ mhartids:
 #       - XS:
 #           - is_hardwired:  A boolean value indicating if platform has hardwired this field to 0.
 #       - FS: 
-#           - distinct: (distinct-warl-func)
-#               - values: A list of 2bit legal values that the FS field can take.(Allowed [0,1,2,3])
-#               - mode : A string describing one of the *distinct-update-warl-func*.
+#           - range: (range-warl-func)
+#               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values FS field can take.(Allowed [0,1,2,3])
+#               - mode : A string describing one of the *range-update-warl-func*.
 #       - MPP: 
-#           - distinct: (distinct-warl-func)
-#               - values: A list of legal values that the MPP field can take.(Allowed [1,2,3])
-#               - mode : A string describing one of the *distinct-update-warl-func*.
+#           - range: (range-warl-func)
+#               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values MPP field can take.(Allowed [0,1,3])
+#               - mode : A string describing one of the *range-update-warl-func*.
 #       - SXL: This field doesnt exist in systems where XLEN = 32
 #           - is_hardwired : A boolean value indicating if platform has hardwired this field to some other field.
 #           - hardwired_field: A string field indicating to which field SXL is hardwired. (Allowed MXL)
-#           - values: A list of legal values that SXL can take when not hardwired to MXL. Allowed values are [1, 2, 3]
+#           - range: (range-warl-func) when not hardwired to MXL
+#               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values SXL field can take.(Allowed [0,1,2,3])
+#               - mode : A string describing one of the *range-update-warl-func*.
 #       - UXL: This field doesnt exist in systems where XLEN = 32
 #           - is_hardwired : A boolean value indicating if platform has hardwired this field to some other field.
 #           - hardwired_field: A string field indicating to which field UXL is hardwired. (Allowed [MXL,SXL])
-#           - values: A list of legal values that SXL can take when not hardwired to MXL. Allowed values are [1, 2, 3]
+#           - range: (range-warl-func)
+#               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values UXL field can take.(Allowed [0,1,2,3])
+#               - mode : A string describing one of the *range-update-warl-func*.
 # 
 # **Examples**:
 #
@@ -365,8 +369,8 @@ mhartids:
 #       - No mode corresponding to a value in MPP must be unsupported (i.e. 1 cannot be present without the 'S' extension and '0' without the 'U' extension)
 #       - No value in SXL or UXL must exceed XLEN/32.
 #       - In 32 bit systems the SXL and UXL fields have no meaning and are ignored while testing.
-#       - In systems other than RV32 if S mode is not supported the SXL field is by default assumed to be hardwired to 0 and any input is ignored.
-#       - In systems other than RV32 if U mode is not supported the UXL field is by default assumed to be hardwired to 0 and any input is ignored.
+#       - In systems other than RV32 for SXL and UXL 0 is allowed to be present only if the corresponding modes are not supported.
+#       - In systems other than RV32 for SXL and UXL if 0 is present in the range list then no other entries are allowed.
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -441,17 +445,13 @@ mstatus:
                                 type: list
                                 schema:
                                     type: integer
-                                    allowed: [1,2,3]
-                            check_with: len_check
+                                    max: 3
+                            check_with: sxl_check
                         mode:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
                             default: "UnChgd"
                 implemented:
-                    type: boolean
-                    readonly: True
-                    # default_setter: lamda doc: sset()
-                is_hardwired_to_0:
                     type: boolean
                     readonly: True
             default:
@@ -477,8 +477,8 @@ mstatus:
                                 type: list
                                 schema:
                                     type: integer
-                                    allowed: [1,2,3]
-                            check_with: len_check
+                                    max: 3
+                            check_with: uxl_check
                         mode:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
@@ -487,9 +487,6 @@ mstatus:
                     type: boolean
                     readonly: True
                     # default_setter: lamda doc: sset()
-                is_hardwired_to_0:
-                    type: boolean
-                    readonly: True
             default:
                 is_hardwired: True
                 hardwired_field: "MXL"
@@ -561,16 +558,6 @@ mstatus:
                 is_hardwired:
                     type: boolean
             readonly: True
-        # MPIE:
-        #     type: dict
-        #     schema:
-        #         hardwired_val:
-        #             type: integer
-        #         is_hardwired:
-        #             type: boolean
-        #     readonly: True
-        #     default:
-        #         is_hardwired: False
         SPIE:
             type: dict
             schema:
@@ -587,16 +574,6 @@ mstatus:
                 is_hardwired:
                     type: boolean
             readonly: True
-        # MIE:
-        #     type: dict
-        #     schema:
-        #         hardwired_val:
-        #             type: integer
-        #         is_hardwired:
-        #             type: boolean
-        #     readonly: True
-        #     default:
-        #         is_hardwired: False
         SIE:
             type: dict
             schema:
@@ -616,18 +593,14 @@ mstatus:
 
 ### 
 # **Description**: Specifies the fields of the *mtvec* register.
-#       - BASE: needs to be described as *distinct-warl-func* providing a list of legal values in int or as a *range-warl-func* providing two integers specifying the range of legal values.       
-#           - range:
-#               - base: An integer indicating the lowest legal value.
-#               - bound: An integer indicating the highest legal value.(less than 2^XLEN-4)
-#               - mode: A string describing one of the *range-update-warl-func*
-#           - distinct:
-#               - values: A list of legal values that the BASE field can take.(all less than 2^XLEN-4)
-#               - mode : A string describing one of the *distinct-update-warl-func*.
+#       - BASE: needs to be described as *range-warl-func* providing two integers specifying the range of legal values.       
+#           - range: (range-warl-func)
+#               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values BASE field can take.
+#               - mode : A string describing one of the *range-update-warl-func*.
 #       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values in int
-#           - distinct:
-#               - values: A list of legal values that the MODE field can take.(Allowed [0,1])
-#               - mode : A string describing one of the *distinct-update-warl-func*.
+#           - range: (range-warl-func)
+#               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values MODE field can take.(Allowed [0,1])
+#               - mode : A string describing one of the *range-update-warl-func*.
 # 
 # **Examples**:
 #
@@ -635,18 +608,17 @@ mstatus:
 # 
 #   mtvec:
 #      BASE:
-#          distinct:
-#              values: [1000]
+#          range:
+#              rangelist: [[1000]]
 #              mode: 'UnChgd'
 #      MODE:
-#           distinct:
-#              values: [0,1]
+#           range:
+#              rangelist: [[0,1]]
 #              mode: "UnChgd"
 #
 # **Constraints**: 
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
-#       - No value in the list of legal values(in case of distinct func) or the base and bound(in case of range func)
-#         can exceed 2^XLEN-4 .
+#       - No value in the list of legal values can exceed 2^XLEN-4 for BASE.
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
@@ -879,11 +851,9 @@ mie:
 #       - bitmask:
 #           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
 #           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
-#
-#       - range:
-#           - base: An integer indicating the lowest legal value.
-#           - bound: An integer indicating the highest legal value.
-#           - mode: A string describing one of the *range-update-warl-func*
+#       - range: (range-warl-func)
+#           - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values mepc can take.
+#           - mode : A string describing one of the *range-update-warl-func*.
 # 
 # **Examples**:
 #
@@ -891,12 +861,12 @@ mie:
 # 
 #   mepc:
 #      range:
-#          bound: 0xFFFFFFFF
-#          base: 0x00
+#          rangelist: [[0xFFFFFFFF,0x80000]]
+#          mode: "UnChgd"
 #
 # **Constraints**: 
 #       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
-#       - The base and bound cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*).
+#       - No legal value can exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *range-warl-func*).
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #

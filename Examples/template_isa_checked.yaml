@@ -59,7 +59,6 @@ mstatus:
     is_hardwired: false
     hardwired_field: MXL
     implemented: true
-    is_hardwired_to_0: false
   UXL:
     range:
       rangelist:
@@ -68,7 +67,6 @@ mstatus:
     is_hardwired: false
     hardwired_field: MXL
     implemented: true
-    is_hardwired_to_0: false
   TSR:
     is_hardwired: false
   TW:
