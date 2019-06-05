@@ -108,15 +108,15 @@ hw_data_misaligned_support:
 # fields:
 #
 #   - implemented: A boolean value indicating if the *misa* has been implemented or not.
-#   - MXL: needs to be described as *distinct-warl-func* providing a list of 2 bit legal values in int
+#   - MXL: needs to be described as *distinct-warl-func* providing a list of 2 bit legal values 
 #       - distinct:
 #           - values: a list of legal values that the MXL field can take.(Allowed [1,2,3])
 #           - mode : a string describing one of the *distinct-update-warl-func*.
 # 
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
-#           - mask  : a 26 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a 26 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a 26 bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a 26 bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -127,7 +127,7 @@ hw_data_misaligned_support:
 #      MXL:
 #          distinct:
 #              values : [1, 2]
-#              mode  : 'UnChgd'
+#              mode  : 'Unchanged'
 #      Extensions:
 #          bitmask:
 #              mask:   0x12D
@@ -162,8 +162,8 @@ misa:
                             check_with: len_check
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest"]
+                            default: "Unchanged"
             allowed: ['distinct']
         Extensions:
             type: dict
@@ -188,7 +188,7 @@ misa:
 ### 
 # **Description**: Stores the VendorId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - id: A XLEN bit wide value in hexa-decimal equal to the VendorId
+#       - id: A XLEN bit wide value equal to the VendorId
 # 
 # **Examples**: 
 # 
@@ -218,7 +218,7 @@ mvendorid:
 ### 
 # **Description**: Stores the ArchitectureId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - id: A XLEN bit wide value in hexa-decimal equal to the ArchitectureId
+#       - id: A XLEN bit wide value equal to the ArchitectureId
 # 
 # **Examples**:
 #
@@ -249,7 +249,7 @@ marchid:
 ### 
 # **Description**: Stores the ImplementationId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - id: A XLEN bit wide value in hexa-decimal equal to the ImplementationId
+#       - id: A XLEN bit wide value equal to the ImplementationId
 # 
 # **Examples**:
 #
@@ -345,11 +345,11 @@ mhartids:
 #      FS:
 #          distinct:
 #              values: [0,1,2,3]
-#              mode: "UnChgd"
+#              mode: "Unchanged"
 #      MPP:
 #           distinct:
 #              values: [0,3]
-#              mode: "UnChgd"
+#              mode: "Unchanged"
 #      SXL:
 #           is_hardwired: False
 #           hardwired_field: "MXL"
@@ -392,8 +392,8 @@ mstatus:
                             allowed: [0,1,2,3]
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest"]
+                            default: "Unchanged"
         MPP:
             type: dict
             schema:
@@ -406,8 +406,8 @@ mstatus:
                             check_with: mpp_check
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest"]
+                            default: "Unchanged"
         SXL:
             type: dict
             schema:
@@ -575,7 +575,7 @@ mstatus:
 
 ### 
 # **Description**: Specifies the fields of the *mtvec* register.
-#       - BASE: needs to be described as *distinct-warl-func* providing a list of legal values in int or as a *range-warl-func* providing two integers specifying the range of legal values.       
+#       - BASE: needs to be described as *distinct-warl-func* providing a list of legal values or as a *range-warl-func* providing two integers specifying the range of legal values.       
 #           - range:
 #               - base: An integer indicating the lowest legal value.
 #               - bound: An integer indicating the highest legal value.(less than 2^XLEN-4)
@@ -583,7 +583,7 @@ mstatus:
 #           - distinct:
 #               - values: A list of legal values that the BASE field can take.(all less than 2^XLEN-4)
 #               - mode : A string describing one of the *distinct-update-warl-func*.
-#       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values in int
+#       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values 
 #           - distinct:
 #               - values: A list of legal values that the MODE field can take.(Allowed [0,1])
 #               - mode : A string describing one of the *distinct-update-warl-func*.
@@ -596,11 +596,11 @@ mstatus:
 #      BASE:
 #          distinct:
 #              values: [1000]
-#              mode: 'UnChgd'
+#              mode: 'Unchanged'
 #      MODE:
 #           distinct:
 #              values: [0,1]
-#              mode: "UnChgd"
+#              mode: "Unchanged"
 #
 # **Constraints**: 
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
@@ -625,8 +625,8 @@ mtvec:
                             type: integer
                         mode:
                             type: string
-                            allowed: ['Saturate','UnChgd','Addr']
-                            default: 'UnChgd'
+                            allowed: ['Saturate','Unchanged','Addr']
+                            default: 'Unchanged'
                     check_with: mtveccheck
                 distinct:
                     type: dict
@@ -637,8 +637,8 @@ mtvec:
                             check_with: mtvecdist
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest"]
+                            default: "Unchanged"
         MODE:
             type: dict
             schema:
@@ -650,8 +650,8 @@ mtvec:
                             allowed: [0,1]
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest"]
+                            default: "Unchanged"
     default:
         BASE:
             range:
@@ -664,8 +664,8 @@ mtvec:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -707,8 +707,8 @@ mideleg:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable exceptions
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -752,8 +752,8 @@ medeleg:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -796,8 +796,8 @@ mip:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -842,8 +842,8 @@ mie:
 #                  legal values allowed
 #
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 #
 #       - range:
 #           - base: An integer indicating the lowest legal value.
@@ -890,21 +890,21 @@ mepc:
                     type: integer
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
             check_with: rangecheck
     default:
         range:
             base: 0x00
             bound: 0xFFFFFFFF
-            mode: "UnChgd"
+            mode: "Unchanged"
 
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a 32 bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a 32 bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -946,8 +946,8 @@ mcountinhibit:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a 32 bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a 32 bit wide value providing the *default* field of the *bitmask-warl-func*.
 #       - is_hardwired: a boolean value indicating whether the register is hardwired or not.
 #       - hardwired_val: an integer indicating to what value the register is hardwired to.
 # 
@@ -1026,8 +1026,8 @@ mhpmcounter3:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1059,8 +1059,8 @@ mhpmcounter4:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1092,8 +1092,8 @@ mhpmcounter5:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1125,8 +1125,8 @@ mhpmcounter6:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1158,8 +1158,8 @@ mhpmcounter7:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1191,8 +1191,8 @@ mhpmcounter8:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1224,8 +1224,8 @@ mhpmcounter9:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1257,8 +1257,8 @@ mhpmcounter10:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1290,8 +1290,8 @@ mhpmcounter11:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1323,8 +1323,8 @@ mhpmcounter12:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1356,8 +1356,8 @@ mhpmcounter13:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1389,8 +1389,8 @@ mhpmcounter14:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1422,8 +1422,8 @@ mhpmcounter15:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1455,8 +1455,8 @@ mhpmcounter16:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1488,8 +1488,8 @@ mhpmcounter17:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1521,8 +1521,8 @@ mhpmcounter18:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1554,8 +1554,8 @@ mhpmcounter19:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1587,8 +1587,8 @@ mhpmcounter20:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1620,8 +1620,8 @@ mhpmcounter21:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1653,8 +1653,8 @@ mhpmcounter22:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1686,8 +1686,8 @@ mhpmcounter23:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1719,8 +1719,8 @@ mhpmcounter24:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1752,8 +1752,8 @@ mhpmcounter25:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1785,8 +1785,8 @@ mhpmcounter26:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1818,8 +1818,8 @@ mhpmcounter27:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1851,8 +1851,8 @@ mhpmcounter28:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1884,8 +1884,8 @@ mhpmcounter29:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1917,8 +1917,8 @@ mhpmcounter30:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
@@ -1950,8 +1950,8 @@ mhpmcounter31:
                     readonly: True
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
+                    allowed: ['Saturate','Unchanged','Addr']
+                    default: 'Unchanged'
                     readonly: True
         is_hardwired:
             type: boolean
