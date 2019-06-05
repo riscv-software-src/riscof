@@ -8,7 +8,7 @@ import os
 import re
 
 def sset():
-    '''Function to check and set defaults for all fields which are dependent on 
+    '''Function to check and set defaults for all "implemented" fields which are dependent on 
         the presence of 'S' extension.'''
     global inp_yaml
     if 'S' in inp_yaml['ISA']:
@@ -17,13 +17,31 @@ def sset():
         return False
 
 def uset():
-    '''Function to check and set defaults for all fields which are dependent on 
+    '''Function to check and set defaults for all "implemented" fields which are dependent on 
         the presence of 'U' extension.'''
     global inp_yaml
     if 'U' in inp_yaml['ISA']:
         return True
     else:
         return False
+
+def hsset():
+    '''Function to check and set defaults for all "is_hardwired_to_0" fields which are dependent on 
+        the presence of 'S' extension.'''
+    global inp_yaml
+    if 'S' in inp_yaml['ISA']:
+        return False
+    else:
+        return True
+
+def huset():
+    '''Function to check and set defaults for all "is_hardwired_to_0" fields which are dependent on 
+        the presence of 'U' extension.'''
+    global inp_yaml
+    if 'U' in inp_yaml['ISA']:
+        return False
+    else:
+        return True
 
 def nosset():
     '''Function to check and set defaults for all fields which are dependent on 
@@ -82,14 +100,15 @@ def miedelegset():
     else:
         return True
 
-
+def mepcset():
+    return {'range':{'rangelist':[[0,int("FFFFFFFF",16)]],'mode':"UnChgd"}}
 def add_def_setters(schema_yaml):
     '''Function to set the default setters for various fields in the schema'''
     # schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
     schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset()
     schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset()
-    schema_yaml['mstatus']['schema']['SXL']['schema']['is_hardwired_to_0']['default_setter'] = lambda doc: sset()
-    schema_yaml['mstatus']['schema']['UXL']['schema']['is_hardwired_to_0']['default_setter'] = lambda doc: uset()
+    schema_yaml['mstatus']['schema']['SXL']['schema']['is_hardwired_to_0']['default_setter'] = lambda doc: hsset()
+    schema_yaml['mstatus']['schema']['UXL']['schema']['is_hardwired_to_0']['default_setter'] = lambda doc: huset()
     schema_yaml['mstatus']['schema']['TVM']['default_setter'] = lambda doc: nosset()
     schema_yaml['mstatus']['schema']['TSR']['default_setter'] = lambda doc: nosset()
     schema_yaml['mstatus']['schema']['MXR']['default_setter'] = lambda doc: nosset()
@@ -103,6 +122,7 @@ def add_def_setters(schema_yaml):
     schema_yaml['mstatus']['schema']['TW']['default_setter'] = lambda doc: twset()
     schema_yaml['mideleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
     schema_yaml['medeleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
+    schema_yaml['mepc']['default_setter'] = lambda doc: mepcset()
     return schema_yaml
 
 def main():
