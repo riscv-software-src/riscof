@@ -75,6 +75,10 @@ def miedelegset():
 
 def mepcset():
     return {'range':{'rangelist':[[0,int("FFFFFFFF",16)]],'mode':"UnChgd"}}
+
+def mtvecset():
+    return {'BASE':{'range':{'rangelist':[[0,int("FFFFFFFC",16)]],'mode':"UnChgd"}},'MODE':{'range':{'rangelist':[[0]],'mode':"UnChgd"}}}
+
 def add_def_setters(schema_yaml):
     '''Function to set the default setters for various fields in the schema'''
     # schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
@@ -94,6 +98,7 @@ def add_def_setters(schema_yaml):
     schema_yaml['mideleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
     schema_yaml['medeleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
     schema_yaml['mepc']['default_setter'] = lambda doc: mepcset()
+    schema_yaml['mtvec']['default_setter'] = lambda doc: mtvecset()
     return schema_yaml
 
 def main():

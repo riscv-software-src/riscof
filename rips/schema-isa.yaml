@@ -349,12 +349,12 @@ mhartids:
 #      XS:
 #          is_hardwired: False
 #      FS:
-#          distinct:
-#              values: [0,1,2,3]
+#          range:
+#              rangelist: [[0,3]]
 #              mode: "UnChgd"
 #      MPP:
-#           distinct:
-#              values: [0,3]
+#           range:
+#              rangelist: [[0],[3]]
 #              mode: "UnChgd"
 #      SXL:
 #           is_hardwired: False
@@ -365,7 +365,7 @@ mhartids:
 #
 # **Constraints**:
 #       - if XS is hardwired to 0 and FS is hardwired to 0, then SD should also be hardwired to 0
-#       - if FS field is_hardwired is True, then the distinct field is ignored by the tests.
+#       - if FS field is_hardwired is True, then the range field is ignored by the tests.
 #       - No mode corresponding to a value in MPP must be unsupported (i.e. 1 cannot be present without the 'S' extension and '0' without the 'U' extension)
 #       - No value in SXL or UXL must exceed XLEN/32.
 #       - In 32 bit systems the SXL and UXL fields have no meaning and are ignored while testing.
@@ -597,7 +597,7 @@ mstatus:
 #           - range: (range-warl-func)
 #               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values BASE field can take.
 #               - mode : A string describing one of the *range-update-warl-func*.
-#       - MODE: needs to be described as *distinct-warl-func* providing a list of legal values in int
+#       - MODE: needs to be described as *range-warl-func* providing a list of legal values in int
 #           - range: (range-warl-func)
 #               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values MODE field can take.(Allowed [0,1])
 #               - mode : A string describing one of the *range-update-warl-func*.
@@ -659,14 +659,6 @@ mtvec:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
                             default: "UnChgd"
-    default:
-        BASE:
-            range:
-                base: 0x00
-                bound: 0xFFFFFFFC
-        MODE:
-            distinct:
-                values: [0]
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
