@@ -22,17 +22,18 @@ mhpmevent3:
   implemented: true
 mhpmevent4:
   range:
-    base: 256
-    bound: 18446744073709551360
-    mode: Saturate
+    rangelist:
+    - - 256
+      - 18446744073709551360
+    mode: UnChgd
   is_hardwired: false
   hardwired_val: 0
   implemented: true
 mhpmevent5:
-  distinct:
-    values:
-    - 0
-    - 2
+  range:
+    rangelist:
+    - - 0
+    - - 2
     mode: UnChgd
   is_hardwired: false
   hardwired_val: 0

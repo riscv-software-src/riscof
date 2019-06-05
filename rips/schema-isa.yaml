@@ -152,19 +152,21 @@ misa:
         MXL:
             type: dict
             schema:
-                distinct:
+                range:
                     type: dict
                     schema:
-                        values:
+                        rangelist:
                             type: list
-                            allowed: [1, 2, 3]
-                            default: []
+                            schema:
+                                type: list
+                                schema:
+                                    type: integer
+                                    allowed: [1,2,3]
                             check_with: len_check
                         mode:
                             type: string
                             allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
                             default: "UnChgd"
-            allowed: ['distinct']
         Extensions:
             type: dict
             schema:
@@ -387,29 +389,37 @@ mstatus:
         FS:
             type: dict
             schema:
-                distinct:
+                range:
                     type: dict
                     schema:
-                        values:
+                        rangelist:
                             type: list
-                            allowed: [0,1,2,3]
+                            schema:
+                                type: list
+                                schema:
+                                    type: integer
+                                    max: 3
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
                             default: "UnChgd"
         MPP:
             type: dict
             schema:
-                distinct:
+                range:
                     type: dict
                     schema:
-                        values:
+                        rangelist:
                             type: list
-                            allowed: [0, 1, 3]
+                            schema:
+                                type: list
+                                schema:
+                                    type: integer
+                                    allowed: [0,1,3]
                             check_with: mpp_check
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
                             default: "UnChgd"
         SXL:
             type: dict
@@ -422,10 +432,21 @@ mstatus:
                     dependencies: ['is_hardwired']
                     allowed: ["MXL"]
                     default: "MXL"
-                values:
-                    type: list
-                    allowed: [1, 2, 3]
-                    check_with: len_check
+                range:
+                    type: dict
+                    schema:
+                        rangelist:
+                            type: list
+                            schema:
+                                type: list
+                                schema:
+                                    type: integer
+                                    allowed: [1,2,3]
+                            check_with: len_check
+                        mode:
+                            type: string
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
+                            default: "UnChgd"
                 implemented:
                     type: boolean
                     readonly: True
@@ -447,10 +468,21 @@ mstatus:
                     dependencies: ['is_hardwired']
                     default: "MXL"
                     allowed: ["MXL","SXL"]
-                values:
-                    type: list
-                    allowed: [1, 2, 3]
-                    check_with: len_check
+                range:
+                    type: dict
+                    schema:
+                        rangelist:
+                            type: list
+                            schema:
+                                type: list
+                                schema:
+                                    type: integer
+                                    allowed: [1,2,3]
+                            check_with: len_check
+                        mode:
+                            type: string
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
+                            default: "UnChgd"
                 implemented:
                     type: boolean
                     readonly: True
@@ -626,40 +658,34 @@ mtvec:
             schema:
                 range:
                     type: dict
-                    excludes: ['distinct']
                     schema: 
-                        base:
-                            type: integer
-                        bound:
-                            type: integer
-                        mode:
-                            type: string
-                            allowed: ['Saturate','UnChgd','Addr']
-                            default: 'UnChgd'
-                    check_with: mtveccheck
-                distinct:
-                    type: dict
-                    excludes: ['range']
-                    schema:
-                        values:
+                        rangelist:
                             type: list
-                            check_with: mtvecdist
+                            schema:
+                                type: list
+                                schema:
+                                    type: integer
+                            check_with: mtveccheck
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
                             default: "UnChgd"
         MODE:
             type: dict
             schema:
-                distinct:
+                range:
                     type: dict
                     schema:
-                        values:
+                        rangelist:
                             type: list
-                            allowed: [0,1]
+                            schema:
+                                type: list
+                                schema:
+                                    type: integer
+                                    max: 2
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
+                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
                             default: "UnChgd"
     default:
         BASE:
@@ -891,22 +917,18 @@ mepc:
                     check_with: max_length
         range:
             type: dict
-            excludes: ['bitmask']
-            schema:
-                base:
-                    type: integer
-                bound:
-                    type: integer
+            schema: 
+                rangelist:
+                    type: list
+                    schema:
+                        type: list
+                        schema:
+                            type: integer
+                    check_with: rangecheck 
                 mode:
                     type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-            check_with: rangecheck
-    default:
-        range:
-            base: 0x00
-            bound: 0xFFFFFFFF
-            mode: "UnChgd"
+                    allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
+                    default: "UnChgd"
 
 
 ### 
@@ -1019,25 +1041,9 @@ mcounteren:
 #
 # `------------------------------------------------------------------------------------------------------------------------------`
 #
-mhpmcounter3:
+mhpmcounter3: &id001
     type: dict
     schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
         is_hardwired:
             type: boolean
             default: False
@@ -1051,963 +1057,31 @@ mhpmcounter3:
     default:
         is_hardwired: False
         hardwired_val: 0
-
-mhpmcounter4:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter5:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter6:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter7:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter8:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter9:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter10:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter11:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter12:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter13:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter14:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter15:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter16:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter17:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter18:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter19:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter20:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter21:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter22:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter23:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter24:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter25:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter26:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter27:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter28:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter29:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter30:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-mhpmcounter31:
-    type: dict
-    schema:
-        range:
-            type: dict
-            schema:
-                base:
-                    type: integer
-                    default: 0x00
-                    readonly: True
-                bound:
-                    type: integer
-                    default: 0xFFFFFFFFFFFFFFFF
-                    readonly: True
-                mode:
-                    type: string
-                    allowed: ['Saturate','UnChgd','Addr']
-                    default: 'UnChgd'
-                    readonly: True
-        is_hardwired:
-            type: boolean
-            default: False
-        hardwired_val:
-            type: integer
-            default: 0
-        implemented:
-            type: boolean
-            default: True
-            readonly: True
-    default:
-        is_hardwired: False
-        hardwired_val: 0
-
-
-
-# # Platform environment
-# # Name of the Target
-# USER_TARGET:
-#     type: string
-#     required: True
-# # Directory containing the platform specific headers
-# USER_ENV_DIR:
-#     type: string
-#     required: True
-# # Linker script to be used during compilation of test
-# USER_LINKER:
-#     type: string
-#     required: True
-# # User defined ABI to be used during compilation
-# USER_ABI:
-#     type: string
-#     required: True
-# USER_EXECUTABLE:
-#     type: string
-#     required: True
-
-# # Execution Enviornment
-# RISCV-PREFIX:
-#     type: string
-#     default: riscv64-unknown-elf-
-#     required: True
-# USER_SIGN:
-#     type: string
-#     required: True
-# USER_POST_SIM:
-#     type: string
-#     default: ''
-#     required: False
+mhpmcounter4: *id001
+mhpmcounter5: *id001
+mhpmcounter6: *id001
+mhpmcounter7: *id001
+mhpmcounter8: *id001
+mhpmcounter9: *id001
+mhpmcounter10: *id001
+mhpmcounter11: *id001
+mhpmcounter12: *id001
+mhpmcounter13: *id001
+mhpmcounter14: *id001
+mhpmcounter15: *id001
+mhpmcounter16: *id001
+mhpmcounter17: *id001
+mhpmcounter18: *id001
+mhpmcounter19: *id001
+mhpmcounter20: *id001
+mhpmcounter21: *id001
+mhpmcounter22: *id001
+mhpmcounter23: *id001
+mhpmcounter24: *id001
+mhpmcounter25: *id001
+mhpmcounter26: *id001
+mhpmcounter27: *id001
+mhpmcounter28: *id001
+mhpmcounter29: *id001
+mhpmcounter30: *id001
+mhpmcounter31: *id001
