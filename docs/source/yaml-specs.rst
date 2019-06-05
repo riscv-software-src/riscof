@@ -14,11 +14,11 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 
   * A list of distinct values which are considered as legal and any value not in the list is considered as illegal.
   * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*distinct-update-warl-func*):
-      * UnChgd: The value remains unchanged
-      * NextUp: ceiling(*WriteVal*) i.e. the next larger or the largest element of the list
-      * NextDown: floor(*WriteVal*) i.e. the next smalles or the smallest element of the list
-      * NearUp: celing(*WriteVal*) i.e. the closest element in the list, with the larger element being chosen in case of a tie.
-      * NearDown: floor(*WriteVal*) i.e. the closes element in the list, with the smaller element being chosen in case of a tie
+      * Unchanged: The value remains unchanged
+      * Nextup: ceiling(*WriteVal*) i.e. the next larger or the largest element of the list
+      * Nextdown: floor(*WriteVal*) i.e. the next smalles or the smallest element of the list
+      * Nearup: celing(*WriteVal*) i.e. the closest element in the list, with the larger element being chosen in case of a tie.
+      * Neardown: floor(*WriteVal*) i.e. the closes element in the list, with the smaller element being chosen in case of a tie
       * Largest: maximum of all legal values
       * Smallest: minimum of all legal values
 
@@ -28,7 +28,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 
   distinct:
     values: [0,55,658,1026]
-    mode: "UnChgd"
+    mode: "Unchanged"
     
 2. **Range** (*range-warl-func*)
 
@@ -46,7 +46,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
              return no-change
 
 
-      * UnChgd
+      * Unchanged
 
         .. code-block:: python
     
@@ -96,7 +96,9 @@ ISA YAML Spec
 This section describes each node of the ISA-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
 
-An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/eg_elaborate_isa.yaml>`_
+All fields accept values as integers or hexadecimals(can be used interchangeably) unless specified otherwise.
+
+An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_isa.yaml>`_
 
 
 .. autoyaml:: ../rips/schema-isa.yaml
@@ -109,7 +111,7 @@ Platform YAML Spec
 This section describes each node of the PLATFORM-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
 
-An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/eg_elaborate_platform.yaml>`_
+An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_platform.yaml>`_
 
 
 .. autoyaml:: ../rips/schema-platform.yaml
@@ -126,7 +128,7 @@ The following variables are available and will be replaced before execution of c
   * *${platform}*-The absolute path to the Platform spec yaml for DUT.
 
 This section describes each node of the ENVIRONMENT-YAML. 
-An example of the ENV yaml for spike is available: `HERE <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/template_env.yaml>`_
+An example of the ENV yaml for spike is available: `HERE <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_env.yaml>`_
 
 .. autoyaml:: ../Examples/template_env.yaml
 
