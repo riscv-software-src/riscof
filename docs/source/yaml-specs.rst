@@ -15,7 +15,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
   * represented as a list of 2 or 1 element list where each represents a set.
   * Legal values are defined as every value present in the union of disjoint sets represented in the list. 
   * Each set is represented as (lower,upper) i.e any value>=lower and value<=upper belongs to the set.
-  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*distinct-update-warl-func*):
+  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*range-update-warl-func*):
       * UnChgd: The value remains unchanged
       * NextUp: ceiling(*WriteVal*) i.e. the next larger or the largest element of the list
       * NextDown: floor(*WriteVal*) i.e. the next smallest or the smallest element of the list
