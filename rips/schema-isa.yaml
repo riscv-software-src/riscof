@@ -108,7 +108,7 @@ hw_data_misaligned_support:
 # fields:
 #
 #   - implemented: A boolean value indicating if the *misa* has been implemented or not.
-#   - MXL: needs to be described as *range-warl-func* providing a list of 2 bit legal values in int
+#   - MXL: needs to be described as *range-warl-func*
 #       - range:
 #           - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the range of values MXL field can take.(Allowed [1,2,3])
 #           - mode : a string describing one of the *range-update-warl-func*.
@@ -597,7 +597,7 @@ mstatus:
 #           - range: (range-warl-func)
 #               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values BASE field can take.
 #               - mode : A string describing one of the *range-update-warl-func*.
-#       - MODE: needs to be described as *range-warl-func* providing a list of legal values in int
+#       - MODE: needs to be described as *range-warl-func*
 #           - range: (range-warl-func)
 #               - rangelist: a list of 2 or 1 element lists which specify the lower and upper bounds of the disjoint set of values MODE field can take.(Allowed [0,1])
 #               - mode : A string describing one of the *range-update-warl-func*.
