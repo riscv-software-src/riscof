@@ -88,6 +88,8 @@ def add_def_setters(schema_yaml):
     # schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
     schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset()
     schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset()
+    schema_yaml['mstatus']['schema']['SXL']['schema']['is_hardwired_to_0']['default_setter'] = lambda doc: sset()
+    schema_yaml['mstatus']['schema']['UXL']['schema']['is_hardwired_to_0']['default_setter'] = lambda doc: uset()
     schema_yaml['mstatus']['schema']['TVM']['default_setter'] = lambda doc: nosset()
     schema_yaml['mstatus']['schema']['TSR']['default_setter'] = lambda doc: nosset()
     schema_yaml['mstatus']['schema']['MXR']['default_setter'] = lambda doc: nosset()
