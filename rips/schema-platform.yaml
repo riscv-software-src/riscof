@@ -1,7 +1,7 @@
 ### 
 # **Description**: Stores the fields for memory mapped *mtime* register.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - address: A hexa-decimal value equal to the physical address at which the register is present.
+#       - address: A value equal to the physical address at which the register is present.
 # 
 # **Examples**: 
 # 
@@ -30,7 +30,7 @@ mtime:
 ### 
 # **Description**: Stores the fields for memory mapped *mtimecmp* register.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - address: A hexa-decimal value equal to the physical address at which the register is present.
+#       - address: A value equal to the physical address at which the register is present.
 # 
 # **Examples**: 
 # 
@@ -170,8 +170,8 @@ mtval:
 #           - bound: An integer indicating the highest legal value.(Less than 2^XLEN)
 #           - mode: A string describing one of the *range-update-warl-func*
 #       - bitmask:
-#           - mask  : an XLEN bit wide hexa-decimal value providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide hexa-decimal value providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : an XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 #       - distinct:
 #           - values: A list of legal values that the register can take.(Less than 2^XLEN)
 #           - mode : A string describing one of the *distinct-update-warl-func*.
