@@ -74,10 +74,10 @@ def miedelegset():
         return True
 
 def mepcset():
-    return {'range':{'rangelist':[[0,int("FFFFFFFF",16)]],'mode':"UnChgd"}}
+    return {'range':{'rangelist':[[0,int("FFFFFFFF",16)]],'mode':"Unchanged"}}
 
 def mtvecset():
-    return {'BASE':{'range':{'rangelist':[[0,int("FFFFFFFC",16)]],'mode':"UnChgd"}},'MODE':{'range':{'rangelist':[[0]],'mode':"UnChgd"}}}
+    return {'BASE':{'range':{'rangelist':[[0,int("FFFFFFFC",16)]],'mode':"Unchanged"}},'MODE':{'range':{'rangelist':[[0]],'mode':"Unchanged"}}}
 
 def add_def_setters(schema_yaml):
     '''Function to set the default setters for various fields in the schema'''
