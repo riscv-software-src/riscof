@@ -25,9 +25,9 @@ copyright = '2019 InCore Semiconductors, IIT Madras'
 author = 'Neel Gala, S Pawan Kumar, Lavanya Jagan'
 
 # The short X.Y version
-version = ''
+version = '1.2.0'
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '1.1.3'
 
 
 # -- General configuration ---------------------------------------------------
@@ -48,7 +48,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinxcontrib.autoyaml',
 ]
-
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -79,30 +78,35 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output -------------------------------------------------
 
+gitlab_url = 'https://gitlab.com/incoresemi/riscof'
+html_show_sourcelink = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
-#html_theme_options = {
-#        'display_version': True,
-#        'includehidden': False,
-#        'collapse_navigation': False,
-#        'sticky_navigation': True,
-#        'navigation_depth': -1,
-#        'includehidden': False,
-#        'titles_only': False
-#        }
+#html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
-    "description": "For RISC-V Compliance",
-    "fixed_sidebar": True,
-    "sidebar_includehidden": True,
-    "sidebar_collapse": True,
-    "show_relbars": True,
-    "show_related": True,
-}
-html_sidebars = {
-    "**": ["about.html", "navigation.html", "searchbox.html", "donate.html"]
-}
+        'prev_next_buttons_location': 'both',
+        'display_version': True,
+        'includehidden': False,
+        'collapse_navigation':True,
+        'sticky_navigation': True,
+        'navigation_depth': 4,
+        'includehidden': True,
+        'titles_only': False
+        }
+#html_theme_options = {
+#    "description": "For RISC-V Compliance",
+#    "fixed_sidebar": True,
+#    "sidebar_includehidden": True,
+#    "sidebar_collapse": True,
+#    "show_relbars": True,
+#    "show_related": True,
+#    'show_powered_by': False,
+#}
+#html_sidebars = {
+#    "**": ["about.html", "navigation.html", "searchbox.html", "donate.html"]
+#}
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
