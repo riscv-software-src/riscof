@@ -127,7 +127,7 @@ hw_data_misaligned_support:
 #      MXL:
 #          range:
 #              rangelist : [[1, 2]]
-#              mode  : 'UnChgd'
+#              mode  : 'Unchanged'
 #      Extensions:
 #          bitmask:
 #              mask:   0x12D
@@ -165,8 +165,8 @@ misa:
                             check_with: len_check
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest"]
+                            default: "Unchanged"
         Extensions:
             type: dict
             schema:
@@ -351,11 +351,11 @@ mhartids:
 #      FS:
 #          range:
 #              rangelist: [[0,3]]
-#              mode: "UnChgd"
+#              mode: "Unchanged"
 #      MPP:
 #           range:
 #              rangelist: [[0],[3]]
-#              mode: "UnChgd"
+#              mode: "Unchanged"
 #      SXL:
 #           is_hardwired: False
 #           hardwired_field: "MXL"
@@ -405,8 +405,8 @@ mstatus:
                                     max: 3
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+                            default: "Unchanged"
         MPP:
             type: dict
             schema:
@@ -423,8 +423,8 @@ mstatus:
                             check_with: mpp_check
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+                            default: "Unchanged"
         SXL:
             type: dict
             schema:
@@ -449,8 +449,8 @@ mstatus:
                             check_with: sxl_check
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+                            default: "Unchanged"
                 implemented:
                     type: boolean
                     readonly: True
@@ -481,8 +481,8 @@ mstatus:
                             check_with: uxl_check
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+                            default: "Unchanged"
                 implemented:
                     type: boolean
                     readonly: True
@@ -610,11 +610,11 @@ mstatus:
 #      BASE:
 #          range:
 #              rangelist: [[1000]]
-#              mode: 'UnChgd'
+#              mode: 'Unchanged'
 #      MODE:
 #           range:
 #              rangelist: [[0,1]]
-#              mode: "UnChgd"
+#              mode: "Unchanged"
 #
 # **Constraints**: 
 #       - The maximum in the list of values specified for MODE cannot exceed 1.
@@ -640,8 +640,8 @@ mtvec:
                             check_with: mtveccheck
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+                            default: "Unchanged"
         MODE:
             type: dict
             schema:
@@ -657,8 +657,8 @@ mtvec:
                                     max: 2
                         mode:
                             type: string
-                            allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-                            default: "UnChgd"
+                            allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+                            default: "Unchanged"
 
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
@@ -854,7 +854,7 @@ mie:
 #   mepc:
 #      range:
 #          rangelist: [[0xFFFFFFFF,0x80000]]
-#          mode: "UnChgd"
+#          mode: "Unchanged"
 #
 # **Constraints**: 
 #       - The mask and default cannot exceed the maximum value which can be represented by XLEN bits(2^XLEN-1) (in case of *bitmask-warl-func*).
@@ -889,8 +889,8 @@ mepc:
                     check_with: rangecheck 
                 mode:
                     type: string
-                    allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-                    default: "UnChgd"
+                    allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+                    default: "Unchanged"
 
 
 ### 

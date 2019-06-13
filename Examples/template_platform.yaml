@@ -16,12 +16,12 @@ mhpmevent3:
 mhpmevent4:
   range:
     rangelist: [[256,0xFFFFFFFFFFFFFF00]]
-    mode: UnChgd
+    mode: Unchanged
   # readonly: True
   # hardwired: '0' 
 mhpmevent5:
   range:
     rangelist: [[0],[2]]
-    mode: "UnChgd"
+    mode: "Unchanged"
   # readonly: True
   # hardwired: '0'   

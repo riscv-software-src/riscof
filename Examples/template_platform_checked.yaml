@@ -25,7 +25,7 @@ mhpmevent4:
     rangelist:
     - - 256
       - 18446744073709551360
-    mode: UnChgd
+    mode: Unchanged
   is_hardwired: false
   hardwired_val: 0
   implemented: true
@@ -34,7 +34,7 @@ mhpmevent5:
     rangelist:
     - - 0
     - - 2
-    mode: UnChgd
+    mode: Unchanged
   is_hardwired: false
   hardwired_val: 0
   implemented: true

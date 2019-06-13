@@ -185,7 +185,7 @@ mtval:
 #   mhpmevent3:
 #      range:
 #         rangelist: [[0],[5,6],[8,9]]
-#         mode: "UnChgd"
+#         mode: "Unchanged"
 #
 # **Constraints**: 
 #       - The mask and default (incase of bitmask func) cannot exceed the maximum value which can be represented by XLEN bits.
@@ -198,7 +198,7 @@ mhpmevent3: &id001
   schema:
     bitmask:
       type: dict
-      excludes: ['range','distinct']
+      excludes: ['range']
       schema:
         mask:
           type: integer
@@ -220,8 +220,8 @@ mhpmevent3: &id001
           check_with: rangecheck
         mode:
           type: string
-          allowed: ["UnChgd","NextUp","NextDown","NearUp","NearDown","Largest","Smallest","Addr"]
-          default: "UnChgd"
+          allowed: ["Unchanged","Nextup","Nextdown","Nearup","Neardown","Largest","Smallest","Addr"]
+          default: "Unchanged"
     is_hardwired:
       type: boolean
       default: False

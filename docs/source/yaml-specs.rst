@@ -61,7 +61,7 @@ ISA YAML Spec
 This section describes each node of the ISA-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
 
-An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/eg_elaborate_isa.yaml>`_
+An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/eg_elaborate_isa.yaml>`_
 
 
 .. autoyaml:: ../rips/schema-isa.yaml
@@ -74,7 +74,7 @@ Platform YAML Spec
 This section describes each node of the PLATFORM-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
 
-An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/eg_elaborate_platform.yaml>`_
+An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/eg_elaborate_platform.yaml>`_
 
 
 .. autoyaml:: ../rips/schema-platform.yaml
@@ -91,7 +91,7 @@ The following variables are available and will be replaced before execution of c
   * *${platform}*-The absolute path to the Platform spec yaml for DUT.
 
 This section describes each node of the ENVIRONMENT-YAML. 
-An example of the ENV yaml for spike is available: `HERE <https://gitlab.com/incoresemi/riscof/blob/1-general-improvements-and-standardisation-of-schema-yaml/Examples/template_env.yaml>`_
+An example of the ENV yaml for spike is available: `HERE <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_env.yaml>`_
 
 .. autoyaml:: ../Examples/template_env.yaml
 
