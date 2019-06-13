@@ -9,7 +9,7 @@ Welcome to RISCOF
 
 For more information on the official RISC-V compliance and test suite please visit: `Github <https://github.com/riscv/riscv-compliance>`_
 
-RISCOF [`Repository <https://gitlab.com/incoresemi/riscof/tree/1-general-improvements-and-standardisation-of-schema-yaml>`_]
+RISCOF [`Repository <https://gitlab.com/incoresemi/riscof>`_]
 
 
 Overview

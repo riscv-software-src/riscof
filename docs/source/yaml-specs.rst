@@ -10,51 +10,20 @@ Since the RISC-V privilege spec indicates several CSRs and sub-fields of CSRs to
 
 The following proposal for WARL functions was made by **Allen Baum (: esperanto)** and has been adopted in this framework.
 
-1. **Distinct** (*distinct-warl-func*) 
+1. **Range** (*range-warl-func*)
 
-  * A list of distinct values which are considered as legal and any value not in the list is considered as illegal.
-  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*distinct-update-warl-func*):
+  * represented as a list of 2 or 1 element list where each represents a set.
+  * Legal values are defined as every value present in the union of disjoint sets represented in the list. 
+  * Each set is represented as (lower,upper) i.e any value>=lower and value<=upper belongs to the set.
+  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*range-update-warl-func*):
       * Unchanged: The value remains unchanged
       * Nextup: ceiling(*WriteVal*) i.e. the next larger or the largest element of the list
-      * Nextdown: floor(*WriteVal*) i.e. the next smalles or the smallest element of the list
+      * Nextdown: floor(*WriteVal*) i.e. the next smallest or the smallest element of the list
       * Nearup: celing(*WriteVal*) i.e. the closest element in the list, with the larger element being chosen in case of a tie.
       * Neardown: floor(*WriteVal*) i.e. the closes element in the list, with the smaller element being chosen in case of a tie
       * Largest: maximum of all legal values
       * Smallest: minimum of all legal values
-
-**Example**:
-
-.. code-block:: python
-
-  distinct:
-    values: [0,55,658,1026]
-    mode: "Unchanged"
-    
-2. **Range** (*range-warl-func*)
-
-  * Legal values are defined as all values that lie within the set: *[base, bound]* inclusive
-  * When an illegal value is written (*WriteVal*) to this field, the next valid value of the field can be deduced based on the following modes(*range-update-warl-func*):
-      * Saturate: 
-
-        .. code-block:: python 
-
-          if ( WriteVal < base )
-             return base; 
-          else if( WriteVal > bound )
-             return bound;
-          else 
-             return no-change
-
-
-      * Unchanged
-
-        .. code-block:: python
-    
-          if ( WriteVal < base || WriteVal > bound)
-             return no-change
-
       * Addr: 
-
         .. code-block:: python
     
           if ( WriteVal < base || WriteVal > bound)
@@ -65,15 +34,11 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
 .. code-block:: python
 
   range:
-    base: 256
-    bound: 0xFFFFFFFFFFFFFF00
-    mode: Saturate
+    rangelist: [[256,300],[25],[30],[350,390]]
+    mode: Addr
     
 
-*Proposal* (By **Allen Baum (: esperanto)**): 
-To treat this field as a list of lists i.e. take in multiple pairs of base and bounds and a value lying inbetween any one of the pairs is considered legal.
-
-3. **Bitmask** (*bitmask-warl-func*)
+2. **Bitmask** (*bitmask-warl-func*)
 
   * This function is represented with 2 fields: the *mask* and the *default*
   * For the read only positions, the corresponding bits are cleared (=0) in the *mask* and the rest of the bits are set (=1).

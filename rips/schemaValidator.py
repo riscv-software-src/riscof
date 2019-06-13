@@ -72,9 +72,57 @@ class schemaValidator(Validator):
         '''Function to check whether the given value is less than XLEN/32(For check).'''
         global xlen
         global extensions
-        if(len(value) > 0):
-            if max(value) > xlen/32:
-                self._error(field,"Max value is greater than " + str(int(xlen/32)))
+        maxv = xlen/32+1
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.")
+            for val in list:
+                if not(val<maxv):
+                    self._error(field,"Invalid values.")
+
+    def _check_with_sxl_check(self,field,value):
+        '''Function to check whether the input list for SXL field is valid.'''
+        global extensions
+        global xlen
+        maxv=xlen/32
+        allowed = []
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.") 
+            if(len(list)==2):
+                for x in range(list[0],list[1]+1):
+                    allowed.append(x)
+            else:
+                allowed.append(list[0]) 
+        if any(x>maxv for x in allowed):
+            self._error(field,"Max allowed value is "+str(maxv))
+        if 0 in allowed:
+            if len(allowed) > 1:
+                self._error(field,"0 is not allowed as a legal value with other values")
+            elif extensions & int("0040000",16) == 0:
+                self._error(field,"SXL cannot be hardwired to 0 when S mode is supported")
+
+    def _check_with_uxl_check(self,field,value):
+        '''Function to check whether the input list for UXL field is valid.'''
+        global extensions
+        global xlen
+        maxv=xlen/32
+        allowed = []
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.") 
+            if(len(list)==2):
+                for x in range(list[0],list[1]+1):
+                    allowed.append(x)
+            else:
+                allowed.append(list[0]) 
+        if any(x>maxv for x in allowed):
+            self._error(field,"Max allowed value is "+str(maxv))
+        if 0 in allowed:
+            if len(allowed) > 1:
+                self._error(field,"0 is not allowed as a legal value with other values")
+            elif extensions & int("0100000",16) == 0:
+                self._error(field,"UXL cannot be hardwired to 0 when S mode is supported")
 
     def _check_with_hart_check(self,field,value):
         '''Function to check whether the hart ids are valid and atleast one is 0.'''
@@ -87,7 +135,6 @@ class schemaValidator(Validator):
         '''Function to check whether the bitmask given for the Extensions field in misa is valid.'''
         global xlen
         global extensions
-        # value=value['bitmask']
         val = value['mask'] ^ value['default'] ^ extensions
         if(val > 0):
             self._error(field,"Extension Bitmask error.")
@@ -95,22 +142,36 @@ class schemaValidator(Validator):
     def _check_with_mpp_check(self,field,value):
         '''Function to check whether the modes specified in MPP field in mstatus is supported'''
         global extensions
-        if(0 in value) and extensions ^ int("0100000",16) == 0:
+        allowed = []
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.") 
+            if(len(list)==2):
+                for x in range(list[0],list[1]+1):
+                    allowed.append(x)
+            else:
+                allowed.append(list[0])     
+        if(0 in allowed) and extensions & int("0100000",16) == 0:
             self._error(field,"0 not a valid entry as U extension is not supported.")
-        if(1 in value) and extensions ^ int("0040000",16) == 0:
+        if(1 in allowed) and extensions & int("0040000",16) == 0:
             self._error(field,"1 not a valid entry as S extension is not supported.")
 
     def _check_with_mtveccheck(self,field,value):
         '''Function to check whether the inputs in range type in mtvec are valid.'''
         global xlen
-        maxv = 2**(xlen)-4
-        if not(value['base']<=maxv and value['bound']<=maxv):
-            self._error(field,"Invalid values.")
+        maxv = 2**(xlen)-3
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.")
+            for val in list:
+                if not(val<maxv):
+                    self._error(field,"Invalid values.")
     
     def _check_with_mtvecdist(self,field,value):
         '''Function to check whether the inputs in distinct type in mtvec are valid.'''
         global xlen
         if max(value)>2**(xlen-2)-1:
+            self._error(field,"value cant be greater than "+str(2**(xlen)-4))
             self._error(field,"Value cant be greater than "+str(2**(xlen)-4))
     
     def _check_with_hardwirecheck(self,field,value):
@@ -128,15 +189,23 @@ class schemaValidator(Validator):
     def _check_with_rangecheck(self,field,value):
         '''Function to check whether the inputs in range type in WARL fields are valid.'''
         global xlen
-        maxv = 2**(xlen)-1
-        if not(value['base']<=maxv and value['bound']<=maxv):
-            self._error(field,"Invalid values.")
+        maxv = 2**(xlen)
+        for list in value:
+            if(len(list)>2):
+                self._error(field,"Only two values are allowed in each sub list.")
+            for val in list:
+                if not(val<maxv):
+                    self._error(field,"Value greater than "+str(maxv))
 
     # def _check_with_rangecheck_64(self,field,value):
     #     '''Function to check whether the inputs in range type in 64 bit WARL fields are valid.'''
     #     maxv = 2**64-1
-    #     if not(value['base']<=maxv and value['bound']<=maxv):
-    #         self._error(field,"Invalid values.")
+    #     for list in value:
+    #         if(len(list)>2):
+    #             self._error(field,"Only two values are allowed in each sub list.")
+    #         for val in list:
+    #             if not(val<maxv):
+    #                 self._error(field,"Invalid values."))
     
     def _check_with_mcause_check(self,field,value):
         '''Function to verify the inputs for mcause.'''

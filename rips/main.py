@@ -7,23 +7,14 @@ import sys
 import os
 import re
 
-def sset():
-    '''Function to check and set defaults for all fields which are dependent on 
-        the presence of 'S' extension.'''
+def iset():
+    '''Function to check and set defaults for all "implemented" fields which are dependent on 
+        the xlen.'''
     global inp_yaml
-    if 'S' in inp_yaml['ISA']:
-        return True
-    else:
+    if '32' in inp_yaml['ISA']:
         return False
-
-def uset():
-    '''Function to check and set defaults for all fields which are dependent on 
-        the presence of 'U' extension.'''
-    global inp_yaml
-    if 'U' in inp_yaml['ISA']:
-        return True
     else:
-        return False
+        return True
 
 def nosset():
     '''Function to check and set defaults for all fields which are dependent on 
@@ -82,12 +73,17 @@ def miedelegset():
     else:
         return True
 
+def mepcset():
+    return {'range':{'rangelist':[[0,int("FFFFFFFF",16)]],'mode':"Unchanged"}}
+
+def mtvecset():
+    return {'BASE':{'range':{'rangelist':[[0,int("FFFFFFFC",16)]],'mode':"Unchanged"}},'MODE':{'range':{'rangelist':[[0]],'mode':"Unchanged"}}}
 
 def add_def_setters(schema_yaml):
     '''Function to set the default setters for various fields in the schema'''
     # schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
-    schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: sset()
-    schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: uset()
+    schema_yaml['mstatus']['schema']['SXL']['schema']['implemented']['default_setter'] = lambda doc: iset()
+    schema_yaml['mstatus']['schema']['UXL']['schema']['implemented']['default_setter'] = lambda doc: iset()
     schema_yaml['mstatus']['schema']['TVM']['default_setter'] = lambda doc: nosset()
     schema_yaml['mstatus']['schema']['TSR']['default_setter'] = lambda doc: nosset()
     schema_yaml['mstatus']['schema']['MXR']['default_setter'] = lambda doc: nosset()
@@ -101,6 +97,8 @@ def add_def_setters(schema_yaml):
     schema_yaml['mstatus']['schema']['TW']['default_setter'] = lambda doc: twset()
     schema_yaml['mideleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
     schema_yaml['medeleg']['schema']['implemented']['default_setter'] = lambda doc:miedelegset()
+    schema_yaml['mepc']['default_setter'] = lambda doc: mepcset()
+    schema_yaml['mtvec']['default_setter'] = lambda doc: mtvecset()
     return schema_yaml
 
 def main():
@@ -200,9 +198,11 @@ def main():
         logger.error(str(error_list))
         sys.exit(0)
 
-    file_name_split=foo.split('.')
-    output_filename=file_name_split[0]+'_checked.'+file_name_split[1]
-    outfile=open(output_filename,'w')
+    logger.info('Performing Additional Checks')
+
+    file_name_split = foo.split('.')
+    output_filename = file_name_split[0]+'_checked.'+file_name_split[1]
+    outfile = open(output_filename, 'w')
     logger.info('Dumping out Normalized Checked YAML: '+output_filename)
     yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
 
