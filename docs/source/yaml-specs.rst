@@ -61,7 +61,9 @@ ISA YAML Spec
 This section describes each node of the ISA-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
 
-An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/eg_elaborate_isa.yaml>`_
+All fields accept values as integers or hexadecimals(can be used interchangeably) unless specified otherwise.
+
+An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_isa.yaml>`_
 
 
 .. autoyaml:: ../rips/schema-isa.yaml
@@ -74,7 +76,7 @@ Platform YAML Spec
 This section describes each node of the PLATFORM-YAML. For each node, we have identified the fields required
 from the user and also the various constraints involved.
 
-An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/eg_elaborate_platform.yaml>`_
+An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_platform.yaml>`_
 
 
 .. autoyaml:: ../rips/schema-platform.yaml

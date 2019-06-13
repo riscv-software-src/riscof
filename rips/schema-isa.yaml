@@ -23,7 +23,7 @@ ISA:
     check_with: capture_isa_specifics
 
 ### 
-# **Description**: Version number of User/Non-priveleged ISA specification
+# **Description**: Version number of User/Non-priveleged ISA specification. Can be specified as a decimal value.
 #
 # **Examples**:
 #
@@ -44,7 +44,7 @@ User_Spec_Version:
     required: True
 
 ### 
-# **Description**: Version number of Priveleged ISA specification
+# **Description**: Version number of Priveleged ISA specification. Can be specified as a decimal value.
 #
 # **Examples**:
 #
@@ -115,8 +115,8 @@ hw_data_misaligned_support:
 # 
 #   - Extensions: is described as a *bitmask-warl-func* indicating the valid extensions.
 #       - bitmask:
-#           - mask  : a 26 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a 26 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a 26 bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a 26 bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -190,7 +190,7 @@ misa:
 ### 
 # **Description**: Stores the VendorId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - id: A XLEN bit wide value in hexa-decimal equal to the VendorId
+#       - id: A XLEN bit wide value equal to the VendorId
 # 
 # **Examples**: 
 # 
@@ -220,7 +220,7 @@ mvendorid:
 ### 
 # **Description**: Stores the ArchitectureId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - id: A XLEN bit wide value in hexa-decimal equal to the ArchitectureId
+#       - id: A XLEN bit wide value equal to the ArchitectureId
 # 
 # **Examples**:
 #
@@ -251,7 +251,7 @@ marchid:
 ### 
 # **Description**: Stores the ImplementationId.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - id: A XLEN bit wide value in hexa-decimal equal to the ImplementationId
+#       - id: A XLEN bit wide value equal to the ImplementationId
 # 
 # **Examples**:
 #
@@ -663,8 +663,8 @@ mtvec:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable interrupts
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -706,8 +706,8 @@ mideleg:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating delegatable exceptions
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -751,8 +751,8 @@ medeleg:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -795,8 +795,8 @@ mip:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating allowed interrupts.
 #       - bitmask:
-#           - mask  : a XLEN bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a XLEN bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a XLEN bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a XLEN bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -896,8 +896,8 @@ mepc:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a 32 bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a 32 bit wide value providing the *default* field of the *bitmask-warl-func*.
 # 
 # **Examples**:
 #
@@ -939,8 +939,8 @@ mcountinhibit:
 ### 
 # **Description**: needs to be described as *bitmask-warl-func* indicating supported counters.
 #       - bitmask:
-#           - mask  : a 32 bit wide value in hexa-decimal providing the *mask* field of the *bitmask-warl-func*.
-#           - default : a 32 bit wide value in hexa-decimal providing the *default* field of the *bitmask-warl-func*.
+#           - mask  : a 32 bit wide value providing the *mask* field of the *bitmask-warl-func*.
+#           - default : a 32 bit wide value providing the *default* field of the *bitmask-warl-func*.
 #       - is_hardwired: a boolean value indicating whether the register is hardwired or not.
 #       - hardwired_val: an integer indicating to what value the register is hardwired to.
 # 

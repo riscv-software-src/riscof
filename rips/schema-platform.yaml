@@ -1,7 +1,7 @@
 ### 
 # **Description**: Stores the fields for memory mapped *mtime* register.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - address: A hexa-decimal value equal to the physical address at which the register is present.
+#       - address: A value equal to the physical address at which the register is present.
 # 
 # **Examples**: 
 # 
@@ -30,7 +30,7 @@ mtime:
 ### 
 # **Description**: Stores the fields for memory mapped *mtimecmp* register.
 #       - implemented: A boolean field indicating that the register has been implemented.
-#       - address: A hexa-decimal value equal to the physical address at which the register is present.
+#       - address: A value equal to the physical address at which the register is present.
 # 
 # **Examples**: 
 # 
