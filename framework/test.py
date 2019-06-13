@@ -1,9 +1,10 @@
 import logging
 import common.utils as utils
-from framework.test_list import *
 import filecmp
 import re
 import sys
+import os
+import oyaml as yaml
 
 logger = logging.getLogger(__name__)
 
@@ -14,115 +15,70 @@ def compare_signature(file1,file2):
         status='Failed'
     return status
 
-def collect_unprivilege(isa):
-    global user_target
-    dut_test_pool = []
-    for test in unprivilege_test_pool:
-        if(len(test)<2):
-            logger.error('Test list should be atleast 2 entries: Test name and\
- march')
-            sys.exit(0)
-        if(len(test)==2):
-            dut_test_pool.append(test)
-        else:
-            criteria = test[2:]
-            select = True
-            for c in criteria:
-                if not eval(c.lower()):
-                    select=False
-            if select:
-                dut_test_pool.append(test)
-            #     if 'in' in c:
-            #         x = c.split();
-            #         if (len(x)!=3):
-            #             logger.error('Wrong Criteria Syntax for test: '+\
-            #                         str(test[0]))
-            #             sys.exit(0)
+def eval_cond(condition,spec):
+    condition = (condition.replace("check",'')).strip()
+    if ':=' in condition:
+        temp = condition.split(":=")
+        keys = temp[0].split(">")
+        for key in keys:
+            try:
+                spec = spec[key]
+            except KeyError:
+                return False
+        if "regex(" in temp[1]:
+            exp = temp[1].replace("regex(","r\"")[:-1]+("\"")
+            return re.match(eval(exp),spec)
 
-            #         if x[0].isdigit():
-            #             if int(x[0]) not in foo[x[2]]:
-            #                 select=False
-            #         elif x[0] not in foo[x[2]]:
-            #             select=False
-            # if select:
-            #     dut_test_pool.append([test[0],test[1]])
-    return dut_test_pool
+def eval_macro(macro,spec):
+    args = (macro.replace("def "," -D")).split("=")
+    if(">" not in args[1]):
+        return [True,str(args[0])+"="+str(args[1])]
 
-def parsetest(file):
-    macro=''
-    test_part_flag = False
-    test_val = True
-    fin = open(file,'r') 
-    
-    test_part_flag = False
-    test_part_start_flag = False
-    # signature_entries= 0
-    test_part_number = '0'
-    line_number = 0
-    test_part_skipped = 0
+def eval_tests(ispec,pspec):
+    spec = {**ispec,**pspec}
+    test_pool = []
+    with open(os.getcwd()+"/framework/database.yaml","r") as dbfile:
+        db = yaml.safe_load(dbfile)
+        for file in db:
+            macros = ''
+            for part in db[file]['parts']:
+                include = True
+                part_dict = db[file]['parts'][part]
+                logger.debug("Checking conditions for {}-{}".format(file,part))
+                for condition in part_dict['check']:
+                    include = include and eval_cond(condition,spec)
+                for macro in part_dict['define']:
+                    temp = eval_macro(macro,spec)
+                    if(temp[0] and include):
+                        macros = macros + temp[1]
+            if not macros == '' :
+                test_pool.append([file,db[file]['commit_id'],macros])
+    return test_pool
 
-    for line in fin:
-        line_number += 1
-        line = line.strip()
-        
-        if line == "":
-            continue
-        
-        if bool(re.match(r"^#", line)) == True:
-            continue
-
-        if test_part_start_flag:
-            if "RVTEST_PART_RUN" in line:
-                if bool(re.match(r"RVTEST_PART_RUN\((.*)[0-9](.*):(.*)\s*\)", line)) == False:
-                    logger.error("{}:{}: Incorrect Syntax in {}".format(file_name, line_number, test_part_number))
-                    sys.exit(0)
-
-                args = re.search(r'RVTEST_PART_RUN\(\s*(.*)\s*,\s*\"(.*):(.*)\"\)', line)
-
-                if args.group(1) != test_part_number:
-                   logger.error("{}:{}: Wrong Test Case Numbering in ({})".format(file_name, line_number, test_part_number))
-                   sys.exit(0)
-               
-        elif "RVTEST_PART_START" in line:
-            if test_part_flag == True:
-                logger.error("{}:{}: Did not finish ({}) start".format(file_name, line_number, test_part_number))
-                sys.exit(0)
-            args = [temp.strip() for temp in (line.strip()).replace('RVTEST_PART_START','')[1:-1].split(',')]
-            
-            if int(test_part_number) >= int(args[0]):
-                logger.error("{}:{}: Incorrect Naming of Test Case after ({})".format(file_name, line_number, test_part_number))
-                sys.exit(0)
-            
-            test_part_number = args[0]                
-            test_part_start_flag = True
-        
-        
-    if test_part_flag != False:
-        logger.error("{}:{}: Did not finish ({}) start".format(file_name, line_number, test_part_number))
 def execute(dut,base,ispec,pspec):
-    test_pool = collect_unprivilege(ispec['ISA'].lower())
+    logger.info("Selecting Tests.")
+    test_pool = eval_tests(ispec,pspec)
     log = []
     for entry in test_pool:
         isa = ispec['ISA'].lower()
         logger.info("Test file:"+entry[0])
         logger.info("Initiating Compilation.")
-        dut.compile(entry[0]," -DTEST_PART_1=True",isa)
+        dut.compile(entry[0],entry[2],isa)
         logger.info("Running DUT simulation.")
         res = dut.simulate(entry[0],isa)
         logger.info("Running Base Model simulation.")
         ref = base.simulate(entry[0],isa)
         logger.info("Initiating check.")
-        log.append([entry[0],compare_signature(res,ref)])
+        log.append([entry[0],entry[1],compare_signature(res,ref)])
     
-    logger.info('Following '+str(len(test_pool))+' Unprivileged \
-tests have been run :\n')
-    logger.info('{0:<25s} : {1}\n'.format('TEST NAME','STATUS'))
+    logger.info('Following '+str(len(test_pool))+' tests have been run :\n')
+    logger.info('{0:<50s} : {1:<40s} : {2}'.format('TEST NAME','COMMIT ID','STATUS'))
     # print(log)
     for x in range(0,len(test_pool)):
-        if(log[x][1]=='Passed'):
-            logger.info('{0:<25s}: {1}'.format(\
-                log[x][0], log[x][1]))
+        if(log[x][2]=='Passed'):
+            logger.info('{0:<50s} : {1:<40s} : {2}'.format(\
+                log[x][0], log[x][1], log[x][2]))
         else:
-            logger.error('{0:<25s}: {1}'.format(\
-                log[x][0], log[x][1]))
+            logger.error('{0:<50s} : {1:<40s} : {2}'.format(\
+                log[x][0], log[x][1], log[x][2]))
 

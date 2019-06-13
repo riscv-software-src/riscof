@@ -5,6 +5,8 @@ common/__pycache__/
 
 framework/__pycache__/
 
+dbgen/__pycache__/
+
 work/
 
 test/

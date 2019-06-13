@@ -39,14 +39,15 @@
 
 #define RVTEST_START                                                    \
 
-#define RVTEST_PART_START(test_num)                               \
+#define RVTEST_PART_START(test_num,conditions)                               \
 
-#define RVTEST_PART_END(signature)                                     \
+#define RVTEST_PART_END(test_num)                                     \
 
-#define RVTEST_UPD_SIGNATURE(signature)                                           \
-  RVTEST_PART_END(signature)                                            \
+#define RVTEST_UPD_SIGNATURE(test_num)                                           \
+  RVTEST_PART_END(test_num)                                            \
       
 #define RVTEST_PART_RUN(test_num, _STR)           \
 
 #endif
+
 

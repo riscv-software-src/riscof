@@ -21,7 +21,7 @@ def main():
     logger.addHandler(fh)
     
     work_dir = os.getcwd()+"/work/"
-    suite = os.getcwd()+"/suite/"
+    # suite = os.getcwd()+"/suite/"
     #Creating work directory
     if not os.path.exists(work_dir):
       logger.debug('Creating new work directory: '+work_dir)
@@ -46,10 +46,10 @@ def main():
     # Setting up models
     if args.dut_env_file is not None:
       logger.debug("Initialising DUT model with "+args.dut_env_file)
-      dut.initialise_from_file(args.dut_env_file,work_dir=work_dir,suite=suite)
+      dut.initialise_from_file(args.dut_env_file,work_dir=work_dir,suite="/suite/")
     if args.base_env_file is not None:
       logger.debug("Initialising BASE model with "+args.base_env_file)
-      base.initialise_from_file(args.base_env_file,work_dir=work_dir,suite=suite)
+      base.initialise_from_file(args.base_env_file,work_dir=work_dir,suite="/suite/")
 
     #Loading Specs
     ispec=utils.loadyaml(args.dut_isa_spec)
