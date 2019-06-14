@@ -33,6 +33,8 @@
 #include "compliance_io.h"
 #include "test_macros.h"
 
+RVTEST_ISA("RV32I")
+
 # Test Virtual Machine (TVM) used by program.
 RV_COMPLIANCE_RV32M
 

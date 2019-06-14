@@ -32,6 +32,8 @@
 #include "compliance_test.h"
 #include "compliance_io.h"
 
+RVTEST_ISA("RV32IM")
+
 RV_COMPLIANCE_RV32M
 
 RV_COMPLIANCE_CODE_BEGIN

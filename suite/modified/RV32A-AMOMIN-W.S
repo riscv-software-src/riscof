@@ -13,6 +13,8 @@
 #include "compliance_io.h"
 #include "riscv_test.h"
 
+RVTEST_ISA("RV32IA")
+
 RV_COMPLIANCE_RV32U
 
 RV_COMPLIANCE_CODE_BEGIN
