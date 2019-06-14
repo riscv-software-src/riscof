@@ -59,14 +59,15 @@ def execute(dut,base,ispec,pspec):
     logger.info("Selecting Tests.")
     test_pool = eval_tests(ispec,pspec)
     log = []
+    isa=ispec['ISA']
     for entry in test_pool:
         logger.info("Test file:"+entry[0])
         logger.info("Initiating Compilation.")
         dut.compile(entry[0],entry[2],entry[3])
         logger.info("Running DUT simulation.")
-        res = dut.simulate(entry[0],entry[3])
+        res = dut.simulate(entry[0],isa)
         logger.info("Running Base Model simulation.")
-        ref = base.simulate(entry[0],entry[3])
+        ref = base.simulate(entry[0],isa)
         logger.info("Initiating check.")
         log.append([entry[0],entry[1],compare_signature(res,ref)])
     
