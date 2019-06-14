@@ -27,8 +27,11 @@ def eval_cond(condition,spec):
                 return False
         if "regex(" in temp[1]:
             exp = temp[1].replace("regex(","r\"")[:-1]+("\"")
-            return re.match(eval(exp),spec)
-
+            x=re.match(eval(exp),spec)
+            if x is None:
+                return False
+            else:
+                return True
 def eval_macro(macro,spec):
     args = (macro.replace("def "," -D")).split("=")
     if(">" not in args[1]):

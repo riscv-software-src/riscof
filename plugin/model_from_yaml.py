@@ -21,9 +21,9 @@ map={
 
 class model_from_yaml(pluginTemplate):
     def __init__(self,*args, **kwargs):
-        self.name = kwargs.get('name',''.join(random.choices(string.ascii_uppercase + string.digits, k=10)))+":"
-    def initialise_from_file(self,file,*args, **kwargs):
-        foo = utils.loadyaml(file)
+        return super().__init__(*args,**kwargs)
+    def initialise(self,*args, **kwargs):
+        foo = utils.loadyaml(kwargs.get("file"))
         compile_flags=' -static -mcmodel=medany -fvisibility=hidden -nostdlib \
         -nostartfiles '
         self.simulator = foo['USER_EXECUTABLE']
