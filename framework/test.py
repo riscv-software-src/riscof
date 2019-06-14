@@ -52,7 +52,7 @@ def eval_tests(ispec,pspec):
                     if(temp[0] and include):
                         macros = macros + temp[1]
             if not macros == '' :
-                test_pool.append([file,db[file]['commit_id'],macros])
+                test_pool.append([file,db[file]['commit_id'],macros,db[file]['isa']])
     return test_pool
 
 def execute(dut,base,ispec,pspec):
@@ -60,14 +60,13 @@ def execute(dut,base,ispec,pspec):
     test_pool = eval_tests(ispec,pspec)
     log = []
     for entry in test_pool:
-        isa = ispec['ISA'].lower()
         logger.info("Test file:"+entry[0])
         logger.info("Initiating Compilation.")
-        dut.compile(entry[0],entry[2],isa)
+        dut.compile(entry[0],entry[2],entry[3])
         logger.info("Running DUT simulation.")
-        res = dut.simulate(entry[0],isa)
+        res = dut.simulate(entry[0],entry[3])
         logger.info("Running Base Model simulation.")
-        ref = base.simulate(entry[0],isa)
+        ref = base.simulate(entry[0],entry[3])
         logger.info("Initiating check.")
         log.append([entry[0],entry[1],compare_signature(res,ref)])
     
