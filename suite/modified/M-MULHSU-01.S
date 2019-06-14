@@ -41,8 +41,8 @@ RV_COMPLIANCE_CODE_BEGIN
   RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
 
   # ---------------------------------------------------------------------------------------------
-  #ifdef TEST_PART_1
-    RVTEST_PART_START(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*M.*); def TEST_PART_1=True")
+  #ifdef TEST_CASE_1
+    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*M.*); def TEST_CASE_1=True")
     RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
     # address for test results
@@ -232,7 +232,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
 
     RVTEST_IO_WRITE_STR(x31, "Test End\n")
-    RVTEST_PART_END(1)
+    RVTEST_CASE_END(1)
   #endif
   # ---------------------------------------------------------------------------------------------
 

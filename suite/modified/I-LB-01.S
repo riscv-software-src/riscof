@@ -43,8 +43,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_PART_1
-    RVTEST_PART_START(1,"// check ISA:=regex(.*I.*); def TEST_PART_1=True")
+  #ifdef TEST_CASE_1
+    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # ------------------0x00000000---------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - test base address + 0\n");
 
@@ -301,7 +301,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
 
-    RVTEST_PART_END(1)
+    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
