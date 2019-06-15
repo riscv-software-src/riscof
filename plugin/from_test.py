@@ -46,6 +46,7 @@ def get_sign(file,spec):
         isa = None
         part_number = ''
         i=0
+        count=0
         include=True
         while i<len(lines):
             line = lines[i]
@@ -86,9 +87,12 @@ def get_sign(file,spec):
             if ("RVTEST_IO_ASSERT_GPR_EQ") in line and part_start and include:
                 val=int(re.findall("RVTEST_IO_ASSERT_GPR_EQ\(.+?,.+?,.*?0x(.+)\)",line,re.DOTALL)[0],16)
                 sign+=outstr.format(val).lower()+'\n'
+                count+=1
             if "RVTEST_CASE_END" in line:
                 args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_CASE_END','')[1:-1].split(',')]
                 part_start = False
+        for i in range(4-count%4):
+            sign+=outstr.format(0).lower()+'\n' 
         return sign
 
 class from_test(pluginTemplate):

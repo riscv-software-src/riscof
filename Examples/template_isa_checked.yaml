@@ -1,5 +1,6 @@
 User_Spec_Version: 2.3
-ISA: RV64IMFADCZifenceiZicsrUS
+# ISA: RV64IMFADCZifenceiZicsrUS
+ISA: RV32IMAC
 Privilege_Spec_Version: 1.11
 misa:
   implemented: true
