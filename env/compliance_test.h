@@ -39,9 +39,9 @@
 
 #define RVTEST_START                                                    \
 
-#define RVTEST_PART_START(test_num,conditions)                               \
+#define RVTEST_PART_START(_PNAME,_COND)                               \
 
-#define RVTEST_PART_END(test_num)                                     \
+#define RVTEST_PART_END(_PNAME)                                     \
 
 #define RVTEST_UPD_SIGNATURE(test_num)                                           \
   RVTEST_PART_END(test_num)                                            \
