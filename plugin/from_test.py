@@ -91,8 +91,9 @@ def get_sign(file,spec):
             if "RVTEST_CASE_END" in line:
                 args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_CASE_END','')[1:-1].split(',')]
                 part_start = False
-        for i in range(4-count%4):
-            sign+=outstr.format(0).lower()+'\n' 
+        if not count%4 == 0:
+            for i in range(4-count%4):
+                sign+=outstr.format(0).lower()+'\n' 
         return sign
 
 class from_test(pluginTemplate):
