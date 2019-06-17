@@ -20,11 +20,12 @@ def orderdict(dict):
         ret[key] = dict[key]
     return ret
 
-def createPartDict(file):
+def createdict(file):
     with open(file,"r") as k:
         lines = k.read().splitlines()
         code_start=False
         part_start=False
+        isa = None
         part_number = ''
         i=0
         part_dict={}
@@ -36,11 +37,13 @@ def createPartDict(file):
                 continue
             if(line.startswith("#") or line.startswith("//")):
                 continue
-            if "RVTEST_PART_START" in line:
+            if "RVTEST_ISA" in line:
+                isa = (((line.strip()).replace('RVTEST_ISA(\"',"")).replace("\")","")).strip()
+            if "RVTEST_CASE_START" in line:
                 if part_start == True:
                     print("{}:{}: Did not finish ({}) start".format(file, i, part_number))
                     sys.exit(0)
-                args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_PART_START','')[1:-1].split(',')]
+                args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_CASE_START','')[1:-1].split(',')]
                 while(line.endswith('\\')):
                     line = lines[i]
                     i+=1
@@ -63,15 +66,19 @@ def createPartDict(file):
                     elif(cond.startswith('def')):
                         define.append(cond)
                 part_dict[part_number] = {'check':check,'define':define}
-            if "RVTEST_PART_END" in line:
-                args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_PART_END','')[1:-1].split(',')]
+            if "RVTEST_CASE_END" in line:
+                args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_CASE_END','')[1:-1].split(',')]
                 if args[0] != part_number:
                     print("{}:{}: Wrong Test Case Numbering in ({})".format(file, i, part_number))
                     sys.exit(0)
                 part_start = False
+    if(isa is None):
+        print("{}:ISA not specified.",file)
+        sys.exit(0)
     if len(part_dict.keys()) == 0:
-        print("{}: Atleast one part must exist in the test.",file) 
-    return orderdict(part_dict)
+        print("{}: Atleast one part must exist in the test.",file)
+        sys.exit(0) 
+    return {'isa':str(isa),'parts':orderdict(part_dict)}
 def main():
     list = dirwalk("/suite/modified")
     repo = git.Repo("./")
@@ -88,10 +95,12 @@ def main():
     for file in existing:
         commit = next(repo.iter_commits(paths="./"+file,max_count=1))
         if(str(commit) != db[file]['commit_id']):
-            db[file] = {'commit_id':str(commit),'parts':createPartDict(cur_dir+file)}
+            temp = createdict(cur_dir+file)
+            db[file] = {'commit_id':str(commit),**temp}
     for file in new:
         commit = next(repo.iter_commits(paths="./"+file,max_count=1))
-        db[file] = {'commit_id':str(commit),'parts':createPartDict(cur_dir+file)}
+        temp = createdict(cur_dir+file)
+        db[file] = {'commit_id':str(commit),**temp}
     with open(dbfile,"w") as wrfile:
         yaml.dump(orderdict(db), wrfile, default_flow_style=False, allow_unicode=True)
         # print(file+" "+str(commit))

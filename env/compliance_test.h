@@ -13,6 +13,8 @@
 // RV Compliance Macros
 //-----------------------------------------------------------------------
 
+#define RVTEST_ISA(_STR)
+
 #define RV_COMPLIANCE_HALT                                              \
   RVTEST_PASS                                                           \
 
@@ -39,9 +41,9 @@
 
 #define RVTEST_START                                                    \
 
-#define RVTEST_PART_START(test_num,conditions)                               \
+#define RVTEST_CASE_START(test_num,conditions)                               \
 
-#define RVTEST_PART_END(test_num)                                     \
+#define RVTEST_CASE_END(test_num)                                     \
 
 #define RVTEST_UPD_SIGNATURE(test_num)                                           \
   RVTEST_PART_END(test_num)                                            \
