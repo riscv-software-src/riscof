@@ -46,6 +46,9 @@ The list of tests, implmentation-plugin and golden-plugin are all fed into the p
    
    quickstart
    yaml-specs
+   database
+   macros
+   cond_spec
    code-doc
 
 Indices and tables

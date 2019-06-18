@@ -41,9 +41,9 @@
 
 #define RVTEST_START                                                    \
 
-#define RVTEST_CASE_START(test_num,conditions)                               \
+#define RVTEST_CASE_START(_PNAME,_DSTR)                               \
 
-#define RVTEST_CASE_END(test_num)                                     \
+#define RVTEST_CASE_END(_PNAME)                                     \
 
 #define RVTEST_UPD_SIGNATURE(test_num)                                           \
   RVTEST_PART_END(test_num)                                            \
