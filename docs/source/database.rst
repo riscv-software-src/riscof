@@ -3,21 +3,32 @@
 Database Generator
 ^^^^^^^^^^^^^^^^^^^^^
 
-This module recursively walks the specified directory(/suite/modified) to find all .S files in them and constructs a database for the framework.
+This module recursively walks the specified directory(/suite/modified) to find 
+all .S files in them and constructs a database for the framework.
 
-The nodes in the directory are identified by their relative path from the repository home.
+The nodes in the directory are identified by their relative path from the 
+repository home.
 Each node in the database is defined as follows:
 
 * file path:
 
-    * commit_id: Contains the recent commit id of the commit in which the test was modified.
-    * isa: Contains the isa required for the compilation of the test. This field is extracted from the *RVTEST_ISA* macro.
-    * parts: Contains the individual parts present in the test and the conditions and macros required by each of them. The parts are identified by unique names as specified in the test. A test must contain atleast one part for it to be included in the database.
+    * commit_id: Contains the recent commit id of the commit in which the test 
+was modified.
+    * isa: Contains the isa required for the compilation of the test. This field 
+is extracted from the *RVTEST_ISA* macro.
+    * parts: Contains the individual parts present in the test and the conditions
+     and macros required by each of them. The parts are identified by unique 
+     names as specified in the test. A test must contain atleast one part for it
+      to be included in the database.
 
-        * part name: This node is extracted from the *RVTEST_CASE_START* macro in the test.
+        * part name: This node is extracted from the *RVTEST_CASE_START* macro 
+        in the test.
 
-            * check: A list of the check statements for the part as specified in the test. These translate to the conditions which need to be satisfied for this part to be included.
-            * define: A list of define statements for the part as specified in the test. These translate to the macros required by this part to run.
+            * check: A list of the check statements for the part as specified in
+             the test. These translate to the conditions which need to be 
+             satisfied for this part to be included.
+            * define: A list of define statements for the part as specified in 
+            the test. These translate to the macros required by this part to run.
             * coverage: Contains the coverage of the test part. **(TBD)**
 
 
@@ -44,6 +55,14 @@ Usage:
     python3 -m dbgen.main
 
 
-What the is the output and where it is generated?
-What are the errors one can face?
+Output:
+    Currently the database is stored in 'framework/database.yaml'.
 
+Possible scenarios where database is not generated:
+
+* There does not exist atleast one part in the test.
+* Any part which has started does not end i.e. *RVTEST_CASE_START* exists for 
+that part but *RVTEST_CASE_END* doesn't.
+* The part names given in a *RVTEST_CASE_START*-*RVTEST_CASE_END* pair doesn't 
+match.
+* *RVTEST_ISA* macro isn't present in the test.
