@@ -9,15 +9,17 @@ The nodes in the directory are identified by their relative path from the reposi
 Each node in the database is defined as follows:
 
 * file path:
+
     * commit_id: Contains the recent commit id of the commit in which the test was modified.
     * isa: Contains the isa required for the compilation of the test. This field is extracted from the *RVTEST_ISA* macro.
     * parts: Contains the individual parts present in the test and the conditions and macros required by each of them. The parts are identified by unique names as specified in the test. A test must contain atleast one part for it to be included in the database.
+
         * part name: This node is extracted from the *RVTEST_CASE_START* macro in the test.
+
             * check: A list of the check statements for the part as specified in the test. These translate to the conditions which need to be satisfied for this part to be included.
             * define: A list of define statements for the part as specified in the test. These translate to the macros required by this part to run.
-            * coverage: Contains the coverage of the test part.*
+            * coverage: Contains the coverage of the test part. **(TBD)**
 
-\* - To be implemented
 
 Example:
 
@@ -40,3 +42,8 @@ Usage:
 .. code-block:: bash
 
     python3 -m dbgen.main
+
+
+What the is the output and where it is generated?
+What are the errors one can face?
+
