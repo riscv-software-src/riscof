@@ -112,7 +112,8 @@ Example
     # ---------------------------------------------------------------------------------------------
     RVTEST_CASE_START(1,"check ISA:=regex(.*I.*); \
                         def TEST_PART_1=True")
-    RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, 1, -1, MIN, MAX register values\n");
+    RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, \
+                        1, -1, MIN, MAX register values\n");
 
     # Addresses for test data and results
     la      x1, test_A1_data
