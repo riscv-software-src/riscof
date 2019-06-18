@@ -9,9 +9,9 @@ import oyaml as yaml
 
 logger= logging.getLogger(__name__)
 
-def loadyaml(foo):
-    file = open(foo,"r")
-    return yaml.safe_load(file)
+def load_yaml(foo):
+    with open(foo,"r") as file:
+        return yaml.safe_load(file)
 
 class ColoredFormatter(logging.Formatter):                                      
     """                                                                         
@@ -38,9 +38,6 @@ class ColoredFormatter(logging.Formatter):
                 '[' + level_name + ']',                                                                                              
                 msg,                                                            
                 self.reset)                 
-
-def hasNumbers(inputString):
-    return any(char.isdigit() for char in inputString)
 
 def setup_logging(log_level):                                                   
     """Setup logging                                                            
@@ -95,6 +92,67 @@ def execute_command_log(execute, logfile):
     execute = execute + '> {}'.format(logfile)
     logger.debug(execute)
     os.system(execute)
+
+def riscof_cmdline_args():
+    parser = argparse.ArgumentParser(
+        formatter_class = SortingHelpFormatter,
+        prog="Riscof",
+        description="This program performs the compliance "
+    )
+    parser.add_argument(
+        '--dut_model','-dm',
+        type=str,
+        metavar='MODEL',
+        help='The MODEL whose compliance is to be verified.',
+        # required=True
+    )
+    parser.add_argument(
+        '--dut_env_file','-df',
+        type=str,
+        metavar='FILE',
+        help='The FILE for DUT containing necessary environment parameters.',
+    )
+    parser.add_argument(
+        '--base_model','-bm',
+        type=str,
+        metavar='MODEL',
+        default='from_test',
+        help='The MODEL whose against which the compliance is verified.'
+    )
+    parser.add_argument(
+        '--base_env_file','-bf',
+        type=str,
+        metavar='FILE',
+        help='The FILE for Base model containing necessary environment parameters.'
+    )
+    parser.add_argument(
+        '--dut_isa_spec','-ispec',
+        type=str,
+        metavar='YAML',
+        help='The YAML which contains the ISA specs of the DUT.',
+        required=True
+    )
+    parser.add_argument(
+        '--dut_platform_spec','-pspec',
+        type=str,
+        metavar='YAML',
+        help='The YAML which contains the Platfrorm specs of the DUT.',
+        required=True
+    )
+    parser.add_argument(
+        '--dut_env_yaml','-eyaml',
+        type=str,
+        metavar='YAML',
+        help='The YAML which contains the Platfrorm specs of the DUT.',
+    )
+    parser.add_argument(
+        '--verbose',
+        action= 'store',
+        default='info',
+        help='debug | info | warning | error', 
+        metavar=""
+    )
+    return parser
 
 def framework_cmdline_args():
     parser = argparse.ArgumentParser(

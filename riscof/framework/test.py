@@ -1,10 +1,11 @@
 import logging
-import common.utils as utils
 import filecmp
 import re
 import sys
 import os
-import oyaml as yaml
+
+import riscof.utils as utils
+import riscof.constants as constants
 
 logger = logging.getLogger(__name__)
 
@@ -40,25 +41,24 @@ def eval_macro(macro,spec):
 def eval_tests(ispec,pspec):
     spec = {**ispec,**pspec}
     test_pool = []
-    with open(os.getcwd()+"/framework/database.yaml","r") as dbfile:
-        db = yaml.safe_load(dbfile)
-        for file in db:
-            macros = ''
-            for part in db[file]['parts']:
-                include = True
-                part_dict = db[file]['parts'][part]
-                logger.debug("Checking conditions for {}-{}".format(file,part))
-                for condition in part_dict['check']:
-                    include = include and eval_cond(condition,spec)
-                for macro in part_dict['define']:
-                    temp = eval_macro(macro,spec)
-                    if(temp[0] and include):
-                        macros = macros + temp[1]
-            if not macros == '' :
-                test_pool.append([file,db[file]['commit_id'],macros,db[file]['isa']])
+    db = utils.load_yaml(constants.framework_db)
+    for file in db:
+        macros = ''
+        for part in db[file]['parts']:
+            include = True
+            part_dict = db[file]['parts'][part]
+            logger.debug("Checking conditions for {}-{}".format(file,part))
+            for condition in part_dict['check']:
+                include = include and eval_cond(condition,spec)
+            for macro in part_dict['define']:
+                temp = eval_macro(macro,spec)
+                if(temp[0] and include):
+                    macros = macros + temp[1]
+        if not macros == '' :
+            test_pool.append([file,db[file]['commit_id'],macros,db[file]['isa']])
     return test_pool
 
-def execute(dut,base,ispec,pspec):
+def run_tests(dut,base,ispec,pspec):
     logger.info("Selecting Tests.")
     test_pool = eval_tests(ispec,pspec)
     log = []

@@ -1,11 +1,16 @@
-from cerberus import Validator
-import oyaml as yaml
-from rips.schemaValidator import *
-import common.utils
-import logging
 import sys
 import os
 import re
+import logging
+
+from cerberus import Validator
+import oyaml as yaml
+
+import riscof.utils as utils
+from riscof.errors import *
+from .schemaValidator import *
+
+logger = logging.getLogger(__name__)
 
 def iset():
     '''Function to check and set defaults for all "implemented" fields which are dependent on 
@@ -101,37 +106,27 @@ def add_def_setters(schema_yaml):
     schema_yaml['mtvec']['default_setter'] = lambda doc: mtvecset()
     return schema_yaml
 
-def main():
+def spec_check(isa_spec,schema_isa,platform_spec,platform_schema):
+    ''' Function to perform ensure that the isa and platform specifications confirm
+    to their schemas.
+    '''
     global inp_yaml
-    # Set up the parser
-    parser = common.utils.rips_cmdline_args()
-    args = parser.parse_args()
-
-    # Set up the logger
-    common.utils.setup_logging(args.verbose)
-    logger = logging.getLogger()
-    logger.handlers = []
-    ch = logging.StreamHandler()
-    ch.setFormatter(common.utils.ColoredFormatter())
-    logger.addHandler(ch)
 
     logger.info('Running RIPS Checker on Input-ISA file')
 
-    foo = args.input_isa
-    schema = args.schema_isa
+    foo = isa_spec
+    schema = schema_isa
     """
       Read the input-isa foo (yaml file) and validate with schema-isa for feature values
       and constraints
     """
-    inputfile = open(foo, 'r')
-    schemafile = open(schema, 'r')
     # Load input YAML file
     logger.info('Loading input file: '+str(foo))
-    inp_yaml = yaml.safe_load(inputfile)
+    inp_yaml = utils.load_yaml(foo)
 
     # instantiate validator
     logger.info('Load Schema '+str(schema))
-    schema_yaml = yaml.safe_load(schemafile)
+    schema_yaml = utils.load_yaml(schema)
     
     #Extract xlen
     if "32" in inp_yaml['ISA']:
@@ -156,7 +151,7 @@ def main():
     else:
         error_list = validator.errors
         logger.error(str(error_list))
-        sys.exit(0)
+        raise ValidationError("Error in ISA Yaml. Refer to logs for more details.")
 
     file_name_split=foo.split('.')
     output_filename=file_name_split[0]+'_checked.'+file_name_split[1]
@@ -166,8 +161,8 @@ def main():
 
     logger.info('Running RIPS Checker on Input-ISA file')
 
-    foo = args.input_platform
-    schema = args.schema_platform
+    foo = platform_spec
+    schema = platform_schema
     """
       Read the input-platform foo (yaml file) and validate with schema-platform for feature values
       and constraints
@@ -176,11 +171,11 @@ def main():
     schemafile = open(schema, 'r')
     # Load input YAML file
     logger.info('Loading input file: '+str(foo))
-    inp_yaml = yaml.safe_load(inputfile)
+    inp_yaml = utils.load_yaml(foo)
 
     # instantiate validator
     logger.info('Load Schema '+str(schema))
-    schema_yaml = yaml.safe_load(schemafile)
+    schema_yaml = utils.load_yaml(schema)
 
     validator = schemaValidator(schema_yaml,xlen=xlen)
     validator.allow_unknown = True
@@ -196,7 +191,8 @@ def main():
     else:
         error_list = validator.errors
         logger.error(str(error_list))
-        sys.exit(0)
+        raise ValidationError("Error in Platform\
+             Yaml. Refer to logs for more details.")
 
     logger.info('Performing Additional Checks')
 
@@ -206,30 +202,28 @@ def main():
     logger.info('Dumping out Normalized Checked YAML: '+output_filename)
     yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
 
-    foo = args.input_environment
-    if(foo is not None):
-        """
-          Read the input-environment foo (yaml file) and perform checks.
-        """
-        inputfile = open(foo, 'r')
-        logger.info('Loading input file: '+str(foo))
-        inp_yaml = yaml.safe_load(inputfile)
-        logger.info("Checking the environment specs.")
-        environment_check(inp_yaml)
-
-def environment_check(input):
-    logger = logging.getLogger(__name__)
+def environment_check(env_spec):
+    """
+        Read the input-environment foo (yaml file) and perform checks.
+    """
+    valid = True
+    logger.info('Loading input file: '+str(env_spec))
+    input = utils.load_yaml(env_spec)
+    logger.info("Checking the environment specs.")
     key_list = input.keys()
     keys = ['USER_ENV_DIR', 'USER_LINKER', 'USER_TARGET', 'USER_EXECUTABLE', 'USER_ABI', 'USER_SIGN', 'RISCV_PREFIX', 'USER_PRE_SIM', 'USER_POST_SIM', 'BUILD']
     for x in keys:
         if x not in key_list:
             logger.error(x+" not defined in environment yaml.")
+            valid=False
     try:
         temp = input['USER_POST_SIM'].keys()
         if 'is_shell' not in temp:
             logger.error("is_shell not defined in USER_POST_SIM")
+            valid=False
         if 'command' not in temp:
             logger.error("command not defined in USER_POST_SIM")
+            valid=False
     except KeyError:
         pass
 
@@ -237,11 +231,12 @@ def environment_check(input):
         temp = input['USER_PRE_SIM'].keys()
         if 'is_shell' not in temp:
             logger.error("is_shell not defined in USER_PRE_SIM")
+            valid=False
         if 'command' not in temp:
             logger.error("command not defined in USER_PRE_SIM")
+            valid=False
     except KeyError:
         pass
 
-if __name__ == '__main__':
-    main()
-
+    if not valid:
+        raise ValidationError("Error in Environment Yaml. Refer to logs for more details.")

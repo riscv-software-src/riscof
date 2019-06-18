@@ -1,9 +1,10 @@
-from plugin.pluginTemplate import pluginTemplate
 import oyaml as yaml
 import logging
 import sys
 import re
 import os
+
+from .pluginTemplate import pluginTemplate
 
 logger = logging.getLogger(__name__)
 
@@ -34,11 +35,11 @@ def get_sign(file,spec):
     isa = spec['ISA']
     with open(file,"r") as k:
         if('32' in isa):
-            outstr = '{0:08X}'
+            sline=lambda x: '{0:x}'.format(x).zfill(8).lower()+'\n'
         elif('64' in isa):
-            outstr = '{0:16X}'
+            sline=lambda x: '{0:x}'.format(x).zfill(16).lower()+'\n'
         elif('128' in isa):
-            outstr = '{0:32X}'
+            sline=lambda x: '{0:x}'.format(x).zfill(32).lower()+'\n'
         sign=""
         lines = k.read().splitlines()
         code_start=False
@@ -86,14 +87,14 @@ def get_sign(file,spec):
                     include = temp[0] and include
             if ("RVTEST_IO_ASSERT_GPR_EQ") in line and part_start and include:
                 val=int(re.findall("RVTEST_IO_ASSERT_GPR_EQ\(.+?,.+?,.*?0x(.+)\)",line,re.DOTALL)[0],16)
-                sign+=outstr.format(val).lower()+'\n'
+                sign+=sline(val)
                 count+=1
             if "RVTEST_CASE_END" in line:
                 args = [(temp.strip()).replace("\"",'') for temp in (line.strip()).replace('RVTEST_CASE_END','')[1:-1].split(',')]
                 part_start = False
         if not count%4 == 0:
             for i in range(4-count%4):
-                sign+=outstr.format(0).lower()+'\n' 
+                sign+=sline(0) 
         return sign
 
 class from_test(pluginTemplate):

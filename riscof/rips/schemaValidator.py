@@ -1,7 +1,4 @@
 from cerberus import Validator
-import logging
-
-
 
 class schemaValidator(Validator):
     ''' Custom validator for schema having the custom rules necessary for implementation and checks.'''

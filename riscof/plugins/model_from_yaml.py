@@ -4,11 +4,12 @@ import shutil
 import subprocess
 import shlex
 import logging
-import common.utils as utils
-from plugin.pluginTemplate import pluginTemplate
 import random
 import string
 from string import Template
+
+import riscof.utils as utils
+from .pluginTemplate import pluginTemplate
 
 logger= logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class model_from_yaml(pluginTemplate):
     def __init__(self,*args, **kwargs):
         return super().__init__(*args,**kwargs)
     def initialise(self,*args, **kwargs):
-        foo = utils.loadyaml(kwargs.get("file"))
+        foo = utils.load_yaml(kwargs.get("file"))
         compile_flags=' -static -mcmodel=medany -fvisibility=hidden -nostdlib \
         -nostartfiles '
         self.simulator = foo['USER_EXECUTABLE']
