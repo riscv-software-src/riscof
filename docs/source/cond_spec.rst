@@ -1,9 +1,9 @@
 .. _cond_spec:
 
 Condtion specification(WIP)
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This section describes the format for the conditions to be followed while writing *_DSTR* for the *RVTEST_PART_START* macro. Each of the statements ends with a ';' .
+This section describes the format for the conditions to be followed while writing *_DSTR* for the *RVTEST_CASE_START* macro. Each of the statements ends with a ';' .
 
 A keylist is a string of '>' separated words(keys) which is used to navigate the supplied specs. The schema may be used to specify them. Only valid keys and their combinations are allowed(as present in the scema).
 
