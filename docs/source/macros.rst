@@ -92,7 +92,7 @@ Macro indicating the start of the data section of the test.
 Macro indicating the end of the data section of the test. All data pertaining to the test must be contained inbetween the *RV_COMPLIANCE_DATA_BEGIN* and *RV_COMPLIANCE_DATA_END* macro pair.
 
 Example
-^^^^^^^^
+-------
 .. code-block:: none
 
     #include "compliance_test.h"
