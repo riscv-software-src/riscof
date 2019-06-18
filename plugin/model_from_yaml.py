@@ -12,11 +12,18 @@ from string import Template
 
 logger= logging.getLogger(__name__)
 
+map={
+    'rv32i':'rv32i',
+    'rv32im':'rv32im',
+    'rv32ic':'rv32ic',
+    'rv32ia':'rv32ia'
+}
+
 class model_from_yaml(pluginTemplate):
     def __init__(self,*args, **kwargs):
-        self.name = kwargs.get('name',''.join(random.choices(string.ascii_uppercase + string.digits, k=10)))+":"
-    def initialise_from_file(self,file,*args, **kwargs):
-        foo = utils.loadyaml(file)
+        return super().__init__(*args,**kwargs)
+    def initialise(self,*args, **kwargs):
+        foo = utils.loadyaml(kwargs.get("file"))
         compile_flags=' -static -mcmodel=medany -fvisibility=hidden -nostdlib \
         -nostartfiles '
         self.simulator = foo['USER_EXECUTABLE']
@@ -96,7 +103,7 @@ class model_from_yaml(pluginTemplate):
         logger.debug(self.name+"Changing directory to "+test_dir)
         os.chdir(test_dir)
         elf = test_dir+str(file.split("/")[-1][:-2])+'.elf'
-        cmd=self.compile_cmd.format(isa,self.user_abi)+' '+test+' -o '+elf
+        cmd=self.compile_cmd.format(map[isa.lower()],self.user_abi)+' '+test+' -o '+elf
         execute = cmd+macros
         utils.execute_command(execute)
         cmd=self.objdump.format(test,self.user_abi)+' '+elf

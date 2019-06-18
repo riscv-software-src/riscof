@@ -38,6 +38,8 @@
 #include "compliance_io.h"
 #include "test_macros.h"
 
+RVTEST_ISA("RV32I")
+
 # Test Virtual Machine (TVM) used by program.
 RV_COMPLIANCE_RV32M
 
@@ -47,8 +49,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31,x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31,"# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-    #ifdef TEST_PART_1
-    RVTEST_PART_START(1,"// check ISA:=regex(.*I.*); def TEST_PART_1=True")
+    #ifdef TEST_CASE_1
+    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # Save and set trap handler address
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31,"# Test part A1 - test LW\n");
@@ -254,7 +256,7 @@ exit_handler:
 test_end:
 
     RVTEST_IO_WRITE_STR(x31,"# Test End\n")
-    RVTEST_PART_END(1)
+    RVTEST_CASE_END(1)
     #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

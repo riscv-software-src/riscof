@@ -27,8 +27,11 @@ def eval_cond(condition,spec):
                 return False
         if "regex(" in temp[1]:
             exp = temp[1].replace("regex(","r\"")[:-1]+("\"")
-            return re.match(eval(exp),spec)
-
+            x=re.match(eval(exp),spec)
+            if x is None:
+                return False
+            else:
+                return True
 def eval_macro(macro,spec):
     args = (macro.replace("def "," -D")).split("=")
     if(">" not in args[1]):
@@ -52,18 +55,18 @@ def eval_tests(ispec,pspec):
                     if(temp[0] and include):
                         macros = macros + temp[1]
             if not macros == '' :
-                test_pool.append([file,db[file]['commit_id'],macros])
+                test_pool.append([file,db[file]['commit_id'],macros,db[file]['isa']])
     return test_pool
 
 def execute(dut,base,ispec,pspec):
     logger.info("Selecting Tests.")
     test_pool = eval_tests(ispec,pspec)
     log = []
+    isa=ispec['ISA']
     for entry in test_pool:
-        isa = ispec['ISA'].lower()
         logger.info("Test file:"+entry[0])
         logger.info("Initiating Compilation.")
-        dut.compile(entry[0],entry[2],isa)
+        dut.compile(entry[0],entry[2],entry[3])
         logger.info("Running DUT simulation.")
         res = dut.simulate(entry[0],isa)
         logger.info("Running Base Model simulation.")
