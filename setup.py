@@ -32,6 +32,7 @@ setup(
         author_email='spawan1999@gmail.com',
         license='BSD',
         packages=find_packages(),
+        install_requires=requirements,
         entry_points={
             "console_scripts": [
                 "riscof=riscof.main:execute",
