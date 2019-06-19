@@ -5,11 +5,12 @@ import re
 import oyaml as yaml
 import collections
 
+import riscof.constants as constants
+
 def dirwalk(dir):
     list = []
     for root, dirs, files in os.walk(os.getcwd()+"/"+dir):
         path = root[root.find(dir):]+"/"
-        # print(path)
         for file in files:
             list.append(path+file)
     return list
@@ -79,16 +80,19 @@ def createdict(file):
         print("{}: Atleast one part must exist in the test.",file)
         sys.exit(0) 
     return {'isa':str(isa),'parts':orderdict(part_dict)}
-def main():
-    list = dirwalk("/suite/modified")
+def generate():
+    list = dirwalk(constants.suite[:-1])
     repo = git.Repo("./")
-    dbfile = "./framework/database.yaml"
+    dbfile = constants.framework_db
     tree = repo.tree()
-    with open(dbfile,"r") as temp:
-        db = yaml.safe_load(temp)
-        for key in db.keys():
-            if key not in list:
-                del db[key]
+    try:
+        with open(dbfile,"r") as temp:
+            db = yaml.safe_load(temp)
+            for key in db.keys():
+                if key not in list:
+                    del db[key]
+    except FileNotFoundError:
+        db={}
     cur_dir = os.getcwd()
     existing = db.keys()
     new = [x for x in list if x not in existing]
@@ -103,9 +107,8 @@ def main():
         db[file] = {'commit_id':str(commit),**temp}
     with open(dbfile,"w") as wrfile:
         yaml.dump(orderdict(db), wrfile, default_flow_style=False, allow_unicode=True)
-        # print(file+" "+str(commit))
 
 
 
 if __name__=='__main__':
-    main()
+    generate()

@@ -4,12 +4,15 @@ Code Documentation
 Custom Schema Validator
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: rips.schemaValidator
+.. automodule:: riscof.rips.schemaValidator
    :members: 
    :special-members:
    :private-members:
 
-.. automodule:: rips.main
+Rips
+^^^^^
+
+.. automodule:: riscof.rips.main
    :members: 
    :special-members:
    :private-members:

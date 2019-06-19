@@ -1,0 +1,37 @@
+###
+# Path to the directory containing the environment set up.
+USER_ENV_DIR: env
+###
+# Path to the linker file.
+USER_LINKER: env/link.ld
+###
+# The name of the target for simulation.
+USER_TARGET: SPIKE
+###
+# The command to run the simulation.
+USER_EXECUTABLE: 'spike -c --isa=${isa} +signature=sign ${elf}'
+###
+# The name of the application binary interface for compilation.
+USER_ABI: ilp32
+###
+# The name of the signature file which would be generated.
+USER_SIGN: sign
+###
+# The prefix of the risc-v command for compilation. 
+RISCV_PREFIX: riscv32-unknown-elf-
+###
+  # - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
+  # - command: command string for pre-simulation processing.
+USER_PRE_SIM: 
+  is_shell: False
+  command: ''
+###
+  # - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
+  # - command: command string for post-simulation processing.
+USER_POST_SIM:
+  is_shell: True
+  command: cat sign | sed 's/.\{8\}/& /g' | awk '{print $4 " " $3 " " $2 " " $1}' | sed 's/ /\n/g' > temp; mv \temp sign; exit 0
+
+###
+# The build script for the environment.
+BUILD: ''

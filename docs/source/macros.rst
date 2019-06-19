@@ -137,16 +137,6 @@ Example
     add     x8, x3, x8
 
     # Store results
-    sw      x3, 0(x2)
-    sw      x4, 4(x2)
-    sw      x5, 8(x2)
-    sw      x6, 12(x2)
-    sw      x7, 16(x2)
-    sw      x8, 20(x2)
-
-    //
-    // Assert
-    //
     RVTEST_IO_CHECK()
     RVTEST_SIGUPDATE(x3, 0x00000000)
     RVTEST_SIGUPDATE(x4, 0x00000000)

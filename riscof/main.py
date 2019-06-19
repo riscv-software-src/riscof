@@ -6,7 +6,7 @@ import riscof.utils as utils
 import riscof.constants as constants
 from riscof.errors import *
 
-def main():
+def execute():
     # Set up the parser
     parser = utils.riscof_cmdline_args()
     args = parser.parse_args()
@@ -41,11 +41,10 @@ def main():
     file_name_split = platform_file.split('.')
     platform_file=file_name_split[0]+'_checked.'+file_name_split[1]
 
-    framework.run(args.dut_model,env_file,args.base_model,args.base_env_file,isa_file,platform_file)
-    
+    framework.run(args.dut_model,env_file,args.base_model,args.base_env_file,isa_file,platform_file)    
 
-if __name__ == "__main__":
-    try:
-        main()
-    except ValidationError:
-        exit()
+# if __name__ == "__main__":
+#     try:
+#         execute()
+#     except ValidationError:
+#         exit()

@@ -66,7 +66,7 @@ All fields accept values as integers or hexadecimals(can be used interchangeably
 An elaborate example of the full-fledge ISA-YAML file can be found here: `ISA-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_isa.yaml>`_
 
 
-.. autoyaml:: ../rips/schema-isa.yaml
+.. autoyaml:: ../riscof/schemas/isa.yaml
 
 .. _platform_yaml_spec:
 
@@ -79,7 +79,7 @@ from the user and also the various constraints involved.
 An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `PLATFORM-YAML <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_platform.yaml>`_
 
 
-.. autoyaml:: ../rips/schema-platform.yaml
+.. autoyaml:: ../riscof/schemas/platform.yaml
 
 .. _environment_yaml_spec:
 
