@@ -57,4 +57,4 @@ def run(dut_model,dut_env_file,base_model,base_env_file,dut_isa_spec,dut_platfor
     # framework.test_execute.load_yaml(input)
 
 if __name__ == '__main__':
-  main()
+  run()

@@ -1,9 +1,9 @@
 ###
 # Path to the directory containing the environment set up.
-USER_ENV_DIR: env
+USER_ENV_DIR: riscof/env
 ###
 # Path to the linker file.
-USER_LINKER: env/link.ld
+USER_LINKER: riscof/env/link.ld
 ###
 # The name of the target for simulation.
 USER_TARGET: SPIKE
