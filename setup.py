@@ -2,6 +2,8 @@ import os
 import codecs
 from setuptools import setup, find_packages
 
+import riscof
+
 # Base directory of package
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -35,7 +37,8 @@ setup(
         install_requires=requirements,
         entry_points={
             "console_scripts": [
-                "riscof=riscof.main:execute",
+                "riscof_compliance=riscof.main:execute",
+                "riscof_dbgen=riscof.dbgen:generate"
             ],
         }
 )
