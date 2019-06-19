@@ -33,6 +33,8 @@
 #include "compliance_io.h"
 #include "test_macros.h"
 
+RVTEST_ISA("RV32I")
+
 # Test Virtual Machine (TVM) used by program.
 RV_COMPLIANCE_RV32M
 
@@ -43,8 +45,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_PART_1
-    RVTEST_PART_START(1)
+  #ifdef TEST_CASE_1
+    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, 1, -1, MIN, MAX register values\n");
 
@@ -424,7 +426,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
 
-    RVTEST_PART_END(1)
+    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

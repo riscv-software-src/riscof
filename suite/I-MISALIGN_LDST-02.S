@@ -38,6 +38,8 @@
 #include "compliance_io.h"
 #include "test_macros.h"
 
+RVTEST_ISA("RV32I")
+
 # Test Virtual Machine (TVM) used by program.
 RV_COMPLIANCE_RV32M
 
@@ -45,12 +47,13 @@ RV_COMPLIANCE_RV32M
 RV_COMPLIANCE_CODE_BEGIN
 
     RVTEST_IO_INIT
-    RVTEST_IO_ASSERT_GPR_EQ(x0, 0x00000000)
-    RVTEST_IO_WRITE_STR("# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-
+    RVTEST_IO_ASSERT_GPR_EQ(x31,x0, 0x00000000)
+    RVTEST_IO_WRITE_STR(x31,"# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+    #ifdef TEST_CASE_1
+    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # Save and set trap handler address
     # ---------------------------------------------------------------------------------------------
-    RVTEST_IO_WRITE_STR("# Test part A1 - test LW\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part A1 - test LW\n");
 
     # set trap handler to handle LW misaligned in software
     la x1, lw_trap_handler
@@ -78,10 +81,10 @@ RV_COMPLIANCE_CODE_BEGIN
     lw      x4, 0(x3)
     sw      x4, 12(x2)
 
-    RVTEST_IO_WRITE_STR("# Test part A1  - Complete\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part A1  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVTEST_IO_WRITE_STR("# Test part A2 - test LH\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part A2 - test LH\n");
 
     # set trap handler to handle LH misaligned in software
     la x1, lh_trap_handler
@@ -103,10 +106,10 @@ RV_COMPLIANCE_CODE_BEGIN
     lh      x4, 0(x3)
     sw      x4, 12(x2)
 
-    RVTEST_IO_WRITE_STR("# Test part A2  - Complete\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part A2  - Complete\n");
     
     # ---------------------------------------------------------------------------------------------
-    RVTEST_IO_WRITE_STR("# Test part A3 - test LHU\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part A3 - test LHU\n");
     
     # set trap handler to handle LHU misaligned in software
     la x1, lhu_trap_handler
@@ -128,10 +131,10 @@ RV_COMPLIANCE_CODE_BEGIN
     lhu     x4, 0(x3)
     sw      x4, 12(x2)
 
-    RVTEST_IO_WRITE_STR("# Test part A3  - Complete\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part A3  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVTEST_IO_WRITE_STR("# Test part B1 - test SW\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part B1 - test SW\n");
 
     la x1, sw_trap_handler
     csrw mtvec, x1
@@ -160,10 +163,10 @@ RV_COMPLIANCE_CODE_BEGIN
     addi    x2, x2, 0x5
     sw      x6, 0(x2)
 
-    RVTEST_IO_WRITE_STR("# Test part B1  - Complete\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part B1  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVTEST_IO_WRITE_STR("# Test part B2 - test SH\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part B2 - test SH\n");
 
     la x1, sh_trap_handler
     csrw mtvec, x1
@@ -186,7 +189,7 @@ RV_COMPLIANCE_CODE_BEGIN
     addi    x2, x2, 0xA
     sh      x6, 0(x2)
 
-    RVTEST_IO_WRITE_STR("# Test part B2  - Complete\n");
+    RVTEST_IO_WRITE_STR(x31,"# Test part B2  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     # restore mtvec and jump to the end
@@ -252,8 +255,9 @@ exit_handler:
 
 test_end:
 
-    RVTEST_IO_WRITE_STR("# Test End\n")
-
+    RVTEST_IO_WRITE_STR(x31,"# Test End\n")
+    RVTEST_CASE_END(1)
+    #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT

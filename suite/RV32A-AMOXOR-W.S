@@ -13,6 +13,8 @@
 #include "compliance_io.h"
 #include "riscv_test.h"
 
+RVTEST_ISA("RV32IA")
+
 RV_COMPLIANCE_RV32U
 
 RV_COMPLIANCE_CODE_BEGIN
@@ -20,8 +22,8 @@ RV_COMPLIANCE_CODE_BEGIN
   RVTEST_IO_INIT
   RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
   RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-  #ifdef TEST_PART_1
-  RVTEST_PART_START(1)
+  #ifdef TEST_CASE_1
+  RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*A.*); def TEST_CASE_1=True")
 
   # address for test results
   la	x2, test_res
@@ -48,7 +50,7 @@ RV_COMPLIANCE_CODE_BEGIN
   RVTEST_IO_ASSERT_GPR_EQ(x31,a5, 0xbffff801)
   TEST_CASE(a5, 0xffffffffbffff801, x2, 12, lw a5, 0(a3))
 
-  RVTEST_PART_END(1)
+  RVTEST_CASE_END(1)
   #endif
 test_end:
   RV_COMPLIANCE_HALT
