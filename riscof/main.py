@@ -43,8 +43,5 @@ def execute():
 
     framework.run(args.dut_model,env_file,args.base_model,args.base_env_file,isa_file,platform_file)    
 
-# if __name__ == "__main__":
-#     try:
-#         execute()
-#     except ValidationError:
-#         exit()
+if __name__ == "__main__":
+    execute()
