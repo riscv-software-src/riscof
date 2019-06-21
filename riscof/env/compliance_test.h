@@ -41,9 +41,15 @@
 
 #define RVTEST_START                                                    \
 
-#define RVTEST_CASE_START(_PNAME,_DSTR)                               \
+#define RVTEST_CASE(_PNAME,_DSTR)                               \
 
-#define RVTEST_CASE_END(_PNAME)                                     \
+#define RVTEST_SIGBASE(_R,_TAG) \
+  la _R,_TAG;\
+  .set offset,0;
+
+#define RVTEST_SIGUPD(_BR,_R,_TAG)\
+  sw _R,offset(_BR);\
+  .set offset,offset+4;
 
 #define RVTEST_UPD_SIGNATURE(test_num)                                           \
   RVTEST_PART_END(test_num)                                            \
