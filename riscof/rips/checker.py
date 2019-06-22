@@ -1,4 +1,3 @@
-import sys
 import os
 import re
 import logging
@@ -7,8 +6,8 @@ from cerberus import Validator
 import oyaml as yaml
 
 import riscof.utils as utils
-from riscof.errors import *
-from .schemaValidator import *
+from riscof.errors import ValidationError
+from .schemaValidator import schemaValidator
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +105,7 @@ def add_def_setters(schema_yaml):
     schema_yaml['mtvec']['default_setter'] = lambda doc: mtvecset()
     return schema_yaml
 
-def spec_check(isa_spec,schema_isa,platform_spec,platform_schema):
+def check_specs(isa_spec,schema_isa,platform_spec,platform_schema):
     ''' Function to perform ensure that the isa and platform specifications confirm
     to their schemas.
     '''
@@ -202,7 +201,7 @@ def spec_check(isa_spec,schema_isa,platform_spec,platform_schema):
     logger.info('Dumping out Normalized Checked YAML: '+output_filename)
     yaml.dump(normalized, outfile, default_flow_style=False, allow_unicode=True)
 
-def environment_check(env_spec):
+def check_environment(env_spec):
     """
         Read the input-environment foo (yaml file) and perform checks.
     """

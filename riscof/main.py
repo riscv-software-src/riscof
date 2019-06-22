@@ -1,10 +1,10 @@
 import logging
 
-import riscof.rips as rips
-import riscof.framework as framework
+import riscof.rips.checker as rips
+import riscof.framework.main as framework
 import riscof.utils as utils
 import riscof.constants as constants
-from riscof.errors import *
+from riscof.errors import ValidationError
 
 def execute():
     # Set up the parser
@@ -25,12 +25,12 @@ def execute():
     isa_file = args.dut_isa_spec
     platform_file = args.dut_platform_spec
 
-    rips.spec_check(isa_file,constants.isa_schema,platform_file,constants.platform_schema)
+    rips.check_specs(isa_file,constants.isa_schema,platform_file,constants.platform_schema)
 
     env_yaml = args.dut_env_yaml
 
     if env_yaml:
-        rips.environment_check(env_yaml)
+        rips.check_environment(env_yaml)
         env_file=env_yaml
     else:
         env_file=args.dut_env_file

@@ -16,11 +16,8 @@ def read(*parts):
 long_description = read('README.md')
 version="1.2.0"
 
-requirements=[
-    'oyaml>=0.9',
-    'Cerberus>=1.3.1',
-    'GitPython>=2.1.11'
-]
+with open("requirements.txt","r") as reqfile:
+    requirements=reqfile.readlines()
 
 setup(
         name="riscof",
