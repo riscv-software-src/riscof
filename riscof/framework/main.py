@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 def run(dut_model, dut_env_file, base_model, base_env_file, dut_isa_spec,
         dut_platform_spec):
+    '''Entry point for the framework module. This function initializes and sets up the required 
+    variables for the tests to run.'''
     work_dir = constants.work_dir
     #Creating work directory
     if not os.path.exists(work_dir):

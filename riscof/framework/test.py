@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 def compare_signature(file1, file2):
+    '''Function to check whether two files are equivalent.
+    '''
     if (filecmp.cmp(file1, file2)):
         status = 'Passed'
     else:
@@ -19,6 +21,8 @@ def compare_signature(file1, file2):
 
 
 def eval_cond(condition, spec):
+    '''Function to evaluate the "check" statement in the database entry.
+    '''
     condition = (condition.replace("check", '')).strip()
     if ':=' in condition:
         temp = condition.split(":=")
@@ -38,12 +42,15 @@ def eval_cond(condition, spec):
 
 
 def eval_macro(macro, spec):
+    '''Function to evaluate the "def" statements in the database entry and return the macro string.'''
     args = (macro.replace("def ", " -D")).split("=")
     if (">" not in args[1]):
         return [True, str(args[0]) + "=" + str(args[1])]
 
 
-def eval_tests(ispec, pspec):
+def generate_test_pool(ispec, pspec):
+    '''Funtion to select the tests which are applicable for the DUT and generate the macros
+    necessary for each test.'''
     spec = {**ispec, **pspec}
     test_pool = []
     db = utils.load_yaml(constants.framework_db)
@@ -66,8 +73,9 @@ def eval_tests(ispec, pspec):
 
 
 def run_tests(dut, base, ispec, pspec):
+    '''Function to run the tests for the DUT.'''
     logger.info("Selecting Tests.")
-    test_pool = eval_tests(ispec, pspec)
+    test_pool = generate_test_pool(ispec, pspec)
     log = []
     isa = ispec['ISA']
     for entry in test_pool:
