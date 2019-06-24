@@ -2,6 +2,6 @@ import os
 
 isa_schema = 'riscof/schemas/isa.yaml'
 platform_schema = 'riscof/schemas/platform.yaml'
-work_dir = os.getcwd()+"/work/"
+work_dir = os.getcwd() + "/work/"
 suite = "/suite/"
-framework_db = os.getcwd()+"/riscof/framework/database.yaml"
+framework_db = os.getcwd() + "/riscof/framework/database.yaml"
