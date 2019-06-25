@@ -62,8 +62,13 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Test
     li      x2, 0x11111111
-    ecall
     RVTEST_SIGUPD(x1,x0,0x0000000)
+    ecall
+    # Store data from test
+    RVTEST_SIGUPD(x1,x30,0x0000000b)
+    RVTEST_SIGUPD(x1,x2,0x11111111)
+    RVTEST_SIGUPD(x1,x0,0x0000000)
+    
 
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
@@ -86,14 +91,6 @@ _trap_handler:
 
     # Store MCAUSE
     csrr    x30, mcause
-    RVTEST_SIGUPD(x1,x30,0x0000000)
-
-    # Store data from test
-    RVTEST_SIGUPD(x1,x2,0x0000000)
-    RVTEST_SIGUPD(x1,x0,0x0000000)
-
-    # increment data_exc address
-    addi    x1, x1, 12
 
     # return
     mret
