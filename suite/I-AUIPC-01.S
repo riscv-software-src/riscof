@@ -46,13 +46,13 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
   #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A - general test of AUIPC\n");
 
     # Addresses for test data and results
     la      x14, test_A_data
-    la      x15, test_A_res
+    RVTEST_SIGBASE(x15, test_A_res)
 
     # Register initialization
     lw      x1, 0(x14)
@@ -81,21 +81,12 @@ test_A:
     xor     x31, x31, x5
 
     # Store results
-    sw      x6, 0(x15)
-    sw      x7, 4(x15)
-    sw      x16, 8(x15)
-    sw      x29, 12(x15)
-    sw      x31, 16(x15)
-
-    //
-    // Assert
-    //
     RVTEST_IO_CHECK()
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x6,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x7,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x16, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x29, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x31, 0x00000000)
+    RVTEST_SIGUPD(x15, x6,  0x00000000)
+    RVTEST_SIGUPD(x15, x7,  0x00000000)
+    RVTEST_SIGUPD(x15, x16, 0x00000000)
+    RVTEST_SIGUPD(x15, x29, 0x00000000)
+    RVTEST_SIGUPD(x15, x31, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
@@ -104,7 +95,7 @@ test_A:
 
     # Addresses for test data and results
     la      x17, test_B_data
-    la      x16, test_B_res
+    RVTEST_SIGBASE(x16, test_B_res)
 
     # Register initialization
     li      x1, 0x11111111
@@ -141,17 +132,11 @@ test_B:
     xor     x30, x30, x8
 
     # Store results
-    sw      x1, 0(x16)
-    sw      x2, 4(x16)
-    sw      x15, 8(x16)
-    sw      x28, 12(x16)
-    sw      x30, 16(x16)
-
-    RVTEST_IO_ASSERT_GPR_EQ(x16, x1,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x16, x2,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x16, x15, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x16, x28, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x16, x30, 0x00000000)
+    RVTEST_SIGUPD(x16, x1,  0x00000000)
+    RVTEST_SIGUPD(x16, x2,  0x00000000)
+    RVTEST_SIGUPD(x16, x15, 0x00000000)
+    RVTEST_SIGUPD(x16, x28, 0x00000000)
+    RVTEST_SIGUPD(x16, x30, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
@@ -160,7 +145,7 @@ test_B:
 
     # Addresses for test data and results
     la      x18, test_C_data
-    la      x17, test_C_res
+    RVTEST_SIGBASE(x17, test_C_res)
 
 test_C1:
     # Register initialization
@@ -194,26 +179,20 @@ test_C2:
     xor     x31, x31, x3
 
     # Store results
-    sw      x4, 0(x17)
-    sw      x15, 4(x17)
-test_C3:
-    sw      x30, 8(x17)
-    sw      x5, 12(x17)
-    sw      x16, 16(x17)
-    sw      x31, 20(x17)
+    RVTEST_SIGUPD(x17, x4,  0x00000000)
+    RVTEST_SIGUPD(x17, x15, 0x00000000)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x4,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x15, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x29, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x5,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x16, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x31, 0x00000000)
+test_C3:
+    
+    RVTEST_SIGUPD(x17, x29, 0x00000000)
+    RVTEST_SIGUPD(x17, x5,  0x00000000)
+    RVTEST_SIGUPD(x17, x16, 0x00000000)
+    RVTEST_SIGUPD(x17, x31, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
 
-    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

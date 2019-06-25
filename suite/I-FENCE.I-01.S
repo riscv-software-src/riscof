@@ -46,13 +46,13 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
   #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A - test fence\n");
 
     # Addresses for test data and results
     la      x16, test_A_data
-    la      x17, test_A_res
+    RVTEST_SIGBASE(x17, test_A_res)
 
     # Register initialization
     li      x3, 0
@@ -71,25 +71,16 @@ instr_A_dst:
     lui     x2, 0
 
     # Store results
-    sw      x1, 0(x17)
-    sw      x2, 4(x17)
-    sw      x3, 8(x17)
-    sw      x15, 12(x17)
-
-    //
-    // Assert
-    //
     RVTEST_IO_CHECK()
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x1,  0x00000030)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x2,  0x00000012)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x3,  0x00000042)
-    RVTEST_IO_ASSERT_GPR_EQ(x17, x15, 0x001101B3)
+    RVTEST_SIGUPD(x17, x1,  0x00000030)
+    RVTEST_SIGUPD(x17, x2,  0x00000012)
+    RVTEST_SIGUPD(x17, x3,  0x00000042)
+    RVTEST_SIGUPD(x17, x15, 0x001101B3)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
 
-    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

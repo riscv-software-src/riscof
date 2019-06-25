@@ -45,7 +45,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
     #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # Save and set trap handler address
     la x1, _trap_handler
     csrrw x21, mtvec, x1
@@ -58,12 +58,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A - test ECALL\n");
 
     # Address for test results
-    la      x1, test_A_res_exc
+    RVTEST_SIGBASE(x1, test_A_res_exc)
 
     # Test
     li      x2, 0x11111111
     ecall
-    sw      x0, 0(x1)
+    RVTEST_SIGUPD(x1,x0,0x0000000)
 
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 
@@ -86,11 +86,11 @@ _trap_handler:
 
     # Store MCAUSE
     csrr    x30, mcause
-    sw      x30, 0(x1)
+    RVTEST_SIGUPD(x1,x30,0x0000000)
 
     # Store data from test
-    sw      x2, 4(x1)
-    sw      x0, 8(x1)
+    RVTEST_SIGUPD(x1,x2,0x0000000)
+    RVTEST_SIGUPD(x1,x0,0x0000000)
 
     # increment data_exc address
     addi    x1, x1, 12
@@ -106,7 +106,6 @@ test_end:
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
 
-    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

@@ -46,12 +46,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
   #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A - general test of CSRRWI\n");
 
     # Address for test results
-    la      x15, test_A_res
+    RVTEST_SIGBASE(x15, test_A_res)
 
     # Register initialization
     csrrw   x0, mscratch, x0
@@ -65,25 +65,14 @@ RV_COMPLIANCE_CODE_BEGIN
     csrrwi  x31, mscratch, 0
 
     # Store results
-    sw      x0, 0(x15)
-    sw      x2, 4(x15)
-    sw      x4, 8(x15)
-    sw      x6, 12(x15)
-    sw      x28, 16(x15)
-    sw      x30, 20(x15)
-    sw      x31, 24(x15)
-
-    //
-    // Assert
-    //
     RVTEST_IO_CHECK()
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x0,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x2,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x4,  0x00000001)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x6,  0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x28, 0x0000001F)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x30, 0x0000000F)
-    RVTEST_IO_ASSERT_GPR_EQ(x15, x31, 0x00000010)
+    RVTEST_SIGUPD(x15, x0,  0x00000000)
+    RVTEST_SIGUPD(x15, x2,  0x00000000)
+    RVTEST_SIGUPD(x15, x4,  0x00000001)
+    RVTEST_SIGUPD(x15, x6,  0x00000000)
+    RVTEST_SIGUPD(x15, x28, 0x0000001F)
+    RVTEST_SIGUPD(x15, x30, 0x0000000F)
+    RVTEST_SIGUPD(x15, x31, 0x00000010)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
@@ -91,22 +80,20 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B - testing writing to x0\n");
 
     # Address for test results
-    la      x1, test_B_res
+    RVTEST_SIGBASE(x1, test_B_res)
 
     # Test
     csrrwi  x0, mscratch, 0xF
     csrrwi  x0, mscratch, 0
 
     # store results
-    sw      x0, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x0, 0x00000000)
+    RVTEST_SIGUPD(x1, x0, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
 
-    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

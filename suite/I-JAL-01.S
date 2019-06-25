@@ -46,12 +46,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
   #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of JAL\n");
 
     # Address for test results
-    la      x1, test_A1_res
+    RVTEST_SIGBASE(x1, test_A1_res)
 
     # Register initialization
     li      x2, 0x12345678
@@ -63,15 +63,9 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x0, 0(x1)
-    sw      x2, 4(x1)
-
-    //
-    // Assert
-    //
     RVTEST_IO_CHECK()
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x0, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x12345678)
+    RVTEST_SIGUPD(x1, x0, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x12345678)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
@@ -79,7 +73,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A2 - test of JAL - jumps forward, backward\n");
 
     # Address for test results
-    la      x1, test_A2_res
+    RVTEST_SIGBASE(x1, test_A2_res)
 
     # Register initialization
     li      x2, 0xFFFFFFFF
@@ -109,15 +103,11 @@ RV_COMPLIANCE_CODE_BEGIN
 3:
 
     # Store results
-    sw      x0, 0(x1)
-    sw      x2, 4(x1)
-    sw      x3, 8(x1)
-    sw      x4, 12(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x0, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x9ABCDEF0)
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x3, 0x87654321)
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x4, 0x0FEDCBA9)
+    RVTEST_SIGUPD(x1, x0, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x9ABCDEF0)
+    RVTEST_SIGUPD(x1, x3, 0x87654321)
+    RVTEST_SIGUPD(x1, x4, 0x0FEDCBA9)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
@@ -126,7 +116,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Addresses for test data and results
     la      x9, test_B1_data
-    la      x10, test_B1_res
+    RVTEST_SIGBASE(x10, test_B1_res)
 
     # Register initialization
     li      x2, 0xFFFFFFFF
@@ -174,21 +164,14 @@ B1b_link:
 
 
     # Store results
-    sw      x2, 0(x10)
-    sw      x3, 4(x10)
-    sw      x4, 8(x10)
-    sw      x5, 12(x10)
-    sw      x6, 16(x10)
-    sw      x7, 20(x10)
-    sw      x8, 24(x10)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x2, 0x11111111)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x3, 0x22222222)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x4, 0x33333333)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x5, 0x44444444)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x6, 0x55555555)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x7, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x8, 0x00000000)
+    RVTEST_SIGUPD(x10, x2, 0x11111111)
+    RVTEST_SIGUPD(x10, x3, 0x22222222)
+    RVTEST_SIGUPD(x10, x4, 0x33333333)
+    RVTEST_SIGUPD(x10, x5, 0x44444444)
+    RVTEST_SIGUPD(x10, x6, 0x55555555)
+    RVTEST_SIGUPD(x10, x7, 0x00000000)
+    RVTEST_SIGUPD(x10, x8, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
@@ -197,7 +180,7 @@ B1b_link:
 
     # Addresses for test data and results
     la      x9, test_B2_data
-    la      x10, test_B2_res
+    RVTEST_SIGBASE(x10, test_B2_res)
 
     # Register initialization
     li      x2, 0xFFFFFFFF
@@ -248,26 +231,18 @@ B2c_link:
     xor     x8, x1, x25
 
     # Store results
-    sw      x2, 0(x10)
-    sw      x3, 4(x10)
-    sw      x4, 8(x10)
-    sw      x5, 12(x10)
-    sw      x6, 16(x10)
-    sw      x7, 20(x10)
-    sw      x8, 24(x10)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x2, 0x66666666)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x3, 0x77777777)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x4, 0x88888888)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x5, 0x99999999)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x6, 0xAAAAAAAA)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x7, 0x00000000)
-    RVTEST_IO_ASSERT_GPR_EQ(x10, x8, 0x00000000)
+    RVTEST_SIGUPD(x10, x2, 0x66666666)
+    RVTEST_SIGUPD(x10, x3, 0x77777777)
+    RVTEST_SIGUPD(x10, x4, 0x88888888)
+    RVTEST_SIGUPD(x10, x5, 0x99999999)
+    RVTEST_SIGUPD(x10, x6, 0xAAAAAAAA)
+    RVTEST_SIGUPD(x10, x7, 0x00000000)
+    RVTEST_SIGUPD(x10, x8, 0x00000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

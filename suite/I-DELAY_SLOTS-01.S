@@ -46,12 +46,12 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
   #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - test JAL\n");
 
     # Address for test results
-    la      x1, test_A1_res
+    RVTEST_SIGBASE(x1, test_A1_res)
 
     # Test
     li      x2, 0x11111111
@@ -60,13 +60,8 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
-
-    //
-    // Assert
-    //
     RVTEST_IO_CHECK()
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x11111111)
+    RVTEST_SIGUPD(x1, x2, 0x11111111)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
@@ -74,7 +69,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A2 - test JALR\n");
 
     # Address for test results
-    la      x1, test_A2_res
+    RVTEST_SIGBASE(x1, test_A2_res)
 
     # Test
     li      x2, 0x22222222
@@ -84,9 +79,8 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x22222222)
+    RVTEST_SIGUPD(x1, x2, 0x22222222)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
@@ -94,7 +88,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B1 - test BEQ\n");
 
     # Address for test results
-    la      x1, test_B1_res
+    RVTEST_SIGBASE(x1, test_B1_res)
 
     # Register initialization
     li      x5, 5
@@ -107,9 +101,8 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x33333333)
+    RVTEST_SIGUPD(x1, x2, 0x33333333)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
@@ -117,7 +110,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B2 - test BNE\n");
 
     # Address for test results
-    la      x1, test_B2_res
+    RVTEST_SIGBASE(x1, test_B2_res)
 
     # Register initialization
     li      x5, 5
@@ -130,9 +123,8 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x44444444)
+    RVTEST_SIGUPD(x1, x2, 0x44444444)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
 
@@ -140,7 +132,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B3 - test BLT\n");
 
     # Address for test results
-    la      x1, test_B3_res
+    RVTEST_SIGBASE(x1, test_B3_res)
 
     # Register initialization
     li      x5, 5
@@ -153,9 +145,8 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x55555555)
+    RVTEST_SIGUPD(x1, x2, 0x55555555)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
 
@@ -163,7 +154,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B4 - test BLTU\n");
 
     # Address for test results
-    la      x1, test_B4_res
+    RVTEST_SIGBASE(x1, test_B4_res)
 
     # Register initialization
     li      x5, 5
@@ -176,9 +167,8 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x66666666)
+    RVTEST_SIGUPD(x1, x2, 0x66666666)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part B  - Complete\n");
 
@@ -186,7 +176,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B5 - test BGE\n");
 
     # Address for test results
-    la      x1, test_B5_res
+    RVTEST_SIGBASE(x1, test_B5_res)
 
     # Register initialization
     li      x5, 5
@@ -199,9 +189,8 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x77777777)
+    RVTEST_SIGUPD(x1, x2, 0x77777777)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part C  - Complete\n");
 
@@ -209,7 +198,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B6 - test BGEU\n");
 
     # Address for test results
-    la      x1, test_B6_res
+    RVTEST_SIGBASE(x1, test_B6_res)
 
     # Register initialization
     li      x5, 5
@@ -222,15 +211,13 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x2, 0(x1)
 
-    RVTEST_IO_ASSERT_GPR_EQ(x1, x2, 0x88888888)
+    RVTEST_SIGUPD(x1, x2, 0x88888888)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part D  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
 
-    RVTEST_CASE_END(1)
   #endif
  # ---------------------------------------------------------------------------------------------
     # HALT

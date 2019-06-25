@@ -13,6 +13,14 @@
 // RV Compliance Macros
 //-----------------------------------------------------------------------
 
+#if XLEN==64
+  #define SREG sd
+  #define REGWIDTH 8
+#else
+  #define SREG sw
+  #define REGWIDTH 4
+#endif
+
 #define RVTEST_ISA(_STR)
 
 #define RV_COMPLIANCE_HALT                                              \
@@ -48,8 +56,8 @@
   .set offset,0;
 
 #define RVTEST_SIGUPD(_BR,_R,_TAG)\
-  sw _R,offset(_BR);\
-  .set offset,offset+4;
+  SREG _R,offset(_BR);\
+  .set offset,offset+REGWIDTH;
 
 #define RVTEST_UPD_SIGNATURE(test_num)                                           \
   RVTEST_PART_END(test_num)                                            \
