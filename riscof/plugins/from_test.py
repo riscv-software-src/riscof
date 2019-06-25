@@ -46,7 +46,6 @@ def get_sign(file, spec):
         sign = ""
         lines = k.read().splitlines()
         code_start = False
-        part_start = False
         isa = None
         part_number = ''
         i = 0
@@ -63,8 +62,7 @@ def get_sign(file, spec):
             if "RVTEST_ISA" in line:
                 isa = (((line.strip()).replace('RVTEST_ISA(\"',
                                                "")).replace("\")", "")).strip()
-            if "RVTEST_CASE_START" in line:
-                part_start = True
+            if "RVTEST_CASE(" in line:
                 include = True
                 args = [(temp.strip()).replace("\"", '')
                         for temp in (line.strip()).replace(
@@ -92,17 +90,12 @@ def get_sign(file, spec):
                 for macro in define:
                     temp = eval_macro(macro, spec)
                     include = temp[0] and include
-            if ("RVTEST_IO_ASSERT_GPR_EQ") in line and part_start and include:
+            if ("RVTEST_SIGUPD") in line and include:
                 val = int(
-                    re.findall("RVTEST_IO_ASSERT_GPR_EQ\(.+?,.+?,.*?0x(.+)\)",
+                    re.findall("RVTEST_SIGUPD\(.+?,.+?,.*?0x(.+)\)",
                                line, re.DOTALL)[0], 16)
                 sign += sline(val)
                 count += 1
-            if "RVTEST_CASE_END" in line:
-                args = [(temp.strip()).replace("\"", '')
-                        for temp in (line.strip()).replace(
-                            'RVTEST_CASE_END', '')[1:-1].split(',')]
-                part_start = False
         if not count % 4 == 0:
             for i in range(4 - count % 4):
                 sign += sline(0)

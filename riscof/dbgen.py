@@ -4,6 +4,7 @@ import sys
 import re
 import oyaml as yaml
 import collections
+from riscof.errors import DbgenError
 
 import riscof.constants as constants
 
@@ -13,7 +14,8 @@ def dirwalk(dir):
     for root, dirs, files in os.walk(os.getcwd() + "/" + dir):
         path = root[root.find(dir):] + "/"
         for file in files:
-            list.append(path + file)
+            if file.endswith(".S"):
+                list.append(path + file)
     return list
 
 
@@ -44,14 +46,10 @@ def createdict(file):
             if "RVTEST_ISA" in line:
                 isa = (((line.strip()).replace('RVTEST_ISA(\"',
                                                "")).replace("\")", "")).strip()
-            if "RVTEST_CASE_START" in line:
-                if part_start == True:
-                    print("{}:{}: Did not finish ({}) start".format(
-                        file, i, part_number))
-                    sys.exit(0)
+            if "RVTEST_CASE(" in line:
                 args = [(temp.strip()).replace("\"", '')
                         for temp in (line.strip()).replace(
-                            'RVTEST_CASE_START', '')[1:-1].split(',')]
+                            'RVTEST_CASE', '')[1:-1].split(',')]
                 while (line.endswith('\\')):
                     line = lines[i]
                     i += 1
@@ -64,7 +62,7 @@ def createdict(file):
                 if (args[0] in part_dict.keys()):
                     print("{}:{}: Incorrect Naming of Test Case after ({})".
                           format(file, i, part_number))
-                    sys.exit(0)
+                    raise DbgenError
                 part_number = args[0]
                 conditions = (args[1].replace("//", '')).split(";")
                 check = []
@@ -76,21 +74,12 @@ def createdict(file):
                     elif (cond.startswith('def')):
                         define.append(cond)
                 part_dict[part_number] = {'check': check, 'define': define}
-            if "RVTEST_CASE_END" in line:
-                args = [(temp.strip()).replace("\"", '')
-                        for temp in (line.strip()).replace(
-                            'RVTEST_CASE_END', '')[1:-1].split(',')]
-                if args[0] != part_number:
-                    print("{}:{}: Wrong Test Case Numbering in ({})".format(
-                        file, i, part_number))
-                    sys.exit(0)
-                part_start = False
     if (isa is None):
         print("{}:ISA not specified.", file)
-        sys.exit(0)
+        raise DbgenError
     if len(part_dict.keys()) == 0:
-        print("{}: Atleast one part must exist in the test.", file)
-        sys.exit(0)
+        print("{}: Atleast one part must exist in the test.".format(file))
+        raise DbgenError
     return {'isa': str(isa), 'parts': orderdict(part_dict)}
 
 
@@ -111,14 +100,20 @@ def generate():
     existing = db.keys()
     new = [x for x in list if x not in existing]
     for file in existing:
-        commit = next(repo.iter_commits(paths="./" + file, max_count=1))
-        if (str(commit) != db[file]['commit_id']):
+        try:
+            commit = next(repo.iter_commits(paths="./" + file, max_count=1))
+            if (str(commit) != db[file]['commit_id']):
+                temp = createdict(cur_dir + file)
+                db[file] = {'commit_id': str(commit), **temp}
+        except DbgenError:
+                del db[file]
+    for file in new:
+        try:
+            commit = next(repo.iter_commits(paths="./" + file, max_count=1))
             temp = createdict(cur_dir + file)
             db[file] = {'commit_id': str(commit), **temp}
-    for file in new:
-        commit = next(repo.iter_commits(paths="./" + file, max_count=1))
-        temp = createdict(cur_dir + file)
-        db[file] = {'commit_id': str(commit), **temp}
+        except DbgenError:
+            continue
     with open(dbfile, "w") as wrfile:
         yaml.dump(orderdict(db),
                   wrfile,
