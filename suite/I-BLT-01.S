@@ -330,7 +330,6 @@ RV_COMPLIANCE_CODE_BEGIN
 1:
 
     # Store results
-    sw      x31, 0(x27)
 
     RVTEST_SIGUPD(x27, x31, 0x000002AB)
 
@@ -341,7 +340,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Address for test data and results
     la      x21, test_C_data
-    la      x22, test_C_res
+    RVTEST_SIGBASE(x22, test_C_res)
 
     # Load testdata
     lw      x31, 0(x21)
@@ -374,10 +373,6 @@ RV_COMPLIANCE_CODE_BEGIN
 3:
 
     # Store results
-    sw      x0, 0(x22)
-    sw      x2, 4(x22)
-    sw      x3, 8(x22)
-    sw      x4, 12(x22)
 
     RVTEST_SIGUPD(x22, x0, 0x00000000)
     RVTEST_SIGUPD(x22, x2, 0x9ABCDEF0)

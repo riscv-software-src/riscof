@@ -226,7 +226,7 @@ RV_COMPLIANCE_CODE_BEGIN
     sw      x27, 0(x28)
     addi    x28, x28, -4
     
-    lw      x26, 0(x28)
+    lw      x26, 4(x28)
     RVTEST_SIGUPD(x9, x26, 0x89ABCDEF)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");

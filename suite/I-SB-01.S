@@ -225,7 +225,7 @@ RV_COMPLIANCE_CODE_BEGIN
     sb      x19, 0(x23)
     lw      x20, 0(x23)
 
-    RVTEST_SIGUPD(x9, x23, 0x00000044)
+    RVTEST_SIGUPD(x9, x20, 0x00000044)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part D  - Complete\n");
 

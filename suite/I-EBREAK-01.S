@@ -85,11 +85,11 @@ _trap_handler:
 
     # Store MCAUSE
     csrr    x30, mcause
-    RVTEST_SIGUPD(x1,x30,0x0000000)
+    RVTEST_SIGUPD(x1,x30,0x0000003)
 
     # Store data from test
-    RVTEST_SIGUPD(x1,x2,0x0000000)
-    RVTEST_SIGUPD(x1,x0,0x0000000)
+    RVTEST_SIGUPD(x1,x2,0x11111111)
+    RVTEST_SIGUPD(x1,x0,0x00000000)
 
     # increment data_exc address
     addi    x1, x1, 12
@@ -121,6 +121,6 @@ RV_COMPLIANCE_DATA_BEGIN
     .align 4
 
 test_A_res_exc:
-    .fill 4, 4, -1
+    .fill 3, 4, -1
 
 RV_COMPLIANCE_DATA_END
