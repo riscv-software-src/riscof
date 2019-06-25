@@ -44,41 +44,41 @@ RV_COMPLIANCE_CODE_BEGIN
 
   # ---------------------------------------------------------------------------------------------
   #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*M.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*M.*); def TEST_CASE_1=True")
     RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
     # address for test results
-    la	x2, test_1_res
+    RVTEST_SIGBASE(x2, test_1_res)
 
     li  x18, MASK_XLEN( 0x0)
     li  x17, MASK_XLEN( 0x0)
     mulhsu  x17,  x18,  x17
-    sw  x17,  0( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x17,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x17,0x00000000)
 
     li  x20, MASK_XLEN( 0x0)
     li  x19, MASK_XLEN( 0x1)
     mulhsu  x19,  x20,  x19
-    sw  x19,  4( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x19,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x19,0x00000000)
 
     li  x22, MASK_XLEN( 0x0)
     li  x21, MASK_XLEN( -0x1)
     mulhsu  x21,  x22,  x21
-    sw  x21,  8( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x21,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x21,0x00000000)
 
     li  x24, MASK_XLEN( 0x0)
     li  x23, MASK_XLEN( 0x7fffffff)
     mulhsu  x23,  x24,  x23
-    sw  x23,  12( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x23,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x23,0x00000000)
 
     li  x26, MASK_XLEN( 0x0)
     li  x25, MASK_XLEN( 0x80000000)
     mulhsu  x25,  x26,  x25
-    sw  x25,  16( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x25,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x25,0x00000000)
 
 
     # ---------------------------------------------------------------------------------------------
@@ -86,37 +86,37 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
     # address for test results
-    la	x2, test_2_res
+    RVTEST_SIGBASE(x2, test_2_res)
 
     li  x28, MASK_XLEN( 0x1)
     li  x27, MASK_XLEN( 0x0)
     mulhsu  x27,  x28,  x27
-    sw  x27,  0( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x27,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x27,0x00000000)
 
     li  x30, MASK_XLEN( 0x1)
     li  x29, MASK_XLEN( 0x1)
     mulhsu  x29,  x30,  x29
-    sw  x29,  4( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x29,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x29,0x00000000)
 
     li  x3, MASK_XLEN( 0x1)
     li  x21, MASK_XLEN( -0x1)
     mulhsu  x21,  x3,  x21
-    sw  x21,  8( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x21,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x21,0x00000000)
 
     li  x8, MASK_XLEN( 0x1)
     li  x4, MASK_XLEN( 0x7fffffff)
     mulhsu  x4,  x8,  x4
-    sw  x4,  12( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x4,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x4,0x00000000)
 
     li  x11, MASK_XLEN( 0x1)
     li  x9, MASK_XLEN( 0x80000000)
     mulhsu  x9,  x11,  x9
-    sw  x9,  16( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x9,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x9,0x00000000)
 
 
     # ---------------------------------------------------------------------------------------------
@@ -124,37 +124,37 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
 
     # address for test results
-    la	x2, test_3_res
+    RVTEST_SIGBASE(x2, test_3_res)
 
     li  x13, MASK_XLEN( -0x1)
     li  x12, MASK_XLEN( 0x0)
     mulhsu  x12,  x13,  x12
-    sw  x12,  0( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x12,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x12,0x00000000)
 
     li  x15, MASK_XLEN( -0x1)
     li  x14, MASK_XLEN( 0x1)
     mulhsu  x14,  x15,  x14
-    sw  x14,  4( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x14,0xffffffff)
+    
+    RVTEST_SIGUPD( x2, x14,0xffffffff)
 
     li  x17, MASK_XLEN( -0x1)
     li  x16, MASK_XLEN( -0x1)
     mulhsu  x16,  x17,  x16
-    sw  x16,  8( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x16,0xffffffff)
+    
+    RVTEST_SIGUPD( x2, x16,0xffffffff)
 
     li  x19, MASK_XLEN( -0x1)
     li  x18, MASK_XLEN( 0x7fffffff)
     mulhsu  x18,  x19,  x18
-    sw  x18,  12( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x18,0xffffffff)
+    
+    RVTEST_SIGUPD( x2, x18,0xffffffff)
 
     li  x21, MASK_XLEN( -0x1)
     li  x20, MASK_XLEN( 0x80000000)
     mulhsu  x20,  x21,  x20
-    sw  x20,  16( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x20,0xffffffff)
+    
+    RVTEST_SIGUPD( x2, x20,0xffffffff)
 
 
     # ---------------------------------------------------------------------------------------------
@@ -162,37 +162,37 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
 
     # address for test results
-    la	x2, test_4_res
+    RVTEST_SIGBASE(x2, test_4_res)
 
     li  x23, MASK_XLEN( 0x7fffffff)
     li  x22, MASK_XLEN( 0x0)
     mulhsu  x22,  x23,  x22
-    sw  x22,  0( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x22,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x22,0x00000000)
 
     li  x25, MASK_XLEN( 0x7fffffff)
     li  x24, MASK_XLEN( 0x1)
     mulhsu  x24,  x25,  x24
-    sw  x24,  4( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x24,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x24,0x00000000)
 
     li  x27, MASK_XLEN( 0x7fffffff)
     li  x26, MASK_XLEN( -0x1)
     mulhsu  x26,  x27,  x26
-    sw  x26,  8( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x26,0x7ffffffe)
+    
+    RVTEST_SIGUPD( x2, x26,0x7ffffffe)
 
     li  x29, MASK_XLEN( 0x7fffffff)
     li  x28, MASK_XLEN( 0x7fffffff)
     mulhsu  x28,  x29,  x28
-    sw  x28,  12( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x28,0x3fffffff)
+    
+    RVTEST_SIGUPD( x2, x28,0x3fffffff)
 
     li  x21, MASK_XLEN( 0x7fffffff)
     li  x30, MASK_XLEN( 0x80000000)
     mulhsu  x30,  x21,  x30
-    sw  x30,  16( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x30,0x3fffffff)
+    
+    RVTEST_SIGUPD( x2, x30,0x3fffffff)
 
 
     # ---------------------------------------------------------------------------------------------
@@ -200,41 +200,40 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
 
     # address for test results
-    la	x2, test_5_res
+    RVTEST_SIGBASE(x2, test_5_res)
 
     li  x4, MASK_XLEN( 0x80000000)
     li  x3, MASK_XLEN( 0x0)
     mulhsu  x3,  x4,  x3
-    sw  x3,  0( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x3,0x00000000)
+    
+    RVTEST_SIGUPD( x2, x3,0x00000000)
 
     li  x9, MASK_XLEN( 0x80000000)
     li  x8, MASK_XLEN( 0x1)
     mulhsu  x8,  x9,  x8
-    sw  x8,  4( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x8,0xffffffff)
+    
+    RVTEST_SIGUPD( x2, x8,0xffffffff)
 
     li  x12, MASK_XLEN( 0x80000000)
     li  x11, MASK_XLEN( -0x1)
     mulhsu  x11,  x12,  x11
-    sw  x11,  8( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x11,0x80000000)
+    
+    RVTEST_SIGUPD( x2, x11,0x80000000)
 
     li  x14, MASK_XLEN( 0x80000000)
     li  x13, MASK_XLEN( 0x7fffffff)
     mulhsu  x13,  x14,  x13
-    sw  x13,  12( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x13,0xc0000000)
+    
+    RVTEST_SIGUPD( x2, x13,0xc0000000)
 
     li  x16, MASK_XLEN( 0x80000000)
     li  x15, MASK_XLEN( 0x80000000)
     mulhsu  x15,  x16,  x15
-    sw  x15,  16( x2)
-    RVTEST_IO_ASSERT_GPR_EQ( x2, x15,0xc0000000)
+    
+    RVTEST_SIGUPD( x2, x15,0xc0000000)
 
 
     RVTEST_IO_WRITE_STR(x31, "Test End\n")
-    RVTEST_CASE_END(1)
   #endif
   # ---------------------------------------------------------------------------------------------
 
