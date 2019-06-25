@@ -67,8 +67,14 @@ def generate_test_pool(ispec, pspec):
                 if (temp[0] and include):
                     macros = macros + temp[1]
         if not macros == '':
+            if '32' in db[file]['isa']:
+                xlen='32'
+            elif '64' in db[file]['isa']:
+                xlen='64'
+            elif '128' in db[file]['isa']:
+                xlen='128'
             test_pool.append(
-                [file, db[file]['commit_id'], macros, db[file]['isa']])
+                [file, db[file]['commit_id'], macros+" -DXLEN="+xlen, db[file]['isa']])
     return test_pool
 
 

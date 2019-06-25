@@ -16,9 +16,11 @@
 #if XLEN==64
   #define SREG sd
   #define REGWIDTH 8
-#else
-  #define SREG sw
-  #define REGWIDTH 4
+#else 
+  #if XLEN==32
+    #define SREG sw
+    #define REGWIDTH 4
+  #endif
 #endif
 
 #define RVTEST_ISA(_STR)
