@@ -92,8 +92,8 @@ def get_sign(file, spec):
                     include = temp[0] and include
             if ("RVTEST_SIGUPD") in line and include:
                 val = int(
-                    re.findall("RVTEST_SIGUPD\(.+?,.+?,.*?0x(.+)\)",
-                               line, re.DOTALL)[0], 16)
+                    re.findall("RVTEST_SIGUPD\(.+?,.+?,.*?0x(.+)\)", line,
+                               re.DOTALL)[0], 16)
                 sign += sline(val)
                 count += 1
         if not count % 4 == 0:

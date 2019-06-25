@@ -47,9 +47,8 @@ def createdict(file):
                 isa = (((line.strip()).replace('RVTEST_ISA(\"',
                                                "")).replace("\")", "")).strip()
             if "RVTEST_CASE(" in line:
-                args = [(temp.strip()).replace("\"", '')
-                        for temp in (line.strip()).replace(
-                            'RVTEST_CASE', '')[1:-1].split(',')]
+                args = [(temp.strip()).replace("\"", '') for temp in (
+                    line.strip()).replace('RVTEST_CASE', '')[1:-1].split(',')]
                 while (line.endswith('\\')):
                     line = lines[i]
                     i += 1
@@ -106,7 +105,7 @@ def generate():
                 temp = createdict(cur_dir + file)
                 db[file] = {'commit_id': str(commit), **temp}
         except DbgenError:
-                del db[file]
+            del db[file]
     for file in new:
         try:
             commit = next(repo.iter_commits(paths="./" + file, max_count=1))
