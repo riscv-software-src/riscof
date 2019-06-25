@@ -49,8 +49,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31,x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31,"# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-    #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+  #ifdef TEST_CASE_1
+    RVTEST_CASE(1,"check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # Save and set trap handler address
     # ---------------------------------------------------------------------------------------------
     RVTEST_IO_WRITE_STR(x31,"# Test part A1 - test LW\n");
@@ -61,25 +61,25 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Addresses for test data and results
     la      x3, test_data
-    la      x2, test_A1_res
+    RVTEST_SIGBASE(x2, test_A1_res)
 
     # Test - mis-aligned by 1 byte
     li      x4,  0
     addi    x3,  x3,  0x1
     lw      x4, 0(x3)
-    sw      x4, 4(x2)
+    RVTEST_SIGUPD(x2, x4, 0xbaabcdef)
 
     # Test - mis-aligned by 2 bytes
     addi    x3,  x3,  0x1
     li      x4,  0
     lw      x4, 0(x3)
-    sw      x4, 8(x2)
+    RVTEST_SIGUPD(x2, x4, 0xdcbaabcd)
 
     # Test - mis-aligned by 3 bytes
     addi    x3,  x3,  0x1
     li      x4,  0
     lw      x4, 0(x3)
-    sw      x4, 12(x2)
+    RVTEST_SIGUPD(x2, x4, 0xfedcbaab)
 
     RVTEST_IO_WRITE_STR(x31,"# Test part A1  - Complete\n");
 
@@ -92,19 +92,19 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Addresses for test data and results
     la      x3, test_data
-    la      x2, test_A2_res
+    RVTEST_SIGBASE(x2, test_A2_res)
 
     # Test - mis-aligned by 1 byte
     addi    x3,  x3,  0x1
     li      x4,  0
     lh      x4, 0(x3)
-    sw      x4, 4(x2)
+    RVTEST_SIGUPD(x2, x4, 0xffffcdef)
 
     # Test - mis-aligned by 3 byte
     addi    x3,  x3,  0x2
     li      x4,  0
     lh      x4, 0(x3)
-    sw      x4, 12(x2)
+    RVTEST_SIGUPD(x2, x4, 0xffffbaab)
 
     RVTEST_IO_WRITE_STR(x31,"# Test part A2  - Complete\n");
     
@@ -117,19 +117,19 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Addresses for test data and results
     la      x3, test_data
-    la      x2, test_A3_res
+    RVTEST_SIGBASE(x2, test_A3_res)
 
     # Test - mis-aligned by 1 byte
     addi    x3,  x3,  0x1
     li      x4,  0
     lhu     x4, 0(x3)
-    sw      x4, 4(x2)
+    RVTEST_SIGUPD(x2, x4, 0xcdef)
 
     # Test - mis-aligned by 3 byte
     addi    x3,  x3,  0x2
     li      x4,  0
     lhu     x4, 0(x3)
-    sw      x4, 12(x2)
+    RVTEST_SIGUPD(x2, x4, 0xbaab)
 
     RVTEST_IO_WRITE_STR(x31,"# Test part A3  - Complete\n");
 
@@ -140,28 +140,45 @@ RV_COMPLIANCE_CODE_BEGIN
     csrw mtvec, x1
 
     # Addresses for test data and results
-    la      x2, test_B1_res
+    la      x1, test_data1
+    RVTEST_SIGBASE(x2, test_B1_res)
 
     # Register initialization
     li      x6, 0x0
     li      x5, 0x99999999
 
     # Init memory
-    sw      x5, 0(x2)
-    sw      x5, 4(x2)
-    sw      x5, 8(x2)
-    sw      x5, 12(x2)
-    sw      x5, 16(x2)
+    sw      x5, 0(x1)
+    sw      x5, 4(x1)
+    sw      x5, 8(x1)
+    sw      x5, 12(x1)
+    sw      x5, 16(x1)
 
     # Test
-    addi    x2, x2, 0x5
-    sw      x6, 0(x2)
+    addi    x1, x1, 0x5
+    sw      x6, 0(x1)
+    
+    addi    x1, x1, 0x5
+    sw      x6, 0(x1)
 
-    addi    x2, x2, 0x5
-    sw      x6, 0(x2)
+    addi    x1, x1, 0x5
+    sw      x6, 0(x1)
 
-    addi    x2, x2, 0x5
-    sw      x6, 0(x2)
+    la      x1, test_data1
+    lw      x5, 0(x1)
+    RVTEST_SIGUPD(x2, x5, 0x99999999)
+
+    lw      x5, 4(x1)
+    RVTEST_SIGUPD(x2, x5, 0x00000099)
+
+    lw      x5, 8(x1)
+    RVTEST_SIGUPD(x2, x5, 0x00009900)
+
+    lw      x5, 12(x1)
+    RVTEST_SIGUPD(x2, x5, 0x00990000)
+
+    lw      x5, 16(x1)
+    RVTEST_SIGUPD(x2, x5, 0x99000000)
 
     RVTEST_IO_WRITE_STR(x31,"# Test part B1  - Complete\n");
 
@@ -172,22 +189,42 @@ RV_COMPLIANCE_CODE_BEGIN
     csrw mtvec, x1
 
     # Addresses for test data and results
-    la      x2, test_B2_res
-
+    la      x1, test_data2
+    RVTEST_SIGBASE(x2, test_B2_res)
+    
+    # Register initialization
+    li      x6, 0x0
+    li      x5, 0x99999999
 
     # Init memory
-    sw      x5, 0(x2)
-    sw      x5, 4(x2)
-    sw      x5, 8(x2)
-    sw      x5, 12(x2)
-    sw      x5, 16(x2)
+    sw      x5, 0(x1)
+    sw      x5, 4(x1)
+    sw      x5, 8(x1)
+    sw      x5, 12(x1)
+    sw      x5, 16(x1)
 
     # Test
-    addi    x2, x2, 0x5
-    sh      x6, 0(x2)
+    addi    x1, x1, 0x5
+    sh      x6, 0(x1)
 
-    addi    x2, x2, 0xA
-    sh      x6, 0(x2)
+    addi    x1, x1, 0xA
+    sh      x6, 0(x1)
+
+    la      x1, test_data2
+    lw      x5, 0(x1)
+    RVTEST_SIGUPD(x2, x5, 0x99999999)
+
+    lw      x5, 4(x1)
+    RVTEST_SIGUPD(x2, x5, 0x99000099)
+
+    lw      x5, 8(x1)
+    RVTEST_SIGUPD(x2, x5, 0x99999999)
+
+    lw      x5, 12(x1)
+    RVTEST_SIGUPD(x2, x5, 0x00999999)
+
+    lw      x5, 16(x1)
+    RVTEST_SIGUPD(x2, x5, 0x99999900)
 
     RVTEST_IO_WRITE_STR(x31,"# Test part B2  - Complete\n");
 
@@ -211,16 +248,16 @@ lw_trap_handler:
     slli x5, x5, 16
     or x4, x4, x5
 
-    lhu_trap_handler:    
-        # load second byte
-        lbu x5, 1(x3)
-        slli x5, x5, 8
-        or x4, x4, x5
+lhu_trap_handler:    
+    # load second byte
+    lbu x5, 1(x3)
+    slli x5, x5, 8
+    or x4, x4, x5
 
-        # load first byte
-        lbu x5, 0(x3)
-        or x4, x4, x5
-        j exit_handler
+    # load first byte
+    lbu x5, 0(x3)
+    or x4, x4, x5
+    j exit_handler
     
 lh_trap_handler:    
     # load second byte
@@ -234,13 +271,12 @@ lh_trap_handler:
     j exit_handler
 
 sw_trap_handler:
+    sb x0, 3(x1)
+    sb x0, 2(x1)
 
-    sb x0, 3(x2)
-    sb x0, 2(x2)
-
-    sh_trap_handler:
-        sb x0, 1(x2)
-        sb x0, 0(x2)
+sh_trap_handler:
+    sb x0, 1(x1)
+    sb x0, 0(x1)
 
 exit_handler:
     # increment return address
@@ -256,8 +292,7 @@ exit_handler:
 test_end:
 
     RVTEST_IO_WRITE_STR(x31,"# Test End\n")
-    RVTEST_CASE_END(1)
-    #endif
+  #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT
@@ -271,6 +306,20 @@ RV_COMPLIANCE_CODE_END
 test_data:
     .word 0xABCDEF89
     .word 0x98FEDCBA
+
+test_data1:
+    .word 0xdead1
+    .word 0xdead2
+    .word 0xdead3
+    .word 0xdead4
+    .word 0xdead5
+
+test_data2:
+    .word 0xbeaf1
+    .word 0xbeaf2
+    .word 0xbeaf3
+    .word 0xbeaf4
+    .word 0xbeaf5
 
 # Output data section.
 RV_COMPLIANCE_DATA_BEGIN
