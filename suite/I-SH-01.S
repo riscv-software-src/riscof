@@ -51,7 +51,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - test base address + 0\n");
 
     # Address for test results
-    la      x1, test_A1_res
+    la      x1, test_temp_data
     RVTEST_SIGBASE(x9, test_A1_res)
     # Set memory
     li      x31, 0xAAAABBBB
@@ -74,7 +74,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A2 - test base address - 1\n");
 
     # Address for test results
-    la      x5, test_A2_res + 1
+    la      x5, test_temp_data + 1
     RVTEST_SIGBASE(x9, test_A2_res)
     # Clear memory
     sw      x0, -1(x5)
@@ -92,7 +92,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A3 - test base address + 1\n");
 
     # Address for test results
-    la      x8, test_A3_res - 1
+    la      x8, test_temp_data - 1
     RVTEST_SIGBASE(x9, test_A3_res)
     # Clear memory
     sw      x0, 1(x8)
@@ -110,7 +110,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A4 - test base address - 2048\n");
 
     # Address for test results
-    la      x11, test_A4_res + 2048
+    la      x11, test_temp_data + 2048
     RVTEST_SIGBASE(x9, test_A4_res)
     # Clear memory
     sw      x0, -2048(x11)
@@ -128,7 +128,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A5 - test base address + 2047\n");
 
     # Address for test results
-    la      x14, test_A5_res - 2047
+    la      x14, test_temp_data - 2047
     RVTEST_SIGBASE(x9, test_A5_res)
     # Clear memory
     sw      x0, 2047(x14)
@@ -146,7 +146,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B - test base address + -4, -2, ... , 6\n");
 
     # Address for test results
-    la      x17, test_B_res
+    la      x17, test_temp_data
     RVTEST_SIGBASE(x9, test_B_res)
     # Test
     li      x18, 0x1111CC0C
@@ -178,7 +178,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part C - test store x0\n");
 
     # Address for test results
-    la      x22, test_C_res
+    la      x22, test_temp_data
     RVTEST_SIGBASE(x9, test_C_res)
     # Set memory
     li      x1, 0x87654321
@@ -198,7 +198,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Address for test data
     la      x21, test_D1_data
-    RVTEST_SIGBASE(x9, test_D1_data)
+    RVTEST_SIGBASE(x9, test_D1_res)
     # Clear memory
     lw      x1, 0(x21)
     sw      x0, 0(x1)
@@ -219,7 +219,7 @@ RV_COMPLIANCE_CODE_BEGIN
 
     # Address for test data
     la      x23, test_D2_data
-    la      x24, test_D2_res
+    la      x24, test_temp_data
     RVTEST_SIGBASE(x9, test_D2_res)
     # Clear memory
     sw      x0, 0(x24)
@@ -237,7 +237,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part E1 - test war hazard (data register)\n");
 
     # Address for test results
-    la      x26, test_E1_res
+    la      x26, test_temp_data
     RVTEST_SIGBASE(x9, test_E1_res)
     # Clear memory
     sw      x0, 0(x26)
@@ -256,7 +256,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part E2 - test war hazard (address register)\n");
 
     # Address for test results
-    la      x28, test_E2_res
+    la      x28, test_temp_data
     RVTEST_SIGBASE(x9, test_E2_res)
     # Clear memory
     sw      x0, 0(x28)
@@ -265,7 +265,7 @@ RV_COMPLIANCE_CODE_BEGIN
     li      x27, 0x89ABCDEF
     sh      x27, 0(x28)
     addi    x28, x28, -4
-    lw      x29, 0(x28)
+    lw      x29, 4(x28)
 
     RVTEST_SIGUPD(x9, x29, 0x0000CDEF)
 
@@ -275,7 +275,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part F - test raw hazard in memory\n");
 
     # Address for test results
-    la      x29, test_F_res
+    la      x29, test_temp_data
     RVTEST_SIGBASE(x9, test_F_res)
     # Clear memory
     sw      x0, 0(x29)
@@ -299,7 +299,7 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part G - test waw hazard in memory\n");
 
     # Address for test results
-    la      x1, test_G_res
+    la      x1, test_temp_data
     RVTEST_SIGBASE(x9, test_G_res)
     # Clear memory
     sw      x0, 0(x1)
@@ -328,10 +328,12 @@ RV_COMPLIANCE_CODE_END
     .align 4
 
 test_D1_data:
-    .word test_D1_res
+    .word test_temp_data
 test_D2_data:
     .word 0x9ABCDEF0
-
+    .fill 1, 4, -1
+test_temp_data:
+    .fill 2, 4, -1
 
 # Output data section.
 RV_COMPLIANCE_DATA_BEGIN
@@ -347,9 +349,8 @@ test_A4_res:
     .fill 1, 4, -1
 test_A5_res:
     .fill 1, 4, -1
-    .fill 1, 4, -1
 test_B_res:
-    .fill 2, 4, -1
+    .fill 3, 4, -1
 test_C_res:
     .fill 1, 4, -1
 test_D1_res:
