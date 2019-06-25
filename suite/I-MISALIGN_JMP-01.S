@@ -44,8 +44,8 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_INIT
     RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-    #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+  #ifdef TEST_CASE_1
+    RVTEST_CASE(1,"check ISA:=regex(.*I.*); def TEST_CASE_1=True")
     # Save and set trap handler address
     la x1, _trap_handler
     csrrw x21, mtvec, x1
@@ -57,14 +57,19 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - test JAL\n");
 
     # Address for test results
-    la      x1, test_A1_res_exc
+    RVTEST_SIGBASE(x1, test_A1_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Test
     li      x2, 0x11111111
     jal     x0, 1f + 2
     li      x2, 0
 1:
-
+    # Store results
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x11111111)
     //
     // Assert
     //
@@ -75,7 +80,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A2 - test JALR - NOT causing the exception\n");
 
     # Address for test results
-    la      x1, test_A2_res
+    RVTEST_SIGBASE(x1, test_A2_res)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Test
     li      x2, 0x22222222
@@ -83,25 +90,22 @@ RV_COMPLIANCE_CODE_BEGIN
     jalr    x0, x4, 0
     li      x2, 0
 1:
-    sw      x2, 0(x1)
-    addi    x1, x1, 4
+    RVTEST_SIGUPD(x1, x2, 0x22222222)
 
     li      x2, 0x33333333
     la      x4, 1f
     jalr    x0, x4, 1
     li      x2, 0
 1:
-    sw      x2, 0(x1)
-    addi    x1, x1, 4
+    RVTEST_SIGUPD(x1, x2, 0x33333333)
 
     li      x2, 0x44444444
     la      x4, 1f
     jalr    x0, x4, -3
     li      x2, 0
 
-    sw      x2, 0(x1)
+    RVTEST_SIGUPD(x1, x2, 0x44444444)
 1:
-    addi    x1, x1, 4
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
@@ -109,7 +113,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part A3 - test JALR - causing the exception\n");
 
     # Address for test results
-    la      x1, test_A3_res_exc
+    RVTEST_SIGBASE(x1, test_A3_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Test
     li      x2, 0x55555555
@@ -117,12 +123,20 @@ RV_COMPLIANCE_CODE_BEGIN
     jalr    x0, x4, 0
     li      x2, 0
 1:
+    # Store results
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x55555555)
 
     li      x2, 0x66666666
     la      x4, 1f + 3
     jalr    x0, x4, 0
     li      x2, 0
 1:
+    # Store results
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x66666666)
 
     # Test
     li      x2, 0x77777777
@@ -130,12 +144,20 @@ RV_COMPLIANCE_CODE_BEGIN
     jalr    x0, x4, 2
     li      x2, 0
 1:
+    # Store results
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x77777777)
 
     li      x2, 0x88888888
     la      x4, 1f
     jalr    x0, x4, 3
     li      x2, 0
 1:
+    # Store results
+    RVTEST_SIGUPD(x1, x7, 0x3)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x88888888)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
@@ -143,7 +165,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B1 - test BEQ\n");
 
     # Address for test results
-    la      x1, test_B1_res_exc
+    RVTEST_SIGBASE(x1, test_B1_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Register initialization
     li      x5, 5
@@ -158,6 +182,9 @@ RV_COMPLIANCE_CODE_BEGIN
     beq     x5, x5, 1f + 2
     li      x2, 0
 1:
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0x99999999)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
 
@@ -165,7 +192,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B2 - test BNE\n");
 
     # Address for test results
-    la      x1, test_B2_res_exc
+    RVTEST_SIGBASE(x1, test_B2_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Register initialization
     li      x5, 5
@@ -180,6 +209,9 @@ RV_COMPLIANCE_CODE_BEGIN
     bne     x5, x6, 1f + 2
     li      x2, 0
 1:
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0xAAAAAAAA)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
 
@@ -187,7 +219,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B3 - test BLT\n");
 
     # Address for test results
-    la      x1, test_B3_res_exc
+    RVTEST_SIGBASE(x1, test_B3_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Register initialization
     li      x5, 5
@@ -202,6 +236,9 @@ RV_COMPLIANCE_CODE_BEGIN
     blt     x5, x6, 1f + 2
     li      x2, 0
 1:
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0xBBBBBBBB)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part B  - Complete\n");
 
@@ -209,7 +246,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B4 - test BLTU\n");
 
     # Address for test results
-    la      x1, test_B4_res_exc
+    RVTEST_SIGBASE(x1, test_B4_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Register initialization
     li      x5, 5
@@ -224,6 +263,10 @@ RV_COMPLIANCE_CODE_BEGIN
     bltu    x5, x6, 1f + 2
     li      x2, 0
 1:
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0xCCCCCCCC)
+
 
     RVTEST_IO_WRITE_STR(x31, "# Test part C  - Complete\n");
 
@@ -231,7 +274,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B5 - test BGE\n");
 
     # Address for test results
-    la      x1, test_B5_res_exc
+    RVTEST_SIGBASE(x1, test_B5_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Register initialization
     li      x5, 5
@@ -246,6 +291,9 @@ RV_COMPLIANCE_CODE_BEGIN
     bge     x6, x5, 1f + 2
     li      x2, 0
 1:
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0xDDDDDDDD)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part D  - Complete\n");
 
@@ -253,7 +301,9 @@ RV_COMPLIANCE_CODE_BEGIN
     RVTEST_IO_WRITE_STR(x31, "# Test part B6 - test BGEU\n");
 
     # Address for test results
-    la      x1, test_B6_res_exc
+    RVTEST_SIGBASE(x1, test_B6_res_exc)
+    li x7, 0xdeadbeaf
+    li x8, 0xbeafdead
 
     # Register initialization
     li      x5, 5
@@ -268,6 +318,9 @@ RV_COMPLIANCE_CODE_BEGIN
     bgeu    x6, x5, 1f + 2
     li      x2, 0
 1:
+    RVTEST_SIGUPD(x1, x7, 0x2)
+    RVTEST_SIGUPD(x1, x8, 0x00000000)
+    RVTEST_SIGUPD(x1, x2, 0xEEEEEEEE)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part E  - Complete\n");
 
@@ -288,20 +341,11 @@ _trap_handler:
 
     # store low bits of mbadaddr
     csrr    x30, mbadaddr
-    andi    x30, x30, 3
-    sw      x30, 0(x1)
+    andi    x7, x30, 3
 
     # Store MCAUSE
-    csrr    x30, mcause
-    sw      x30, 4(x1)
+    csrr    x8, mcause
 
-    # Store data from test
-    sw      x2, 8(x1)
-
-    # increment data_exc address
-    addi    x1, x1, 12
-
-    # return
     mret
     RVTEST_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
@@ -311,9 +355,7 @@ test_end:
     RVTEST_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
     RVTEST_IO_WRITE_STR(x31, "# Test End\n")
-
-    RVTEST_CASE_END(1)
-     #endif
+  #endif
  # ---------------------------------------------------------------------------------------------
     # HALT
     RV_COMPLIANCE_HALT
