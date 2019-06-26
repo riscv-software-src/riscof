@@ -9,7 +9,7 @@ import string
 from string import Template
 
 import riscof.utils as utils
-from .pluginTemplate import pluginTemplate
+from riscof.plugins.pluginTemplate import pluginTemplate
 
 logger = logging.getLogger(__name__)
 

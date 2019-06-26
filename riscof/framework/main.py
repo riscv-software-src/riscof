@@ -3,7 +3,7 @@ import importlib
 import shutil
 import os
 
-from .test import run_tests
+from riscof.framework.test import run_tests
 import riscof.utils as utils
 import riscof.constants as constants
 

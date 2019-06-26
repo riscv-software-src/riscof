@@ -4,7 +4,7 @@ import sys
 import re
 import os
 
-from .pluginTemplate import pluginTemplate
+from riscof.plugins.pluginTemplate import pluginTemplate
 
 logger = logging.getLogger(__name__)
 

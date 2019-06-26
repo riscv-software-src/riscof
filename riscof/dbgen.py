@@ -99,9 +99,12 @@ def generate():
     try:
         with open(dbfile, "r") as temp:
             db = yaml.safe_load(temp)
+            delkeys = []
             for key in db.keys():
                 if key not in list:
-                    del db[key]
+                    delkeys.append(key)
+            for key in delkeys:
+                del db[key]
     except FileNotFoundError:
         db = {}
     cur_dir = os.getcwd()

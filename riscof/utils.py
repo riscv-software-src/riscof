@@ -225,7 +225,7 @@ def setup_logging(log_level):
         print(
             "\033[91mInvalid log level passed. Please select from debug | info | warning | error\033[0m"
         )
-        sys.exit(1)
+        raise ValueError("{}-Invalid log level.".format(log_level))
 
     logging.basicConfig(level=numeric_level)
 
