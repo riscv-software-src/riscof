@@ -1,6 +1,6 @@
 .. _cond_spec:
 
-Condtion specification(WIP)
+Framework directives(WIP)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This section describes the format for the conditions to be followed while writing *_DSTR* for the *RVTEST_CASE_START* macro. Each of the statements ends with a ';' .

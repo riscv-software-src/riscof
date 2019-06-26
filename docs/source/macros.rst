@@ -41,25 +41,15 @@ Example:
 
     RVTEST_IO_WRITE_STR(x31,"Example String")
 
-**RVTEST_CASE_START(_PNAME,_DSTR)**
+**RVTEST_CASE(_PNAME,_DSTR)**
 
-Macro to indicate the start of the test part. It takes two arguments namely part name(_PNAME) and the string specifying the conditions in which this part is enabled and the macros required for the part to run(_DSTR). The format for writing the _DSTR can be found here: :ref:`cond_spec` .
-
-Example:
-
-.. code-block:: c
-
-    RVTEST_CASE_START(1,"check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_PART_1=True")
-
-**RVTEST_CASE_END(_PNAME)**
-
-Macro to indicate the end of a test part. It takes one argument namely the part name(_PNAME). A part which should be contained within the *RVTEST_CASE_START* and *RVTEST_CASE_END* macro pair and no nested parts are allowed. The _PNAME in the macro pairs must match. There should be atleast one test part in a test.
+Macro to indicate the start of the test case. It takes two arguments namely part name(_PNAME) and the string specifying the conditions in which this part is enabled and the macros required for the part to run(_DSTR). The format for writing the _DSTR can be found here: :ref:`cond_spec` .
 
 Example:
 
 .. code-block:: c
 
-    RVTEST_CASE_END(1)
+    RVTEST_CASE_START(1,"check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_CASE_1=True")
 
 **RVTEST_SIGBASE(_R,_TAG)**
 
@@ -71,10 +61,9 @@ Example:
 
     RVTEST_SIGBASE(X26, test_B_res)
 
-**RVTEST_SIGUPDATE(_R,_AVAL)**
+**RVTEST_SIGUPDATE(_BR,_R,_AVAL)**
 
-Macro to store the value contained in a register using the base register specified in the 
-*RVTEST_SIGBASE* macro and an offset and increment the offset. Optionally, the macro can invoke a test assertion macro(currently *RVTEST_IO_ASSERT_GPR_EQ*) with the assertion value. It takes two arguments namely the register whose value needs 
+Macro to store the value contained in a register using the base register specified an offset and increment the offset. Optionally, the macro can invoke a test assertion macro(currently *RVTEST_IO_ASSERT_GPR_EQ*) with the assertion value. It takes three arguments namely the base register(_BR) the register whose value needs 
 to be stored(_R) and the assertion value(_AVAL). 
 
 Example:
@@ -106,18 +95,18 @@ Example
     RV_COMPLIANCE_CODE_BEGIN
 
     RVTEST_IO_INIT
-    RVTEST_SIGBASE(x2)
     RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
 
     # ---------------------------------------------------------------------------------------------
-    RVTEST_CASE_START(1,"check ISA:=regex(.*I.*); \
-                        def TEST_PART_1=True")
+    #ifdef TEST_CASE_1
+    RVTEST_CASE(1,"check ISA:=regex(.*I.*); \
+                        def TEST_CASE_1=True")
     RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, \
                         1, -1, MIN, MAX register values\n");
 
     # Addresses for test data and results
     la      x1, test_A1_data
-    la      x2, test_A1_res
+    RVTEST_SIGBASE(x2, test_A1_res)
 
     # Load testdata
     lw      x3, 0(x1)
@@ -138,15 +127,15 @@ Example
 
     # Store results
     RVTEST_IO_CHECK()
-    RVTEST_SIGUPDATE(x3, 0x00000000)
-    RVTEST_SIGUPDATE(x4, 0x00000000)
-    RVTEST_SIGUPDATE(x5, 0x00000001)
-    RVTEST_SIGUPDATE(x6, 0xFFFFFFFF)
-    RVTEST_SIGUPDATE(x7, 0x7FFFFFFF)
-    RVTEST_SIGUPDATE(x8, 0x80000000)
+    RVTEST_SIGUPDATE(x2, x3, 0x00000000)
+    RVTEST_SIGUPDATE(x2, x4, 0x00000000)
+    RVTEST_SIGUPDATE(x2, x5, 0x00000001)
+    RVTEST_SIGUPDATE(x2, x6, 0xFFFFFFFF)
+    RVTEST_SIGUPDATE(x2, x7, 0x7FFFFFFF)
+    RVTEST_SIGUPDATE(x2, x8, 0x80000000)
 
     RVTEST_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
-    RVTEST_CASE_END(1)
+    #endif
     RV_COMPLIANCE_HALT
 
     RV_COMPLIANCE_CODE_END

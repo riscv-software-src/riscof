@@ -8,14 +8,14 @@ Sample command for riscof
 
 Spike vs Spike
 ```
-python -m riscof.main -bm model_from_yaml -bf Examples/template_env.yaml -eyaml Examples/template_env.yaml -dm model_from_yaml -ispec Examples/template_isa.yaml -pspec Examples/template_platform.yaml --verbose debug
+python -m riscof.main -bm model_from_yaml -bf Examples/template_env.yaml -eyaml Examples/template_env.yaml -dm model_from_yaml -ispec Examples/rv32i_isa.yaml -pspec Examples/rv32i_platform.yaml --verbose debug
 
 
 ```
 
 Eclass vs Spike
 ```
-python -m riscof.main -bm model_from_yaml -bf Examples/template_env.yaml -dm model_from_yaml -ispec Examples/template_isa.yaml -pspec Examples/template_platform.yaml -eyaml Examples/e_class_env.yaml --verbose debug
+python -m riscof.main -bm model_from_yaml -bf Examples/template_env.yaml -dm model_from_yaml -ispec Examples/rv32i_isa.yaml -pspec Examples/rv32i_platform.yaml -eyaml Examples/e_class_env.yaml --verbose debug
 
 ```
 

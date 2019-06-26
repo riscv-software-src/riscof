@@ -12,7 +12,7 @@ Custom Schema Validator
 Rips
 ^^^^^
 
-.. automodule:: riscof.rips.main
+.. automodule:: riscof.rips.checker
    :members: 
    :special-members:
    :private-members:

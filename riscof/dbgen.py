@@ -10,6 +10,11 @@ import riscof.constants as constants
 
 
 def dirwalk(dir):
+    '''
+        Recursively searches a directory and returns a list of 
+        relative paths(from the directory) of the files which end with ".S".
+        :params: dir - The directory in which the files have to be searched for.
+    '''
     list = []
     for root, dirs, files in os.walk(os.getcwd() + "/" + dir):
         path = root[root.find(dir):] + "/"
@@ -20,6 +25,10 @@ def dirwalk(dir):
 
 
 def orderdict(dict):
+    '''
+        Creates and returns a sorted dictionary from a given dictionary.
+        :params: dict - The dictionary which needs to be sorted.
+    '''
     ret = collections.OrderedDict()
     for key in sorted(dict.keys()):
         ret[key] = dict[key]
