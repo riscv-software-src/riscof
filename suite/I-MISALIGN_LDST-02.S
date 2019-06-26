@@ -326,14 +326,14 @@ RV_COMPLIANCE_DATA_BEGIN
     .align 4
 
 test_A1_res:
-    .fill 4, 4, -1
+    .fill 3, 4, -1
 test_A2_res:
-    .fill 4, 4, -1
+    .fill 2, 4, -1
 test_A3_res:
-    .fill 4, 4, -1
+    .fill 2, 4, -1
 test_B1_res:
-    .fill 6, 4, -1
+    .fill 5, 4, -1
 test_B2_res:
-    .fill 6, 4, -1
+    .fill 5, 4, -1
 
 RV_COMPLIANCE_DATA_END
