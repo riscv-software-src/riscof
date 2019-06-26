@@ -9,7 +9,7 @@ import string
 from string import Template
 
 import riscof.utils as utils
-from riscof.plugins.pluginTemplate import pluginTemplate
+from riscof.plugins.Template import pluginTemplate
 
 logger = logging.getLogger(__name__)
 
@@ -62,9 +62,8 @@ class model_from_yaml(pluginTemplate):
         if self.perform_build:
             logger.debug(self.name + "Build")
             d = dict(isaf=isa_yaml, platformf=platform_yaml, isa=isa)
-            utils.execute_sim_command("",
-                                      Template(self.buildsc).safe_substitute(d),
-                                      True)
+            utils.shellCommand("",
+                               Template(self.buildsc).safe_substitute(d)).run()
 
     def simulate(self, file, isa):
         test_dir = self.work_dir + str(file.replace(self.suite, '')[:-2]) + "/"
