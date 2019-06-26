@@ -68,27 +68,31 @@ class model_from_yaml(pluginTemplate):
 
     def simulate(self, file, isa):
         test_dir = self.work_dir + str(file.replace(self.suite, '')[:-2]) + "/"
-        logger.debug(self.name + "Changing directory to " + test_dir)
-        os.chdir(test_dir)
         elf = test_dir + str(file.split("/")[-1][:-2]) + '.elf'
         d = dict(elf=elf, testDir=test_dir, isa=isa)
         if self.perform_pre:
             logger.debug(self.name + "Pre Sim")
             command = Template(self.pre).safe_substitute(d)
-            utils.execute_sim_command(self.env_dir, command, self.is_pre_shell)
+            if self.is_pre_shell:
+                utils.shellCommand(command).run(cwd=test_dir)
+            else:
+                utils.Command(command).run(cwd=test_dir)
 
         logger.debug(self.name + "Simulate")
         command = Template(self.simulator).safe_substitute(d)
-        utils.execute_command(command)
+        utils.Command(command).run(cwd=test_dir)
 
         if self.perform_post:
             logger.debug(self.name + "Post Sim")
             command = Template(self.post).safe_substitute(d)
-            utils.execute_sim_command(self.env_dir, command, self.is_post_shell)
+            if self.is_post_shell:
+                utils.shellCommand(command).run(cwd=test_dir)
+            else:
+                utils.Command(command).run(cwd=test_dir)
 
         sign_file = test_dir + self.name[:-1] + "_" + self.user_target + "_sign"
         cp = "cat " + test_dir + self.signature + " > " + sign_file
-        utils.execute_sim_command("", cp, True)
+        utils.shellCommand(cp, ensure_absolute_paths=True).run()
         return sign_file
 
     def make_recursive(self, path):
@@ -107,13 +111,12 @@ class model_from_yaml(pluginTemplate):
         test = self.root_dir + str(file)
         test_dir = self.work_dir + str(file.replace(self.suite, '')[:-2]) + "/"
         self.make_recursive(test_dir)
-        logger.debug(self.name + "Changing directory to " + test_dir)
-        os.chdir(test_dir)
         elf = test_dir + str(file.split("/")[-1][:-2]) + '.elf'
         cmd = self.compile_cmd.format(map[isa.lower()],
                                       self.user_abi) + ' ' + test + ' -o ' + elf
         execute = cmd + macros
-        utils.execute_command(execute)
+        utils.Command(execute).run(cwd=test_dir)
         cmd = self.objdump.format(test, self.user_abi) + ' ' + elf
-        utils.execute_command_log(
-            cmd, '{}.disass'.format(str(file.split("/")[-1][:-2])))
+        utils.shellCommand(
+            cmd + ' > {}.disass'.format(str(file.split("/")[-1][:-2]))).run(
+                cwd=test_dir)
