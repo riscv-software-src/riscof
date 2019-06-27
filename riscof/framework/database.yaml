@@ -1,0 +1,575 @@
+suite/I-ADD-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-ADDI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-AND-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-ANDI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-AUIPC-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-BEQ-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-BGE-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-BGEU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-BLT-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-BLTU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-BNE-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-CSRRC-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-CSRRCI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-CSRRS-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-CSRRSI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-CSRRW-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-CSRRWI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-DELAY_SLOTS-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-EBREAK-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True)
+suite/I-ECALL-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-ENDIANESS-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-FENCE.I-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-IO.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-JAL-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-JALR-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-LB-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-LBU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-LH-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-LHU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-LUI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-LW-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-MISALIGN_JMP-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-MISALIGN_LDST-02.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-NOP-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-OR-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-ORI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-RF_size-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-RF_width-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-RF_x0-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SB-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SH-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SLL-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SLLI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SLT-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SLTI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SLTIU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SLTU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SRA-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SRAI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SRL-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SRLI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SUB-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-SW-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-XOR-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/I-XORI-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32I
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-DIV-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-DIVU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-MUL-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-MULH-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-MULHSU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-MULHU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-REM-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True
+suite/M-REMU-01.S:
+  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  isa: RV32IM
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*M.*)
+      define:
+      - def TEST_CASE_1=True

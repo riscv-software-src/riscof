@@ -1,15 +1,15 @@
 ###
 # Path to the directory containing the environment set up.
-USER_ENV_DIR: env
+USER_ENV_DIR: suite/env
 ###
 # Path to the linker file.
-USER_LINKER: env/link.ld
+USER_LINKER: suite/env/link.ld
 ###
 # The name of the target for simulation.
 USER_TARGET: SPIKE
 ###
 # The command to run the simulation.
-USER_EXECUTABLE: 'spike -c --isa=${isa} +signature=sign ${elf}'
+USER_EXECUTABLE: 'spike -c --isa=${isa} +signature=sign ${elf} 2 > log.txt'
 ###
 # The name of the application binary interface for compilation.
 USER_ABI: ilp32

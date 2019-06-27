@@ -6,47 +6,59 @@ Install dependencies
 
 .. code-block:: bash
 
-    sudo apt-get install python3 pip3 # make sure to use python3.5 or above
+    sudo apt-get install python3 pip3 # make sure to use python3.7 or above
     git clone https://gitlab.com/incoresemi/riscof.git
-    pip3 install -r requirements.txt
+    python setup.py install
 
 Usage
 ^^^^^
 
 .. code-block:: bash
 
-    python3 -m rips.main -h
-    usage: RIPS Checker [-h] --input_isa YAML --input_platform YAML
-                        [--input_environment YAML] --schema_isa YAML
-                        --schema_platform YAML [--verbose]
+    python -m riscof.main -h
+    usage: riscof [-h] [--dut_model MODEL] [--dut_env_file FILE]
+                  [--base_model MODEL] [--base_env_file FILE] --dut_isa_spec YAML
+                  --dut_platform_spec YAML [--dut_env_yaml YAML] [--verbose]
 
-    This Program checks an input YAML for compatibility with RIPS format
+    This program checks compliance for a DUT.
 
     optional arguments:
-      --input_environment YAML, -ei YAML
-                            Input YAML file containing environment specs.
-      --input_isa YAML, -ii YAML
-                            Input YAML file containing ISA specs.
-      --input_platform YAML, -pi YAML
-                            Input YAML file containing platform specs.
-      --schema_isa YAML, -is YAML
-                            Input YAML file containing the schema for ISA.
-      --schema_platform YAML, -ps YAML
-                            Input YAML file containing the schema for Platform.
+      --base_env_file FILE, -bf FILE
+                            The FILE for Base model containing necessary
+                            environment parameters.
+      --base_model MODEL, -bm MODEL
+                            The MODEL whose against which the compliance is
+                            verified.
+      --dut_env_file FILE, -df FILE
+                            The FILE for DUT containing necessary environment
+                            parameters.
+      --dut_env_yaml YAML, -eyaml YAML
+                            The YAML which contains the Platfrorm specs of the
+                            DUT.
+      --dut_isa_spec YAML, -ispec YAML
+                            The YAML which contains the ISA specs of the DUT.
+      --dut_model MODEL, -dm MODEL
+                            The MODEL whose compliance is to be verified.
+      --dut_platform_spec YAML, -pspec YAML
+                            The YAML which contains the Platfrorm specs of the
+                            DUT.
       --verbose             debug | info | warning | error
       -h, --help            show this help message and exit
 
 Example:
 
+
+This Example runs spike vs spike. Please ensure spike and riscv toolchain is installed and configured before running this.
+
 .. code-block:: bash
 
-
-    python3 -m rips.main \
-    -ii Examples/template_isa.yaml \
-    -pi Examples/template_platform.yaml \
-    -is rips/schema-isa.yaml \
-    -ps rips/schema-platform.yaml \
-    -ei Examples/template_env.yaml \
+    python -m riscof.main \
+    -bm model_from_yaml \
+    -bf Examples/template_env.yaml \
+    -eyaml Examples/template_env.yaml \
+    -dm model_from_yaml \
+    -ispec Examples/rv32i_isa.yaml \
+    -pspec Examples/rv32i_platform.yaml \
     --verbose debug
 
 

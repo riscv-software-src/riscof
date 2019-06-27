@@ -2,20 +2,25 @@
 The work here is under development and is not stable for consumption .. yet!
 
 ## Documentation
-You can find the latest documentation of the work: [here](https://riscof.readthedocs.io/en/latest/)
+You can find the latest documentation of the work: [here](https://riscof.readthedocs.io/)
 
-Sample command for framework (under development)
+Sample command for riscof
 
 Spike vs Spike
 ```
-python3 -m framework.main -bm model_from_yaml -bf Examples/template_env.yaml -df Examples/template_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
+python -m riscof.main -bm model_from_yaml -bf Examples/template_env.yaml -eyaml Examples/template_env.yaml -dm model_from_yaml -ispec Examples/rv32i_isa.yaml -pspec Examples/rv32i_platform.yaml --verbose debug
 
-python3 -m framework.main -bm model_from_yaml -bf Examples/template_env_2.yaml -df Examples/template_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
+
 ```
 
 Eclass vs Spike
 ```
-python3 -m framework.main -bm model_from_yaml -bf Examples/template_env_2.yaml -df Examples/e_class_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
+python -m riscof.main -bm model_from_yaml -bf Examples/template_env.yaml -dm model_from_yaml -ispec Examples/rv32i_isa.yaml -pspec Examples/rv32i_platform.yaml -eyaml Examples/e_class_env.yaml --verbose debug
 
-python3 -m framework.main -bm model_from_yaml -bf Examples/template_env.yaml -df Examples/e_class_env.yaml -dm model_from_yaml -ispec Examples/template_isa_checked.yaml -pspec Examples/template_platform_checked.yaml --verbose debug
+```
+
+dbgen
+```
+python -m riscof.dbgen
+
 ```
