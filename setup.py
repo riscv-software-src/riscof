@@ -1,5 +1,6 @@
 import os
 import codecs
+import pip
 from setuptools import setup, find_packages
 
 import riscof
@@ -17,10 +18,7 @@ def read(*parts):
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
-version = "1.4.0"
-
-with open("requirements.txt", "r") as reqfile:
-    requirements = reqfile.readlines()
+version = "1.4.3"
 
 setup(name="riscof",
       version=version,
@@ -36,9 +34,8 @@ setup(name="riscof",
       license='BSD',
       packages=find_packages(),
       package_dir={'riscof': 'riscof/'},
-      package_data={'riscof': ['suite/env/*', 'suite/*.S', 'schemas/*']},
-      data_files=[('riscof/framework/', ['riscof/framework/database.yaml'])],
-      install_requires=requirements,
+      package_data={'riscof': ['suite/env/*', 'suite/*.S', 'schemas/*', 'framework/database.yaml', '../LICENSE'] },
+      install_requires=['Cerberus>=1.3.1', 'GitPython>=2.1.11', 'oyaml>=0.9','PyYAML>=5.1.1'],
       entry_points={
           "console_scripts": ["riscof=riscof.main:execute"],
       })
