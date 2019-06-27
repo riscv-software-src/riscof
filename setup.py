@@ -16,7 +16,7 @@ def read(*parts):
 #Long Description
 
 long_description = read('README.md')
-version = "1.2.0"
+version = "1.4.0"
 
 with open("requirements.txt", "r") as reqfile:
     requirements = reqfile.readlines()
