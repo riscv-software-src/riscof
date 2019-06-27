@@ -27,6 +27,8 @@ setup(name="riscof",
       long_description=long_description,
       classifiers=[
           "Programming Language :: Python :: 3.7",
+          "Licence :: OSI Approved :: BSD licence",
+          "Development Status :: 2 - Pre-Alpha"
       ],
       author='S Pawan Kumar',
       author_email='spawan1999@gmail.com',
