@@ -16,11 +16,11 @@ def dirwalk(dir):
         :params: dir - The directory in which the files have to be searched for.
     '''
     list = []
-    for root, dirs, files in os.walk(os.getcwd() + "/" + dir):
+    for root, dirs, files in os.walk(os.path.join(constants.root, dir)):
         path = root[root.find(dir):] + "/"
         for file in files:
             if file.endswith(".S"):
-                list.append(path + file)
+                list.append(os.path.join(path, file))
     return list
 
 
@@ -94,7 +94,7 @@ def createdict(file):
 def generate():
     list = dirwalk(constants.suite[:-1])
     repo = git.Repo("./")
-    dbfile = constants.framework_db
+    dbfile = os.path.join(constants.root, constants.framework_db)
     tree = repo.tree()
     try:
         with open(dbfile, "r") as temp:
@@ -107,21 +107,21 @@ def generate():
                 del db[key]
     except FileNotFoundError:
         db = {}
-    cur_dir = os.getcwd()
+    cur_dir = constants.root
     existing = db.keys()
     new = [x for x in list if x not in existing]
     for file in existing:
         try:
             commit = next(repo.iter_commits(paths="./" + file, max_count=1))
             if (str(commit) != db[file]['commit_id']):
-                temp = createdict(cur_dir + file)
+                temp = createdict(os.path.join(cur_dir, file))
                 db[file] = {'commit_id': str(commit), **temp}
         except DbgenError:
             del db[file]
     for file in new:
         try:
             commit = next(repo.iter_commits(paths="./" + file, max_count=1))
-            temp = createdict(cur_dir + file)
+            temp = createdict(os.path.join(cur_dir, file))
             db[file] = {'commit_id': str(commit), **temp}
         except DbgenError:
             continue

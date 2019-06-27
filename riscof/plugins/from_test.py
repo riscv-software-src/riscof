@@ -4,7 +4,8 @@ import sys
 import re
 import os
 
-from riscof.plugins.pluginTemplate import pluginTemplate
+from riscof.plugins.Template import pluginTemplate
+import riscof.constants as constants
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +106,7 @@ def get_sign(file, spec):
 class from_test(pluginTemplate):
 
     def initialise(self, *args, **kwargs):
-        self.home = os.getcwd()
+        self.home = constants.root
         self.suite = kwargs.get("suite")
         self.work_dir = kwargs.get("work_dir")
 
@@ -118,10 +119,11 @@ class from_test(pluginTemplate):
         self.data = {**ispec, **pspec}
 
     def simulate(self, file, isa):
-        test_dir = self.work_dir + str(file.replace(self.suite, '')[:-2]) + "/"
-        logger.debug(self.name + "Changing directory to " + test_dir)
-        os.chdir(test_dir)
-        with open(self.name[:-1] + "_sign", "w") as signf:
-            sign = get_sign(self.home + file, self.data)
+        logger.debug(self.name + "Simulate")
+        test_dir = os.path.join(self.work_dir,
+                                str(file.replace(self.suite, '')[:-2]) + "/")
+        with open(os.path.join(test_dir, self.name[:-1] + "_sign"),
+                  "w") as signf:
+            sign = get_sign(os.path.join(self.home, file), self.data)
             signf.write(sign)
-        return test_dir + self.name[:-1] + "_sign"
+        return os.path.join(test_dir, self.name[:-1] + "_sign")

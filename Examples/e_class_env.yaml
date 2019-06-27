@@ -24,7 +24,7 @@ RISCV_PREFIX: riscv32-unknown-elf-
   # - command: command string for pre-simulation processing.
 USER_PRE_SIM: 
   is_shell: True
-  command: 'elf2hex 4 524288 $elf 2147483648 > ${testDir}code.mem.MSB ; cp ${testDir}code.mem.MSB ${testDir}code.mem.LSB ; ln -sf /home/dracarys/intern/riscv-compliance/riscv-target/eclass/bin/* ${testDir}.'
+  command: 'elf2hex 4 524288 $elf 2147483648 > ${testDir}/code.mem.MSB ; cp ${testDir}/code.mem.MSB ${testDir}/code.mem.LSB ; ln -sf /home/dracarys/intern/riscv-compliance/riscv-target/eclass/bin/* ${testDir}/.'
 ###
   # - is_shell: A boolean value indicating whether the command given is to be run as a shell command(True) or not(False).
   # - command: command string for post-simulation processing.

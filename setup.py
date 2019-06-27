@@ -37,8 +37,5 @@ setup(name="riscof",
       data_files=[('riscof/framework/', ['riscof/framework/database.yaml'])],
       install_requires=requirements,
       entry_points={
-          "console_scripts": [
-              "riscof_compliance=riscof.main:execute",
-              "riscof_dbgen=riscof.dbgen:generate"
-          ],
+          "console_scripts": ["riscof=riscof.main:execute"],
       })

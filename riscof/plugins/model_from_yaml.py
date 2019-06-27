@@ -10,6 +10,7 @@ from string import Template
 
 import riscof.utils as utils
 from riscof.plugins.Template import pluginTemplate
+import riscof.constants as constants
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +42,9 @@ class model_from_yaml(pluginTemplate):
         self.suite = kwargs.get("suite")
         self.gcc = foo['RISCV_PREFIX'] + 'gcc'
         self.ld = foo['RISCV_PREFIX'] + 'ld'
-        self.root_dir = os.getcwd() + "/"
-        self.linker = self.root_dir + foo['USER_LINKER']
-        self.env_dir = self.root_dir + foo['USER_ENV_DIR'] + '/'
+        self.root_dir = constants.root
+        self.linker = os.path.join(self.root_dir, foo['USER_LINKER'])
+        self.env_dir = os.path.join(self.root_dir, foo['USER_ENV_DIR']) + '/'
         self.user_abi = foo['USER_ABI'].lower()
         self.user_target = foo['USER_TARGET']
         self.work_dir = kwargs.get("work_dir")
@@ -66,8 +67,9 @@ class model_from_yaml(pluginTemplate):
                                Template(self.buildsc).safe_substitute(d)).run()
 
     def simulate(self, file, isa):
-        test_dir = self.work_dir + str(file.replace(self.suite, '')[:-2]) + "/"
-        elf = test_dir + str(file.split("/")[-1][:-2]) + '.elf'
+        test_dir = os.path.join(self.work_dir,
+                                str(file.replace(self.suite, '')[:-2]))
+        elf = os.path.join(test_dir, str(file.split("/")[-1][:-2]) + '.elf')
         d = dict(elf=elf, testDir=test_dir, isa=isa)
         if self.perform_pre:
             logger.debug(self.name + "Pre Sim")
@@ -89,28 +91,30 @@ class model_from_yaml(pluginTemplate):
             else:
                 utils.Command(command).run(cwd=test_dir)
 
-        sign_file = test_dir + self.name[:-1] + "_" + self.user_target + "_sign"
-        cp = "cat " + test_dir + self.signature + " > " + sign_file
+        sign_file = os.path.join(
+            test_dir, self.name[:-1] + "_" + self.user_target + "_sign")
+        cp = "cat " + os.path.join(test_dir, self.signature) + " > " + sign_file
         utils.shellCommand(cp, ensure_absolute_paths=True).run()
         return sign_file
 
     def make_recursive(self, path):
-        cur_path = self.root_dir + "/"
-        dirs = (path.replace(self.root_dir, '')).split("/")
+        cur_path = os.getcwd() + "/"
+        dirs = (path.replace(cur_path, '')).split("/")
         for dir in dirs[:-1]:
-            cur_path = cur_path + dir + "/"
+            cur_path = os.path.join(cur_path, dir)
             if not os.path.exists(cur_path):
                 os.mkdir(cur_path)
-        if os.path.exists(cur_path + dirs[-1]):
-            shutil.rmtree(cur_path + dirs[-1], ignore_errors=True)
-        os.mkdir(cur_path + dirs[-1])
+        if os.path.exists(os.path.join(cur_path, dirs[-1])):
+            shutil.rmtree(os.path.join(cur_path, dirs[-1]), ignore_errors=True)
+        os.mkdir(os.path.join(cur_path, dirs[-1]))
 
     def compile(self, file, macros, isa):
         logger.debug(self.name + "Compile")
-        test = self.root_dir + str(file)
-        test_dir = self.work_dir + str(file.replace(self.suite, '')[:-2]) + "/"
+        test = os.path.join(self.root_dir, str(file))
+        test_dir = os.path.join(self.work_dir,
+                                str(file.replace(self.suite, '')[:-2]))
         self.make_recursive(test_dir)
-        elf = test_dir + str(file.split("/")[-1][:-2]) + '.elf'
+        elf = os.path.join(test_dir, str(file.split("/")[-1][:-2]) + '.elf')
         cmd = self.compile_cmd.format(map[isa.lower()],
                                       self.user_abi) + ' ' + test + ' -o ' + elf
         execute = cmd + macros
