@@ -14,8 +14,9 @@ def read(*parts):
 
 
 #Long Description
+with open("README.rst", "r") as fh:
+    long_description = fh.read()
 
-long_description = read('README.md')
 version = "1.4.0"
 
 with open("requirements.txt", "r") as reqfile:
@@ -27,7 +28,7 @@ setup(name="riscof",
       long_description=long_description,
       classifiers=[
           "Programming Language :: Python :: 3.7",
-          "Licence :: OSI Approved :: BSD licence",
+          "License :: OSI Approved :: BSD License",
           "Development Status :: 2 - Pre-Alpha"
       ],
       author='S Pawan Kumar',
@@ -35,7 +36,7 @@ setup(name="riscof",
       license='BSD',
       packages=find_packages(),
       package_dir={'riscof': 'riscof/'},
-      package_data={'riscof': ['suite/*', 'suite/env/*', 'schemas/*']},
+      package_data={'riscof': ['suite/env/*', 'suite/*.S', 'schemas/*']},
       data_files=[('riscof/framework/', ['riscof/framework/database.yaml'])],
       install_requires=requirements,
       entry_points={
