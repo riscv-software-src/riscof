@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Report Generation.
 - RiscV OVPsim support. 
 
+## [1.4.1] - 2019-06-28
+### Added
+- requirements.txt file in docs for sphinx build
+
+### Fixed
+- setup.py modified for pypi installation
+- README.rst
+
+### Removed
+- README.md as this is replaced with README.rst.
+
 ## [1.4.0] - 2019-06-27
 ### Added
 - Setup script for PyPI integration.
