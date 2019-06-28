@@ -1,5 +1,7 @@
-Riscof
+RISCOF
 ===========
-**Riscof** is a RISC-V compliance framework developed by Incoresemi Ltd
+**RISCOF** is a RISC-V Compliance Framework.
 
-Latest documentation of riscof can be found here: https://riscof.readthedocs.io/
+LICENSE: BSD-3 Clause.
+
+Latest documentation of RISCOF can be found here: https://riscof.readthedocs.io/
