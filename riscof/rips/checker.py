@@ -114,7 +114,6 @@ def mtvecset():
 
 def add_def_setters(schema_yaml):
     '''Function to set the default setters for various fields in the schema'''
-    # schema_yaml['misa']['schema']['Extensions']['schema']['readonly']['default_setter'] = lambda doc: extreaddefset()
     schema_yaml['mstatus']['schema']['SXL']['schema']['implemented'][
         'default_setter'] = lambda doc: iset()
     schema_yaml['mstatus']['schema']['UXL']['schema']['implemented'][
@@ -151,8 +150,31 @@ def add_def_setters(schema_yaml):
 
 
 def check_specs(isa_spec, schema_isa, platform_spec, platform_schema):
-    ''' Function to perform ensure that the isa and platform specifications confirm
-    to their schemas.
+    ''' 
+        Function to perform ensure that the isa and platform specifications confirm
+        to their schemas. The :py:mod:`Cerberus` module is used to validate that the
+        specifications confirm to their respective schemas.
+
+        :param isa_spec: The path to the DUT isa specification yaml file.
+
+        :param schema_isa: The path to the yaml file containing the schema 
+            describing the isa specs.  
+
+        :param platform_spec: The path to the DUT platform specification yaml file.
+
+        :param schema_platform: The path to the yaml file containing the schema 
+            describing the platform specs.
+        
+        :type isa_spec: str
+
+        :type schema_isa: str
+
+        :type platform_spec: str
+
+        :type schema_platform: str
+
+        :raise ValidationError: It is raised when the specifications violate the 
+            schema rules.
     '''
     global inp_yaml
 
@@ -249,9 +271,6 @@ def check_specs(isa_spec, schema_isa, platform_spec, platform_schema):
 
 
 def check_environment(env_spec):
-    """
-        Read the input-environment foo (yaml file) and perform checks.
-    """
     valid = True
     logger.info('Loading input file: ' + str(env_spec))
     input = utils.load_yaml(env_spec)

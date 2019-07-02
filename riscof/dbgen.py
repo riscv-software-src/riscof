@@ -24,18 +24,34 @@ def dirwalk(dir):
     return list
 
 
-def orderdict(dict):
+def orderdict(foo):
     '''
         Creates and returns a sorted dictionary from a given dictionary.
-        :params: dict - The dictionary which needs to be sorted.
+        :params foo: The dictionary which needs to be sorted.
+
+        :type foo: dict
+
+        :return: A dictionary with alphabetically sorted(based on keys) entries.
+
     '''
     ret = collections.OrderedDict()
     for key in sorted(dict.keys()):
-        ret[key] = dict[key]
+        ret[key] = foo[key]
     return ret
 
 
 def createdict(file):
+    '''
+        Parse the file and create the dictionary node for it.
+
+        :param file: The relative path of the test from riscof home.
+
+        :type file: str
+
+        :return: A dictionary containing all the necesary nodes for the file.
+
+        :raise DbgenError: Raised if the test file doesnt adhere to the rules.
+    '''
     with open(file, "r") as k:
         lines = k.read().splitlines()
         code_start = False
