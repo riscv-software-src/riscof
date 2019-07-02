@@ -1,0 +1,84 @@
+import random
+import string
+from abc import abstractmethod, ABC
+
+
+class pluginTemplate(ABC):
+    """
+        Metaclass for plugins as supported by :py:mod:`ABC`.
+    """
+
+    @abstractmethod
+    def __init__(self, *args, **kwargs):
+        """
+            Constructor.
+            
+            :param name: (passed as kwarg) Name to be displayed in the logger.
+            
+            :type name: str
+        """
+        self.name = kwargs.get(
+            'name', ''.join(
+                random.choices(string.ascii_uppercase + string.digits,
+                               k=10))) + ":"
+
+    @abstractmethod
+    def initialise(self, suite, workdir):
+        """
+            Initialise the plugin with neccessary parameters.
+            
+            :param suite: The name of the suite directory. 
+                This is used to replace the name of the file to create 
+                directories in proper order.
+            
+            :param workdir: The absolute path to the work directory.
+        """
+        pass
+
+    @abstractmethod
+    def build(self, isa_yaml, platform_yaml):
+        """
+            Build the model as per specifications specified by DUT.
+            
+            :param isa_yaml: Path to the checked isa specs yaml.
+            
+            :param platform_yaml: Path to the checked platform specs yaml.
+            
+            :type isa_yaml: str
+            
+            :type platform_yaml: str
+        """
+        pass
+
+    @abstractmethod
+    def simulate(self, file):
+        """Use the model to simulate the elf for the given file.
+            
+            :return: The absolute path to the signature file generated.
+            
+            :param file: The test file path relative to the riscof directory.
+            
+            :type file: str
+        """
+        pass
+
+    @abstractmethod
+    def compile(self, file, macros, isa):
+        """
+            Compile the test file and produce the elf at the 
+            correct place(workdir/testname/testname.elf).
+            
+            :param file: The test file path relative to the riscof directory.
+            
+            :param macros: The macros(in gcc format) to be specified while compiling.
+            
+            :param isa: The isa(Adhering to the RISCV specs) which can be used 
+                to derive complier options as required.
+            
+            :type file: str
+            
+            :type macros: str
+            
+            :type isa: str
+        """
+        pass

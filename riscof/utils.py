@@ -14,25 +14,28 @@ logger = logging.getLogger(__name__)
 class Command():
     """
     Class for command build which is supported
-    by :py:module:`suprocess` module. Supports automatic
-    conversion of :py:cls:`pathlib.Path` instances to 
-    valid format for :py:module:`subprocess` functions.
+    by :py:mod:`suprocess` module. Supports automatic
+    conversion of :py:class:`pathlib.Path` instances to 
+    valid format for :py:mod:`subprocess` functions.
     """
 
     def __init__(self, *args, pathstyle='auto', ensure_absolute_paths=False):
         """Constructor.
 
         :param pathstyle: Determine the path style when adding instance of
-        :py:class:`pathlib.Path`. Path style determines the slash type 
-        which separates the path components. If pathstyle is `auto`, then
-        on Windows backslashes are used and on Linux forward slashes are used.
-        When backslashes should be prevented on all systems, the pathstyle
-        should be `posix`. No other values are allowed.
+            :py:class:`pathlib.Path`. Path style determines the slash type 
+            which separates the path components. If pathstyle is `auto`, then
+            on Windows backslashes are used and on Linux forward slashes are used.
+            When backslashes should be prevented on all systems, the pathstyle
+            should be `posix`. No other values are allowed.
+
         :param ensure_absolute_paths: If true, then any passed path will be
-        converted to absolute path.
-        :param dir=path to the directory in which the command has to be executed.
+            converted to absolute path.
+        
         :param args: Initial command.
+        
         :type pathstyle: str
+        
         :type ensure_absolute_paths: bool
         """
         self.ensure_absolute_paths = ensure_absolute_paths
@@ -46,8 +49,8 @@ class Command():
         """Add new argument to command.
         
         :param arg: Argument to be added. It may be list, tuple,
-        :py:class:`Command` instance or any instance which
-        supports :py:func:`str`.
+            :py:class:`Command` instance or any instance which
+            supports :py:func:`str`.
         """
         to_add = []
         if type(arg) is list:
@@ -77,9 +80,9 @@ class Command():
     def run(self, **kwargs):
         """Execute the current command.
         
-        Uses :py:func:`subprocess.run` to execute the command.
+        Uses :py:class:`subprocess.Popen` to execute the command.
         
-        :return: Instance of :py:obj:`subprocess.CompletedProcess`.
+        :return: The return code of the process     .
         :raise: subprocess.CalledProcessError if `check` is set
                 to true in `kwargs` and the process returns
                 non-zero value.
@@ -154,7 +157,7 @@ class Command():
 
     def __iter__(self):
         """
-        Support iteration so functions from :py:module:`subprocess` module
+        Support iteration so functions from :py:mod:`subprocess` module
         support `Command` instance.
         """
         return iter(self.args)
@@ -167,8 +170,13 @@ class Command():
 
 
 class shellCommand(Command):
+    """
+        Sub Class of the command class which always executes commands as shell commands.
+    """
 
     def __init__(self, *args, pathstyle='auto', ensure_absolute_paths=False):
+        """
+        """
         return super().__init__(*args,
                                 pathstyle=pathstyle,
                                 ensure_absolute_paths=ensure_absolute_paths)
@@ -212,12 +220,10 @@ def setup_logging(log_level):
     """Setup logging                                                            
                                                                                 
         Verbosity decided on user input                                         
+                                                                                                                                                   
+        :param log_level: User defined log level                             
                                                                                 
-        Args:                                                                   
-            log_level: (str) User defined log level                             
-                                                                                
-        Returns:                                                                
-            None                                                                
+        :type log_level: str                                                               
     """
     numeric_level = getattr(logging, log_level.upper(), None)
 
@@ -246,51 +252,18 @@ def riscof_cmdline_args():
         '--dut_model',
         '-dm',
         type=str,
-        metavar='MODEL',
-        help='The MODEL whose compliance is to be verified.',
-        # required=True
-    )
-    parser.add_argument(
-        '--dut_env_file',
-        '-df',
-        type=str,
-        metavar='FILE',
-        help='The FILE for DUT containing necessary environment parameters.',
-    )
+        metavar='MODEL_NAME',
+        help=
+        'The name of the model(MODEL_NAME) whose compliance is to be verified.',
+        required=True)
     parser.add_argument(
         '--base_model',
         '-bm',
         type=str,
-        metavar='MODEL',
+        metavar='MODEL_NAME',
         default='from_test',
-        help='The MODEL whose against which the compliance is verified.')
-    parser.add_argument(
-        '--base_env_file',
-        '-bf',
-        type=str,
-        metavar='FILE',
         help=
-        'The FILE for Base model containing necessary environment parameters.')
-    parser.add_argument(
-        '--dut_isa_spec',
-        '-ispec',
-        type=str,
-        metavar='YAML',
-        help='The YAML which contains the ISA specs of the DUT.',
-        required=True)
-    parser.add_argument(
-        '--dut_platform_spec',
-        '-pspec',
-        type=str,
-        metavar='YAML',
-        help='The YAML which contains the Platfrorm specs of the DUT.',
-        required=True)
-    parser.add_argument(
-        '--dut_env_yaml',
-        '-eyaml',
-        type=str,
-        metavar='YAML',
-        help='The YAML which contains the Platfrorm specs of the DUT.',
+        'The name of the model(MODEL_NAME) against which compliance is to be verified.'
     )
     parser.add_argument('--verbose',
                         action='store',

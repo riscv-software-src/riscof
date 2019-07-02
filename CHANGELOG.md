@@ -3,9 +3,19 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Enabling external plugin support.
-- Report Generation.
-- RiscV OVPsim support. 
+- Report Generation
+- RiscV OVPsim support
+
+## [1.5.0] - 2019-07-02
+### Added
+- External plugin support.
+
+### Changed
+- pluginTemplate is now implemented as an ABC.
+- Documentation update.
+
+### Removed
+- No plugins included in the default package.
 
 ## [1.4.1] - 2019-06-28
 ### Added

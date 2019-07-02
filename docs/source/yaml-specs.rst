@@ -24,6 +24,7 @@ The following proposal for WARL functions was made by **Allen Baum (: esperanto)
       * Largest: maximum of all legal values
       * Smallest: minimum of all legal values
       * Addr: 
+      
         .. code-block:: python
     
           if ( WriteVal < base || WriteVal > bound)
@@ -80,22 +81,5 @@ An eloborate example of the full-fledge PLATFORM-YAML file can be found here: `P
 
 
 .. autoyaml:: ../riscof/schemas/platform.yaml
-
-.. _environment_yaml_spec:
-
-Environment YAML Spec
-^^^^^^^^^^^^^^^^^^^^^
-
-The following variables are available and will be replaced before execution of command.
-  * *${testDir}*-The absolute path to the test directory containing the generated files for the current test.
-  * *${elf}*-The absolute path to the elf file generated after compilation.
-  * *${isa}*-The absolute path to the ISA spec yaml for DUT.
-  * *${platform}*-The absolute path to the Platform spec yaml for DUT.
-
-This section describes each node of the ENVIRONMENT-YAML. 
-An example of the ENV yaml for spike is available: `HERE <https://gitlab.com/incoresemi/riscof/blob/master/Examples/template_env.yaml>`_
-
-.. autoyaml:: ../Examples/template_env.yaml
-
 
 

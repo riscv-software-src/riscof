@@ -10,10 +10,26 @@ import riscof.constants as constants
 logger = logging.getLogger(__name__)
 
 
-def run(dut_model, dut_env_file, base_model, base_env_file, dut_isa_spec,
-        dut_platform_spec):
-    '''Entry point for the framework module. This function initializes and sets up the required 
-    variables for the tests to run.'''
+def run(dut, base, dut_isa_spec, dut_platform_spec):
+    '''
+        Entry point for the framework module. This function initializes and sets up the required 
+        variables for the tests to run.
+
+        :param dut: The class instance for the DUT model.
+
+        :param base: The class instance for the BASE model.
+
+        :param dut_isa_spec: The absolute path to the checked yaml containing 
+            the DUT isa specification.
+        
+        :param dut_platform_spec: The absolute path to the checked yaml containing 
+            the DUT platform specification.
+        
+        :type dut_platform_spec: str
+
+        :type dut_isa_spec: str
+
+    '''
     work_dir = constants.work_dir
     #Creating work directory
     if not os.path.exists(work_dir):
@@ -25,40 +41,17 @@ def run(dut_model, dut_env_file, base_model, base_env_file, dut_isa_spec,
         logger.debug('Creating new work directory: ' + work_dir)
         os.mkdir(work_dir)
 
-    logger.info("Preparing Models")
-    # Gathering Models
-    logger.debug("Importing " + dut_model + " plugin")
-    dut_plugin = importlib.import_module("riscof.plugins." + dut_model)
-    dut_class = getattr(dut_plugin, dut_model)
-    dut = dut_class(name="DUT")
-    logger.debug("Importing " + base_model + " plugin")
-    base_plugin = importlib.import_module("riscof.plugins." + base_model)
-    base_class = getattr(base_plugin, base_model)
-    base = base_class(name="Reference")
-
     # Setting up models
-    if dut_env_file is not None:
-        logger.debug("Initialising DUT model with " + dut_env_file)
-        dut.initialise(file=dut_env_file,
-                       work_dir=work_dir,
-                       suite=constants.suite)
-    else:
-        dut.initialise(work_dir=work_dir, suite=constants.suite)
-    if base_env_file is not None:
-        logger.debug("Initialising BASE model with " + base_env_file)
-        base.initialise(file=base_env_file,
-                        work_dir=work_dir,
-                        suite=constants.suite)
-    else:
-        base.initialise(work_dir=work_dir, suite=constants.suite)
+    dut.initialise(constants.suite, work_dir)
+    base.initialise(constants.suite, work_dir)
     #Loading Specs
     ispec = utils.load_yaml(dut_isa_spec)
     pspec = utils.load_yaml(dut_platform_spec)
 
     logger.debug("Running Build for DUT")
-    dut.build(dut_isa_spec, dut_platform_spec, ispec['ISA'].lower())
+    dut.build(dut_isa_spec, dut_platform_spec)
     logger.debug("Running Build for Base")
-    base.build(dut_isa_spec, dut_platform_spec, ispec['ISA'].lower())
+    base.build(dut_isa_spec, dut_platform_spec)
 
     run_tests(dut, base, ispec, pspec)
     # framework.test_execute.load_yaml(input)
