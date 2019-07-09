@@ -95,11 +95,11 @@ def mepcset():
     }
 
 
-def mtvecset():
+def xtvecset():
     return {
         'BASE': {
             'range': {
-                'rangelist': [[0, int("FFFFFFFC", 16)]],
+                'rangelist': [[0, int("3FFFFFFF", 16)]],
                 'mode': "Unchanged"
             }
         },
@@ -110,6 +110,18 @@ def mtvecset():
             }
         }
     }
+
+
+def simpset():
+    global inp_yaml
+    if 'S' in inp_yaml['ISA']:
+        return True
+    else:
+        return False
+
+
+def satpset():
+    return {'MODE': {'range': {'rangelist': [[0]]}}}
 
 
 def add_def_setters(schema_yaml):
@@ -145,7 +157,21 @@ def add_def_setters(schema_yaml):
     schema_yaml['medeleg']['schema']['implemented'][
         'default_setter'] = lambda doc: miedelegset()
     schema_yaml['mepc']['default_setter'] = lambda doc: mepcset()
-    schema_yaml['mtvec']['default_setter'] = lambda doc: mtvecset()
+    schema_yaml['mtvec']['default_setter'] = lambda doc: xtvecset()
+    schema_yaml['stvec']['default_setter'] = lambda doc: xtvecset()
+    schema_yaml['satp']['default_setter'] = lambda doc: satpset()
+    schema_yaml['stvec']['schema']['implemented'][
+        'default_setter'] = lambda doc: simpset()
+    schema_yaml['sie']['schema']['implemented'][
+        'default_setter'] = lambda doc: simpset()
+    schema_yaml['sip']['schema']['implemented'][
+        'default_setter'] = lambda doc: simpset()
+    schema_yaml['scounteren']['schema']['implemented'][
+        'default_setter'] = lambda doc: simpset()
+    schema_yaml['sepc']['schema']['implemented'][
+        'default_setter'] = lambda doc: simpset()
+    schema_yaml['satp']['schema']['implemented'][
+        'default_setter'] = lambda doc: simpset()
     return schema_yaml
 
 
@@ -203,8 +229,11 @@ def check_specs(isa_spec, schema_isa, platform_spec, platform_schema):
         xlen = 128
 
     schema_yaml = add_def_setters(schema_yaml)
-    validator = schemaValidator(schema_yaml, xlen=xlen)
-    validator.allow_unknown = True
+    validator = schemaValidator(
+        schema_yaml,
+        xlen=xlen,
+    )
+    validator.allow_unknown = False
     normalized = validator.normalized(inp_yaml, schema_yaml)
 
     # Perform Validation
@@ -245,7 +274,7 @@ def check_specs(isa_spec, schema_isa, platform_spec, platform_schema):
     schema_yaml = utils.load_yaml(schema)
 
     validator = schemaValidator(schema_yaml, xlen=xlen)
-    validator.allow_unknown = True
+    validator.allow_unknown = False
     normalized = validator.normalized(inp_yaml, schema_yaml)
     # print(normalized)
     # Perform Validation
@@ -260,8 +289,6 @@ def check_specs(isa_spec, schema_isa, platform_spec, platform_schema):
         logger.error(str(error_list))
         raise ValidationError("Error in Platform\
              Yaml. Refer to logs for more details.")
-
-    logger.info('Performing Additional Checks')
 
     file_name_split = foo.split('.')
     output_filename = file_name_split[0] + '_checked.' + file_name_split[1]

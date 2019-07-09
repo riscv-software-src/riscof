@@ -155,7 +155,7 @@ RV_COMPLIANCE_CODE_BEGIN
     li      x2, 0
 1:
     # Store results
-    RVTEST_SIGUPD(x1, x7, 0x3)
+    RVTEST_SIGUPD(x1, x7, 0x2)
     RVTEST_SIGUPD(x1, x8, 0x00000000)
     RVTEST_SIGUPD(x1, x2, 0x88888888)
 

@@ -3,8 +3,19 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Report Generation
-- RiscV OVPsim support
+- Spec Coverage
+- Clean up of macros to ensure bare minimum and necessary code for testing.
+- Privilege tests for machine csrs.
+
+## [1.5.1] - 2019-07-09
+### Added
+- Html Report Generation.
+- Supervisor csrs to schema.
+- Documentation update for Supervisor csrs.
+### Changed
+- Use difflib instead of filecmp for signature comparision.
+### Fixed
+- Bug fix for mstatus(it is to be treated as a required field).
 
 ## [1.5.0] - 2019-07-02
 ### Added

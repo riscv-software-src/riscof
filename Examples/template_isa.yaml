@@ -31,7 +31,7 @@ mstatus:
   FS:
     range:
       rangelist: [[0,3]]
-      update: "Unchanged"
+      mode: "Unchanged"
   MPP:
     range:
       rangelist: [[0,1],[3]]
@@ -94,3 +94,42 @@ mhpmcounter4:
   is_hardwired: False
 mhpmcounter5:
   is_hardwired: False
+satp:
+  MODE:
+    range:
+      rangelist: [[0],[8]]
+      mode: "Unchanged"
+  ASID:
+    bitmask:
+      mask: 0x1FF
+      default: 0x00
+    # range:
+    #   rangelist: [[0,0x1FF]]
+    #   mode: "Unchanged"
+  PPN:
+    bitmask:
+      mask: 0xFFFFFFFFFFF
+      default: 0x00
+    # range:
+    #   rangelist: [[0,0xFFFFFFFFFFF]]
+    #   mode: "Unchanged"
+sepc:
+  # bitmask:
+  #   mask: 0xFFFFFFFFFFFFFFFE
+  #   default: 0x00
+  range:
+    rangelist: [[0x00,0xFFFFFFFFFFFFFFFF]]
+sip:
+  bitmask:
+    mask: 0xF7AFFFFFFFFFFFFF
+    default: 0x00
+sie:
+  bitmask:
+    mask: 0xF7AFFFFFFFFFFFFF
+    default: 0x00
+scounteren:
+  bitmask:
+    mask: 0x1F
+    default: 0x00
+  # is_hardwired: True
+  # hardwired_val: 0

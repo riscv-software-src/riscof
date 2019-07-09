@@ -1,8 +1,9 @@
 import logging
-import filecmp
 import re
 import sys
 import os
+from pathlib import Path
+import difflib
 
 import riscof.utils as utils
 import riscof.constants as constants
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 def compare_signature(file1, file2):
     '''
         Function to check whether two signature files are equivalent. This funcion uses the
-        :py:mod:`filecmp` to perform the comparision.
+        :py:mod:`difflib` to perform the comparision and obtain the difference.
 
         :param file1: The path to the first signature.
 
@@ -24,14 +25,18 @@ def compare_signature(file1, file2):
         :type file2: str
 
         :return: A string indicating whether the test "Passed" (if files are the same)
-            or "Failed" (if the files are different).
+            or "Failed" (if the files are different) and the diff of the files.
 
     '''
-    if (filecmp.cmp(file1, file2)):
+    res = ("".join(
+        difflib.unified_diff(
+            open(file1, "r").readlines(),
+            open(file2, "r").readlines(), file1, file2))).strip()
+    if res == "":
         status = 'Passed'
     else:
         status = 'Failed'
-    return status
+    return status, res
 
 
 def eval_cond(condition, spec):
@@ -151,12 +156,18 @@ def run_tests(dut, base, ispec, pspec):
         :type ispec: dict
 
         :type pspec: dict
+
+        :return: A list of dictionary objects containing the necessary information
+            required to generate the report.
     '''
     logger.info("Selecting Tests.")
     test_pool = generate_test_pool(ispec, pspec)
-    log = []
+    results = []
     for entry in test_pool:
         logger.info("Test file:" + entry[0])
+        work_dir = os.path.join(constants.work_dir,
+                                str(entry[0].replace(constants.suite, '')[:-2]))
+        Path(work_dir).mkdir(parents=True, exist_ok=True)
         logger.info("Initiating Compilation.")
         dut.compile(entry[0], entry[2], entry[3])
         logger.info("Running DUT simulation.")
@@ -164,16 +175,33 @@ def run_tests(dut, base, ispec, pspec):
         logger.info("Running Base Model simulation.")
         ref = base.simulate(entry[0])
         logger.info("Initiating check.")
-        log.append([entry[0], entry[1], compare_signature(res, ref)])
+        result, diff = compare_signature(res, ref)
+        res = {
+            'name':
+            entry[0],
+            'res':
+            result,
+            'commit_id':
+            entry[1],
+            'log':
+            'commit_id:' + entry[1] + "\n" + entry[2] +
+            "" if result == "Passed" else diff,
+            'path':
+            work_dir,
+            'repclass':
+            result.lower()
+        }
+        results.append(res)
 
     logger.info('Following ' + str(len(test_pool)) + ' tests have been run :\n')
     logger.info('{0:<50s} : {1:<40s} : {2}'.format('TEST NAME', 'COMMIT ID',
                                                    'STATUS'))
-    # print(log)
-    for x in range(0, len(test_pool)):
-        if (log[x][2] == 'Passed'):
+    for res in results:
+        if (res['res'] == 'Passed'):
             logger.info('{0:<50s} : {1:<40s} : {2}'.format(\
-                log[x][0], log[x][1], log[x][2]))
+                res['name'], res['commit_id'], res['res']))
         else:
             logger.error('{0:<50s} : {1:<40s} : {2}'.format(\
-                log[x][0], log[x][1], log[x][2]))
+                res['name'], res['commit_id'], res['res']))
+
+    return results

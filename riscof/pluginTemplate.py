@@ -1,12 +1,16 @@
 import random
 import string
+import logging
 from abc import abstractmethod, ABC
+
+logger = logging.getLogger(__name__)
 
 
 class pluginTemplate(ABC):
     """
         Metaclass for plugins as supported by :py:mod:`ABC`.
     """
+    __model__ = "Template"
 
     @abstractmethod
     def __init__(self, *args, **kwargs):
@@ -18,9 +22,9 @@ class pluginTemplate(ABC):
             :type name: str
         """
         self.name = kwargs.get(
-            'name', ''.join(
-                random.choices(string.ascii_uppercase + string.digits,
-                               k=10))) + ":"
+            'name',
+            ''.join(random.choices(string.ascii_uppercase + string.digits,
+                                   k=10)))
 
     @abstractmethod
     def initialise(self, suite, workdir):
@@ -33,6 +37,7 @@ class pluginTemplate(ABC):
             
             :param workdir: The absolute path to the work directory.
         """
+        logger.debug(self.name + "Initialise")
         pass
 
     @abstractmethod
@@ -48,6 +53,7 @@ class pluginTemplate(ABC):
             
             :type platform_yaml: str
         """
+        logger.debug(self.name + "Build")
         pass
 
     @abstractmethod
@@ -60,6 +66,7 @@ class pluginTemplate(ABC):
             
             :type file: str
         """
+        logger.debug(self.name + "Simulate")
         pass
 
     @abstractmethod
@@ -81,4 +88,13 @@ class pluginTemplate(ABC):
             
             :type isa: str
         """
+        logger.debug(self.name + "Compile")
         pass
+
+    def getname(self):
+        return self._role + "-" + self.__model__ + ":"
+
+    def setname(self, role):
+        self._role = role
+
+    name = property(getname, setname)
