@@ -61,12 +61,6 @@ class schemaValidator(Validator):
         if value > (2**xlen) - 1:
             self._error(field, "Max value is greater than " + str(2**xlen - 1))
 
-    # def _check_with_max_length_64(self,field,value):
-    #     '''Function to check whether the given value is less than the maximum value that can be stored(2^64-1) for
-    #     registers which are 64 bits wide irrespective of XLEN.'''
-    #     if value > (2**64)-1:
-    #         self._error(field, "Max value is greater than "+str(2**64-1))
-
     def _check_with_len_check(self, field, value):
         '''Function to check whether the given value is less than XLEN/32(For check).'''
         global xlen
@@ -84,6 +78,7 @@ class schemaValidator(Validator):
         '''Function to check whether the input list for SXL field is valid.'''
         global extensions
         global xlen
+        global sxlen
         maxv = xlen / 32
         allowed = []
         for list in value:
@@ -95,6 +90,7 @@ class schemaValidator(Validator):
                     allowed.append(x)
             else:
                 allowed.append(list[0])
+        sxlen = max(allowed)
         if any(x > maxv for x in allowed):
             self._error(field, "Max allowed value is " + str(maxv))
         if 0 in allowed:
@@ -169,10 +165,10 @@ class schemaValidator(Validator):
             self._error(field,
                         "1 not a valid entry as S extension is not supported.")
 
-    def _check_with_mtveccheck(self, field, value):
+    def _check_with_xtveccheck(self, field, value):
         '''Function to check whether the inputs in range type in mtvec are valid.'''
         global xlen
-        maxv = 2**(xlen) - 3
+        maxv = 2**(xlen - 2)
         for list in value:
             if (len(list) > 2):
                 self._error(field,
@@ -180,15 +176,6 @@ class schemaValidator(Validator):
             for val in list:
                 if not (val < maxv):
                     self._error(field, "Invalid values.")
-
-    def _check_with_mtvecdist(self, field, value):
-        '''Function to check whether the inputs in distinct type in mtvec are valid.'''
-        global xlen
-        if max(value) > 2**(xlen - 2) - 1:
-            self._error(field,
-                        "value cant be greater than " + str(2**(xlen) - 4))
-            self._error(field,
-                        "Value cant be greater than " + str(2**(xlen) - 4))
 
     def _check_with_hardwirecheck(self, field, value):
         '''Function to check that none of the bits in the field are hardwired to 1'''
@@ -214,18 +201,90 @@ class schemaValidator(Validator):
                 if not (val < maxv):
                     self._error(field, "Value greater than " + str(maxv))
 
-    # def _check_with_rangecheck_64(self,field,value):
-    #     '''Function to check whether the inputs in range type in 64 bit WARL fields are valid.'''
-    #     maxv = 2**64-1
-    #     for list in value:
-    #         if(len(list)>2):
-    #             self._error(field,"Only two values are allowed in each sub list.")
-    #         for val in list:
-    #             if not(val<maxv):
-    #                 self._error(field,"Invalid values."))
-
-    def _check_with_mcause_check(self, field, value):
+    def _check_with_xcause_check(self, field, value):
         '''Function to verify the inputs for mcause.'''
         if (min(value) < 16):
             self._error(
                 field, "Invalid platform specific values for exception cause.")
+
+    def _check_with_satp_check(self, field, value):
+        global sxlen
+        if value['implemented']:
+            try:
+                if sxlen == 1:
+                    for list in value['MODE']['range']['rangelist']:
+                        if (len(list) > 2):
+                            self._error(
+                                field,
+                                "Only two values are allowed in each sub list.")
+                        for val in list:
+                            if not val in [0, 1]:
+                                self._error(field, "Invalid value " + str(val))
+                    asidlen = 9
+                    ppnlen = 22
+                elif sxlen == 2:
+                    allowed = []
+                    for list in value['MODE']['range']['rangelist']:
+                        if (len(list) > 2):
+                            self._error(
+                                field,
+                                "Only two values are allowed in each sub list.")
+                        for val in list:
+                            if not val in [0, 8, 9]:
+                                self._error(field, "Invalid value " + str(val))
+                            allowed.append(val)
+                    if 9 in allowed and 8 not in allowed:
+                        self._error(field, "9 cannot be present without 8.")
+                    asidlen = 16
+                    ppnlen = 44
+                maxv = (2**asidlen) - 1
+                if 'bitmask' in value['ASID']:
+                    if value['ASID']['bitmask']['mask'] > maxv:
+                        self._error(
+                            field, "ASID-Bitmask-mask value is greater than " +
+                            str(maxv))
+                    if value['ASID']['bitmask']['mask'] > maxv:
+                        self._error(
+                            field,
+                            "ASID-Bitmask-default value is greater than " +
+                            str(maxv))
+                if 'range' in value['ASID']:
+                    for list in value['ASID']['range']['rangelist']:
+                        if (len(list) > 2):
+                            self._error(
+                                field,
+                                "Only two values are allowed in each sub list.")
+                        for val in list:
+                            if val > maxv:
+                                self._error(
+                                    field,
+                                    "ASID-range-rangelist Value greater than " +
+                                    str(maxv))
+                maxv = (2**ppnlen) - 1
+                if 'bitmask' in value['PPN']:
+                    if value['PPN']['bitmask']['mask'] > maxv:
+                        self._error(
+                            field, "PPN-Bitmask-mask value is greater than " +
+                            str(maxv))
+                    if value['PPN']['bitmask']['mask'] > maxv:
+                        self._error(
+                            field,
+                            "PPN-Bitmask-default value is greater than " +
+                            str(maxv))
+                if 'range' in value['PPN']:
+                    for list in value['PPN']['range']['rangelist']:
+                        if (len(list) > 2):
+                            self._error(
+                                field,
+                                "Only two values are allowed in each sub list.")
+                        for val in list:
+                            if val > maxv:
+                                self._error(
+                                    field,
+                                    "PPN-range-rangelist Value greater than " +
+                                    str(maxv))
+            except KeyError:
+                self._error(
+                    field,
+                    "Please refer to the schema and enter the node values correctly."
+                )

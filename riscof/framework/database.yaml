@@ -278,7 +278,7 @@ suite/I-LW-01.S:
       define:
       - def TEST_CASE_1=True
 suite/I-MISALIGN_JMP-01.S:
-  commit_id: 1b7807b5c536b294795b2db0175808a936a96325
+  commit_id: cc011ced8edaab6284a766b88e8792b727235f58
   isa: RV32I
   parts:
     '1':

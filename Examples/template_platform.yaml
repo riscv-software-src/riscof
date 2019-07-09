@@ -7,6 +7,9 @@ mtimecmp:
 mcause:
   values: [16,17,18,19,20,21]
   implemented: True
+scause:
+  values: [16,17,18,19,20,21]
+  implemented: True
 mhpmevent3:
   bitmask:
     mask: 0xFC

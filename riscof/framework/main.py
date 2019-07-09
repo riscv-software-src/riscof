@@ -29,6 +29,9 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
 
         :type dut_isa_spec: str
 
+        :return: A list of dictionary objects containing the necessary information
+            required to generate the report given from the :py:mod:`riscof.framework.test` module.
+
     '''
     work_dir = constants.work_dir
     #Creating work directory
@@ -53,8 +56,9 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
     logger.debug("Running Build for Base")
     base.build(dut_isa_spec, dut_platform_spec)
 
-    run_tests(dut, base, ispec, pspec)
-    # framework.test_execute.load_yaml(input)
+    results = run_tests(dut, base, ispec, pspec)
+
+    return results
 
 
 if __name__ == '__main__':

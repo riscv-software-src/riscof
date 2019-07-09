@@ -41,7 +41,6 @@ mstatus:
       rangelist:
       - - 0
         - 3
-      update: Unchanged
       mode: Unchanged
   MPP:
     range:
@@ -151,6 +150,46 @@ mhpmcounter5:
   is_hardwired: false
   hardwired_val: 0
   implemented: true
+satp:
+  MODE:
+    range:
+      rangelist:
+      - - 0
+      - - 8
+      mode: Unchanged
+  ASID:
+    bitmask:
+      mask: 511
+      default: 0
+  PPN:
+    bitmask:
+      mask: 17592186044415
+      default: 0
+  implemented: true
+sepc:
+  range:
+    rangelist:
+    - - 0
+      - 18446744073709551615
+    mode: Unchanged
+  implemented: true
+sip:
+  bitmask:
+    mask: 17847765323269275647
+    default: 0
+  implemented: true
+sie:
+  bitmask:
+    mask: 17847765323269275647
+    default: 0
+  implemented: true
+scounteren:
+  bitmask:
+    mask: 31
+    default: 0
+  is_hardwired: false
+  hardwired_val: 0
+  implemented: true
 hw_ins_misaligned_support: false
 hw_data_misaligned_support: false
 mhpmcounter6:
@@ -256,4 +295,17 @@ mhpmcounter30:
 mhpmcounter31:
   is_hardwired: false
   hardwired_val: 0
+  implemented: true
+stvec:
+  BASE:
+    range:
+      rangelist:
+      - - 0
+        - 1073741823
+      mode: Unchanged
+  MODE:
+    range:
+      rangelist:
+      - - 0
+      mode: Unchanged
   implemented: true

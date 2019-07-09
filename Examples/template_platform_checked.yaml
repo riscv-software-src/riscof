@@ -13,6 +13,15 @@ mcause:
   - 20
   - 21
   implemented: true
+scause:
+  values:
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  implemented: true
 mhpmevent3:
   bitmask:
     mask: 252
@@ -145,3 +154,6 @@ mhpmevent31:
   is_hardwired: true
   hardwired_val: 0
   implemented: true
+stval:
+  is_hardwired: true
+  hardwired_val: 0

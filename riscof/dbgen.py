@@ -35,7 +35,7 @@ def orderdict(foo):
 
     '''
     ret = collections.OrderedDict()
-    for key in sorted(dict.keys()):
+    for key in sorted(foo.keys()):
         ret[key] = foo[key]
     return ret
 
@@ -110,7 +110,7 @@ def createdict(file):
 def generate():
     list = dirwalk(constants.suite[:-1])
     repo = git.Repo("./")
-    dbfile = os.path.join(constants.root, constants.framework_db)
+    dbfile = constants.framework_db
     tree = repo.tree()
     try:
         with open(dbfile, "r") as temp:
@@ -128,7 +128,8 @@ def generate():
     new = [x for x in list if x not in existing]
     for file in existing:
         try:
-            commit = next(repo.iter_commits(paths="./" + file, max_count=1))
+            commit = next(
+                repo.iter_commits(paths="./riscof/" + file, max_count=1))
             if (str(commit) != db[file]['commit_id']):
                 temp = createdict(os.path.join(cur_dir, file))
                 db[file] = {'commit_id': str(commit), **temp}

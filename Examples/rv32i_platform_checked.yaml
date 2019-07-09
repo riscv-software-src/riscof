@@ -123,3 +123,8 @@ mhpmevent31:
   is_hardwired: true
   hardwired_val: 0
   implemented: true
+scause:
+  implemented: false
+stval:
+  is_hardwired: true
+  hardwired_val: 0
