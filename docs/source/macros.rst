@@ -1,107 +1,204 @@
 .. _test_macros:
 
-Test Macros
-^^^^^^^^^^^
+Macro Descriptions
+^^^^^^^^^^^^^^^^^^^
+
+Standard Test Macros
+--------------------
+
+These are the list of standard macros which can be used by a test-developer. These are not to be
+modified and to be used as is defined. The definitions for the macros can be found `here. <https://gitlab.com/incoresemi/riscof/blob/master/riscof/suite/env/compliance_test.h>`_
 
 **RVTEST_ISA(_STR)**
 
-Empty macro to specify the isa required for compilation of the test. It takes one argument namely a string containing the ISA confirming to the latest RISCV ISA specification(_STR).
-This is the first macro which the dbgen module looks for and is mandated to be present at the start of the test.
+* Arguments: 
+  
+    * _STR: ISA confirming to the latest RISCV ISA specification
 
-Example:
+* Description:
+
+    Empty macro to specify the isa required for compilation of the test. This is the first macro which the dbgen (database-generator) module looks for and is mandated to be present at the start of the test.
+
+* Usage:
 
 .. code-block:: c
 
     RVTEST_ISA("RV32IC")
 
-**RV_COMPLIANCE_CODE_BEGIN**
+**RVTEST_CODE_BEGIN**
 
-Macro to indicate the start of the code block in the test and add the startup routine for the test. 
-No part of the code section should precede this macro. 
+* Arguments: None
 
-**RV_COMPLIANCE_CODE_END**
+* Description:
 
-Macro to indicate the end of the code block in the test.
+    Macro to indicate the start of the code block in the test and add the startup routine for the test. 
+    No part of the code section should precede this macro. 
 
-**RV_COMPLIANCE_HALT**
+**RVTEST_CODE_END**
 
-Macro to add the code to halt the machine.
+* Arguments: None
 
-**RVTEST_IO_INIT**
+* Description:
 
-Macro to initialise the IO for the test. (To be used for debugging)
+    Macro to indicate the end of the code block in the test.No part of the code section should follow after this macro.
 
-**RVTEST_IO_WRITE_STR(_R, _STR)**
+**RVTEST_HALT**
 
-Macro to write string to the debug output. It takes two arguments namely a register(_R) and an output string(_STR). 
+* Arguments: None
 
-Example:
+* Description:
 
-.. code-block:: c
+    Macro to halt the machine.
 
-    RVTEST_IO_WRITE_STR(x31,"Example String")
+* Note: Future versions may not have this macro!
 
-**RVTEST_CASE(_PNAME,_DSTR)**
 
-Macro to indicate the start of the test case. It takes two arguments namely part name(_PNAME) and the string specifying the conditions in which this part is enabled and the macros required for the part to run(_DSTR). The format for writing the _DSTR can be found here: :ref:`cond_spec` .
+**RVTEST_CASE( _PNAME, _DSTR )**
 
-Example:
+* Arguments:
+
+    * _PNAME: The name of the part. Can be any aplhanumeric string.
+
+    * _DSTR: The conditions which decide whether this particular test-case is enabled. One can also define compile time macros required for the part to be enabled. The format for writing the _DSTR can be found here: :ref:`cond_spec` .
+
+* Description:
+
+    Macro to indicate the start of the test case.
+
+* Usage:
 
 .. code-block:: c
 
     RVTEST_CASE_START(1,"check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_CASE_1=True")
 
-**RVTEST_SIGBASE(_R,_TAG)**
+**RVTEST_SIGBASE( _R, _TAG )**
 
-Macro to define the register used as a pointer to the output signature area and initialise it with the appropriate value. It takes two arguments namely the register to use as pointer(_R) and the tag containing the address of the signature section(_TAG).
+* Arguments:
 
-Example:
+    * _R: The register to use as the base register pointing to the signature data-section.
+
+    * _TAG: The tag containing the address of the signature section.
+
+* Description:
+
+    This macro initializes the register (_R) with the value of tag (_TAG) which is meant to point to
+    the signature area. The offset is reset to 0x0.
+
+* Usage:
 
 .. code-block:: c
 
     RVTEST_SIGBASE(X26, test_B_res)
 
-**RVTEST_SIGUPDATE(_BR,_R,_AVAL)**
+**RVTEST_SIGUPD(_BR, _R, _SR, _AVAL)**
 
-Macro to store the value contained in a register using the base register specified an offset and increment the offset. Optionally, the macro can invoke a test assertion macro(currently *RVTEST_IO_ASSERT_GPR_EQ*) with the assertion value. It takes three arguments namely the base register(_BR) the register whose value needs 
-to be stored(_R) and the assertion value(_AVAL). 
+* Arguments:
 
-Example:
+    * _BR: The base register pointing to the signature section.
+
+    * _R: The register whose value needs to be stored to the signature.
+
+    * _SR: The register to be used as scratch register,used internally by the RVMODEL_IO_ASSERT macro.
+
+    * _AVAL: The assertion value for the register, used internally by the RVMODEL_IO_ASSERT macro.
+
+* Description:
+
+    Macro to store the value contained in a register using the base register specified an offset and increment the offset. Optionally, the macro can invoke a test assertion macro(currently *RVMODEL_IO_ASSERT_GPR_EQ*) with the assertion value.
+
+* Usage:
 
 .. code-block:: c
 
-    RVTEST_SIGUPDATE(X3, 0x00000000)
+    RVTEST_SIGUPD(x2, x3, x31, 0x00000000)
 
-**RV_COMPLIANCE_DATA_BEGIN**
+**RVTEST_DATA_BEGIN**
 
-Macro indicating the start of the data section of the test.
+* Arguments: None
 
-**RV_COMPLIANCE_DATA_END**
+* Description:
 
-Macro indicating the end of the data section of the test. All data pertaining to the test must be contained inbetween the *RV_COMPLIANCE_DATA_BEGIN* and *RV_COMPLIANCE_DATA_END* macro pair.
+    Macro indicating the start of the data section of the test.
+
+**RVTEST_DATA_END**
+
+* Arguments: None
+
+* Description:
+
+    Macro indicating the end of the data section of the test. All data pertaining to the test must be contained inbetween the *RVTEST_DATA_BEGIN* and *RVTEST_DATA_END* macro pair.
+
+Standard MODEL Macros
+---------------------
+
+These are the list of model-based macros which can be modified by the model based on the platform
+dependencies.
+
+**RVMODEL_IO_INIT**
+
+* Arguments: None
+
+* Description:
+
+    Macro to initialise the IO for the test. (To be used for debugging)
+
+**RVMODEL_IO_WRITE_STR(_SR, _STR)**
+
+* Arguments:
+
+    * _SR: The scratch register to be used to hold the address of the temporary stack.
+
+    * _STR: The string which should be written.
+
+* Description:
+
+    Macro to write string to the debug output. 
+
+* Usage:
+
+.. code-block:: c
+
+    RVMODEL_IO_WRITE_STR(x31,"My custom String")
+
+
+**RVMODEL_IO_ASSERT_GPR_EQ(_SR, _R, _AVAL)**
+
+* Arguments:
+
+    * _SR: The scratch register to be used to hold the address of the temporary stack.
+
+    * _R: The register whose value needs to be checked.
+
+    * _AVAL: The assert value for the register.
+
+* Description:
+
+    Macro to check whether the register value(_R) is equal to a specific value(_AVAL) and display output as defined.
+
+* Usage:
+
+.. code-block:: c
+
+    RVMODEL_IO_ASSERT_GPR_EQ(x31, x2, 0xDEADBEEF)
 
 Example
 -------
-.. code-block:: none
-
-    #include "compliance_test.h"
-    #include "compliance_io.h"
-    #include "test_macros.h"
+.. code-block:: c
 
     RVTEST_ISA("RV32I")
-    RV_COMPLIANCE_RV32M
+    RVMODEL_RV32M
 
     # Test code region.
-    RV_COMPLIANCE_CODE_BEGIN
+    RVTEST_CODE_BEGIN
 
-    RVTEST_IO_INIT
-    RVTEST_IO_WRITE_STR(x31, "# Test Begin\n")
+    RVMODEL_IO_INIT
+    RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
     # ---------------------------------------------------------------------------------------------
     #ifdef TEST_CASE_1
     RVTEST_CASE(1,"check ISA:=regex(.*I.*); \
                         def TEST_CASE_1=True")
-    RVTEST_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, \
+    RVMODEL_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, \
                         1, -1, MIN, MAX register values\n");
 
     # Addresses for test data and results
@@ -126,29 +223,28 @@ Example
     add     x8, x3, x8
 
     # Store results
-    RVTEST_IO_CHECK()
-    RVTEST_SIGUPDATE(x2, x3, 0x00000000)
-    RVTEST_SIGUPDATE(x2, x4, 0x00000000)
-    RVTEST_SIGUPDATE(x2, x5, 0x00000001)
-    RVTEST_SIGUPDATE(x2, x6, 0xFFFFFFFF)
-    RVTEST_SIGUPDATE(x2, x7, 0x7FFFFFFF)
-    RVTEST_SIGUPDATE(x2, x8, 0x80000000)
+    RVTEST_SIGUPD(x2, x3, 0x00000000)
+    RVTEST_SIGUPD(x2, x4, 0x00000000)
+    RVTEST_SIGUPD(x2, x5, 0x00000001)
+    RVTEST_SIGUPD(x2, x6, 0xFFFFFFFF)
+    RVTEST_SIGUPD(x2, x7, 0x7FFFFFFF)
+    RVTEST_SIGUPD(x2, x8, 0x80000000)
 
-    RVTEST_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
     #endif
-    RV_COMPLIANCE_HALT
+    RVTEST_HALT
 
-    RV_COMPLIANCE_CODE_END
+    RVTEST_CODE_END
 
     test_A1_data:
         .word 0
 
-    RV_COMPLIANCE_DATA_BEGIN
+    RVTEST_DATA_BEGIN
 
     test_A1_res:
         .fill 6, 4, -1
-    
-    RV_COMPLIANCE_DATA_END
+
+    RVTEST_DATA_END
 
 
 

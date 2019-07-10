@@ -7,13 +7,22 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Clean up of macros to ensure bare minimum and necessary code for testing.
 - Privilege tests for machine csrs.
 
+## [1.5.2] - 2019-07-10
+### Fixed
+- Errors in macro documentation.
+
+### Changed
+- Changed macro name prefixes to RVTEST and RVMODEL based on their definitions and functions.
+
 ## [1.5.1] - 2019-07-09
 ### Added
 - Html Report Generation.
 - Supervisor csrs to schema.
 - Documentation update for Supervisor csrs.
+
 ### Changed
 - Use difflib instead of filecmp for signature comparision.
+
 ### Fixed
 - Bug fix for mstatus(it is to be treated as a required field).
 
