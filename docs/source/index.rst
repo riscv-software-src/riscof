@@ -23,7 +23,7 @@ The following diagram captures the over-flow of RISCOF.
     :height: 500px
     :alt: riscof-flow
 
-The user is required to provide 2 YAML files as input to the plugin:
+The user is required to provide 2 YAML files as input in the plugin:
 
 1. **ISA Spec**: This YAML file is meant to capture the ISA related features implemented by the user. Details of this input file can be found here : :ref:`isa_yaml_spec`. 
 2. **Platform Spec**: This YAML file is meant to capture the platform specific features implemented by the user. Details of this input file can be found here : :ref:`platform_yaml_spec`.

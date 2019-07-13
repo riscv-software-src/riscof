@@ -89,7 +89,7 @@ def eval_macro(macro, spec):
             macro statement to be used while compilatio( in gcc format).
 
     '''
-    args = (macro.replace("def ", " -D")).split("=")
+    args = (macro.replace("def ", "")).split("=")
     if (">" not in args[1]):
         return (True, str(args[0]) + "=" + str(args[1]))
 
@@ -118,7 +118,7 @@ def generate_test_pool(ispec, pspec):
     test_pool = []
     db = utils.load_yaml(constants.framework_db)
     for file in db:
-        macros = ''
+        macros = []
         for part in db[file]['parts']:
             include = True
             part_dict = db[file]['parts'][part]
@@ -128,16 +128,17 @@ def generate_test_pool(ispec, pspec):
             for macro in part_dict['define']:
                 temp = eval_macro(macro, spec)
                 if (temp[0] and include):
-                    macros = macros + temp[1]
-        if not macros == '':
+                    macros.append(temp[1])
+        if not macros == []:
             if '32' in db[file]['isa']:
                 xlen = '32'
             elif '64' in db[file]['isa']:
                 xlen = '64'
             elif '128' in db[file]['isa']:
                 xlen = '128'
-            test_pool.append((file, db[file]['commit_id'],
-                              macros + " -DXLEN=" + xlen, db[file]['isa']))
+            macros.append("XLEN=" + xlen)
+            test_pool.append(
+                (file, db[file]['commit_id'], macros, db[file]['isa']))
     return test_pool
 
 
@@ -168,12 +169,14 @@ def run_tests(dut, base, ispec, pspec):
         work_dir = os.path.join(constants.work_dir,
                                 str(entry[0].replace(constants.suite, '')[:-2]))
         Path(work_dir).mkdir(parents=True, exist_ok=True)
-        logger.info("Initiating Compilation.")
-        dut.compile(entry[0], entry[2], entry[3])
-        logger.info("Running DUT simulation.")
-        res = dut.simulate(entry[0])
+        logger.info("Initiating Base Model Compilation.")
+        base.compile(entry[0], entry[3], entry[2])
         logger.info("Running Base Model simulation.")
         ref = base.simulate(entry[0])
+        logger.info("Initiating DUT Compilation.")
+        dut.compile(entry[0], entry[3], entry[2])
+        logger.info("Running DUT simulation.")
+        res = dut.simulate(entry[0])
         logger.info("Initiating check.")
         result, diff = compare_signature(res, ref)
         res = {
@@ -184,7 +187,7 @@ def run_tests(dut, base, ispec, pspec):
             'commit_id':
             entry[1],
             'log':
-            'commit_id:' + entry[1] + "\n" + entry[2] +
+            'commit_id:' + entry[1] + "\nMACROS:\n" + "\n".join(entry[2]) +
             "" if result == "Passed" else diff,
             'path':
             work_dir,

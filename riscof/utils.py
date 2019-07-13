@@ -248,23 +248,12 @@ def riscof_cmdline_args():
         formatter_class=SortingHelpFormatter,
         prog="riscof",
         description="This program checks compliance for a DUT.")
-    parser.add_argument(
-        '--dut_model',
-        '-dm',
-        type=str,
-        metavar='MODEL_NAME',
-        help=
-        'The name of the model(MODEL_NAME) whose compliance is to be verified.',
-        required=True)
-    parser.add_argument(
-        '--base_model',
-        '-bm',
-        type=str,
-        metavar='MODEL_NAME',
-        default='from_test',
-        help=
-        'The name of the model(MODEL_NAME) against which compliance is to be verified.'
-    )
+    parser.add_argument('--setup',
+                        action='store_true',
+                        help='Initiate setup for riscof.')
+    parser.add_argument('--run',
+                        action='store_true',
+                        help='Run riscof in current directory.')
     parser.add_argument('--verbose',
                         action='store',
                         default='info',

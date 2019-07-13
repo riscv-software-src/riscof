@@ -4,8 +4,24 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 - Spec Coverage
-- Clean up of macros to ensure bare minimum and necessary code for testing.
 - Privilege tests for machine csrs.
+
+## [1.6.0] - 2019-07-12
+### Added
+- `--setup` option to generate setup files in *pwd*.
+- Added support for separate environment files for model and standard macros.
+- New model specific macros.
+
+## Changed
+- Configuration for riscof is taken through `config.ini` file in the *pwd*.
+- Suite directory structure to follow the standard.
+- Moved `C` and `A` extension tests to *wip* folder.
+- Modified macros into new `RVTEST_` and `RVMODEL_` prefixed macros.
+- Macro list for compile now passed as a list instead of `-D` prefixed string.
+
+## Removed
+- Clean up of macro definitions to ensure bare minimum and necessary code for testing.
+
 
 ## [1.5.2] - 2019-07-10
 ### Fixed

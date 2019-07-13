@@ -112,27 +112,44 @@ modified and to be used as is defined. The definitions for the macros can be fou
 
     RVTEST_SIGUPD(x2, x3, x31, 0x00000000)
 
-**RVTEST_DATA_BEGIN**
-
-* Arguments: None
-
-* Description:
-
-    Macro indicating the start of the data section of the test.
-
-**RVTEST_DATA_END**
-
-* Arguments: None
-
-* Description:
-
-    Macro indicating the end of the data section of the test. All data pertaining to the test must be contained inbetween the *RVTEST_DATA_BEGIN* and *RVTEST_DATA_END* macro pair.
 
 Standard MODEL Macros
 ---------------------
 
 These are the list of model-based macros which can be modified by the model based on the platform
 dependencies.
+
+**RVMODEL_DATA_SECTION**
+
+* Arguments: None
+
+* Description:
+
+    Macro containing the data section for the model for auxillary purposes.
+
+**RVMODEL_DATA_BEGIN**
+
+* Arguments: None
+
+* Description:
+
+    Macro indicating the start of the signature section of the test.
+
+**RVMODEL_DATA_END**
+
+* Arguments: None
+
+* Description:
+
+    Macro indicating the end of the signature section of the test. All signature pertaining to the test must be contained inbetween the *RVMODEL_DATA_BEGIN* and *RVMODEL_DATA_END* macro pair.
+
+**RVMODEL_BOOT**
+
+* Arguments: None
+
+* Description:
+
+    Macro containing the boot code for the model(can be an empty macro).
 
 **RVMODEL_IO_INIT**
 
@@ -141,6 +158,14 @@ dependencies.
 * Description:
 
     Macro to initialise the IO for the test. (To be used for debugging)
+
+**RVMODEL_IO_CHECK**
+
+* Arguments: None
+
+* Description:
+
+    Macro to check the IO. (To be used for debugging)
 
 **RVMODEL_IO_WRITE_STR(_SR, _STR)**
 
@@ -239,12 +264,12 @@ Example
     test_A1_data:
         .word 0
 
-    RVTEST_DATA_BEGIN
+    RVMODEL_DATA_BEGIN
 
     test_A1_res:
         .fill 6, 4, -1
 
-    RVTEST_DATA_END
+    RVMODEL_DATA_END
 
 
 

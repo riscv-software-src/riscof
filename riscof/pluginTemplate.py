@@ -27,15 +27,22 @@ class pluginTemplate(ABC):
                                    k=10)))
 
     @abstractmethod
-    def initialise(self, suite, workdir):
+    def initialise(self, suite, workdir, env):
         """
             Initialise the plugin with neccessary parameters.
             
-            :param suite: The name of the suite directory. 
-                This is used to replace the name of the file to create 
+            :param suite: The name of the suite directory.This is used to replace the name of the file to create 
                 directories in proper order.
             
             :param workdir: The absolute path to the work directory.
+
+            :param env: The directory containing the header files for the tests.
+
+            :type suite: str
+
+            :type workdir: str
+            
+            :type env: str
         """
         logger.debug(self.name + "Initialise")
         pass
@@ -70,21 +77,21 @@ class pluginTemplate(ABC):
         pass
 
     @abstractmethod
-    def compile(self, file, macros, isa):
+    def compile(self, file, isa, macros):
         """
             Compile the test file and produce the elf at the 
             correct place(workdir/testname/testname.elf).
             
             :param file: The test file path relative to the riscof directory.
             
-            :param macros: The macros(in gcc format) to be specified while compiling.
-            
             :param isa: The isa(Adhering to the RISCV specs) which can be used 
                 to derive complier options as required.
             
+            :param macros: The list of macros to be defined while compiling.
+
             :type file: str
             
-            :type macros: str
+            :type macros: list
             
             :type isa: str
         """

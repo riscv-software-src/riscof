@@ -43,20 +43,16 @@ Usage
 
 .. code-block:: bash
 
-    riscof [-h] --dut_model MODEL_NAME [--base_model MODEL_NAME]
-                      [--verbose]
+    riscof [-h] [--setup] [--run] [--verbose]
 
-        This program checks compliance for a DUT.
+    This program checks compliance for a DUT.
 
-        optional arguments:
-          --base_model MODEL_NAME, -bm MODEL_NAME
-                                The name of the model(MODEL_NAME) against which
-                                compliance is to be verified.
-          --dut_model MODEL_NAME, -dm MODEL_NAME
-                                The name of the model(MODEL_NAME) whose compliance is
-                                to be verified.
-          --verbose             debug | info | warning | error
-          -h, --help            show this help message and exit
+    optional arguments:
+      --run       Run riscof in current directory.
+      --setup     Initiate setup for riscof.
+      --verbose   debug | info | warning | error
+      -h, --help  show this help message and exit
+
 
 
 * For developers
@@ -66,35 +62,63 @@ Usage
     cd riscof/
 
     python -m riscof.main -h
-        usage: riscof [-h] --dut_model MODEL_NAME [--base_model MODEL_NAME]
-                      [--verbose]
+        usage: [-h] [--setup] [--run] [--verbose]
 
         This program checks compliance for a DUT.
 
         optional arguments:
-          --base_model MODEL_NAME, -bm MODEL_NAME
-                                The name of the model(MODEL_NAME) against which
-                                compliance is to be verified.
-          --dut_model MODEL_NAME, -dm MODEL_NAME
-                                The name of the model(MODEL_NAME) whose compliance is
-                                to be verified.
-          --verbose             debug | info | warning | error
-          -h, --help            show this help message and exit
+          --run       Run riscof in current directory.
+          --setup     Initiate setup for riscof.
+          --verbose   debug | info | warning | error
+          -h, --help  show this help message and exit
 
-Example:
+
+Example
+^^^^^^^
 
 This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is installed and configured before running this.
-When prompted,give the path to the *template_env.yaml* in the *riscof-plugins/yamlPlugin/Examples/* folder.
 
-.. code-block:: bash
+1. Setup
 
-    riscof -bm sigGen -dm yamlPlugin
+    * For users
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    python -m riscof.main \
-    -bm sigGen \
-    -dm yamlPlugin \
+        riscof --setup
+
+    * For developers
+
+    .. code-block:: bash
+
+        python -m riscof.main --setup
+
+    A *config.ini* file and *env* directory will be created in the *pwd*.
+
+2. Configure
+    
+    Modify the config.ini file as follows. The *env* directory can be ignored for now.
+
+    .. code-block:: ini
+
+        [RISCOF]
+        ReferencePlugin=sigGen
+        DUTPlugin=spike
+
+3. Run
+
+    * For users
+
+    .. code-block:: bash
+
+        riscof --run --verbose debug
+
+    * For developers
+    
+    .. code-block:: bash
+
+        python -m riscof.main --run --verbose debug
+
+
 
 Writing your own Plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^

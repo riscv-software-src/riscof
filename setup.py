@@ -35,7 +35,7 @@ setup(name="riscof",
       package_dir={'riscof': 'riscof/'},
       package_data={
           'riscof': [
-              'suite/env/*', 'suite/*.S', 'schemas/*',
+              'suite/mod_env/*', 'suite/env/*', 'suite/*.S', 'schemas/*',
               'framework/database.yaml', 'Templates/*'
           ]
       },

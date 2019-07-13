@@ -12,15 +12,19 @@ import riscof.constants as constants
 def dirwalk(dir):
     '''
         Recursively searches a directory and returns a list of 
-        relative paths(from the directory) of the files which end with ".S".
+        relative paths(from the directory) of the files which end with ".S"(excluding any folder named wip).
+        
         :params: dir - The directory in which the files have to be searched for.
+        
+        :return: a list of all .S file paths relative to the riscof home.
     '''
     list = []
     for root, dirs, files in os.walk(os.path.join(constants.root, dir)):
-        path = root[root.find(dir):] + "/"
-        for file in files:
-            if file.endswith(".S"):
-                list.append(os.path.join(path, file))
+        if "/wip" not in root:
+            path = root[root.find(dir):] + "/"
+            for file in files:
+                if file.endswith(".S"):
+                    list.append(os.path.join(path, file))
     return list
 
 
@@ -137,7 +141,8 @@ def generate():
             del db[file]
     for file in new:
         try:
-            commit = next(repo.iter_commits(paths="./" + file, max_count=1))
+            commit = next(
+                repo.iter_commits(paths="./riscof/" + file, max_count=1))
             temp = createdict(os.path.join(cur_dir, file))
             db[file] = {'commit_id': str(commit), **temp}
         except DbgenError:
