@@ -45,8 +45,8 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
         os.mkdir(work_dir)
 
     # Setting up models
-    dut.initialise(constants.suite, work_dir)
-    base.initialise(constants.suite, work_dir)
+    dut.initialise(constants.suite, work_dir, constants.env)
+    base.initialise(constants.suite, work_dir, constants.env)
     #Loading Specs
     ispec = utils.load_yaml(dut_isa_spec)
     pspec = utils.load_yaml(dut_platform_spec)
