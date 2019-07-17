@@ -1,7 +1,7 @@
 release:
     script:
-        - python setup.py bdist sdist
-        - python -m twine upload --username $pypiusername --password $pypipassword --repository-url https://pypi.org/ dist/*
+        - python setup.py sdist
+        - python -m twine upload --username $pypiusername --password $pypipassword dist/*
         - python /scratch/version-extract.py
     only:
         refs:
