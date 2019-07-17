@@ -5,15 +5,19 @@ Installation and Setup
 ^^^^^^^^^^^^^^^^^^^^^^^
 1. Install riscof
 
+    Before proceding further please ensure *pip* and *python* is installed and the python version is greater than 3.7.0.
+
+    You can check the python version by using 
+    
     .. code-block:: bash
 
-        sudo apt-get install python3 pip3 # make sure to use python3.7 or above
+        python --version
 
-    * Install using pip(For users):
+    * Install using pip(For users-**WIP**):
 
     .. code-block:: bash
 
-        pip3 install riscof
+        pip install riscof
 
 
     * Clone from git(For developers):
@@ -22,7 +26,7 @@ Installation and Setup
 
         git clone https://gitlab.com/incoresemi/riscof.git
         cd riscof
-        pip install docs/requirements.txt
+        pip install -r docs/requirements.txt
         python setup.py install -e
 
 2. Setup Plugins
@@ -39,7 +43,7 @@ Installation and Setup
 Usage
 ^^^^^
 
-* For users
+* For users-**WIP**
 
 .. code-block:: bash
 
@@ -80,7 +84,7 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
 
 1. Setup
 
-    * For users
+    * For users-**WIP**
 
     .. code-block:: bash
 
@@ -106,7 +110,7 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
 
 3. Run
 
-    * For users
+    * For users-**WIP**
 
     .. code-block:: bash
 
