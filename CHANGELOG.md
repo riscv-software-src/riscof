@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Spec Coverage
 - Privilege tests for machine csrs.
 
+## [1.6.3] - 2019-07-17
+### Fixed
+- Fixed setup.py for pypi compatibility.
+
 ## [1.6.2] - 2019-07-17
 ### Added
 - MANIFEST.in file added.
