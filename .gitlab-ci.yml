@@ -1,6 +1,8 @@
 release:
     script:
-        - python3 /scratch/version-extract.py
+        - python setup.py bdist sdist
+        - python -m twine upload --username $pypiusername --password $pypipassword --repository-url https://pypi.org/legacy/ dist/*
+        - python /scratch/version-extract.py
     only:
         refs:
             - master

@@ -20,7 +20,7 @@ with open("README.rst", "r") as fh:
 
 setup(name="riscof",
       version=riscof.__version__,
-      description="RiscV Compliance Framework by Incoresemi Ltd.",
+      description="Risc-V Compliance Framework",
       long_description=long_description,
       classifiers=[
           "Programming Language :: Python :: 3.7.*",
@@ -28,8 +28,8 @@ setup(name="riscof",
           "Development Status :: 3 - Beta"
       ],
       url='https://gitlab.com/incoresemi/riscof',
-      author='S Pawan Kumar',
-      author_email='spawan1999@gmail.com',
+      author='InCore Semiconductors Pvt. Ltd.',
+      author_email='neelgala@incoresemi.com',
       license='BSD-3-Clause',
       packages=find_packages(),
       install_package_data=True,
