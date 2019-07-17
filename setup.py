@@ -23,9 +23,9 @@ setup(name="riscof",
       description="Risc-V Compliance Framework",
       long_description=long_description,
       classifiers=[
-          "Programming Language :: Python :: 3.7.*",
-          "License :: OSI Approved :: BSD-3-Clause",
-          "Development Status :: 3 - Beta"
+          "Programming Language :: Python :: 3.7",
+          "License :: OSI Approved :: BSD License",
+          "Development Status :: 4 - Beta"
       ],
       url='https://gitlab.com/incoresemi/riscof',
       author='InCore Semiconductors Pvt. Ltd.',
