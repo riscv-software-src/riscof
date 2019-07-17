@@ -6,6 +6,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Spec Coverage
 - Privilege tests for machine csrs.
 
+## [1.6.2] - 2019-07-17
+### Added
+- MANIFEST.in file added.
+
+### Changed
+- `setup.py` modified to add suite properly.
+- Package requirements updated appropriately.
+- gitlab-cicd to use version-extract.py for generating tags.
+
+### Fixed
+- Errors in quickstart documentation.
+
 ## [1.6.1] - 2019-07-15
 ### Added
 - Links to yaml specifications in the report.

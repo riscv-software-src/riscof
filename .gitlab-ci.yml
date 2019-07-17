@@ -1,6 +1,6 @@
 release:
     script:
-        - python3 /scratch/version-update.py
+        - python3 /scratch/version-extract.py
     only:
         refs:
             - master

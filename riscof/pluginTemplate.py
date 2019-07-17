@@ -19,6 +19,10 @@ class pluginTemplate(ABC):
             
             :param name: (passed as kwarg) Name to be displayed in the logger.
             
+            :param config: (passed as kwarg) The configuration for the plugin as specified in the conifig.ini file.
+
+            :type config: dict
+
             :type name: str
         """
         self.name = kwargs.get(

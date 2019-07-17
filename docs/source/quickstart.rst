@@ -5,19 +5,21 @@ Installation and Setup
 ^^^^^^^^^^^^^^^^^^^^^^^
 1. Install riscof
 
-    Before proceding further please ensure *pip* and *python* is installed and the python version is greater than 3.7.0.
+    Before proceding further please ensure *pip* and *python* is installed and configured.
 
     You can check the python version by using 
     
     .. code-block:: bash
 
-        python --version
+        python3 --version
+
+    *Support exists for python versions > 3.7.0 only. Please ensure correct version before proceding further.*
 
     * Install using pip(For users-**WIP**):
 
     .. code-block:: bash
 
-        pip install riscof
+        pip3 install -r riscof
 
 
     * Clone from git(For developers):
@@ -26,8 +28,7 @@ Installation and Setup
 
         git clone https://gitlab.com/incoresemi/riscof.git
         cd riscof
-        pip install -r docs/requirements.txt
-        python setup.py install -e
+        pip3 install -r requirements.txt
 
 2. Setup Plugins
 
@@ -65,7 +66,7 @@ Usage
 
     cd riscof/
 
-    python -m riscof.main -h
+    python3 -m riscof.main -h
         usage: [-h] [--setup] [--run] [--verbose]
 
         This program checks compliance for a DUT.
@@ -94,7 +95,7 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
 
     .. code-block:: bash
 
-        python -m riscof.main --setup
+        python3 -m riscof.main --setup
 
     A *config.ini* file and *env* directory will be created in the *pwd*.
 
@@ -108,6 +109,12 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
         ReferencePlugin=sigGen
         DUTPlugin=spike
 
+        [spike]
+        ispec=#/path_to_riscof_plugins/yamlPlugin/Examples/rv32i_isa.yaml
+        pspec=#/path_to_riscof_plugins/yamlPlugin/Examples/rv32i_platform.yaml
+    
+    In the above block please edit the paths to point to the files appropriately. Other plugins can be used in the same way by changing the names in the nodes and the DUTPlugin argument.
+
 3. Run
 
     * For users-**WIP**
@@ -120,7 +127,7 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
     
     .. code-block:: bash
 
-        python -m riscof.main --run --verbose debug
+        python3 -m riscof.main --run --verbose debug
 
 
 
