@@ -32,16 +32,19 @@ setup(name="riscof",
       author_email='spawan1999@gmail.com',
       license='BSD-3-Clause',
       packages=find_packages(),
+      install_package_data=True,
       package_dir={'riscof': 'riscof/'},
       package_data={
           'riscof': [
-              'suite/mod_env/*', 'suite/env/*', 'suite/*.S', 'schemas/*',
-              'framework/database.yaml', 'Templates/*'
+              'suite/env/*', 'suite/rv32i_m/I/*.S', 'suite/rv32i_m/M/*.S',
+              'schemas/*', 'framework/database.yaml', 'Templates/report.html',
+              'Templates/style.css', 'Templates/setup/*',
+              'Templates/setup/env/*'
           ]
       },
       install_requires=[
           'Cerberus>=1.3.1', 'GitPython>=2.1.11', 'oyaml>=0.9', 'PyYAML>=5.1.1',
-          'jinja2>=2.10.1'
+          'jinja2>=2.10.1', 'pytz>=2019.1'
       ],
       python_requires=">=3.7.0",
       entry_points={
