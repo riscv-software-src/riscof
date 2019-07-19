@@ -3,8 +3,18 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Spec Coverage
+- Parallelizing Execution on models
 - Privilege tests for machine csrs.
+- Spec Coverage
+
+## [1.7.2] - 2019-07-19
+### Fixed
+- ci-cd for pdf hosting on gitlab itself
+
+## [1.7.1] - 2019-07-19
+### Fixed
+- Removed stray text in flow diagram.
+- docs for pdf generation.
 
 ## [1.7.1] - 2019-07-19
 ### Fixed
