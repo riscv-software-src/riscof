@@ -9,17 +9,17 @@ import configparser
 from jinja2 import Template
 
 import riscof
-import riscof.rips.checker as rips
+import rifle.checker as rifle
 import riscof.framework.main as framework
 import riscof.utils as utils
 import riscof.constants as constants
-from riscof.errors import ValidationError
+from rifle.errors import ValidationError
 
 
 def execute():
     '''
         Entry point for riscof. This function sets up the models and 
-        calls the :py:mod:`rips` and :py:mod:`framework` modules with 
+        calls the :py:mod:`rifle` and :py:mod:`framework` modules with 
         appropriate arguments.
     '''
     # Set up the parser
@@ -65,13 +65,12 @@ def execute():
         else:
             base = base_class(name="Reference")
 
-        #Run rips on inputs
+        #Run rifle on inputs
         isa_file = dut.isa_spec
         platform_file = dut.platform_spec
 
         try:
-            rips.check_specs(isa_file, constants.isa_schema, platform_file,
-                             constants.platform_schema)
+            rifle.check_specs(isa_file, platform_file)
         except ValidationError as msg:
             logger.error(msg)
             return 1

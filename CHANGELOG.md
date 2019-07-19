@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Spec Coverage
 - Privilege tests for machine csrs.
 
+## [1.7.0] - 2019-07-19
+## Changed
+- Uses *rifle* instead of *rips* subpackage.
+### Removed
+- *rips* module is no longer a subpackage.
+- Examples folder removed from the repository.
+
 ## [1.6.3] - 2019-07-17
 ### Fixed
 - Fixed setup.py for pypi compatibility.

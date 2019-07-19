@@ -7,6 +7,21 @@ Installation and Setup
 
     Before proceding further please ensure *pip* and *python* is installed and configured.
 
+    In case you have issues installing python-3.7, we recommend using `pyenv`. 
+    
+    Installing instructions for pyenv:
+
+    .. code-block:: bash
+
+        #!/bin/sh
+        curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+        echo "export PATH=\"/home/dracarys/.pyenv/bin:$PATH\"" >> ~/.bashrc
+        pyenv install 3.7.0
+        pyenv global 3.7.0
+        pip install --upgrade pip
+
+    **If using *pyenv* use *python* instead of *python3* and *pip* instead of *pip3***
+
     You can check the python version by using 
     
     .. code-block:: bash
@@ -19,7 +34,7 @@ Installation and Setup
 
     .. code-block:: bash
 
-        pip3 install -r riscof
+        pip3 install riscof
 
 
     * Clone from git(For developers):

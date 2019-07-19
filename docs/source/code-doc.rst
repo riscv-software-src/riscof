@@ -6,21 +6,6 @@ Code Documentation
    :special-members:
    :private-members:
 
-
-Rips
-^^^^^
-
-.. automodule:: riscof.rips.checker
-   :members: 
-   :special-members:
-   :private-members:
-
-.. automodule:: riscof.rips.schemaValidator
-   :members: 
-   :special-members:
-   :private-members:
-
-
 Database Generator(dbgen)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
