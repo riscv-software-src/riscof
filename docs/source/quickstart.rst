@@ -1,5 +1,6 @@
+##########
 Quickstart
-----------
+##########
 
 Installation and Setup
 ^^^^^^^^^^^^^^^^^^^^^^^

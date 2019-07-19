@@ -22,12 +22,12 @@ sys.setrecursionlimit(1500)
 
 project = u'RISCOF'
 copyright = '2019 InCore Semiconductors, IIT Madras'
-author = 'Neel Gala, S Pawan Kumar, Lavanya Jagan'
+author = 'InCore Semiconductors Pvt. Ltd.'
 
 # The short X.Y version
 version = '1.2.0'
 # The full version, including alpha/beta/rc tags
-release = '1.1.3'
+#release = 'beta'
 
 
 # -- General configuration ---------------------------------------------------
@@ -175,7 +175,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'RISCVComplianceFramework.tex', 'RISC-V Compliance Framework Documentation',
-     'Neel Gala, S Pawan Kumar, Lavanya Jagan', 'manual'),
+     'InCore Semiconductors Pvt. Ltd.', 'manual'),
 ]
 
 

@@ -6,8 +6,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Spec Coverage
 - Privilege tests for machine csrs.
 
+## [1.7.1] - 2019-07-19
+### Fixed
+- Removed stray text in flow diagram.
+- docs for pdf generation.
+
 ## [1.7.0] - 2019-07-19
-## Changed
+### Changed
 - Uses *rifle* instead of *rips* subpackage.
 ### Removed
 - *rips* module is no longer a subpackage.

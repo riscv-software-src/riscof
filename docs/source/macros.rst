@@ -1,7 +1,8 @@
 .. _test_macros:
 
+##################
 Macro Descriptions
-^^^^^^^^^^^^^^^^^^^
+##################
 
 Standard Test Macros
 --------------------

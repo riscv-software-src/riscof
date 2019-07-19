@@ -1,5 +1,6 @@
+##################
 Code Documentation
-------------------
+##################
 
 .. automodule:: riscof.main
    :members: 
