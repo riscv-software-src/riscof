@@ -27,7 +27,7 @@ doc:
       refs:
         - master
     artifacts:
-      name: RISCVComplianceFramework.pdf
+      name: RISCVComplianceFramework
       paths: 
         - ./RISCVComplianceFramework.pdf
     tags:
