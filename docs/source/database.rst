@@ -1,7 +1,8 @@
 .. _database:
 
+##################
 Database Generator
-^^^^^^^^^^^^^^^^^^^^^
+##################
 
 This module recursively walks the specified directory(/suite/modified) to find all .S files in them and constructs a database for the framework.
 The nodes in the directory are identified by their relative path from the repository home.
