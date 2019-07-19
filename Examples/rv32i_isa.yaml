@@ -1,6 +1,0 @@
-ISA: RV32I
-mstatus:
-  MPP: 
-    range:
-      rangelist: [[3]]
-      mode: "Unchanged"

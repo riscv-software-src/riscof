@@ -2,8 +2,6 @@ recursive-include riscof/suite *.S *.h
 
 recursive-include riscof/Templates *.html *.css *.ld *.ini *.h
 
-recursive-include riscof/schemas *.yaml
-
 recursive-include riscof/framework *.yaml
 
 recursive-exclude riscof/suite/wip *.S
@@ -11,3 +9,5 @@ recursive-exclude riscof/suite/wip *.S
 recursive-exclude riscof/__pycache__ *.pyc
 
 include LICENSE
+
+exclude riscof/dbgen.py

@@ -4,9 +4,12 @@ import sys
 import re
 import oyaml as yaml
 import collections
-from riscof.errors import DbgenError
 
 import riscof.constants as constants
+
+
+class DbgenError(Exception):
+    pass
 
 
 def dirwalk(dir):
