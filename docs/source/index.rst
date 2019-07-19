@@ -3,12 +3,12 @@ Welcome to RISCOF
 #################
 
 .. toctree::
-   :hidden:
    :glob:
 
    intro
    overview
    quickstart
+   RIFLE <https://rifle.readthedocs.io/>
    database
    macros
    cond_spec

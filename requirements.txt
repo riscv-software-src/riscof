@@ -7,4 +7,4 @@ oyaml>=0.9
 pytz>=2019.1
 PyYAML>=5.1.1
 smmap2>=2.0.5
-rifle>=1.0.0
+rifle>=1.0.3
