@@ -10,7 +10,8 @@ The following diagram captures the over-flow of RISCOF.
     :alt: riscof-flow
 
 The user is required to provide the spec files in the plugin. 
-For details on how to write the spec files can be found here: `Spec Documentation <https://rifle.readthedocs.io/en/latest/yaml-specs.html>`_
+
+**Details on how to write the YAML spec files can be found here**: `Spec Documentation <https://rifle.readthedocs.io/en/latest/yaml-specs.html>`_
 
 
 Working

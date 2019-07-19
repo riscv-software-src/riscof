@@ -43,7 +43,7 @@ setup(name="riscof",
       },
       install_requires=[
           'Cerberus>=1.3.1', 'GitPython>=2.1.11', 'oyaml>=0.9', 'PyYAML>=5.1.1',
-          'jinja2>=2.10.1', 'pytz>=2019.1', 'rifle>=1.0.0'
+          'jinja2>=2.10.1', 'pytz>=2019.1', 'rifle>=1.0.3'
       ],
       python_requires=">=3.7.0",
       entry_points={
