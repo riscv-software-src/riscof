@@ -34,15 +34,6 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
 
     '''
     work_dir = constants.work_dir
-    #Creating work directory
-    if not os.path.exists(work_dir):
-        logger.debug('Creating new work directory: ' + work_dir)
-        os.mkdir(work_dir)
-    else:
-        logger.debug('Removing old work directory: ' + work_dir)
-        shutil.rmtree(work_dir)
-        logger.debug('Creating new work directory: ' + work_dir)
-        os.mkdir(work_dir)
 
     # Setting up models
     dut.initialise(constants.suite, work_dir, constants.env)

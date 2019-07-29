@@ -69,17 +69,23 @@ def execute():
         isa_file = dut.isa_spec
         platform_file = dut.platform_spec
 
+        work_dir = constants.work_dir
+        #Creating work directory
+        if not os.path.exists(work_dir):
+            logger.debug('Creating new work directory: ' + work_dir)
+            os.mkdir(work_dir)
+        else:
+            logger.debug('Removing old work directory: ' + work_dir)
+            shutil.rmtree(work_dir)
+            logger.debug('Creating new work directory: ' + work_dir)
+            os.mkdir(work_dir)
+
         try:
-            rifle.check_specs(isa_file, platform_file)
+            isa_file, platform_file = rifle.check_specs(isa_file, platform_file,
+                                                        work_dir)
         except ValidationError as msg:
             logger.error(msg)
             return 1
-
-        file_name_split = isa_file.split('.')
-        isa_file = file_name_split[0] + '_checked.' + file_name_split[1]
-
-        file_name_split = platform_file.split('.')
-        platform_file = file_name_split[0] + '_checked.' + file_name_split[1]
 
         report_objects = {}
         report_objects['date'] = (datetime.now(
