@@ -170,11 +170,7 @@ Writing your own Plugins
             super().build(isa_spec,platform_spec)
             #Your code here
         
-        def compile(self,file,macros,isa):
-            super().compile(file,macros,isa)
-            #Your code here
-        
-        def simulate(file);
-            super().simulate(file)
-            #Your code here
+        def runTests(self, testlist):
+            super().build(testlist)
+            #Your code here.
 

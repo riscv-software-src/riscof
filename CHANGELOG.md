@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.8.0] - 2019-08-02
+## Changed
+- Parallel Execution on models.
+- Signature files are mandated to be self.name[:-1]+".signature"
+
 ## [1.7.4] - 2019-07-23
 ### Changed
 - Patch to support rifle version 1.1.0

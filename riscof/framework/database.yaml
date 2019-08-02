@@ -1,5 +1,5 @@
 suite/rv32i_m/I/I-ADD-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -8,7 +8,7 @@ suite/rv32i_m/I/I-ADD-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-ADDI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -17,7 +17,7 @@ suite/rv32i_m/I/I-ADDI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-AND-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -26,7 +26,7 @@ suite/rv32i_m/I/I-AND-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-ANDI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -35,7 +35,7 @@ suite/rv32i_m/I/I-ANDI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-AUIPC-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -44,7 +44,7 @@ suite/rv32i_m/I/I-AUIPC-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-BEQ-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -53,7 +53,7 @@ suite/rv32i_m/I/I-BEQ-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-BGE-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -62,7 +62,7 @@ suite/rv32i_m/I/I-BGE-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-BGEU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -71,7 +71,7 @@ suite/rv32i_m/I/I-BGEU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-BLT-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -80,7 +80,7 @@ suite/rv32i_m/I/I-BLT-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-BLTU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -89,7 +89,7 @@ suite/rv32i_m/I/I-BLTU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-BNE-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -98,7 +98,7 @@ suite/rv32i_m/I/I-BNE-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-CSRRC-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -107,7 +107,7 @@ suite/rv32i_m/I/I-CSRRC-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-CSRRCI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -116,7 +116,7 @@ suite/rv32i_m/I/I-CSRRCI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-CSRRS-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -125,7 +125,7 @@ suite/rv32i_m/I/I-CSRRS-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-CSRRSI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -134,7 +134,7 @@ suite/rv32i_m/I/I-CSRRSI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-CSRRW-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -143,7 +143,7 @@ suite/rv32i_m/I/I-CSRRW-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-CSRRWI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -152,7 +152,7 @@ suite/rv32i_m/I/I-CSRRWI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-DELAY_SLOTS-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -161,16 +161,16 @@ suite/rv32i_m/I/I-DELAY_SLOTS-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-EBREAK-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: fa77193f0e68bc42949869266e994bb7b2d58d0b
   isa: RV32I
   parts:
     '1':
       check:
       - check ISA:=regex(.*I.*)
       define:
-      - def TEST_CASE_1=True)
+      - def TEST_CASE_1=True
 suite/rv32i_m/I/I-ECALL-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -179,7 +179,7 @@ suite/rv32i_m/I/I-ECALL-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-ENDIANESS-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -188,7 +188,7 @@ suite/rv32i_m/I/I-ENDIANESS-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-FENCE.I-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -197,7 +197,7 @@ suite/rv32i_m/I/I-FENCE.I-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-IO.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -206,7 +206,7 @@ suite/rv32i_m/I/I-IO.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-JAL-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -215,7 +215,7 @@ suite/rv32i_m/I/I-JAL-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-JALR-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -224,7 +224,7 @@ suite/rv32i_m/I/I-JALR-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-LB-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -233,7 +233,7 @@ suite/rv32i_m/I/I-LB-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-LBU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -242,7 +242,7 @@ suite/rv32i_m/I/I-LBU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-LH-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -251,7 +251,7 @@ suite/rv32i_m/I/I-LH-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-LHU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -260,7 +260,7 @@ suite/rv32i_m/I/I-LHU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-LUI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -269,7 +269,7 @@ suite/rv32i_m/I/I-LUI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-LW-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -278,7 +278,7 @@ suite/rv32i_m/I/I-LW-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-MISALIGN_JMP-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -287,7 +287,7 @@ suite/rv32i_m/I/I-MISALIGN_JMP-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-MISALIGN_LDST-02.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -296,7 +296,7 @@ suite/rv32i_m/I/I-MISALIGN_LDST-02.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-NOP-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -305,7 +305,7 @@ suite/rv32i_m/I/I-NOP-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-OR-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -314,7 +314,7 @@ suite/rv32i_m/I/I-OR-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-ORI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -323,7 +323,7 @@ suite/rv32i_m/I/I-ORI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-RF_size-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -332,7 +332,7 @@ suite/rv32i_m/I/I-RF_size-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-RF_width-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -341,7 +341,7 @@ suite/rv32i_m/I/I-RF_width-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-RF_x0-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -350,7 +350,7 @@ suite/rv32i_m/I/I-RF_x0-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SB-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -359,7 +359,7 @@ suite/rv32i_m/I/I-SB-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SH-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -368,7 +368,7 @@ suite/rv32i_m/I/I-SH-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SLL-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -377,7 +377,7 @@ suite/rv32i_m/I/I-SLL-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SLLI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -386,7 +386,7 @@ suite/rv32i_m/I/I-SLLI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SLT-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -395,7 +395,7 @@ suite/rv32i_m/I/I-SLT-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SLTI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -404,7 +404,7 @@ suite/rv32i_m/I/I-SLTI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SLTIU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -413,7 +413,7 @@ suite/rv32i_m/I/I-SLTIU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SLTU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -422,7 +422,7 @@ suite/rv32i_m/I/I-SLTU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SRA-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -431,7 +431,7 @@ suite/rv32i_m/I/I-SRA-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SRAI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -440,7 +440,7 @@ suite/rv32i_m/I/I-SRAI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SRL-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -449,7 +449,7 @@ suite/rv32i_m/I/I-SRL-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SRLI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -458,7 +458,7 @@ suite/rv32i_m/I/I-SRLI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SUB-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -467,7 +467,7 @@ suite/rv32i_m/I/I-SUB-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-SW-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -476,7 +476,7 @@ suite/rv32i_m/I/I-SW-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-XOR-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -485,7 +485,7 @@ suite/rv32i_m/I/I-XOR-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-XORI-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
   parts:
     '1':
@@ -494,7 +494,7 @@ suite/rv32i_m/I/I-XORI-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-DIV-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':
@@ -504,7 +504,7 @@ suite/rv32i_m/M/M-DIV-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-DIVU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':
@@ -514,7 +514,7 @@ suite/rv32i_m/M/M-DIVU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-MUL-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':
@@ -524,7 +524,7 @@ suite/rv32i_m/M/M-MUL-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-MULH-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':
@@ -534,7 +534,7 @@ suite/rv32i_m/M/M-MULH-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-MULHSU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':
@@ -544,7 +544,7 @@ suite/rv32i_m/M/M-MULHSU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-MULHU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':
@@ -554,7 +554,7 @@ suite/rv32i_m/M/M-MULHU-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-REM-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':
@@ -564,7 +564,7 @@ suite/rv32i_m/M/M-REM-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/M/M-REMU-01.S:
-  commit_id: 5cc520f8328f15c1e54a98f1b26ed62b1b9a2bd1
+  commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32IM
   parts:
     '1':

@@ -5,6 +5,8 @@ import os
 from pathlib import Path
 import difflib
 
+import oyaml as yaml
+
 import riscof.utils as utils
 import riscof.constants as constants
 
@@ -163,21 +165,41 @@ def run_tests(dut, base, ispec, pspec):
     '''
     logger.info("Selecting Tests.")
     test_pool = generate_test_pool(ispec, pspec)
+    test_list = {}
     results = []
     for entry in test_pool:
-        logger.info("Test file:" + entry[0])
+        # logger.info("Test file:" + entry[0])
+        temp = {}
         work_dir = os.path.join(constants.work_dir,
                                 str(entry[0].replace(constants.suite, '')[:-2]))
         Path(work_dir).mkdir(parents=True, exist_ok=True)
-        logger.info("Initiating Base Model Compilation.")
-        base.compile(entry[0], entry[3], entry[2])
-        logger.info("Running Base Model simulation.")
-        ref = base.simulate(entry[0])
-        logger.info("Initiating DUT Compilation.")
-        dut.compile(entry[0], entry[3], entry[2])
-        logger.info("Running DUT simulation.")
-        res = dut.simulate(entry[0])
-        logger.info("Initiating check.")
+        temp['work_dir']=work_dir
+        temp['macros']=entry[2]
+        temp['isa']=entry[3]
+        test_list[entry[0]]=temp
+        # logger.info("Initiating Base Model Compilation.")
+        # base.compile(entry[0], entry[3], entry[2])
+        # logger.info("Running Base Model simulation.")
+        # ref = base.simulate(entry[0])
+        # logger.info("Initiating DUT Compilation.")
+        # dut.compile(entry[0], entry[3], entry[2])
+        # logger.info("Running DUT simulation.")
+        # res = dut.simulate(entry[0])
+        # logger.info("Initiating check.")
+    
+    with open(os.path.join(constants.work_dir,"test_list.yaml"),"w") as tfile:
+        yaml.safe_dump(test_list,tfile)
+
+    logger.info("Running Tests on DUT.")
+    dut.runTests(test_list)
+    logger.info("Running Tests on Reference Model.")
+    base.runTests(test_list)
+
+    logger.info("Initiating signature checking.")
+    for entry in test_pool:
+
+        res = os.path.join(test_list[entry[0]]['work_dir'],dut.name[:-1]+".signature")
+        ref = os.path.join(test_list[entry[0]]['work_dir'],base.name[:-1]+".signature")
         result, diff = compare_signature(res, ref)
         res = {
             'name':
