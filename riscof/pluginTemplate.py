@@ -68,38 +68,16 @@ class pluginTemplate(ABC):
         pass
 
     @abstractmethod
-    def simulate(self, file):
-        """Use the model to simulate the elf for the given file.
+    def runTests(self, testlist):
+        """Use the model to run the tests and produce signatures. The signature files generated should be named-*self.name[:-1]+".signature"*.
             
             :return: The absolute path to the signature file generated.
             
-            :param file: The test file path relative to the riscof directory.
+            :param testlist: A dictionary of tests and other information about them(like macros,work_dir and isa).
             
-            :type file: str
+            :type testlist: dict
         """
-        logger.debug(self.name + "Simulate")
-        pass
-
-    @abstractmethod
-    def compile(self, file, isa, macros):
-        """
-            Compile the test file and produce the elf at the 
-            correct place(workdir/testname/testname.elf).
-            
-            :param file: The test file path relative to the riscof directory.
-            
-            :param isa: The isa(Adhering to the RISCV specs) which can be used 
-                to derive complier options as required.
-            
-            :param macros: The list of macros to be defined while compiling.
-
-            :type file: str
-            
-            :type macros: list
-            
-            :type isa: str
-        """
-        logger.debug(self.name + "Compile")
+        logger.debug(self.name + "Test Run")
         pass
 
     def getname(self):
