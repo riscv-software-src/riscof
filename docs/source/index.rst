@@ -8,7 +8,7 @@ Welcome to RISCOF
    intro
    overview
    quickstart
-   RIFLE <https://rifle.readthedocs.io/>
+   RIFLE <https://riscv-config.readthedocs.io/>
    database
    macros
    cond_spec
