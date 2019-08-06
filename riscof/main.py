@@ -9,17 +9,17 @@ import configparser
 from jinja2 import Template
 
 import riscof
-import rifle.checker as rifle
+import riscv_config.checker as riscv_config
 import riscof.framework.main as framework
 import riscof.utils as utils
 import riscof.constants as constants
-from rifle.errors import ValidationError
+from riscv_config.errors import ValidationError
 
 
 def execute():
     '''
         Entry point for riscof. This function sets up the models and 
-        calls the :py:mod:`rifle` and :py:mod:`framework` modules with 
+        calls the :py:mod:`riscv_config` and :py:mod:`framework` modules with 
         appropriate arguments.
     '''
     # Set up the parser
@@ -65,7 +65,7 @@ def execute():
         else:
             base = base_class(name="Reference")
 
-        #Run rifle on inputs
+        #Run riscv_config on inputs
         isa_file = dut.isa_spec
         platform_file = dut.platform_spec
 
@@ -81,8 +81,8 @@ def execute():
             os.mkdir(work_dir)
 
         try:
-            isa_file, platform_file = rifle.check_specs(isa_file, platform_file,
-                                                        work_dir)
+            isa_file, platform_file = riscv_config.check_specs(
+                isa_file, platform_file, work_dir)
         except ValidationError as msg:
             logger.error(msg)
             return 1
