@@ -1,3 +1,253 @@
+suite/rv32i_m/C/C-ADD.S:
+  commit_id: d8f68d453223994370254658248019ec399f9362
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-ADDI.S:
+  commit_id: d8f68d453223994370254658248019ec399f9362
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-ADDI16SP.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-ADDI4SPN.S:
+  commit_id: f248951aa14dcb60da4b91fa726f08f0b5cebb65
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-AND.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-ANDI.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-BEQZ.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-BNEZ.S:
+  commit_id: eeae00fd0389122f5daea7249b9d3c28215a0855
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-J.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-JAL.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-JALR.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-JR.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-LI.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-LUI.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-LW.S:
+  commit_id: eeae00fd0389122f5daea7249b9d3c28215a0855
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-LWSP.S:
+  commit_id: eeae00fd0389122f5daea7249b9d3c28215a0855
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-MV.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-OR.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-SLLI.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-SRAI.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-SRLI.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-SUB.S:
+  commit_id: d8f68d453223994370254658248019ec399f9362
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-SW.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-SWSP.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
+suite/rv32i_m/C/C-XOR.S:
+  commit_id: 69c14908c071dd2b6c397a6fdde847590210dab2
+  isa: RV32IC
+  parts:
+    '1':
+      check:
+      - check ISA:=regex(.*I.*)
+      - check ISA:=regex(.*C.*)
+      define:
+      - def TEST_CASE_1=True
 suite/rv32i_m/I/I-ADD-01.S:
   commit_id: d50921ef64708678832770fd842355aa2b0684af
   isa: RV32I
@@ -161,7 +411,7 @@ suite/rv32i_m/I/I-DELAY_SLOTS-01.S:
       define:
       - def TEST_CASE_1=True
 suite/rv32i_m/I/I-EBREAK-01.S:
-  commit_id: fa77193f0e68bc42949869266e994bb7b2d58d0b
+  commit_id: 3a4a3a576666d5153ae6a844e74a45f953245e57
   isa: RV32I
   parts:
     '1':

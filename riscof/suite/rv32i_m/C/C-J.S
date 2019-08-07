@@ -1,4 +1,4 @@
-# RISC-V Compliance Test RV32IMC-C.LW-01
+# RISC-V Compliance Test RV32IMC-C.J-01
 #
 # Copyright (c) 2018, Imperas Software Ltd.
 # All rights reserved.
@@ -26,98 +26,103 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Specification: RV32IMC Base Integer Instruction Set, Version 2.0
-# Description: Testing instruction C.LW.
+# Description: Testing instruction C.J.
 
-#include "test_macros.h"
+
 #include "compliance_test.h"
-#include "compliance_io.h"
+#include "compliance_model.h"
 
 RVTEST_ISA("RV32IC")
 
-RV_COMPLIANCE_RV32M
 
-RV_COMPLIANCE_CODE_BEGIN
 
-  RVTEST_IO_INIT
-  RVTEST_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-  RVTEST_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+RVTEST_CODE_BEGIN
+
+  RVMODEL_IO_INIT
+  RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
     #ifdef TEST_CASE_1
-    RVTEST_CASE_START(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_CASE_1=True")
+    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_CASE_1=True")
 
   # ---------------------------------------------------------------------------------------------
 
-  RVTEST_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
+  RVMODEL_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
   # address for test results
-  la	x2, test_1_res
+  RVTEST_SIGBASE(	x2, test_1_res)
 
-  TEST_CL(c.lw, x14, 0, x2, 0)
-  RVTEST_IO_ASSERT_GPR_EQ(x31, x14, 0x11111111)
+  li  x11, 0x0;
+c.j 1f;
+li  x11,0x123ab;
+1:
+RVTEST_SIGUPD( x2, x11, 0x0)
 
   # ---------------------------------------------------------------------------------------------
 
-  RVTEST_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
+  RVMODEL_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
   # address for test results
-  la	x2, test_2_res
+  RVTEST_SIGBASE(	x2, test_2_res)
 
-  TEST_CL(c.lw, x15, 4, x2, 0)
-  RVTEST_IO_ASSERT_GPR_EQ(x31, x15, 0x22222222)
+  li  x12, 0x1;
+c.j 1f;
+li  x12,0x123ab;
+1:
+RVTEST_SIGUPD( x2, x12, 0x1)
 
   # ---------------------------------------------------------------------------------------------
 
-  RVTEST_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
+  RVMODEL_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
 
   # address for test results
-  la	x2, test_3_res
+  RVTEST_SIGBASE(	x2, test_3_res)
 
-  TEST_CL(c.lw, x8, 8, x2, 0)
-  RVTEST_IO_ASSERT_GPR_EQ(x31, x8, 0x33333333)
+  li  x13, 0xffffffff;
+c.j 1f;
+li  x13,0x123ab;
+1:
+RVTEST_SIGUPD( x2, x13, 0xffffffff)
 
   # ---------------------------------------------------------------------------------------------
 
-  RVTEST_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
+  RVMODEL_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
 
   # address for test results
-  la	x2, test_4_res
+  RVTEST_SIGBASE(	x2, test_4_res)
 
-  TEST_CL(c.lw, x9, 100, x2, 0)
-  RVTEST_IO_ASSERT_GPR_EQ(x31, x9, 0x44444444)
+  li  x14, 0x7fff;
+c.j 1f;
+li  x14,0x123ab;
+1:
+RVTEST_SIGUPD( x2, x14, 0x7fff)
 
   # ---------------------------------------------------------------------------------------------
 
-  RVTEST_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
+  RVMODEL_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
 
   # address for test results
-  la	x2, test_5_res
+  RVTEST_SIGBASE(	x2, test_5_res)
 
-  TEST_CL(c.lw, x13, 124, x2, 0)
-  RVTEST_IO_ASSERT_GPR_EQ(x31, x13, 0x55555555)
+  li  x15, 0x8000;
+c.j 1f;
+li  x15,0x123ab;
+1:
+RVTEST_SIGUPD( x2, x15, 0x8000)
 
-  RVTEST_IO_WRITE_STR(x31, "Test End\n")
+  RVMODEL_IO_WRITE_STR(x31, "Test End\n")
 
   # ---------------------------------------------------------------------------------------------
 
-    RVTEST_CASE_END(1)
+    
     #endif
-  RV_COMPLIANCE_HALT
+  RVMODEL_HALT
 
-RV_COMPLIANCE_CODE_END
+RVTEST_CODE_END
 
 # Input data section.
   .data
-.align 4
-test_data:
-    .word 0x11111111
-    .word 0x22222222
-    .word 0x33333333
-    .fill 22, 4, -1
-    .word 0x44444444
-    .fill 5, 4, -1
-    .word 0x55555555
 
 # Output data section.
-RV_COMPLIANCE_DATA_BEGIN
+RVMODEL_DATA_BEGIN
 test_1_res:
   .fill 1, 4, -1
 test_2_res:
@@ -129,4 +134,4 @@ test_4_res:
 test_5_res:
   .fill 1, 4, -1
 
-RV_COMPLIANCE_DATA_END
+RVMODEL_DATA_END
