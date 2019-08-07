@@ -6,16 +6,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.9.0] - 2019-08-07
+### Added
+- Ported C extension tests to latest spec.
+
 ## [1.8.2] - 2019-08-02
-## Fixed
+### Fixed
 - minor doc updates to replace rifle with riscv-config 
 
 ## [1.8.1] - 2019-08-02
-## Changed
+### Changed
 - Changed dependency from rifle to riscv-config.
 
 ## [1.8.0] - 2019-08-02
-## Changed
+### Changed
 - Parallel Execution on models.
 - Signature files are mandated to be self.name[:-1]+".signature"
 
