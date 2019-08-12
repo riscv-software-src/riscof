@@ -51,28 +51,28 @@ RVTEST_CODE_BEGIN
     # address for test results
     RVTEST_SIGBASE(x2, test_1_res)
 
-    li  x18, MASK_XLEN( 0x0)
-    li  x17, MASK_XLEN( 0x0)
+    li  x18,  0x0
+    li  x17,  0x0
     div  x17,  x18,  x17
     RVTEST_SIGUPD( x2, x17,0xffffffff)
 
-    li  x20, MASK_XLEN( 0x0)
-    li  x19, MASK_XLEN( 0x1)
+    li  x20,  0x0
+    li  x19,  0x1
     div  x19,  x20,  x19
     RVTEST_SIGUPD( x2, x19,0x00000000)
 
-    li  x22, MASK_XLEN( 0x0)
-    li  x21, MASK_XLEN( -0x1)
+    li  x22,  0x0
+    li  x21,  -0x1
     div  x21,  x22,  x21
     RVTEST_SIGUPD( x2, x21,0x00000000)
 
-    li  x24, MASK_XLEN( 0x0)
-    li  x23, MASK_XLEN( 0x7fffffff)
+    li  x24,  0x0
+    li  x23,  0x7fffffff
     div  x23,  x24,  x23
     RVTEST_SIGUPD( x2, x23,0x00000000)
 
-    li  x26, MASK_XLEN( 0x0)
-    li  x25, MASK_XLEN( 0x80000000)
+    li  x26,  0x0
+    li  x25,  0x80000000
     div  x25,  x26,  x25
     RVTEST_SIGUPD( x2, x25,0x00000000)
 
@@ -84,28 +84,28 @@ RVTEST_CODE_BEGIN
     # address for test results
     RVTEST_SIGBASE(x2, test_2_res)
 
-    li  x28, MASK_XLEN( 0x1)
-    li  x27, MASK_XLEN( 0x0)
+    li  x28,  0x1
+    li  x27,  0x0
     div  x27,  x28,  x27
     RVTEST_SIGUPD( x2, x27,0xffffffff)
 
-    li  x30, MASK_XLEN( 0x1)
-    li  x29, MASK_XLEN( 0x1)
+    li  x30,  0x1
+    li  x29,  0x1
     div  x29,  x30,  x29
     RVTEST_SIGUPD( x2, x29,0x00000001)
 
-    li  x3, MASK_XLEN( 0x1)
-    li  x21, MASK_XLEN( -0x1)
+    li  x3,  0x1
+    li  x21,  -0x1
     div  x21,  x3,  x21
     RVTEST_SIGUPD( x2, x21,0xffffffff)
 
-    li  x8, MASK_XLEN( 0x1)
-    li  x4, MASK_XLEN( 0x7fffffff)
+    li  x8,  0x1
+    li  x4,  0x7fffffff
     div  x4,  x8,  x4
     RVTEST_SIGUPD( x2, x4,0x00000000)
 
-    li  x11, MASK_XLEN( 0x1)
-    li  x9, MASK_XLEN( 0x80000000)
+    li  x11,  0x1
+    li  x9,  0x80000000
     div  x9,  x11,  x9
     RVTEST_SIGUPD( x2, x9,0x00000000)
 
@@ -117,28 +117,28 @@ RVTEST_CODE_BEGIN
     # address for test results
     RVTEST_SIGBASE(x2, test_3_res)
 
-    li  x13, MASK_XLEN( -0x1)
-    li  x12, MASK_XLEN( 0x0)
+    li  x13,  -0x1
+    li  x12,  0x0
     div  x12,  x13,  x12
     RVTEST_SIGUPD( x2, x12,0xffffffff)
 
-    li  x15, MASK_XLEN( -0x1)
-    li  x14, MASK_XLEN( 0x1)
+    li  x15,  -0x1
+    li  x14,  0x1
     div  x14,  x15,  x14
     RVTEST_SIGUPD( x2, x14,0xffffffff)
 
-    li  x17, MASK_XLEN( -0x1)
-    li  x16, MASK_XLEN( -0x1)
+    li  x17,  -0x1
+    li  x16,  -0x1
     div  x16,  x17,  x16
     RVTEST_SIGUPD( x2, x16,0x00000001)
 
-    li  x19, MASK_XLEN( -0x1)
-    li  x18, MASK_XLEN( 0x7fffffff)
+    li  x19,  -0x1
+    li  x18,  0x7fffffff
     div  x18,  x19,  x18
     RVTEST_SIGUPD( x2, x18,0x00000000)
 
-    li  x21, MASK_XLEN( -0x1)
-    li  x20, MASK_XLEN( 0x80000000)
+    li  x21,  -0x1
+    li  x20,  0x80000000
     div  x20,  x21,  x20
     RVTEST_SIGUPD( x2, x20,0x00000000)
 
@@ -150,28 +150,28 @@ RVTEST_CODE_BEGIN
     # address for test results
     RVTEST_SIGBASE(x2, test_4_res)
 
-    li  x23, MASK_XLEN( 0x7fffffff)
-    li  x22, MASK_XLEN( 0x0)
+    li  x23,  0x7fffffff
+    li  x22,  0x0
     div  x22,  x23,  x22
     RVTEST_SIGUPD( x2, x22,0xffffffff)
 
-    li  x25, MASK_XLEN( 0x7fffffff)
-    li  x24, MASK_XLEN( 0x1)
+    li  x25,  0x7fffffff
+    li  x24,  0x1
     div  x24,  x25,  x24
     RVTEST_SIGUPD( x2, x24,0x7fffffff)
 
-    li  x27, MASK_XLEN( 0x7fffffff)
-    li  x26, MASK_XLEN( -0x1)
+    li  x27,  0x7fffffff
+    li  x26,  -0x1
     div  x26,  x27,  x26
     RVTEST_SIGUPD( x2, x26,0x80000001)
 
-    li  x29, MASK_XLEN( 0x7fffffff)
-    li  x28, MASK_XLEN( 0x7fffffff)
+    li  x29,  0x7fffffff
+    li  x28,  0x7fffffff
     div  x28,  x29,  x28
     RVTEST_SIGUPD( x2, x28,0x00000001)
 
-    li  x21, MASK_XLEN( 0x7fffffff)
-    li  x30, MASK_XLEN( 0x80000000)
+    li  x21,  0x7fffffff
+    li  x30,  0x80000000
     div  x30,  x21,  x30
     RVTEST_SIGUPD( x2, x30,0x00000000)
 
@@ -183,28 +183,28 @@ RVTEST_CODE_BEGIN
     # address for test results
     RVTEST_SIGBASE(x2, test_5_res)
 
-    li  x4, MASK_XLEN( 0x80000000)
-    li  x3, MASK_XLEN( 0x0)
+    li  x4,  0x80000000
+    li  x3,  0x0
     div  x3,  x4,  x3
     RVTEST_SIGUPD( x2, x3,0xffffffff)
 
-    li  x9, MASK_XLEN( 0x80000000)
-    li  x8, MASK_XLEN( 0x1)
+    li  x9,  0x80000000
+    li  x8,  0x1
     div  x8,  x9,  x8
     RVTEST_SIGUPD( x2, x8,0x80000000)
 
-    li  x12, MASK_XLEN( 0x80000000)
-    li  x11, MASK_XLEN( -0x1)
+    li  x12,  0x80000000
+    li  x11,  -0x1
     div  x11,  x12,  x11
     RVTEST_SIGUPD( x2, x11,0x80000000)
 
-    li  x14, MASK_XLEN( 0x80000000)
-    li  x13, MASK_XLEN( 0x7fffffff)
+    li  x14,  0x80000000
+    li  x13,  0x7fffffff
     div  x13,  x14,  x13
     RVTEST_SIGUPD( x2, x13,0xffffffff)
 
-    li  x16, MASK_XLEN( 0x80000000)
-    li  x15, MASK_XLEN( 0x80000000)
+    li  x16,  0x80000000
+    li  x15,  0x80000000
     div  x15,  x16,  x15
     RVTEST_SIGUPD( x2, x15,0x00000001)
 

@@ -82,7 +82,7 @@ def execute():
 
         try:
             isa_file, platform_file = riscv_config.check_specs(
-                isa_file, platform_file, work_dir)
+                isa_file, platform_file, work_dir, True)
         except ValidationError as msg:
             logger.error(msg)
             return 1

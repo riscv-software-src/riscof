@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.10.0] - 2019-08-12
+### Added
+- Ported A extension tests to latest spec.
+### Fixed
+- Fixed logging issue with riscv-config v1.0.2.
+- Fixed undefined macro in M extension tests.
+
 ## [1.9.0] - 2019-08-07
 ### Added
 - Ported C extension tests to latest spec.
