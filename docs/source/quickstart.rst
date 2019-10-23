@@ -31,7 +31,7 @@ Installation and Setup
 
     *Support exists for python versions > 3.7.0 only. Please ensure correct version before proceding further.*
 
-    * Install using pip(For users-**WIP**):
+    * Install using pip(For users):
 
     .. code-block:: bash
 
@@ -60,21 +60,21 @@ Installation and Setup
 Usage
 ^^^^^
 
-* For users-**WIP**
+* For users-
 
 .. code-block:: bash
 
-    riscof [-h] [--setup] [--run] [--verbose]
-
+    usage: riscof [-h] [--setup] [--validateyaml] [--testlist] [--run] [--verbose]
+    
     This program checks compliance for a DUT.
-
+    
     optional arguments:
-      --run       Run riscof in current directory.
-      --setup     Initiate setup for riscof.
-      --verbose   debug | info | warning | error
-      -h, --help  show this help message and exit
-
-
+      --run           Run riscof in current directory.
+      --setup         Initiate setup for riscof.
+      --testlist      Generate the testlist only.
+      --validateyaml  Validate the Input YAMLs using riscv-config
+      --verbose       debug | info | warning | error
+      -h, --help      show this help message and exit
 
 * For developers
 
@@ -83,15 +83,18 @@ Usage
     cd riscof/
 
     python3 -m riscof.main -h
-        usage: [-h] [--setup] [--run] [--verbose]
 
-        This program checks compliance for a DUT.
-
-        optional arguments:
-          --run       Run riscof in current directory.
-          --setup     Initiate setup for riscof.
-          --verbose   debug | info | warning | error
-          -h, --help  show this help message and exit
+      usage: riscof [-h] [--setup] [--validateyaml] [--testlist] [--run] [--verbose]
+      
+      This program checks compliance for a DUT.
+      
+      optional arguments:
+        --run           Run riscof in current directory.
+        --setup         Initiate setup for riscof.
+        --testlist      Generate the testlist only.
+        --validateyaml  Validate the Input YAMLs using riscv-config
+        --verbose       debug | info | warning | error
+        -h, --help      show this help message and exit
 
 
 Example
@@ -101,7 +104,7 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
 
 1. Setup
 
-    * For users-**WIP**
+    * For users
 
     .. code-block:: bash
 
@@ -133,7 +136,7 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
 
 3. Run
 
-    * For users-**WIP**
+    * For users
 
     .. code-block:: bash
 

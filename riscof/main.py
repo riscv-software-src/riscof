@@ -11,6 +11,7 @@ from jinja2 import Template
 import riscof
 import riscv_config.checker as riscv_config
 import riscof.framework.main as framework
+import riscof.framework.test as test_routines
 import riscof.utils as utils
 import riscof.constants as constants
 from riscv_config.errors import ValidationError
@@ -36,7 +37,8 @@ def execute():
     fh = logging.FileHandler('run.log', 'w')
     logger.addHandler(fh)
 
-    if (args.run):
+
+    if (args.run or args.testlist or args.validateyaml):
         config = configparser.ConfigParser()
         logger.info("Reading configuration.")
         try:
@@ -87,6 +89,9 @@ def execute():
             logger.error(msg)
             return 1
 
+        if(args.validateyaml):
+          exit(0)
+        
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
@@ -95,12 +100,17 @@ def execute():
         report_objects['reference'] = (base.__model__).replace("_", " ")
 
         isa_specs = utils.load_yaml(isa_file)
+        platform_specs = utils.load_yaml(platform_file)
+
+        if(args.testlist):
+            test_routines.generate_test_pool(isa_specs, platform_specs)
+            return 0
 
         with open(isa_file, "r") as isafile:
             ispecs = isafile.read()
 
         with open(platform_file, "r") as platfile:
-            platform_specs = platfile.read()
+            pspecs = platfile.read()
 
         report_objects['isa'] = isa_specs['ISA']
         report_objects['usv'] = isa_specs['User_Spec_Version']
@@ -108,7 +118,7 @@ def execute():
         report_objects['isa_yaml'] = isa_file
         report_objects['platform_yaml'] = platform_file
         report_objects['isa_specs'] = ispecs
-        report_objects['platform_specs'] = platform_specs
+        report_objects['platform_specs'] = pspecs
 
         report_objects['results'] = framework.run(dut, base, isa_file,
                                                   platform_file)

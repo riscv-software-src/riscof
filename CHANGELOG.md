@@ -6,6 +6,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.11.0] - 2019-10-23
+### Added
+- Added support to generate test list only through command line.
+- Added support to generate test generate validated YAML files only through command line.
+### Fixed
+- Fixed path to riscv-config yaml-specs in html report.
+- Fixed error in documentation.
+
 ## [1.10.0] - 2019-08-12
 ### Added
 - Ported A extension tests to latest spec.

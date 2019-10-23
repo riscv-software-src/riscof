@@ -71,8 +71,6 @@ class pluginTemplate(ABC):
     def runTests(self, testlist):
         """Use the model to run the tests and produce signatures. The signature files generated should be named-*self.name[:-1]+".signature"*.
             
-            :return: The absolute path to the signature file generated.
-            
             :param testlist: A dictionary of tests and other information about them(like macros,work_dir and isa).
             
             :type testlist: dict
