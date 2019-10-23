@@ -118,6 +118,7 @@ def generate_test_pool(ispec, pspec):
     '''
     spec = {**ispec, **pspec}
     test_pool = []
+    test_list = {}
     db = utils.load_yaml(constants.framework_db)
     for file in db:
         macros = []
@@ -141,32 +142,7 @@ def generate_test_pool(ispec, pspec):
             macros.append("XLEN=" + xlen)
             test_pool.append(
                 (file, db[file]['commit_id'], macros, db[file]['isa']))
-    return test_pool
-
-
-def run_tests(dut, base, ispec, pspec):
-    '''
-        Function to run the tests for the DUT.
-
-        :param dut: The class instance for the DUT model.
-
-        :param base: The class instance for the BASE model.
-
-        :param ispec: The isa specifications of the DUT.
-
-        :param pspec: The platform specifications of the DUT.
-
-        :type ispec: dict
-
-        :type pspec: dict
-
-        :return: A list of dictionary objects containing the necessary information
-            required to generate the report.
-    '''
     logger.info("Selecting Tests.")
-    test_pool = generate_test_pool(ispec, pspec)
-    test_list = {}
-    results = []
     for entry in test_pool:
         # logger.info("Test file:" + entry[0])
         temp = {}
@@ -190,6 +166,30 @@ def run_tests(dut, base, ispec, pspec):
     with open(os.path.join(constants.work_dir,"test_list.yaml"),"w") as tfile:
         yaml.safe_dump(test_list,tfile)
 
+    return (test_list, test_pool)
+
+
+def run_tests(dut, base, ispec, pspec):
+    '''
+        Function to run the tests for the DUT.
+
+        :param dut: The class instance for the DUT model.
+
+        :param base: The class instance for the BASE model.
+
+        :param ispec: The isa specifications of the DUT.
+
+        :param pspec: The platform specifications of the DUT.
+
+        :type ispec: dict
+
+        :type pspec: dict
+
+        :return: A list of dictionary objects containing the necessary information
+            required to generate the report.
+    '''
+    test_list, test_pool = generate_test_pool(ispec, pspec)
+    results = []
     logger.info("Running Tests on DUT.")
     dut.runTests(test_list)
     logger.info("Running Tests on Reference Model.")
@@ -197,7 +197,8 @@ def run_tests(dut, base, ispec, pspec):
 
     logger.info("Initiating signature checking.")
     for entry in test_pool:
-
+        work_dir = os.path.join(constants.work_dir,
+                                str(entry[0].replace(constants.suite, '')[:-2]))
         res = os.path.join(test_list[entry[0]]['work_dir'],dut.name[:-1]+".signature")
         ref = os.path.join(test_list[entry[0]]['work_dir'],base.name[:-1]+".signature")
         result, diff = compare_signature(res, ref)

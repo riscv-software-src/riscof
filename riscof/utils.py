@@ -251,6 +251,12 @@ def riscof_cmdline_args():
     parser.add_argument('--setup',
                         action='store_true',
                         help='Initiate setup for riscof.')
+    parser.add_argument('--validateyaml',
+                        action='store_true',
+                        help='Validate the Input YAMLs using riscv-config')
+    parser.add_argument('--testlist',
+                        action='store_true',
+                        help='Generate the testlist only.')
     parser.add_argument('--run',
                         action='store_true',
                         help='Run riscof in current directory.')
