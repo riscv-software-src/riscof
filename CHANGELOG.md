@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.11.1] - 2019-11-28
+### Added
+- Update docs for : install, macros and usage example
+
 ## [1.11.0] - 2019-10-23
 ### Added
 - Added support to generate test list only through command line.
