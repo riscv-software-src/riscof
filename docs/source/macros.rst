@@ -43,17 +43,6 @@ modified and to be used as is defined. The definitions for the macros can be fou
 
     Macro to indicate the end of the code block in the test.No part of the code section should follow after this macro.
 
-**RVTEST_HALT**
-
-* Arguments: None
-
-* Description:
-
-    Macro to halt the machine.
-
-* Note: Future versions may not have this macro!
-
-
 **RVTEST_CASE( _PNAME, _DSTR )**
 
 * Arguments:
@@ -91,7 +80,7 @@ modified and to be used as is defined. The definitions for the macros can be fou
 
     RVTEST_SIGBASE(X26, test_B_res)
 
-**RVTEST_SIGUPD(_BR, _R, _SR, _AVAL)**
+**RVTEST_SIGUPD(_BR, _R, _AVAL)**
 
 * Arguments:
 
@@ -99,19 +88,17 @@ modified and to be used as is defined. The definitions for the macros can be fou
 
     * _R: The register whose value needs to be stored to the signature.
 
-    * _SR: The register to be used as scratch register,used internally by the RVMODEL_IO_ASSERT macro.
-
     * _AVAL: The assertion value for the register, used internally by the RVMODEL_IO_ASSERT macro.
 
 * Description:
 
-    Macro to store the value contained in a register using the base register specified an offset and increment the offset. Optionally, the macro can invoke a test assertion macro(currently *RVMODEL_IO_ASSERT_GPR_EQ*) with the assertion value.
+    Macro to store the value contained in a register using the base register specified an offset and increment the offset. 
 
 * Usage:
 
 .. code-block:: c
 
-    RVTEST_SIGUPD(x2, x3, x31, 0x00000000)
+    RVTEST_SIGUPD(x2, x3, 0x00000000)
 
 
 Standard MODEL Macros
@@ -152,13 +139,21 @@ dependencies.
 
     Macro containing the boot code for the model(can be an empty macro).
 
+**RVMODEL_HALT**
+
+* Arguments: None
+
+* Description:
+
+    Macro to halt the target machine.
+
 **RVMODEL_IO_INIT**
 
 * Arguments: None
 
 * Description:
 
-    Macro to initialise the IO for the test. (To be used for debugging)
+    Macro to initialise the IO for the target machine. (To be used for debugging)
 
 **RVMODEL_IO_CHECK**
 
@@ -258,7 +253,7 @@ Example
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
     #endif
-    RVTEST_HALT
+    RVMODEL_HALT
 
     RVTEST_CODE_END
 

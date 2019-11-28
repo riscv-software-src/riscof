@@ -4,49 +4,86 @@ Quickstart
 
 Installation and Setup
 ^^^^^^^^^^^^^^^^^^^^^^^
-1. Install riscof
+
+Pre-requisites:
+---------------
 
     Before proceding further please ensure *pip* and *python* is installed and configured.
 
-    In case you have issues installing python-3.7, we recommend using `pyenv`. 
+    In case you have issues installing python-3.7, we recommend using `pyenv`.
     
-    Installing instructions for pyenv:
+    If you are working on Ubuntu/Debian systems make sure you have the following dependencies
+    installed before installing `pyenv`
 
     .. code-block:: bash
 
-        #!/bin/sh
-        curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
-        echo "export PATH=\"/home/dracarys/.pyenv/bin:$PATH\"" >> ~/.bashrc
-        pyenv install 3.7.0
-        pyenv global 3.7.0
-        pip install --upgrade pip
-
-    **If using *pyenv* use *python* instead of *python3* and *pip* instead of *pip3***
-
-    You can check the python version by using 
-    
-    .. code-block:: bash
-
-        python3 --version
-
-    *Support exists for python versions > 3.7.0 only. Please ensure correct version before proceding further.*
-
-    * Install using pip(For users):
+      sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+      
+    Download and install pyenv:
 
     .. code-block:: bash
 
-        pip3 install riscof
+      #!/bin/sh
+      curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+
+    Add the following lines to your bashrc:
+
+    .. code-block:: bash
+
+      export PATH="/home/<username>/.pyenv/bin:$PATH"
+      eval "$(pyenv init -)"
+      eval "$(pyenv virtualenv-init -)"
+
+    Open a new terminal and create a virtual environment using the following
+
+    .. code-block:: bash
+
+      pyenv install 3.7.0
+      pyenv virtualenv 3.7.0 riscof_env
 
 
-    * Clone from git(For developers):
+    Now you can activate this virtual environment using the following command:
+
+    .. code-block:: bash
+
+      pyenv activate riscof_env
+      python --version
+
+Installing RISCOF:
+------------------
+      
+  * Install using pip (For users):
+
+    .. code-block:: bash
+
+        pip install riscof
+
+    To upgrade an already installed version of riscof to the latest version:
+
+    .. code-block:: bash
+
+        pip install -U riscof
+
+    To pull out a specific version of riscof:
+
+    .. code-block:: bash
+
+        pip install riscof==1.X.X
+
+
+
+  * Clone from git(For developers):
 
     .. code-block:: bash
 
         git clone https://gitlab.com/incoresemi/riscof.git
         cd riscof
-        pip3 install -r requirements.txt
+        pip install -r requirements.txt
 
-2. Setup Plugins
+Download sample plugins:
+------------------------
 
     * Clone the plugins from git.
 
@@ -60,7 +97,7 @@ Installation and Setup
 Usage
 ^^^^^
 
-* For users-
+* For users 
 
 .. code-block:: bash
 
@@ -133,6 +170,11 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
         pspec=#/path_to_riscof_plugins/yamlPlugin/Examples/rv32i_platform.yaml
     
     In the above block please edit the paths to point to the files appropriately. Other plugins can be used in the same way by changing the names in the nodes and the DUTPlugin argument.
+    Remember to update your PYTHONPATH to include the plugins:
+
+    .. code-block:: bash
+
+        export PYTHONPATH=<path_to_riscof-plugins>/signGen:<path_to_riscof-plugins>/spike_simple
 
 3. Run
 
