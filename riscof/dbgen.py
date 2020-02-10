@@ -114,9 +114,10 @@ def createdict(file):
     return {'isa': str(isa), 'parts': orderdict(part_dict)}
 
 
-def generate():
-    list = dirwalk(constants.suite[:-1])
-    repo = git.Repo("./")
+def generate_standard():
+    list = dirwalk(constants.suite)
+    repo_path = os.path.normpath(constants.root+"/../")
+    repo = git.Repo(repo_path)
     dbfile = constants.framework_db
     tree = repo.tree()
     try:
@@ -136,18 +137,34 @@ def generate():
     for file in existing:
         try:
             commit = next(
-                repo.iter_commits(paths="./riscof/" + file, max_count=1))
+                repo.iter_commits(paths=file, max_count=1))
             if (str(commit) != db[file]['commit_id']):
                 temp = createdict(os.path.join(cur_dir, file))
-                db[file] = {'commit_id': str(commit), **temp}
+                db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
         except DbgenError:
-            del db[file]
+            del db[file.replace(os.path.join(repo_path,"riscof/"),"")]
     for file in new:
         try:
             commit = next(
-                repo.iter_commits(paths="./riscof/" + file, max_count=1))
+                repo.iter_commits(paths=file, max_count=1))
             temp = createdict(os.path.join(cur_dir, file))
-            db[file] = {'commit_id': str(commit), **temp}
+            db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
+        except DbgenError:
+            continue
+    with open(dbfile, "w") as wrfile:
+        yaml.dump(orderdict(db),
+                  wrfile,
+                  default_flow_style=False,
+                  allow_unicode=True)
+
+def generate():
+    list = dirwalk(constants.suite)
+    dbfile = constants.framework_db
+    db = {}
+    for file in list:
+        try:
+            temp = createdict(file)
+            db[file] = {'commit_id':'0',**temp}
         except DbgenError:
             continue
     with open(dbfile, "w") as wrfile:
@@ -158,4 +175,4 @@ def generate():
 
 
 if __name__ == '__main__':
-    generate()
+    generate_standard()

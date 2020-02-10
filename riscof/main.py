@@ -2,6 +2,7 @@ import logging
 import importlib
 from datetime import datetime
 import os
+import sys
 import pytz
 import shutil
 import configparser
@@ -12,6 +13,7 @@ import riscof
 import riscv_config.checker as riscv_config
 import riscof.framework.main as framework
 import riscof.framework.test as test_routines
+import riscof.dbgen as dbgen
 import riscof.utils as utils
 import riscof.constants as constants
 from riscv_config.errors import ValidationError
@@ -19,13 +21,16 @@ from riscv_config.errors import ValidationError
 
 def execute():
     '''
-        Entry point for riscof. This function sets up the models and 
-        calls the :py:mod:`riscv_config` and :py:mod:`framework` modules with 
+        Entry point for riscof. This function sets up the models and
+        calls the :py:mod:`riscv_config` and :py:mod:`framework` modules with
         appropriate arguments.
     '''
     # Set up the parser
     parser = utils.riscof_cmdline_args()
     args = parser.parse_args()
+    if len(sys.argv)<2:
+        parser.print_help()
+        raise SystemExit
 
     # Set up the logger
     utils.setup_logging(args.verbose)
@@ -37,30 +42,41 @@ def execute():
     fh = logging.FileHandler('run.log', 'w')
     logger.addHandler(fh)
 
-
     if (args.run or args.testlist or args.validateyaml):
         config = configparser.ConfigParser()
-        logger.info("Reading configuration.")
+        logger.info("Reading configuration from: "+args.config)
         try:
-            config.read('config.ini')
+            config.read(args.config)
         except FileNotFoundError as err:
             logger.error(err)
             return 1
-
         riscof_config = config['RISCOF']
         logger.info("Preparing Models")
+
         # Gathering Models
         dut_model = riscof_config['DUTPlugin']
+        dut_model_path = os.path.abspath(riscof_config['DUTPluginPath'])
         base_model = riscof_config['ReferencePlugin']
-        logger.debug("Importing " + dut_model + " plugin")
-        dut_plugin = importlib.import_module("riscof_" + dut_model)
+        base_model_path = os.path.abspath(riscof_config['ReferencePluginPath'])
+        logger.debug("Importing " + dut_model + " plugin from: "+str(dut_model_path))
+        sys.path.append(dut_model_path)
+        try:
+            dut_plugin = importlib.import_module("riscof_" + dut_model)
+        except ImportError as msg:
+            logger.error("Error while importing "+dut_model+".\n"+str(msg))
+            raise SystemExit
         dut_class = getattr(dut_plugin, dut_model)
         if dut_model in config:
             dut = dut_class(name="DUT", config=config[dut_model])
         else:
             dut = dut_class(name="DUT")
-        logger.debug("Importing " + base_model + " plugin")
-        base_plugin = importlib.import_module("riscof_" + base_model)
+        logger.debug("Importing " + base_model + " plugin from: "+str(base_model_path))
+        sys.path.append(base_model_path)
+        try:
+            base_plugin = importlib.import_module("riscof_" + base_model)
+        except ImportError as msg:
+            logger.error("Error while importing "+base_model+".\n"+str(msg))
+            raise SystemExit
         base_class = getattr(base_plugin, base_model)
         if base_model in config:
             base = base_class(name="Reference", config=config[base_model])
@@ -82,6 +98,15 @@ def execute():
             logger.debug('Creating new work directory: ' + work_dir)
             os.mkdir(work_dir)
 
+        if args.suite is not None:
+            logger.info("Generating database for custom suite.")
+            work_dir = constants.work_dir
+            constants.suite = args.suite
+            constants.framework_db = os.path.join(work_dir,"framework.yaml")
+            logger.debug('Suite used: '+constants.suite)
+            dbgen.generate()
+            logger.debug('Database File Generated: '+constants.framework_db)
+
         try:
             isa_file, platform_file = riscv_config.check_specs(
                 isa_file, platform_file, work_dir, True)
@@ -91,7 +116,7 @@ def execute():
 
         if(args.validateyaml):
           exit(0)
-        
+
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")

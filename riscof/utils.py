@@ -7,15 +7,34 @@ import subprocess
 import operator
 import shlex
 import oyaml as yaml
+import riscof.utils as utils
 
 logger = logging.getLogger(__name__)
 
+
+
+class makeUtil():
+    def __init__(self,makeCommand='make',makefilePath="./Makefile"):
+        self.makeCommand=makeCommand
+        self.makefilePath = makefilePath
+        self.targets = []
+    def add_target(self,command,tname=""):
+        if tname == "":
+            tname = "TARGET"+str(len(self.targets))
+        with open(self.makefilePath,"a") as makefile:
+            makefile.write("\n\n.PHONY : " + tname + "\n" + tname + " :\n\t"+command.replace("\n","\n\t"))
+            self.targets.append(tname)
+    def execute_target(self,tname,cwd="./"):
+        assert tname in self.targets, "Target does not exist."
+        utils.shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
+    def execute_all(self,cwd):
+        utils.shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
 
 class Command():
     """
     Class for command build which is supported
     by :py:mod:`suprocess` module. Supports automatic
-    conversion of :py:class:`pathlib.Path` instances to 
+    conversion of :py:class:`pathlib.Path` instances to
     valid format for :py:mod:`subprocess` functions.
     """
 
@@ -23,7 +42,7 @@ class Command():
         """Constructor.
 
         :param pathstyle: Determine the path style when adding instance of
-            :py:class:`pathlib.Path`. Path style determines the slash type 
+            :py:class:`pathlib.Path`. Path style determines the slash type
             which separates the path components. If pathstyle is `auto`, then
             on Windows backslashes are used and on Linux forward slashes are used.
             When backslashes should be prevented on all systems, the pathstyle
@@ -31,11 +50,11 @@ class Command():
 
         :param ensure_absolute_paths: If true, then any passed path will be
             converted to absolute path.
-        
+
         :param args: Initial command.
-        
+
         :type pathstyle: str
-        
+
         :type ensure_absolute_paths: bool
         """
         self.ensure_absolute_paths = ensure_absolute_paths
@@ -47,7 +66,7 @@ class Command():
 
     def append(self, arg):
         """Add new argument to command.
-        
+
         :param arg: Argument to be added. It may be list, tuple,
             :py:class:`Command` instance or any instance which
             supports :py:func:`str`.
@@ -79,9 +98,9 @@ class Command():
 
     def run(self, **kwargs):
         """Execute the current command.
-        
+
         Uses :py:class:`subprocess.Popen` to execute the command.
-        
+
         :return: The return code of the process     .
         :raise: subprocess.CalledProcessError if `check` is set
                 to true in `kwargs` and the process returns
@@ -125,10 +144,10 @@ class Command():
 
     def _path2str(self, path):
         """Convert :py:class:`pathlib.Path` to string.
-        
+
         The final form of the string is determined by the
         configuration of `Command` instance.
-        
+
         :param path: Path-like object which will be converted
                      into string.
         :return: String representation of `path`
@@ -191,8 +210,8 @@ def load_yaml(foo):
 
 
 class ColoredFormatter(logging.Formatter):
-    """                                                                         
-        Class to create a log output which is colored based on level.           
+    """
+        Class to create a log output which is colored based on level.
     """
 
     def __init__(self, *args, **kwargs):
@@ -217,13 +236,13 @@ class ColoredFormatter(logging.Formatter):
 
 
 def setup_logging(log_level):
-    """Setup logging                                                            
-                                                                                
-        Verbosity decided on user input                                         
-                                                                                                                                                   
-        :param log_level: User defined log level                             
-                                                                                
-        :type log_level: str                                                               
+    """Setup logging
+
+        Verbosity decided on user input
+
+        :param log_level: User defined log level
+
+        :type log_level: str
     """
     numeric_level = getattr(logging, log_level.upper(), None)
 
@@ -243,8 +262,14 @@ class SortingHelpFormatter(argparse.HelpFormatter):
         super(SortingHelpFormatter, self).add_arguments(actions)
 
 
+class MyParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        raise SystemExit
+
 def riscof_cmdline_args():
-    parser = argparse.ArgumentParser(
+    parser = MyParser(
         formatter_class=SortingHelpFormatter,
         prog="riscof",
         description="This program checks compliance for a DUT.")
@@ -265,4 +290,15 @@ def riscof_cmdline_args():
                         default='info',
                         help='debug | info | warning | error',
                         metavar="")
+    parser.add_argument('--suite',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom suite directory.',
+                        metavar= 'PATH')
+    parser.add_argument('--config',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the config file.',
+                        default='config.ini',
+                        metavar= 'PATH')
     return parser

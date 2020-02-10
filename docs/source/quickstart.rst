@@ -163,6 +163,10 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
 
         [RISCOF]
         ReferencePlugin=sigGen
+        # path where riscof_<ReferencePlugin_Name>.py exists
+        ReferencePluginPath=#/path_to_riscof_plugins/sigGen
+        # path where riscof_<DUTPlugin_Name>.py exists
+        DUTPluginPath=#/path_to_riscof_plugins/spike
         DUTPlugin=spike
 
         [spike]
@@ -170,12 +174,7 @@ This Example runs spike vs sigGen. Please ensure spike and riscv toolchain is in
         pspec=#/path_to_riscof_plugins/yamlPlugin/Examples/rv32i_platform.yaml
     
     In the above block please edit the paths to point to the files appropriately. Other plugins can be used in the same way by changing the names in the nodes and the DUTPlugin argument.
-    Remember to update your PYTHONPATH to include the plugins:
-
-    .. code-block:: bash
-
-        export PYTHONPATH=<path_to_riscof-plugins>/signGen:<path_to_riscof-plugins>/spike_simple
-
+    
 3. Run
 
     * For users
@@ -196,7 +195,6 @@ Writing your own Plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 * Ensure that the module is named as *riscof_\*model_name\*.py* and the class is named as *model_name*.
 * The class is a subclass of the *pluginTemplate* class present in *riscof.pluginTemplate*.
-* The path where the file exists is present on the *PYTHONPATH*.
 
 .. code-block:: python
 

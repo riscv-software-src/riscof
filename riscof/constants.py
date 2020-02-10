@@ -2,7 +2,7 @@ import os
 
 root = os.path.abspath(os.path.dirname(__file__))
 
-suite = "suite/"
+suite = os.path.join(root,"suite/")
 framework_db = os.path.join(root, "framework/database.yaml")
 cwd = os.getcwd()
 work_dir = os.path.join(cwd, "riscof_work/")

@@ -6,9 +6,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.12.0] - 2020-02-10
+### Fixed
+- RISCOF now checks if the sign dumps are not empty before comparing them.
+- Print help when no arguments specified in command line.
+### Added
+- A Makefile generation utility to avoid plugins re-writing it always.
+- Automated adding paths to PYTHONPATH.
+- Support for custom suites.
+
 ## [1.11.1] - 2019-11-28
 ### Added
-- Update docs for : install, macros and usage example
+- Update docs for : install, macros and usage example.
 
 ## [1.11.0] - 2019-10-23
 ### Added
