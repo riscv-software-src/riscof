@@ -9,5 +9,3 @@ recursive-exclude riscof/suite/wip *.S
 recursive-exclude riscof/__pycache__ *.pyc
 
 include LICENSE
-
-exclude riscof/dbgen.py
