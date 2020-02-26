@@ -32,11 +32,8 @@
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
-RVTEST_ISA("RV32I")
-
 # Test Virtual Machine (TVM) used by program.
-
+RVTEST_ISA("RV32I")
 
 # Test code region
 RVTEST_CODE_BEGIN
@@ -45,13 +42,14 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x31, "# Test part A1 - test x1 - x15 are 32 bits\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x16, test_A1_res)
+    la      x16, test_A1_res
 
     # Init registers
     li      x0, 1
@@ -150,24 +148,43 @@ RVTEST_CODE_BEGIN
 1:
 
     # Store results
+    sw      x0, 0(x16)
+    sw      x1, 4(x16)
+    sw      x2, 8(x16)
+    sw      x3, 12(x16)
+    sw      x4, 16(x16)
+    sw      x5, 20(x16)
+    sw      x6, 24(x16)
+    sw      x7, 28(x16)
+    sw      x8, 32(x16)
+    sw      x9, 36(x16)
+    sw      x10, 40(x16)
+    sw      x11, 44(x16)
+    sw      x12, 48(x16)
+    sw      x13, 52(x16)
+    sw      x14, 56(x16)
+    sw      x15, 60(x16)
 
+    //
+    // Assert
+    //
     RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x16, x0,  0x00000000)
-    RVTEST_SIGUPD(x16, x1,  0x80000000)
-    RVTEST_SIGUPD(x16, x2,  0x80000000)
-    RVTEST_SIGUPD(x16, x3,  0x80000000)
-    RVTEST_SIGUPD(x16, x4,  0x80000000)
-    RVTEST_SIGUPD(x16, x5,  0x80000000)
-    RVTEST_SIGUPD(x16, x6,  0x80000000)
-    RVTEST_SIGUPD(x16, x7,  0x80000000)
-    RVTEST_SIGUPD(x16, x8,  0x80000000)
-    RVTEST_SIGUPD(x16, x9,  0x80000000)
-    RVTEST_SIGUPD(x16, x10, 0x80000000)
-    RVTEST_SIGUPD(x16, x11, 0x80000000)
-    RVTEST_SIGUPD(x16, x12, 0x80000000)
-    RVTEST_SIGUPD(x16, x13, 0x80000000)
-    RVTEST_SIGUPD(x16, x14, 0x80000000)
-    RVTEST_SIGUPD(x16, x15, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x0,  0x00000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x1,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x2,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x3,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x4,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x5,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x6,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x7,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x8,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x9,  0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x10, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x11, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x12, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x13, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x14, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x16, x15, 0x80000000)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
@@ -175,7 +192,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x31, "# Test part A2 - test x16 - x30 are 32 bits\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_A2_res)
+    la      x1, test_A2_res
 
     # Init registers
     li      x16, 1
@@ -278,28 +295,46 @@ RVTEST_CODE_BEGIN
 1:
 
     # Store results
+    sw      x16, 0(x1)
+    sw      x17, 4(x1)
+    sw      x18, 8(x1)
+    sw      x19, 12(x1)
+    sw      x20, 16(x1)
+    sw      x21, 20(x1)
+    sw      x22, 24(x1)
+    sw      x23, 28(x1)
+    sw      x24, 32(x1)
+    sw      x25, 36(x1)
+    sw      x26, 40(x1)
+    sw      x27, 44(x1)
+    sw      x28, 48(x1)
+    sw      x29, 52(x1)
+    sw      x30, 56(x1)
+    sw      x31, 60(x1)
 
-    RVTEST_SIGUPD(x1, x16, 0x80000000)
-    RVTEST_SIGUPD(x1, x17, 0x80000000)
-    RVTEST_SIGUPD(x1, x18, 0x80000000)
-    RVTEST_SIGUPD(x1, x19, 0x80000000)
-    RVTEST_SIGUPD(x1, x20, 0x80000000)
-    RVTEST_SIGUPD(x1, x21, 0x80000000)
-    RVTEST_SIGUPD(x1, x22, 0x80000000)
-    RVTEST_SIGUPD(x1, x23, 0x80000000)
-    RVTEST_SIGUPD(x1, x24, 0x80000000)
-    RVTEST_SIGUPD(x1, x25, 0x80000000)
-    RVTEST_SIGUPD(x1, x26, 0x80000000)
-    RVTEST_SIGUPD(x1, x27, 0x80000000)
-    RVTEST_SIGUPD(x1, x28, 0x80000000)
-    RVTEST_SIGUPD(x1, x29, 0x80000000)
-    RVTEST_SIGUPD(x1, x30, 0x80000000)
-    RVTEST_SIGUPD(x1, x31, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x16, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x17, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x18, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x19, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x20, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x21, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x22, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x23, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x24, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x25, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x26, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x27, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x28, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x29, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x30, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x31, 0x80000000)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
     RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
-  #endif
+
+#endif
+
  # ---------------------------------------------------------------------------------------------
     # HALT
     RVMODEL_HALT

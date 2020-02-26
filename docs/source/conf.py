@@ -14,9 +14,15 @@
 #
 import os
 import sys
+import re 
+
 sys.path.insert(0, os.path.abspath('../..'))
 sys.setrecursionlimit(1500)
 
+def get_version():
+    changelog = open('../../CHANGELOG.md','r').read()
+    x = re.findall(r'##\s*\[(.*?)\]',changelog)[0]
+    return str(x)
 
 # -- Project information -----------------------------------------------------
 
@@ -25,9 +31,9 @@ copyright = '2019 InCore Semiconductors, IIT Madras'
 author = 'InCore Semiconductors Pvt. Ltd.'
 
 # The short X.Y version
-version = '1.2.0'
+version = get_version()
 # The full version, including alpha/beta/rc tags
-#release = 'beta'
+release = version
 
 
 # -- General configuration ---------------------------------------------------

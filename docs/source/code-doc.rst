@@ -1,3 +1,5 @@
+.. _codedoc:
+
 ##################
 Code Documentation
 ##################
@@ -14,6 +16,8 @@ Database Generator(dbgen)
    :members: 
    :special-members:
    :private-members:
+
+.. _utils:
 
 Utils
 ^^^^^^

@@ -32,52 +32,43 @@
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
-RVTEST_ISA("RV32I")
-
 # Test Virtual Machine (TVM) used by program.
-
+RVTEST_ISA("RV32I")
 
 # Test code region
 RVTEST_CODE_BEGIN
 
     RVMODEL_IO_INIT
-    RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-    RVMODEL_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+    RVMODEL_IO_ASSERT_GPR_EQ(x30, x0, 0x00000000)
+    RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
-    #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
 
     # Save and set trap handler address
     la x1, _trap_handler
-    csrrw x21, mtvec, x1
+    csrrw x31, mtvec, x1
 
     //
     // Assert
     //
     RVMODEL_IO_CHECK()
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A - test EBREAK\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A - test EBREAK\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_A_res_exc)
+    la      x1, test_A_res_exc
 
     # Test
     li      x2, 0x11111111
-    RVTEST_SIGUPD(x1,x0,0x00000000)
     ebreak
-    # Store data from the test
-    RVTEST_SIGUPD(x1,x30,0x0000003)
-    RVTEST_SIGUPD(x1,x2,0x11111111)
-    RVTEST_SIGUPD(x1,x0,0x00000000)
+    sw      x0, 0(x1)
 
-    RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x0000000)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     # restore mtvec and jump to the end
-    csrw mtvec, x21
+    csrw mtvec, x31
     jal x0, test_end
 
     # ---------------------------------------------------------------------------------------------
@@ -90,18 +81,26 @@ _trap_handler:
 
     # Store MCAUSE
     csrr    x30, mcause
+    sw      x30, 0(x1)
+
+    # Store data from test
+    sw      x2, 4(x1)
+    sw      x0, 8(x1)
+
+    # increment data_exc address
+    addi    x1, x1, 12
 
     # return
     mret
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
 
 test_end:
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
-    #endif
+    RVMODEL_IO_WRITE_STR(x30, "# Test End\n")
+
+#endif
+
  # ---------------------------------------------------------------------------------------------
     # HALT
     RVMODEL_HALT

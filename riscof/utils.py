@@ -14,20 +14,70 @@ logger = logging.getLogger(__name__)
 
 
 class makeUtil():
+    """
+    Utility for ease of use of make commands like `make` and `pmake`.
+    Supports automatic addition and execution of targets. Uses the class
+    :py:class:`shellCommand` to execute commands.
+    """
     def __init__(self,makeCommand='make',makefilePath="./Makefile"):
+        """ Constructor.
+
+        :param makeCommand: The variant of make to be used with optional arguments.
+            Ex - `pmake -j 8`
+
+        :type makeCommand: str
+
+        :param makefilePath: The path to the makefile to be used.
+
+        :type makefilePath: str
+
+        """
         self.makeCommand=makeCommand
         self.makefilePath = makefilePath
         self.targets = []
     def add_target(self,command,tname=""):
+        """
+        Function to add a target to the makefile.
+
+        :param command: The command to be executed when the target is run.
+
+        :type command: str
+
+        :param tname: The name of the target to be used. If not specified, TARGET<num> is used as the name.
+
+        :type tname: str
+        """
         if tname == "":
             tname = "TARGET"+str(len(self.targets))
         with open(self.makefilePath,"a") as makefile:
             makefile.write("\n\n.PHONY : " + tname + "\n" + tname + " :\n\t"+command.replace("\n","\n\t"))
             self.targets.append(tname)
     def execute_target(self,tname,cwd="./"):
+        """
+        Function to execute a particular target only.
+
+        :param tname: Name of the target to execute.
+
+        :type tname: str
+
+        :param cwd: The working directory to be set while executing the make command.
+
+        :type cwd: str
+
+        :raise AssertionError: If target name is not present in the list of defined targets.
+
+        """
         assert tname in self.targets, "Target does not exist."
         utils.shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
     def execute_all(self,cwd):
+        """
+        Function to execute all the defined targets.
+
+        :param cwd: The working directory to be set while executing the make command.
+
+        :type cwd: str
+
+        """
         utils.shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
 
 class Command():
@@ -102,7 +152,7 @@ class Command():
         Uses :py:class:`subprocess.Popen` to execute the command.
 
         :return: The return code of the process     .
-        :raise: subprocess.CalledProcessError if `check` is set
+        :raise subprocess.CalledProcessError: If `check` is set
                 to true in `kwargs` and the process returns
                 non-zero value.
         """
@@ -195,6 +245,22 @@ class shellCommand(Command):
 
     def __init__(self, *args, pathstyle='auto', ensure_absolute_paths=False):
         """
+        :param pathstyle: Determine the path style when adding instance of
+            :py:class:`pathlib.Path`. Path style determines the slash type
+            which separates the path components. If pathstyle is `auto`, then
+            on Windows backslashes are used and on Linux forward slashes are used.
+            When backslashes should be prevented on all systems, the pathstyle
+            should be `posix`. No other values are allowed.
+
+        :param ensure_absolute_paths: If true, then any passed path will be
+            converted to absolute path.
+
+        :param args: Initial command.
+
+        :type pathstyle: str
+
+        :type ensure_absolute_paths: bool
+
         """
         return super().__init__(*args,
                                 pathstyle=pathstyle,
@@ -256,7 +322,6 @@ def setup_logging(log_level):
 
 
 class SortingHelpFormatter(argparse.HelpFormatter):
-
     def add_arguments(self, actions):
         actions = sorted(actions, key=operator.attrgetter('option_strings'))
         super(SortingHelpFormatter, self).add_arguments(actions)
@@ -273,32 +338,46 @@ def riscof_cmdline_args():
         formatter_class=SortingHelpFormatter,
         prog="riscof",
         description="This program checks compliance for a DUT.")
-    parser.add_argument('--setup',
+    required = parser.add_argument_group('required arguments')
+    optional = parser.add_argument_group('optional arguments')
+    optional.add_argument('--config',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the config file.',
+                        metavar= 'PATH')
+    optional.add_argument('--setup',
                         action='store_true',
                         help='Initiate setup for riscof.')
-    parser.add_argument('--validateyaml',
+    optional.add_argument('--validateyaml',
                         action='store_true',
                         help='Validate the Input YAMLs using riscv-config')
-    parser.add_argument('--testlist',
+    optional.add_argument('--testlist',
                         action='store_true',
-                        help='Generate the testlist only.')
-    parser.add_argument('--run',
+                        help='Generate the testlist only. [subsumes --validateyaml]')
+    optional.add_argument('--run',
                         action='store_true',
-                        help='Run riscof in current directory.')
-    parser.add_argument('--verbose',
+                        help='Run riscof. [subsumes --testlist and --validateyaml]')
+    optional.add_argument('--verbose',
                         action='store',
                         default='info',
                         help='debug | info | warning | error',
                         metavar="")
-    parser.add_argument('--suite',
+    optional.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
-    parser.add_argument('--config',
-                        type= lambda p: str(pathlib.Path(p).absolute()),
+    optional.add_argument('--dutname',
                         action='store',
-                        help='The Path to the config file.',
-                        default='config.ini',
-                        metavar= 'PATH')
+                        help='Name of DUT plugin. [used with setup command only]',
+                        default='spike',
+                        metavar= 'NAME')
+    optional.add_argument('--refname',
+                        action='store',
+                        help='Name of Reference plugin. [used with setup command only]',
+                        default='riscvOVPsim',
+                        metavar= 'NAME')
+    optional.add_argument('--version','-v',
+                        help='Print version of RISCOF being used',
+                        action='store_true')
     return parser

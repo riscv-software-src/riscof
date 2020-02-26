@@ -19,7 +19,7 @@ RVTEST_CODE_BEGIN
   RVMODEL_IO_INIT
   RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
   #ifdef TEST_CASE_1
-  RVTEST_CASE(1,"// check ISA:=regex(.*I.*); check ISA:=regex(.*A.*); def TEST_CASE_1=True")
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*A.*); def TEST_CASE_1=True")
 
   # address for test results
   RVTEST_SIGBASE(	x2, test_res)

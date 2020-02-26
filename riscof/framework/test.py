@@ -201,8 +201,7 @@ def run_tests(dut, base, ispec, pspec):
 
     logger.info("Initiating signature checking.")
     for entry in test_pool:
-        work_dir = os.path.join(constants.work_dir,
-                                str(entry[0].replace(constants.suite, '')[:-2]))
+        work_dir = test_list[entry[0]]['work_dir']
         res = os.path.join(test_list[entry[0]]['work_dir'],dut.name[:-1]+".signature")
         ref = os.path.join(test_list[entry[0]]['work_dir'],base.name[:-1]+".signature")
         result, diff = compare_signature(res, ref)

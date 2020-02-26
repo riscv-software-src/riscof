@@ -1,228 +1,170 @@
-# RISC-V Compliance Test I-AUIPC-01
+# RISC-V Compliance Test AUIPC-01
 #
-# Copyright (c) 2017, Codasip Ltd.
-# Copyright (c) 2018, Imperas Software Ltd. Additions
-# All rights reserved.
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#      * Redistributions of source code must retain the above copyright
-#        notice, this list of conditions and the following disclaimer.
-#      * Redistributions in binary form must reproduce the above copyright
-#        notice, this list of conditions and the following disclaimer in the
-#        documentation and/or other materials provided with the distribution.
-#      * Neither the name of the Codasip Ltd., Imperas Software Ltd. nor the
-#        names of its contributors may be used to endorse or promote products
-#        derived from this software without specific prior written permission.
+# Copyright (c) 2019 Imperas Software Ltd., www.imperas.com
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-# IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Codasip Ltd., Imperas Software Ltd.
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Specification: RV32I Base Integer Instruction Set, Version 2.0
-# Description: Testing instruction AUIPC.
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied.
+#
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+#
+# Specification: RV32I Base Integer Instruction Set, Version 2.1
+# Description: Testing instruction 'AUIPC'.
 
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
 RVTEST_ISA("RV32I")
 
-# Test Virtual Machine (TVM) used by program.
-
-
-# Test code region
 RVTEST_CODE_BEGIN
 
-    RVMODEL_IO_INIT
-    RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-    RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A - general test of AUIPC\n");
+	RVMODEL_IO_INIT
+	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
 
-    # Addresses for test data and results
-    la      x14, test_A_data
-    RVTEST_SIGBASE(x15, test_A_res)
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
 
-    # Register initialization
-    lw      x1, 0(x14)
-    li      x2, 0x00001004
-    li      x3, 0xFFFFF008
-    li      x4, 0x7FFFF00C
-    li      x5, 0x80000010
+	# ---------------------------------------------------------------------------------------------
 
-    add     x2, x1, x2
-    add     x3, x1, x3
-    add     x4, x1, x4
-    add     x5, x1, x5
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 1\n")
 
-    # Test
-test_A:
-    auipc   x6, 0x0
-    auipc   x7, 0x1
-    auipc   x16, 0xFFFFF
-    auipc   x29, 0x7FFFF
-    auipc   x31, 0x80000
 
-    xor     x6, x6, x1
-    xor     x7, x7, x2
-    xor     x16, x16, x3
-    xor     x29, x29, x4
-    xor     x31, x31, x5
+    # address for test results
+	la	x5, test_1_res
 
-    # Store results
-    RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x15, x6,  0x00000000)
-    RVTEST_SIGUPD(x15, x7,  0x00000000)
-    RVTEST_SIGUPD(x15, x16, 0x00000000)
-    RVTEST_SIGUPD(x15, x29, 0x00000000)
-    RVTEST_SIGUPD(x15, x31, 0x00000000)
+	TEST_AUIPC(auipc, x0, 0x0, 0x0, x5, 0,x6)   # Testcase 0
+	TEST_AUIPC(auipc, x1, 0x0, 0x0, x5, 4,x6)   # Testcase 1
+	TEST_AUIPC(auipc, x2, 0x7ff000, 0x7ff, x5, 8,x6)   # Testcase 2
+	TEST_AUIPC(auipc, x3, 0x1000, 0x1, x5, 12,x6)   # Testcase 3
+	TEST_AUIPC(auipc, x4, 0x1234000, 0x1234, x5, 16,x6)   # Testcase 4
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B - test AUIPC overwrites low bits\n");
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 2\n")
 
-    # Addresses for test data and results
-    la      x17, test_B_data
-    RVTEST_SIGBASE(x16, test_B_res)
 
-    # Register initialization
-    li      x1, 0x11111111
-    li      x2, 0x22222222
-    li      x15, 0x33333333
-    li      x28, 0x44444444
-    li      x30, 0x55555555
+    # address for test results
+	la	x1, test_2_res
 
-    lw      x3, 0(x17)
-    li      x4, 0x80000000
-    li      x5, 0x7FFFF004
-    li      x6, 0x00000008
-    li      x7, 0x0000100C
-    li      x8, 0xFFFFF010
+	TEST_AUIPC(auipc, x5, 0x80000000, 0x80000, x1, 0,x2)   # Testcase 5
+	TEST_AUIPC(auipc, x6, 0x1234000, 0x1234, x1, 4,x2)   # Testcase 6
+	TEST_AUIPC(auipc, x7, 0xfffff000, 0xfffff, x1, 8,x2)   # Testcase 7
+	TEST_AUIPC(auipc, x8, 0x1000, 0x1, x1, 12,x2)   # Testcase 8
+	TEST_AUIPC(auipc, x9, 0x7ffff000, 0x7ffff, x1, 16,x2)   # Testcase 9
 
-    add     x4, x3, x4
-    add     x5, x3, x5
-    add     x6, x3, x6
-    add     x7, x3, x7
-    add     x8, x3, x8
 
-    # Test
-test_B:
-    auipc   x1, 0x80000
-    auipc   x2, 0x7FFFF
-    auipc   x15, 0
-    auipc   x28, 1
-    auipc   x30, 0xFFFFF
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 3\n")
 
-    xor     x1, x1, x4
-    xor     x2, x2, x5
-    xor     x15, x15, x6
-    xor     x28, x28, x7
-    xor     x30, x30, x8
 
-    # Store results
-    RVTEST_SIGUPD(x16, x1,  0x00000000)
-    RVTEST_SIGUPD(x16, x2,  0x00000000)
-    RVTEST_SIGUPD(x16, x15, 0x00000000)
-    RVTEST_SIGUPD(x16, x28, 0x00000000)
-    RVTEST_SIGUPD(x16, x30, 0x00000000)
+    # address for test results
+	la	x1, test_3_res
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
+	TEST_AUIPC(auipc, x10, 0x54321000, 0x54321, x1, 0,x7)   # Testcase 10
+	TEST_AUIPC(auipc, x11, 0x800000, 0x800, x1, 4,x7)   # Testcase 11
+	TEST_AUIPC(auipc, x12, 0x0, 0x0, x1, 8,x7)   # Testcase 12
+	TEST_AUIPC(auipc, x13, 0x7ff000, 0x7ff, x1, 12,x7)   # Testcase 13
+	TEST_AUIPC(auipc, x14, 0x0, 0x0, x1, 16,x7)   # Testcase 14
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C - test loading address using auipc + addi or la alias\n");
 
-    # Addresses for test data and results
-    la      x18, test_C_data
-    RVTEST_SIGBASE(x17, test_C_res)
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 4\n")
 
-test_C1:
-    # Register initialization
-    lw      x1, 0(x18)
-    lw      x2, 4(x18)
-    lw      x3, 8(x18)
 
-    # Test
-    la      x4,  test_C1
-    la      x15, test_C2
-    la      x30, test_C3
+    # address for test results
+	la	x2, test_4_res
 
-    # C1
-    auipc   x5, 0x0
-    addi    x5, x5, 0xFFFFFFDC
+	TEST_AUIPC(auipc, x15, 0x1000, 0x1, x2, 0,x3)   # Testcase 15
+	TEST_AUIPC(auipc, x16, 0x0, 0x0, x2, 4,x3)   # Testcase 16
+	TEST_AUIPC(auipc, x17, 0x0, 0x0, x2, 8,x3)   # Testcase 17
+	TEST_AUIPC(auipc, x18, 0x7ff000, 0x7ff, x2, 12,x3)   # Testcase 18
+	TEST_AUIPC(auipc, x19, 0x1000, 0x1, x2, 16,x3)   # Testcase 19
 
-test_C2:
-    # C2
-    auipc   x16, 0x0
-    addi    x16, x16, 0x0
 
-    # C3
-    auipc   x31, 0x0
-    addi    x31, x31, 0x28
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 5\n")
 
-    xor     x4, x4, x1
-    xor     x15, x15, x2
-    xor     x30, x30, x3
-    sub     x5, x5, x1
-    xor     x16, x16, x2
-    xor     x31, x31, x3
 
-    # Store results
-    RVTEST_SIGUPD(x17, x4,  0x00000000)
-    RVTEST_SIGUPD(x17, x15, 0x00000000)
+    # address for test results
+	la	x1, test_5_res
 
-test_C3:
-    
-    RVTEST_SIGUPD(x17, x29, 0x00000000)
-    RVTEST_SIGUPD(x17, x5,  0x00000000)
-    RVTEST_SIGUPD(x17, x16, 0x00000000)
-    RVTEST_SIGUPD(x17, x31, 0x00000000)
+	TEST_AUIPC(auipc, x20, 0x1234000, 0x1234, x1, 0,x2)   # Testcase 20
+	TEST_AUIPC(auipc, x21, 0x80000000, 0x80000, x1, 4,x2)   # Testcase 21
+	TEST_AUIPC(auipc, x22, 0x1234000, 0x1234, x1, 8,x2)   # Testcase 22
+	TEST_AUIPC(auipc, x23, 0xfffff000, 0xfffff, x1, 12,x2)   # Testcase 23
+	TEST_AUIPC(auipc, x24, 0x1000, 0x1, x1, 16,x2)   # Testcase 24
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 6\n")
 
-  #endif
- # ---------------------------------------------------------------------------------------------
-    # HALT
-    RVMODEL_HALT
+
+    # address for test results
+	la	x1, test_6_res
+
+	TEST_AUIPC(auipc, x25, 0x7ffff000, 0x7ffff, x1, 0,x7)   # Testcase 25
+	TEST_AUIPC(auipc, x26, 0x54321000, 0x54321, x1, 4,x7)   # Testcase 26
+	TEST_AUIPC(auipc, x27, 0x800000, 0x800, x1, 8,x7)   # Testcase 27
+	TEST_AUIPC(auipc, x28, 0x0, 0x0, x1, 12,x7)   # Testcase 28
+	TEST_AUIPC(auipc, x29, 0x7ff000, 0x7ff, x1, 16,x7)   # Testcase 29
+
+
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 7\n")
+
+
+    # address for test results
+	la	x2, test_7_res
+
+	TEST_AUIPC(auipc, x30, 0x0, 0x0, x2, 0,x3)   # Testcase 30
+	TEST_AUIPC(auipc, x31, 0x1000, 0x1, x2, 4,x3)   # Testcase 31
+
+
+	# ---------------------------------------------------------------------------------------------
+	
+	RVMODEL_IO_WRITE_STR(x31, "Test End\n")
+
+#endif
+
+	# ---------------------------------------------------------------------------------------------
+
+	RVMODEL_HALT
 
 RVTEST_CODE_END
 
 # Input data section.
-    .data
-    .align 4
-
-test_A_data:
-    .word test_A
-test_B_data:
-    .word test_B
-test_C_data:
-    .word test_C1
-    .word test_C2
-    .word test_C3
-
+	.data
 
 # Output data section.
 RVMODEL_DATA_BEGIN
-    .align 4
 
-test_A_res:
-    .fill 5, 4, -1
-test_B_res:
-    .fill 5, 4, -1
-test_C_res:
-    .fill 6, 4, -1
+test_1_res:
+	.fill 5, 4, -1
+test_2_res:
+	.fill 5, 4, -1
+test_3_res:
+	.fill 5, 4, -1
+test_4_res:
+	.fill 5, 4, -1
+test_5_res:
+	.fill 5, 4, -1
+test_6_res:
+	.fill 5, 4, -1
+test_7_res:
+	.fill 5, 4, -1
 
 RVMODEL_DATA_END
+

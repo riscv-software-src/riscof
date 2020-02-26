@@ -32,57 +32,49 @@
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
-RVTEST_ISA("RV32I")
-
 # Test Virtual Machine (TVM) used by program.
-
+RVTEST_ISA("RV32I")
 
 # Test code region
 RVTEST_CODE_BEGIN
 
     RVMODEL_IO_INIT
-    RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-    RVMODEL_IO_WRITE_STR(x31, "# Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+    RVMODEL_IO_ASSERT_GPR_EQ(x30, x0, 0x00000000)
+    RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
+
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+
     # Save and set trap handler address
     la x1, _trap_handler
-    csrrw x21, mtvec, x1
+    csrrw x31, mtvec, x1
 
     # switch off C
     csrrci   x0, misa, 4
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1 - test JAL\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A1 - test JAL\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_A1_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_A1_res_exc
 
     # Test
     li      x2, 0x11111111
     jal     x0, 1f + 2
     li      x2, 0
 1:
-    # Store results
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0x11111111)
+
     //
     // Assert
     //
     RVMODEL_IO_CHECK()
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2 - test JALR - NOT causing the exception\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A2 - test JALR - NOT causing the exception\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_A2_res)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_A2_res
 
     # Test
     li      x2, 0x22222222
@@ -90,32 +82,33 @@ RVTEST_CODE_BEGIN
     jalr    x0, x4, 0
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x2, 0x22222222)
+    sw      x2, 0(x1)
+    addi    x1, x1, 4
 
     li      x2, 0x33333333
     la      x4, 1f
     jalr    x0, x4, 1
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x2, 0x33333333)
+    sw      x2, 0(x1)
+    addi    x1, x1, 4
 
     li      x2, 0x44444444
     la      x4, 1f
     jalr    x0, x4, -3
     li      x2, 0
 
-    RVTEST_SIGUPD(x1, x2, 0x44444444)
+    sw      x2, 0(x1)
 1:
+    addi    x1, x1, 4
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A2  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3 - test JALR - causing the exception\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A3 - test JALR - causing the exception\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_A3_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_A3_res_exc
 
     # Test
     li      x2, 0x55555555
@@ -123,20 +116,12 @@ RVTEST_CODE_BEGIN
     jalr    x0, x4, 0
     li      x2, 0
 1:
-    # Store results
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0x55555555)
 
     li      x2, 0x66666666
     la      x4, 1f + 3
     jalr    x0, x4, 0
     li      x2, 0
 1:
-    # Store results
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0x66666666)
 
     # Test
     li      x2, 0x77777777
@@ -144,30 +129,20 @@ RVTEST_CODE_BEGIN
     jalr    x0, x4, 2
     li      x2, 0
 1:
-    # Store results
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0x77777777)
 
     li      x2, 0x88888888
     la      x4, 1f
     jalr    x0, x4, 3
     li      x2, 0
 1:
-    # Store results
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0x88888888)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A3  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B1 - test BEQ\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part B1 - test BEQ\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_B1_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_B1_res_exc
 
     # Register initialization
     li      x5, 5
@@ -182,19 +157,14 @@ RVTEST_CODE_BEGIN
     beq     x5, x5, 1f + 2
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0x99999999)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A4  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B2 - test BNE\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part B2 - test BNE\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_B2_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_B2_res_exc
 
     # Register initialization
     li      x5, 5
@@ -209,19 +179,14 @@ RVTEST_CODE_BEGIN
     bne     x5, x6, 1f + 2
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0xAAAAAAAA)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A5  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B3 - test BLT\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part B3 - test BLT\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_B3_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_B3_res_exc
 
     # Register initialization
     li      x5, 5
@@ -236,19 +201,14 @@ RVTEST_CODE_BEGIN
     blt     x5, x6, 1f + 2
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0xBBBBBBBB)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part B  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B4 - test BLTU\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part B4 - test BLTU\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_B4_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_B4_res_exc
 
     # Register initialization
     li      x5, 5
@@ -263,20 +223,14 @@ RVTEST_CODE_BEGIN
     bltu    x5, x6, 1f + 2
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0xCCCCCCCC)
 
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part C  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B5 - test BGE\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part B5 - test BGE\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_B5_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_B5_res_exc
 
     # Register initialization
     li      x5, 5
@@ -291,19 +245,14 @@ RVTEST_CODE_BEGIN
     bge     x6, x5, 1f + 2
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0xDDDDDDDD)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part D  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B6 - test BGEU\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part B6 - test BGEU\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_B6_res_exc)
-    li x7, 0xdeadbeaf
-    li x8, 0xbeafdead
+    la      x1, test_B6_res_exc
 
     # Register initialization
     li      x5, 5
@@ -318,18 +267,15 @@ RVTEST_CODE_BEGIN
     bgeu    x6, x5, 1f + 2
     li      x2, 0
 1:
-    RVTEST_SIGUPD(x1, x7, 0x2)
-    RVTEST_SIGUPD(x1, x8, 0x00000000)
-    RVTEST_SIGUPD(x1, x2, 0xEEEEEEEE)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part E  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part E  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     # restore mtvec and jump to the end
-    csrw mtvec, x21
+    csrw mtvec, x31
     jal x0, test_end
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     # Exception handler
@@ -341,21 +287,32 @@ _trap_handler:
 
     # store low bits of mbadaddr
     csrr    x30, mbadaddr
-    andi    x7, x30, 3
+    andi    x30, x30, 3
+    sw      x30, 0(x1)
 
     # Store MCAUSE
-    csrr    x8, mcause
+    csrr    x30, mcause
+    sw      x30, 4(x1)
 
+    # Store data from test
+    sw      x2, 8(x1)
+
+    # increment data_exc address
+    addi    x1, x1, 12
+
+    # return
     mret
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A2  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
 
 test_end:
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A3  - Complete\n");
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
-  #endif
+    RVMODEL_IO_WRITE_STR(x30, "# Test End\n")
+
+#endif
+
  # ---------------------------------------------------------------------------------------------
     # HALT
     RVMODEL_HALT

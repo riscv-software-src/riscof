@@ -17,3 +17,8 @@ run\.log
 docs/build
 
 *.pyc
+
+.python-version
+
+./riscof_work
+./env

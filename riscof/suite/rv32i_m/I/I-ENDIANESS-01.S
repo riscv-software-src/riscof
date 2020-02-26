@@ -32,11 +32,8 @@
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
-RVTEST_ISA("RV32I")
-
 # Test Virtual Machine (TVM) used by program.
-
+RVTEST_ISA("RV32I")
 
 # Test code region
 RVTEST_CODE_BEGIN
@@ -45,14 +42,15 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x31, "# Test part A - test loading word by LW, LH, LB\n");
 
     # Addresses for test data and results
     la      x16, test_A_data
-    RVTEST_SIGBASE(x17, test_A_res)
+    la      x17, test_A_res
 
     # Test
     lw      x1, 0(x16)
@@ -65,20 +63,34 @@ RVTEST_CODE_BEGIN
     lbu     x8, 3(x16)
 
     # Store results
+    sw      x1, 0(x17)
+    sw      x2, 4(x17)
+    sw      x3, 8(x17)
+    sw      x4, 12(x17)
+    sw      x5, 16(x17)
+    sw      x6, 20(x17)
+    sw      x7, 24(x17)
+    sw      x8, 28(x17)
+
+    //
+    // Assert
+    //
     RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x17, x1, 0x01234567)
-    RVTEST_SIGUPD(x17, x2, 0x00004567)
-    RVTEST_SIGUPD(x17, x3, 0x00000123)
-    RVTEST_SIGUPD(x17, x4, 0x00000089)
-    RVTEST_SIGUPD(x17, x5, 0x00000067)
-    RVTEST_SIGUPD(x17, x6, 0x00000045)
-    RVTEST_SIGUPD(x17, x7, 0x00000023)
-    RVTEST_SIGUPD(x17, x8, 0x00000001)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x1, 0x01234567)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x2, 0x00004567)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x3, 0x00000123)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x4, 0x00000089)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x5, 0x00000067)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x6, 0x00000045)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x7, 0x00000023)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x8, 0x00000001)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
     RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
-  #endif
+
+#endif
+
  # ---------------------------------------------------------------------------------------------
     # HALT
     RVMODEL_HALT

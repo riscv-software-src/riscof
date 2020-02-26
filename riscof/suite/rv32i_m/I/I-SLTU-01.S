@@ -1,361 +1,170 @@
-# RISC-V Compliance Test I-SLTU-01
+# RISC-V Compliance Test SLTU-01
 #
-# Copyright (c) 2017, Codasip Ltd.
-# Copyright (c) 2018, Imperas Software Ltd. Additions
-# All rights reserved.
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#      * Redistributions of source code must retain the above copyright
-#        notice, this list of conditions and the following disclaimer.
-#      * Redistributions in binary form must reproduce the above copyright
-#        notice, this list of conditions and the following disclaimer in the
-#        documentation and/or other materials provided with the distribution.
-#      * Neither the name of the Codasip Ltd., Imperas Software Ltd. nor the
-#        names of its contributors may be used to endorse or promote products
-#        derived from this software without specific prior written permission.
+# Copyright (c) 2019 Imperas Software Ltd., www.imperas.com
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-# IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Codasip Ltd., Imperas Software Ltd.
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Specification: RV32I Base Integer Instruction Set, Version 2.0
-# Description: Testing instruction SLTU.
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied.
+#
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+#
+# Specification: RV32I Base Integer Instruction Set, Version 2.1
+# Description: Testing instruction 'SLTU'.
 
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
 RVTEST_ISA("RV32I")
 
-# Test Virtual Machine (TVM) used by program.
-
-
-# Test code region
 RVTEST_CODE_BEGIN
 
-    RVMODEL_IO_INIT
-    RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-    RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, 1, -1, MIN, MAX register values\n");
+	RVMODEL_IO_INIT
+	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
 
-    # Addresses for test data and results
-    la      x1, test_A1_data
-    RVTEST_SIGBASE(x2, test_A1_res)
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
 
-    # Load testdata
-    lw      x3, 0(x1)
+	# ---------------------------------------------------------------------------------------------
 
-    # Register initialization
-    li      x4, 1
-    li      x5, 0x7FFFFFFF
-    li      x6, 0xFFFFFFFF
-    li      x7, 0
-    li      x8, 0x80000000
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 1\n")
 
-    # Test
-    sltu   x4, x3, x4
-    sltu   x5, x3, x5
-    sltu   x6, x3, x6
-    sltu   x7, x3, x7
-    sltu   x8, x3, x8
 
-    # Store results
-    RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x2, x3, 0x00000000)
-    RVTEST_SIGUPD(x2, x4, 0x00000001)
-    RVTEST_SIGUPD(x2, x5, 0x00000001)
-    RVTEST_SIGUPD(x2, x6, 0x00000001)
-    RVTEST_SIGUPD(x2, x7, 0x00000000)
-    RVTEST_SIGUPD(x2, x8, 0x00000001)
+    # address for test results
+	la	x5, test_1_res
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
+	TEST_RR_OP(sltu, x0, x31, x16, 0x0, -0x1, 0x0, x5, 0, x6)   # Testcase 0
+	TEST_RR_OP(sltu, x1, x30, x15, 0x1, 0x1, -0x7ff, x5, 4, x6)   # Testcase 1
+	TEST_RR_OP(sltu, x2, x29, x14, 0x1, 0x0, -0x1, x5, 8, x6)   # Testcase 2
+	TEST_RR_OP(sltu, x3, x28, x13, 0x1, 0x7ff, -0x1234, x5, 12, x6)   # Testcase 3
+	TEST_RR_OP(sltu, x4, x27, x12, 0x1, 0x0, 0x80000000, x5, 16, x6)   # Testcase 4
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2 - general test of value 1 with 0, 1, -1, MIN, MAX register values\n");
 
-    # Addresses for test data and results
-    la      x1, test_A2_data
-    RVTEST_SIGBASE(x2, test_A2_res)
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 2\n")
 
-    # Load testdata
-    lw      x8, 0(x1)
 
-    # Register initialization
-    li      x9, 1
-    li      x10, 0x7FFFFFFF
-    li      x11, 0xFFFFFFFF
-    li      x12, 0
-    li      x13, 0x80000000
+    # address for test results
+	la	x1, test_2_res
 
-    # Test
-    sltu   x9, x8, x9
-    sltu   x10, x8, x10
-    sltu   x11, x8, x11
-    sltu   x12, x8, x12
-    sltu   x13, x8, x13
+	TEST_RR_OP(sltu, x5, x26, x11, 0x1, 0x800, 0x1234, x1, 0, x2)   # Testcase 5
+	TEST_RR_OP(sltu, x6, x25, x10, 0x1, 0x7654321, 0xffffffff, x1, 4, x2)   # Testcase 6
+	TEST_RR_OP(sltu, x7, x24, x9, 0x0, 0x7fffffff, 0x1, x1, 8, x2)   # Testcase 7
+	TEST_RR_OP(sltu, x8, x23, x8, 0x1, 0x1, 0x7fffffff, x1, 12, x2)   # Testcase 8
+	TEST_RR_OP(sltu, x9, x22, x7, 0x0, 0xffffffff, 0x7654321, x1, 16, x2)   # Testcase 9
 
-    # Store results
 
-    RVTEST_SIGUPD(x2, x8,  0x00000001)
-    RVTEST_SIGUPD(x2, x9,  0x00000000)
-    RVTEST_SIGUPD(x2, x10, 0x00000001)
-    RVTEST_SIGUPD(x2, x11, 0x00000001)
-    RVTEST_SIGUPD(x2, x12, 0x00000000)
-    RVTEST_SIGUPD(x2, x13, 0x00000001)
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 3\n")
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3 - general test of value -1 with 0, 1, -1, MIN, MAX register values\n");
+    # address for test results
+	la	x1, test_3_res
 
-    # Addresses for test data and results
-    la      x1, test_A3_data
-    RVTEST_SIGBASE(x2, test_A3_res)
+	TEST_RR_OP(sltu, x10, x21, x6, 0x0, 0x1234, 0x800, x1, 0, x7)   # Testcase 10
+	TEST_RR_OP(sltu, x11, x20, x5, 0x0, 0x80000000, 0x0, x1, 4, x7)   # Testcase 11
+	TEST_RR_OP(sltu, x12, x19, x4, 0x0, -0x1234, 0x7ff, x1, 8, x7)   # Testcase 12
+	TEST_RR_OP(sltu, x13, x18, x3, 0x0, -0x1, -0x1, x1, 12, x7)   # Testcase 13
+	TEST_RR_OP(sltu, x14, x17, x2, 0x0, -0x7ff, 0x1, x1, 16, x7)   # Testcase 14
 
-    # Load testdata
-    lw      x13, 0(x1)
 
-    # Register initialization
-    li      x14, 1
-    li      x15, 0x7FFFFFFF
-    li      x16, 0xFFFFFFFF
-    li      x17, 0
-    li      x18, 0x80000000
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 4\n")
 
-    # Test
-    sltu   x14, x13, x14
-    sltu   x15, x13, x15
-    sltu   x16, x13, x16
-    sltu   x17, x13, x17
-    sltu   x18, x13, x18
 
-    # Store results
+    # address for test results
+	la	x2, test_4_res
 
-    RVTEST_SIGUPD(x2, x13, 0xFFFFFFFF)
-    RVTEST_SIGUPD(x2, x14, 0x00000000)
-    RVTEST_SIGUPD(x2, x15, 0x00000000)
-    RVTEST_SIGUPD(x2, x16, 0x00000000)
-    RVTEST_SIGUPD(x2, x17, 0x00000000)
-    RVTEST_SIGUPD(x2, x18, 0x00000000)
+	TEST_RR_OP(sltu, x15, x16, x1, 0x0, 0x0, 0x0, x2, 0, x3)   # Testcase 15
+	TEST_RR_OP(sltu, x16, x15, x0, 0x0, -0x1, 0x0, x2, 4, x3)   # Testcase 16
+	TEST_RR_OP(sltu, x17, x14, x31, 0x1, 0x1, -0x7ff, x2, 8, x3)   # Testcase 17
+	TEST_RR_OP(sltu, x18, x13, x30, 0x1, 0x0, -0x1, x2, 12, x3)   # Testcase 18
+	TEST_RR_OP(sltu, x19, x12, x29, 0x1, 0x7ff, -0x1234, x2, 16, x3)   # Testcase 19
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4 - general test of value 0x7FFFFFFF with 0, 1, -1, MIN, MAX register values\n");
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 5\n")
 
-    # Addresses for test data and results
-    la      x1, test_A4_data
-    RVTEST_SIGBASE(x2, test_A4_res)
 
-    # Load testdata
-    lw      x18, 0(x1)
+    # address for test results
+	la	x1, test_5_res
 
-    # Register initialization
-    li      x19, 1
-    li      x20, 0x7FFFFFFF
-    li      x21, 0xFFFFFFFF
-    li      x22, 0
-    li      x23, 0x80000000
+	TEST_RR_OP(sltu, x20, x11, x28, 0x1, 0x0, 0x80000000, x1, 0, x2)   # Testcase 20
+	TEST_RR_OP(sltu, x21, x10, x27, 0x1, 0x800, 0x1234, x1, 4, x2)   # Testcase 21
+	TEST_RR_OP(sltu, x22, x9, x26, 0x1, 0x7654321, 0xffffffff, x1, 8, x2)   # Testcase 22
+	TEST_RR_OP(sltu, x23, x8, x25, 0x0, 0x7fffffff, 0x1, x1, 12, x2)   # Testcase 23
+	TEST_RR_OP(sltu, x24, x7, x24, 0x1, 0x1, 0x7fffffff, x1, 16, x2)   # Testcase 24
 
-    # Test
-    sltu   x19, x18, x19
-    sltu   x20, x18, x20
-    sltu   x21, x18, x21
-    sltu   x22, x18, x22
-    sltu   x23, x18, x23
 
-    # Store results
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 6\n")
 
-    RVTEST_SIGUPD(x2, x18, 0x7FFFFFFF)
-    RVTEST_SIGUPD(x2, x19, 0x00000000)
-    RVTEST_SIGUPD(x2, x20, 0x00000000)
-    RVTEST_SIGUPD(x2, x21, 0x00000001)
-    RVTEST_SIGUPD(x2, x22, 0x00000000)
-    RVTEST_SIGUPD(x2, x23, 0x00000001)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
+    # address for test results
+	la	x1, test_6_res
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A5 - general test of value 0x80000000 with 0, 1, -1, MIN, MAX register values\n");
+	TEST_RR_OP(sltu, x25, x6, x23, 0x0, 0xffffffff, 0x7654321, x1, 0, x7)   # Testcase 25
+	TEST_RR_OP(sltu, x26, x5, x22, 0x0, 0x1234, 0x800, x1, 4, x7)   # Testcase 26
+	TEST_RR_OP(sltu, x27, x4, x21, 0x0, 0x80000000, 0x0, x1, 8, x7)   # Testcase 27
+	TEST_RR_OP(sltu, x28, x3, x20, 0x0, -0x1234, 0x7ff, x1, 12, x7)   # Testcase 28
+	TEST_RR_OP(sltu, x29, x2, x19, 0x0, -0x1, -0x1, x1, 16, x7)   # Testcase 29
 
-    # Addresses for test data and results
-    la      x1, test_A5_data
-    RVTEST_SIGBASE(x2, test_A5_res)
 
-    # Load testdata
-    lw      x23, 0(x1)
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 7\n")
 
-    # Register initialization
-    li      x24, 1
-    li      x25, 0x7FFFFFFF
-    li      x26, 0xFFFFFFFF
-    li      x27, 0
-    li      x28, 0x80000000
 
-    # Test
-    sltu   x24, x23, x24
-    sltu   x25, x23, x25
-    sltu   x26, x23, x26
-    sltu   x27, x23, x27
-    sltu   x28, x23, x28
+    # address for test results
+	la	x2, test_7_res
 
-    # Store results
+	TEST_RR_OP(sltu, x30, x1, x18, 0x0, -0x7ff, 0x1, x2, 0, x3)   # Testcase 30
+	TEST_RR_OP(sltu, x31, x0, x17, 0x0, 0x0, 0x0, x2, 4, x3)   # Testcase 31
 
-    RVTEST_SIGUPD(x2, x23, 0x80000000)
-    RVTEST_SIGUPD(x2, x24, 0x00000000)
-    RVTEST_SIGUPD(x2, x25, 0x00000000)
-    RVTEST_SIGUPD(x2, x26, 0x00000001)
-    RVTEST_SIGUPD(x2, x27, 0x00000000)
-    RVTEST_SIGUPD(x2, x28, 0x00000000)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
+	# ---------------------------------------------------------------------------------------------
+	
+	RVMODEL_IO_WRITE_STR(x31, "Test End\n")
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B - testing writing to x0\n");
+#endif
 
-    # Addresses for test data and results
-    la      x26, test_B_data
-    RVTEST_SIGBASE(x27, test_B_res)
+	# ---------------------------------------------------------------------------------------------
 
-    # Load testdata
-    lw      x1, 0(x26)
-
-    # Register initialization
-    li      x2, 0xFFFFFFFF
-
-    # Test
-    sltu    x0, x1, x2
-
-    # Store results
-
-    RVTEST_SIGUPD(x27, x0, 0x00000000)
-    RVTEST_SIGUPD(x27, x1, 0x00000001)
-    RVTEST_SIGUPD(x27, x2, 0xFFFFFFFF)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C - testing compare x0\n");
-
-    # Addresses for test data and results
-    RVTEST_SIGBASE(x31, test_C_res)
-
-    # Register initialization
-    li      x1, 1
-    li      x2, 0x7FF
-    li      x3, 0xFFFFFFFF
-    li      x4, 0
-    li      x5, 0xFFFFF800
-
-    # Test
-    sltu   x6, x0, x1
-    sltu   x7, x0, x2
-    sltu   x8, x0, x3
-    sltu   x9, x0, x4
-    sltu   x10, x0, x5
-    sltu   x11, x1, x0
-    sltu   x12, x2, x0
-    sltu   x13, x3, x0
-    sltu   x14, x4, x0
-    sltu   x15, x5, x0
-
-    # Store results
-
-    RVTEST_SIGUPD(x31, x6,  0x00000001)
-    RVTEST_SIGUPD(x31, x7,  0x00000001)
-    RVTEST_SIGUPD(x31, x8,  0x00000001)
-    RVTEST_SIGUPD(x31, x9,  0x00000000)
-    RVTEST_SIGUPD(x31, x10, 0x00000001)
-    RVTEST_SIGUPD(x31, x11, 0x00000000)
-    RVTEST_SIGUPD(x31, x12, 0x00000000)
-    RVTEST_SIGUPD(x31, x13, 0x00000000)
-    RVTEST_SIGUPD(x31, x14, 0x00000000)
-    RVTEST_SIGUPD(x31, x15, 0x00000000)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D - testing forwarding between instructions\n");
-
-    # Addresses for test data and results
-    RVTEST_SIGBASE(x31, test_D_res)
-
-    # Register initialization
-    li      x3, 0x1
-
-    # Test
-    sltu   x1, x0, x3
-    sltu   x2, x1, x3
-    sltu   x28, x2, x3
-    sltu   x29, x28, x3
-    sltu   x30, x29, x3
-
-    # Store results
-
-    RVTEST_SIGUPD(x31, x1,  0x00000001)
-    RVTEST_SIGUPD(x31, x2,  0x00000000)
-    RVTEST_SIGUPD(x31, x28, 0x00000001)
-    RVTEST_SIGUPD(x31, x29, 0x00000000)
-    RVTEST_SIGUPD(x31, x30, 0x00000001)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D  - Complete\n");
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
-  #endif
- # ---------------------------------------------------------------------------------------------
-    # HALT
-    RVMODEL_HALT
+	RVMODEL_HALT
 
 RVTEST_CODE_END
 
 # Input data section.
-    .data
-    .align 4
-
-test_A1_data:
-    .word 0
-test_A2_data:
-    .word 1
-test_A3_data:
-    .word -1
-test_A4_data:
-    .word 0x7FFFFFFF
-test_A5_data:
-    .word 0x80000000
-test_B_data:
-    .word 1
+	.data
 
 # Output data section.
 RVMODEL_DATA_BEGIN
-    .align 4
-test_A1_res:
-    .fill 6, 4, -1
-test_A2_res:
-    .fill 6, 4, -1
-test_A3_res:
-    .fill 6, 4, -1
-test_A4_res:
-    .fill 6, 4, -1
-test_A5_res:
-    .fill 6, 4, -1
-test_B_res:
-    .fill 3, 4, -1
-test_C_res:
-    .fill 10, 4, -1
-test_D_res:
-    .fill 5, 4, -1
 
+test_1_res:
+	.fill 5, 4, -1
+test_2_res:
+	.fill 5, 4, -1
+test_3_res:
+	.fill 5, 4, -1
+test_4_res:
+	.fill 5, 4, -1
+test_5_res:
+	.fill 5, 4, -1
+test_6_res:
+	.fill 5, 4, -1
+test_7_res:
+	.fill 5, 4, -1
 
 RVMODEL_DATA_END
+

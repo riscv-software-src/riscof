@@ -6,6 +6,7 @@ import sys
 import pytz
 import shutil
 import configparser
+import distutils.dir_util
 
 from jinja2 import Template
 
@@ -41,6 +42,11 @@ def execute():
     logger.addHandler(ch)
     fh = logging.FileHandler('run.log', 'w')
     logger.addHandler(fh)
+
+    print('RISCOF: RISC-V Compliance Framework')
+    print('Version: '+riscof.__version__)
+    if (args.version):
+        raise SystemExit
 
     if (args.run or args.testlist or args.validateyaml):
         config = configparser.ConfigParser()
@@ -175,17 +181,29 @@ def execute():
         except:
             return 0
     elif (args.setup):
-        logger.info("Setting up environment files.")
+        logger.info("Setting up sample plugin requirements [Old files will \
+be overwritten]")
         try:
-            logger.debug(
-                "Copying sample directory containing environment files.")
             cwd = os.getcwd()
-            src = os.path.join(constants.root, "Templates/setup/env/")
-            dest = os.path.join(cwd, "env/")
-            shutil.copytree(src, dest)
-            logger.debug("Copying sample config file.")
-            src = os.path.join(constants.root, "Templates/setup/config.ini")
-            shutil.copy(src, cwd)
+            logger.info("Creating sample Plugin directory for [DUT]: " +\
+                    args.dutname + ' [Ref]: '+args.refname)
+            dutname = args.dutname
+            src = os.path.join(constants.root, "Templates/setup/model/")
+            dest = os.path.join(cwd, dutname)
+            distutils.dir_util.copy_tree(src, dest)
+            os.rename(cwd+'/'+args.dutname+'/model_isa.yaml',
+                    cwd+'/'+args.dutname+'/'+args.dutname+'_isa.yaml')
+            os.rename(cwd+'/'+args.dutname+'/model_platform.yaml',
+                    cwd+'/'+args.dutname+'/'+args.dutname+'_platform.yaml')
+            os.rename(cwd+'/'+args.dutname+'/riscof_model.py',
+                    cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py')
+            logger.info("Creating Sample Config File")
+            configfile = open('config.ini','w')
+            configfile.write(constants.config_temp.format(args.refname, \
+                    cwd+'/'+args.refname, args.dutname,cwd+'/'+args.dutname))
+            logger.info('**NOTE**: Please update the paths of the reference \
+and DUT plugins in the config.ini file')
+            configfile.close()
             return 0
         except FileExistsError as err:
             logger.error(err)

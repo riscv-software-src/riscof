@@ -32,11 +32,8 @@
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
-RVTEST_ISA("RV32I")
-
 # Test Virtual Machine (TVM) used by program.
-
+RVTEST_ISA("RV32I")
 
 # Test code region.
 RVTEST_CODE_BEGIN
@@ -45,13 +42,14 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*Zicsr.*); def TEST_CASE_1=True")
+
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x31, "# Test part A - general test of CSRRW\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x15, test_A_res)
+    la      x15, test_A_res
 
     # Register initialization
     li      x1, 1
@@ -70,13 +68,23 @@ RVTEST_CODE_BEGIN
     csrrw   x31, mscratch, x0
 
     # Store results
+    sw      x2, 0(x15)
+    sw      x4, 4(x15)
+    sw      x6, 8(x15)
+    sw      x28, 12(x15)
+    sw      x30, 16(x15)
+    sw      x31, 20(x15)
+
+    //
+    // Assert
+    //
     RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x15, x2,  0x00000000)
-    RVTEST_SIGUPD(x15, x4,  0x00000001)
-    RVTEST_SIGUPD(x15, x6,  0x00000000)
-    RVTEST_SIGUPD(x15, x28, 0xFFFFFFFF)
-    RVTEST_SIGUPD(x15, x30, 0x7FFFFFFF)
-    RVTEST_SIGUPD(x15, x31, 0x80000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x15, x2,  0x00000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x15, x4,  0x00000001)
+    RVMODEL_IO_ASSERT_GPR_EQ(x15, x6,  0x00000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x15, x28, 0xFFFFFFFF)
+    RVMODEL_IO_ASSERT_GPR_EQ(x15, x30, 0x7FFFFFFF)
+    RVMODEL_IO_ASSERT_GPR_EQ(x15, x31, 0x80000000)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
@@ -84,7 +92,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x31, "# Test part B - testing forwarding between instructions\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x26, test_B_res)
+    la      x26, test_B_res
 
     # Register initialization
     li      x1, 0x12345678
@@ -98,11 +106,15 @@ RVTEST_CODE_BEGIN
     csrrw   x6, mscratch, x0
 
     # store results
+    sw      x3, 0(x26)
+    sw      x4, 4(x26)
+    sw      x5, 8(x26)
+    sw      x6, 12(x26)
 
-    RVTEST_SIGUPD(x26, x3, 0x12345678)
-    RVTEST_SIGUPD(x26, x4, 0x9ABCDEF0)
-    RVTEST_SIGUPD(x26, x5, 0x12345678)
-    RVTEST_SIGUPD(x26, x6, 0x9ABCDEF0)
+    RVMODEL_IO_ASSERT_GPR_EQ(x26, x3, 0x12345678)
+    RVMODEL_IO_ASSERT_GPR_EQ(x26, x4, 0x9ABCDEF0)
+    RVMODEL_IO_ASSERT_GPR_EQ(x26, x5, 0x12345678)
+    RVMODEL_IO_ASSERT_GPR_EQ(x26, x6, 0x9ABCDEF0)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
 
@@ -110,7 +122,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x31, "# Test part C - testing writing to x0\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x1, test_C_res)
+    la      x1, test_C_res
 
     # Register initialization
     li      x2, 0x42726E6F
@@ -120,8 +132,9 @@ RVTEST_CODE_BEGIN
     csrrw   x0, mscratch, x0
 
     # store results
-    
-    RVTEST_SIGUPD(x1, x0, 0x00000000)
+    sw      x0, 0(x1)
+
+    RVMODEL_IO_ASSERT_GPR_EQ(x1, x0, 0x00000000)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
 
@@ -129,7 +142,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x31, "# Test part D - testing forwarding throught x0\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x2, test_D_res)
+    la      x2, test_D_res
 
     # Register initialization
     li      x27, 0xF7FF8818
@@ -141,9 +154,12 @@ RVTEST_CODE_BEGIN
     csrrw   x5, mscratch, x0
 
     # store results
+    sw      x0, 0(x2)
+    sw      x5, 4(x2)
 
-    RVTEST_SIGUPD(x2, x0, 0x00000000)
-    RVTEST_SIGUPD(x2, x5, 0x00000000)
+
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x0, 0x00000000)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x5, 0x00000000)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
 
@@ -151,7 +167,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x31, "# Test part E - testing csrrw with same dst and src registers\n");
 
     # Address for test results
-    RVTEST_SIGBASE(x2, test_E_res)
+    la      x2, test_E_res
 
     # Register initialization
     li      x7, 0x32165498
@@ -165,16 +181,20 @@ RVTEST_CODE_BEGIN
     csrrw   x8, mscratch, x0
 
     # Store results
+    sw      x5, 0(x2)
+    sw      x7, 4(x2)
+    sw      x8, 8(x2)
 
-    RVTEST_SIGUPD(x2, x5, 0x14725836)
-    RVTEST_SIGUPD(x2, x7, 0x96385274)
-    RVTEST_SIGUPD(x2, x8, 0x32165498)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x5, 0x14725836)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x7, 0x96385274)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x8, 0x32165498)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
 
     RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
 
-  #endif
+#endif
+
  # ---------------------------------------------------------------------------------------------
     # HALT
     RVMODEL_HALT
