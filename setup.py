@@ -41,7 +41,7 @@ setup(name="riscof",
               'suite/rv64i_m/I/*.S',
               'framework/database.yaml', 'Templates/report.html',
               'Templates/style.css', 'Templates/setup/*',
-              'Templates/setup/env/*'
+              'Templates/setup/env/*', 'Templates/setup/model/*'
           ]
       },
       install_requires=[

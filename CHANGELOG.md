@@ -6,7 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
-## [1.13.0] - 2020-02-25
+## [1.13.1] - 2020-02-26
+### Fixed
+- shipping the model folder as well
+## [1.13.0] - 2020-02-26
 ### Fixed
 - PyPi is now shipped with compressed and atomic tests
 - docs have been updated with developer related information
