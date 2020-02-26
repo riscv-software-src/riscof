@@ -2,9 +2,21 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Unreleased
 - Privilege tests for machine csrs.
 - Spec Coverage
+
+## [1.13.0] - 2020-02-25
+### Fixed
+- PyPi is now shipped with compressed and atomic tests
+- docs have been updated with developer related information
+- Shifted to the new test-suite available on github
+### Added
+- Update docs for : install, macros and usage example
+- Setup command has been updated to create sample plugin folder with all collaterals required for
+  running RISCOF.
+- Added version argument support
+- Version is also printed at the begining of each run
 
 ## [1.12.0] - 2020-02-10
 ### Fixed

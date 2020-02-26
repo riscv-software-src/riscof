@@ -45,4 +45,42 @@ begin_testcode:
 
 #endif //_COMPLIANCE_TEST_H
 
+//------------------------------ BORROWED FROM ANDREW's RISC-V TEST MACROS -----------------------//
+#define MASK_XLEN(x) ((x) & ((1 << (__riscv_xlen - 1) << 1) - 1))
 
+#define SEXT_IMM(x) ((x) | (-(((x) >> 11) & 1) << 11))
+
+#define TEST_AUIPC(inst, destreg, correctval, imm, swreg, offset, testreg) \
+    TEST_CASE(testreg, destreg, correctval, swreg, offset, \
+      1: \
+      inst destreg, imm; \
+      la swreg, 1b; \
+      sub destreg, destreg, swreg; \
+      )
+
+#define TEST_CASE(testreg, destreg, correctval, swreg, offset, code... ) \
+    code; \
+    sw destreg, offset(swreg); \
+    RVMODEL_IO_ASSERT_GPR_EQ(testreg, destreg, correctval) \
+
+//Tests for a instructions with register-immediate operand
+#define TEST_IMM_OP( inst, destreg, reg, correctval, val, imm, swreg, offset, testreg) \
+    TEST_CASE(testreg, destreg, correctval, swreg, offset, \
+      li reg, MASK_XLEN(val); \
+      inst destreg, reg, SEXT_IMM(imm); \
+    )
+
+//Tests for a instructions with register-register operand
+#define TEST_RR_OP(inst, destreg, reg1, reg2, correctval, val1, val2, swreg, offset, testreg) \
+    TEST_CASE(testreg, destreg, correctval, swreg, offset, \
+      li  reg1, MASK_XLEN(val1); \
+      li  reg2, MASK_XLEN(val2); \
+      inst destreg, reg1, reg2; \
+    )
+
+#define TEST_RR_SRC2( inst, destreg, reg, correctval, val1, val2, swreg, offset, testreg) \
+    TEST_CASE( testreg, destreg, correctval, swreg, offset, \
+      li reg, MASK_XLEN(val1); \
+      li destreg, MASK_XLEN(val2); \
+      inst destreg, reg, destreg; \
+    )

@@ -1,386 +1,426 @@
-# RISC-V Compliance Test I-SB-01
+# RISC-V Compliance Test SB-01
 #
-# Copyright (c) 2017, Codasip Ltd.
-# Copyright (c) 2018, Imperas Software Ltd. Additions
-# All rights reserved.
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#      * Redistributions of source code must retain the above copyright
-#        notice, this list of conditions and the following disclaimer.
-#      * Redistributions in binary form must reproduce the above copyright
-#        notice, this list of conditions and the following disclaimer in the
-#        documentation and/or other materials provided with the distribution.
-#      * Neither the name of the Codasip Ltd., Imperas Software Ltd. nor the
-#        names of its contributors may be used to endorse or promote products
-#        derived from this software without specific prior written permission.
+# Copyright (c) 2019 Imperas Software Ltd., www.imperas.com
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-# IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Codasip Ltd., Imperas Software Ltd.
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Specification: RV32I Base Integer Instruction Set, Version 2.0
-# Description: Testing instruction SB.
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied.
+#
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+#
+# Specification: RV32I Base Integer Instruction Set, Version 2.1
+# Description: Testing instruction 'SB'.
 
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
 RVTEST_ISA("RV32I")
 
-# Test Virtual Machine (TVM) used by program.
-
-
-# Test code region
 RVTEST_CODE_BEGIN
 
-    RVMODEL_IO_INIT
-    RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-    RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
 
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1 - test base address + 0\n");
+	RVMODEL_IO_INIT
+	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
 
-    # Address for test results
-    la x1, test_temp_data
-    RVTEST_SIGBASE(x9, test_A1_res)
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
 
-    # Set memory
-    li      x31, 0xAAAABBBB
-    sw      x31, 0(x1)
+	# ---------------------------------------------------------------------------------------------
 
-    # Test
-    li      x2, 0x11F1F222
-    sb      x2, 0(x1)
-    lw      x3, 0(x1)
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 1\n")
 
-    //
-    // Assert
-    //
-    RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x9, x3, 0xAAAABB22)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2 - test base address - 1\n");
-
-    # Address for test results
-    la      x5, test_temp_data + 1
-    RVTEST_SIGBASE(x9, test_A2_res)
+    # Addresses for test results
+	la	x5, test_1_res
 
     # Clear memory
-    sw      x0, -1(x5)
-
+    sb      x0, 0x0(x5)
     # Test
-    li      x25, 0xF33344F4
-    sb      x25, 0xFFFFFFFF(x5)
-    lw      x24, 0xFFFFFFFF(x5)
+    li      x16, -0x1
+    addi    x31, x5, 0
+    sb      x16, 0x0(x31)
 
-    RVTEST_SIGUPD(x9, x24, 0x000000F4)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x6, x31, test_1_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x6, x16, -0x1)
+    # Clear memory
+    sb      x0, -0x2(x5)
+    # Test
+    li      x15, 0x1
+    addi    x30, x5, 0
+    sb      x15, -0x2(x30)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
+    #RVMODEL_IO_ASSERT_GPR_EQ(x6, x30, test_1_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x6, x15, 0x1)
+    # Clear memory
+    sb      x0, 0x3(x5)
+    # Test
+    li      x14, 0x0
+    addi    x29, x5, 0
+    sb      x14, 0x3(x29)
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3 - test base address + 1\n");
+    #RVMODEL_IO_ASSERT_GPR_EQ(x6, x29, test_1_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x6, x14, 0x0)
+    # Clear memory
+    sb      x0, -0x4(x5)
+    # Test
+    li      x13, 0x7ff
+    addi    x28, x5, 0
+    sb      x13, -0x4(x28)
 
-    # Address for test results
-    la      x8, test_temp_data - 1
-    RVTEST_SIGBASE(x9,test_A3_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x6, x28, test_1_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x6, x13, 0x7ff)
+    # Clear memory
+    sb      x0, 0x2(x5)
+    # Test
+    li      x12, 0x0
+    addi    x27, x5, 0
+    sb      x12, 0x2(x27)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x6, x27, test_1_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x6, x12, 0x0)
+
+
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 2\n")
+
+
+    # Addresses for test results
+	la	x1, test_2_res
 
     # Clear memory
-    sw      x0, 1(x8)
-
+    sb      x0, 0x4(x1)
     # Test
-    li      x31, 0x55F5F666
-    sb      x31, +1(x8)
-    lw      x8, +1(x8)
+    li      x11, 0x800
+    addi    x26, x1, 0
+    sb      x11, 0x4(x26)
 
-    RVTEST_SIGUPD(x9, x8, 0x00000066)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4 - test base address - 2048\n");
-
-    # Address for test results
-    la      x11, test_temp_data + 2048
-    RVTEST_SIGBASE(x9,test_A4_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x26, test_2_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x11, 0x800)
     # Clear memory
-    sw      x0, -2048(x11)
-
+    sb      x0, -0x1(x1)
     # Test
-    li      x12, 0xF77788F8
-    sb      x12, 0xFFFFF800(x11)
-    lw      x13, 0xFFFFF800(x11)
+    li      x10, 0x7654321
+    addi    x25, x1, 0
+    sb      x10, -0x1(x25)
 
-    RVTEST_SIGUPD(x9, x13, 0x000000F8)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A5 - test base address + 2047\n");
-
-    # Address for test results
-    la      x14, test_temp_data - 2047
-    RVTEST_SIGBASE(x9,test_A5_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x25, test_2_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x10, 0x7654321)
     # Clear memory
-    sw      x0, 2047(x14)
-
+    sb      x0, 0x1(x1)
     # Test
-    li      x15, 0x99090AAA
-    sb      x15, 0x7FF(x14)
-    lw      x16, 0x7FF(x14)
+    li      x9, 0x7fffffff
+    addi    x24, x1, 0
+    sb      x9, 0x1(x24)
 
-    RVTEST_SIGUPD(x9, x16, 0x000000AA)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B - test base address + -4, -3, ... , 7\n");
-
-    # Address for test results
-    la      x17, test_temp_data
-    RVTEST_SIGBASE(x9, test_B_res)
-
-    # Test
-    li      x18, 0x1111110C
-    li      x19, 0x222222CC
-    li      x20, 0x333333BB
-    li      x21, 0x4444440B
-    li      x22, 0x555555EE
-    li      x23, 0x6666660E
-    li      x24, 0x7777770D
-    li      x25, 0x888888DD
-    li      x26, 0x999999F0
-    li      x27, 0xAAAAAA00
-    li      x28, 0xBBBBBBFF
-    li      x29, 0xCCCCCC0F
-
-    # Store results
-    sb      x18, -4(x17)
-    sb      x19, -3(x17)
-    sb      x20, -2(x17)
-    sb      x21, -1(x17)
-    sb      x22, 0(x17)
-    sb      x23, 1(x17)
-    sb      x24, 2(x17)
-    sb      x25, 3(x17)
-    sb      x26, 4(x17)
-    sb      x27, 5(x17)
-    sb      x28, 6(x17)
-    sb      x29, 7(x17)
-
-    lw      x16, -4(x17)
-    lw      x15, 0(x17)
-    lw      x14, 4(x17)
-
-    RVTEST_SIGUPD(x9, x16, 0x0BBBCC0C)
-    RVTEST_SIGUPD(x9, x15, 0xDD0D0EEE)
-    RVTEST_SIGUPD(x9, x14, 0x0FFF00F0)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C - test store x0\n");
-
-    # Address for test results
-    la      x22, test_temp_data
-    RVTEST_SIGBASE(x9,test_C_res)
-
-    # Set memory
-    li      x1, 0x87654321
-    sw      x1, 0(x22)
-
-    # Test
-    li      x0, 0x12345678
-    sb      x0, 0(x22)
-    lw      x1, 0(x22)
-
-    RVTEST_SIGUPD(x9, x1, 0x87654300)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D1 - test for forwarding (to address register)\n");
-
-    # Address for test data
-    la      x21, test_D1_data
-    RVTEST_SIGBASE(x9,test_D1_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x24, test_2_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x9, 0x7fffffff)
     # Clear memory
-    lw      x1, 0(x21)
-    sw      x0, 0(x1)
-
+    sb      x0, 0x0(x1)
     # Test
-    li      x19, 0x11223344
-    lw      x23, 0(x21)
-    sb      x19, 0(x23)
-    lw      x20, 0(x23)
+    li      x8, 0x1
+    addi    x23, x1, 0
+    sb      x8, 0x0(x23)
 
-    RVTEST_SIGUPD(x9, x20, 0x00000044)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D2 - test for forwarding (to data register)\n");
-
-    # Address for test data
-    la      x23, test_D2_data
-    la      x24, test_temp_data
-    RVTEST_SIGBASE(x9,test_D2_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x23, test_2_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x8, 0x1)
     # Clear memory
-    sw      x0, 0(x24)
-
+    sb      x0, -0x2(x1)
     # Test
-    lw      x25, 0(x23)
-    sb      x25, 0(x24)
-    lw      x26, 0(x24)
+    li      x7, 0xffffffff
+    addi    x22, x1, 0
+    sb      x7, -0x2(x22)
 
-    RVTEST_SIGUPD(x9, x26, 0x000000F0)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x22, test_2_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x7, 0xffffffff)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part E  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part E1 - test war hazard (data register)\n");
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 3\n")
 
-    # Address for test results
-    la      x26, test_temp_data
-    RVTEST_SIGBASE(x9,test_E1_res)
+
+    # Addresses for test results
+	la	x1, test_3_res
+
     # Clear memory
-    sw      x0, 0(x26)
-
+    sb      x0, 0x3(x1)
     # Test
-    li      x25, 0x76543210
-    sb      x25, 0(x26)
-    mv      x25, x0 
-    lw      x24, 0(x26)
+    li      x6, 0x1234
+    addi    x21, x1, 0
+    sb      x6, 0x3(x21)
 
-    RVTEST_SIGUPD(x9, x24, 0x00000010)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part E2 - test war hazard (address register)\n");
-
-    # Address for test results
-    la      x28, test_temp_data
-    RVTEST_SIGBASE(x9,test_E2_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x21, test_3_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x6, 0x1234)
     # Clear memory
-    sw      x0, 0(x28)
-
+    sb      x0, -0x4(x1)
     # Test
-    li      x27, 0x89ABCDEF
-    sb      x27, 0(x28)
-    addi    x28, x28, -4
-    lw      x29, 4(x28)
+    li      x5, 0x80000000
+    addi    x20, x1, 0
+    sb      x5, -0x4(x20)
 
-    RVTEST_SIGUPD(x9, x29, 0x000000EF)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part F - test raw hazard in memory\n");
-
-    # Address for test results
-    la      x29, test_temp_data
-    RVTEST_SIGBASE(x9,test_F_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x20, test_3_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x5, 0x80000000)
     # Clear memory
-    sw      x0, 0(x29)
-    sw      x0, 4(x29)
-
+    sb      x0, 0x2(x1)
     # Test
-    li      x27, 0x14725836
-    sb      x27, 0(x29)
-    lw      x30, 0(x29)
-    sb      x30, 4(x29)
+    li      x4, -0x1234
+    addi    x19, x1, 0
+    sb      x4, 0x2(x19)
 
-    lw      x26, 0(x29)
-    lw      x25, 4(x29)
-
-    RVTEST_SIGUPD(x9, x26, 0x00000036)
-    RVTEST_SIGUPD(x9, x25, 0x00000036)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part G - test waw hazard in memory\n");
-
-    # Address for test results
-    la      x1, test_temp_data
-    RVTEST_SIGBASE(x9,test_G_res)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x19, test_3_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x4, -0x1234)
     # Clear memory
-    sw      x0, 0(x1)
-
+    sb      x0, 0x4(x1)
     # Test
-    li      x2, 0x96385201
-    li      x3, 0x25814963
-    sb      x2, 0(x1)
-    sb      x3, 0(x1)
-    lw      x4, 0(x1)
+    li      x3, -0x1
+    addi    x18, x1, 0
+    sb      x3, 0x4(x18)
 
-    RVTEST_SIGUPD(x9, x4, 0x00000063)
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x18, test_3_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x3, -0x1)
+    # Clear memory
+    sb      x0, -0x1(x1)
+    # Test
+    li      x2, -0x7ff
+    addi    x17, x1, 0
+    sb      x2, -0x1(x17)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x17, test_3_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x2, -0x7ff)
 
-    RVMODEL_IO_WRITE_STR(x31, "Test End\n")
-  #endif
- # ---------------------------------------------------------------------------------------------
-    # HALT
-    RVMODEL_HALT
+
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 4\n")
+
+
+    # Addresses for test results
+	la	x2, test_4_res
+
+    # Clear memory
+    sb      x0, 0x1(x2)
+    # Test
+    li      x1, 0x0
+    addi    x16, x2, 0
+    sb      x1, 0x1(x16)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x3, x16, test_4_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x3, x1, 0x0)
+    # Clear memory
+    sb      x0, 0x0(x2)
+    # Test
+    li      x0, -0x1
+    addi    x15, x2, 0
+    sb      x0, 0x0(x15)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x3, x15, test_4_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x3, x0, 0)
+    # Clear memory
+    sb      x0, -0x2(x2)
+    # Test
+    li      x31, 0x1
+    addi    x14, x2, 0
+    sb      x31, -0x2(x14)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x3, x14, test_4_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x3, x31, 0x1)
+    # Clear memory
+    sb      x0, 0x3(x2)
+    # Test
+    li      x30, 0x0
+    addi    x13, x2, 0
+    sb      x30, 0x3(x13)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x3, x13, test_4_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x3, x30, 0x0)
+    # Clear memory
+    sb      x0, -0x4(x2)
+    # Test
+    li      x29, 0x7ff
+    addi    x12, x2, 0
+    sb      x29, -0x4(x12)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x3, x12, test_4_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x3, x29, 0x7ff)
+
+
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 5\n")
+
+
+    # Addresses for test results
+	la	x1, test_5_res
+
+    # Clear memory
+    sb      x0, 0x2(x1)
+    # Test
+    li      x28, 0x0
+    addi    x11, x1, 0
+    sb      x28, 0x2(x11)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x11, test_5_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x28, 0x0)
+    # Clear memory
+    sb      x0, 0x4(x1)
+    # Test
+    li      x27, 0x800
+    addi    x10, x1, 0
+    sb      x27, 0x4(x10)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x10, test_5_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x27, 0x800)
+    # Clear memory
+    sb      x0, -0x1(x1)
+    # Test
+    li      x26, 0x7654321
+    addi    x9, x1, 0
+    sb      x26, -0x1(x9)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x9, test_5_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x26, 0x7654321)
+    # Clear memory
+    sb      x0, 0x1(x1)
+    # Test
+    li      x25, 0x7fffffff
+    addi    x8, x1, 0
+    sb      x25, 0x1(x8)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x8, test_5_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x25, 0x7fffffff)
+    # Clear memory
+    sb      x0, 0x0(x1)
+    # Test
+    li      x24, 0x1
+    addi    x7, x1, 0
+    sb      x24, 0x0(x7)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x2, x7, test_5_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x2, x24, 0x1)
+
+
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 6\n")
+
+
+    # Addresses for test results
+	la	x1, test_6_res
+
+    # Clear memory
+    sb      x0, -0x2(x1)
+    # Test
+    li      x23, 0xffffffff
+    addi    x6, x1, 0
+    sb      x23, -0x2(x6)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x6, test_6_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x23, 0xffffffff)
+    # Clear memory
+    sb      x0, 0x3(x1)
+    # Test
+    li      x22, 0x1234
+    addi    x5, x1, 0
+    sb      x22, 0x3(x5)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x5, test_6_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x22, 0x1234)
+    # Clear memory
+    sb      x0, -0x4(x1)
+    # Test
+    li      x21, 0x80000000
+    addi    x4, x1, 0
+    sb      x21, -0x4(x4)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x4, test_6_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x21, 0x80000000)
+    # Clear memory
+    sb      x0, 0x2(x1)
+    # Test
+    li      x20, -0x1234
+    addi    x3, x1, 0
+    sb      x20, 0x2(x3)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x3, test_6_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x20, -0x1234)
+    # Clear memory
+    sb      x0, 0x4(x1)
+    # Test
+    li      x19, -0x1
+    addi    x2, x1, 0
+    sb      x19, 0x4(x2)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x7, x2, test_6_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x7, x19, -0x1)
+
+
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 7\n")
+
+
+    # Addresses for test results
+	la	x2, test_7_res
+
+    # Clear memory
+    sb      x0, -0x1(x2)
+    # Test
+    li      x18, -0x7ff
+    addi    x1, x2, 0
+    sb      x18, -0x1(x1)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x3, x1, test_7_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x3, x18, -0x7ff)
+    # Clear memory
+    sb      x0, 0x1(x2)
+    # Test
+    li      x17, 0x0
+    addi    x1, x2, 0
+    sb      x17, 0x1(x1)
+
+    #RVMODEL_IO_ASSERT_GPR_EQ(x3, x1, test_7_res)
+    RVMODEL_IO_ASSERT_GPR_EQ(x3, x17, 0x0)
+
+
+	# ---------------------------------------------------------------------------------------------
+	
+	RVMODEL_IO_WRITE_STR(x31, "Test End\n")
+
+#endif
+
+	# ---------------------------------------------------------------------------------------------
+
+	RVMODEL_HALT
 
 RVTEST_CODE_END
 
 # Input data section.
-    .data
-    .align 4
-
-test_D1_data:
-    .word test_temp_data
-test_D2_data:
-    .word 0x9ABCDEF0
-    .fill 1, 4, -1
-test_temp_data:
-    .fill 2, 4, -1
-
+	.data
 
 # Output data section.
 RVMODEL_DATA_BEGIN
-    .align 4
 
-test_A1_res:
-    .fill 1, 4, -1
-test_A2_res:
-    .fill 1, 4, -1
-test_A3_res:
-    .fill 1, 4, -1
-test_A4_res:
-    .fill 1, 4, -1
-test_A5_res:
-    .fill 1, 4, -1
-test_B_res:
-    .fill 3, 4, -1
-test_C_res:
-    .fill 1, 4, -1
-test_D1_res:
-    .fill 1, 4, -1
-test_D2_res:
-    .fill 1, 4, -1
-test_E1_res:
-    .fill 1, 4, -1
-test_E2_res:
-    .fill 1, 4, -1
-test_F_res:
-    .fill 2, 4, -1
-test_G_res:
-    .fill 1, 4, -1
+test_1_res:
+	.fill 5, 4, -1
+test_2_res:
+	.fill 5, 4, -1
+test_3_res:
+	.fill 5, 4, -1
+test_4_res:
+	.fill 5, 4, -1
+test_5_res:
+	.fill 5, 4, -1
+test_6_res:
+	.fill 5, 4, -1
+test_7_res:
+	.fill 5, 4, -1
 
 RVMODEL_DATA_END
+

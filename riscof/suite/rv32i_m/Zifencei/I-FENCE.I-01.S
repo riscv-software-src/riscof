@@ -1,4 +1,4 @@
-# RISC-V Compliance Test I-CSRRWI-01
+# RISC-V Compliance Test I-FENCE.I-01
 #
 # Copyright (c) 2017, Codasip Ltd.
 # Copyright (c) 2018, Imperas Software Ltd. Additions
@@ -27,74 +27,67 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Specification: RV32I Base Integer Instruction Set, Version 2.0
-# Description: Testing instruction CSRRWI.
+# Description: Testing instruction FENCE.I.
 
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
+# Test Virtual Machine (TVM) used by program.
 RVTEST_ISA("RV32I")
 
-# Test Virtual Machine (TVM) used by program.
-
-
-# Test code region.
+# Test code region
 RVTEST_CODE_BEGIN
 
     RVMODEL_IO_INIT
     RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A - general test of CSRRWI\n");
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*Zifencei.*); def TEST_CASE_1=True")
 
-    # Address for test results
-    RVTEST_SIGBASE(x15, test_A_res)
+    # ---------------------------------------------------------------------------------------------
+    RVMODEL_IO_WRITE_STR(x31, "# Test part A - test fence\n");
+
+    # Addresses for test data and results
+    la      x16, test_A_data
+    la      x17, test_A_res
 
     # Register initialization
-    csrrw   x0, mscratch, x0
+    li      x3, 0
+
+    # Load testdata
+    lw      x1, 0(x16)
+    lw      x2, 4(x16)
 
     # Test
-    csrrwi  x2, mscratch, 1
-    csrrwi  x4, mscratch, 0
-    csrrwi  x6, mscratch, 0x1F
-    csrrwi  x28, mscratch, 0x0F
-    csrrwi  x30, mscratch, 0x10
-    csrrwi  x31, mscratch, 0
+    la      x20, instr_A_src
+    la      x21, instr_A_dst
+    lw      x15, 0(x20)
+    sw      x15, 0(x21)
+    fence.i
+instr_A_dst:
+    lui     x2, 0
 
     # Store results
+    sw      x1, 0(x17)
+    sw      x2, 4(x17)
+    sw      x3, 8(x17)
+    sw      x15, 12(x17)
+
+    //
+    // Assert
+    //
     RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x15, x0,  0x00000000)
-    RVTEST_SIGUPD(x15, x2,  0x00000000)
-    RVTEST_SIGUPD(x15, x4,  0x00000001)
-    RVTEST_SIGUPD(x15, x6,  0x00000000)
-    RVTEST_SIGUPD(x15, x28, 0x0000001F)
-    RVTEST_SIGUPD(x15, x30, 0x0000000F)
-    RVTEST_SIGUPD(x15, x31, 0x00000010)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x2,  0x00000012)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x3,  0x00000042)
+    RVMODEL_IO_ASSERT_GPR_EQ(x17, x15, 0x001101B3)
 
     RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B - testing writing to x0\n");
-
-    # Address for test results
-    RVTEST_SIGBASE(x1, test_B_res)
-
-    # Test
-    csrrwi  x0, mscratch, 0xF
-    csrrwi  x0, mscratch, 0
-
-    # store results
-
-    RVTEST_SIGUPD(x1, x0, 0x00000000)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
-
     RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
 
-  #endif
+#endif
+
  # ---------------------------------------------------------------------------------------------
     # HALT
     RVMODEL_HALT
@@ -105,13 +98,19 @@ RVTEST_CODE_END
     .data
     .align 4
 
+instr_A_src:
+    add     x3, x2, x1
+
+test_A_data:
+    .word 0x30
+    .word 0x12
+
+
 # Output data section.
 RVMODEL_DATA_BEGIN
     .align 4
 
 test_A_res:
-    .fill 7, 4, -1
-test_B_res:
-    .fill 1, 4, -1
+    .fill 4, 4, -1
 
-RVMODEL_DATA_END     # End of test output data region.
+RVMODEL_DATA_END

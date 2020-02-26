@@ -25,7 +25,7 @@ ruamel.yaml==0.15.97
 six==1.12.0
 smmap2==2.0.5
 snowballstemmer==1.2.1
-Sphinx==1.7.5
+Sphinx
 sphinx-rtd-theme==0.4.3
 sphinxcontrib-autoyaml==0.5.0
 sphinxcontrib-websupport==1.1.2

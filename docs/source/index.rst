@@ -4,14 +4,17 @@ Welcome to RISCOF
 
 .. toctree::
    :glob:
+   :maxdepth: 2
 
    intro
    overview
    quickstart
-   RISCV-Config <https://riscv-config.readthedocs.io/>
+   plugins
+   testlist
    database
-   macros
-   cond_spec
+   newtest
+   test_format
+   RISCV-Config [External] <https://riscv-config.readthedocs.io/>
    code-doc
 
 Indices and tables

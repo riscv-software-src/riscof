@@ -1,346 +1,170 @@
-# RISC-V Compliance Test I-XORI-01
+# RISC-V Compliance Test XORI-01
 #
-# Copyright (c) 2017, Codasip Ltd.
-# Copyright (c) 2018, Imperas Software Ltd. Additions
-# All rights reserved.
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#      * Redistributions of source code must retain the above copyright
-#        notice, this list of conditions and the following disclaimer.
-#      * Redistributions in binary form must reproduce the above copyright
-#        notice, this list of conditions and the following disclaimer in the
-#        documentation and/or other materials provided with the distribution.
-#      * Neither the name of the Codasip Ltd., Imperas Software Ltd. nor the
-#        names of its contributors may be used to endorse or promote products
-#        derived from this software without specific prior written permission.
+# Copyright (c) 2019 Imperas Software Ltd., www.imperas.com
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-# IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Codasip Ltd., Imperas Software Ltd.
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Specification: RV32I Base Integer Instruction Set, Version 2.0
-# Description: Testing instruction XORI.
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied.
+#
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+#
+# Specification: RV32I Base Integer Instruction Set, Version 2.1
+# Description: Testing instruction 'XORI'.
 
 #include "compliance_test.h"
 #include "compliance_model.h"
 
-
 RVTEST_ISA("RV32I")
 
-# Test Virtual Machine (TVM) used by program.
-
-
-# Test code region
 RVTEST_CODE_BEGIN
 
-    RVMODEL_IO_INIT
-    RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
-    RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
-
-  #ifdef TEST_CASE_1
-    RVTEST_CASE(1,"// check ISA:=regex(.*I.*); def TEST_CASE_1=True")
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1 - general test of value 0 with 0, 1, -1, MIN, MAX immediate values\n");
-
-    # Addresses for test data and results
-    la      x1, test_A1_data
-    RVTEST_SIGBASE(x2, test_A1_res)
-
-    # Load testdata
-    lw      x3, 0(x1)
-
-    # Test
-    xori    x4, x3, 1
-    xori    x5, x3, 0x7FF
-    xori    x6, x3, 0xFFFFFFFF
-    xori    x7, x3, 0
-    xori    x8, x3, 0xFFFFF800
-
-    # Store results
-    RVMODEL_IO_CHECK()
-    RVTEST_SIGUPD(x2, x3, 0x00000000)
-    RVTEST_SIGUPD(x2, x4, 0x00000001)
-    RVTEST_SIGUPD(x2, x5, 0x000007FF)
-    RVTEST_SIGUPD(x2, x6, 0xFFFFFFFF)
-    RVTEST_SIGUPD(x2, x7, 0x00000000)
-    RVTEST_SIGUPD(x2, x8, 0xFFFFF800)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A1  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2 - general test of value 1 with 0, 1, -1, MIN, MAX immediate values\n");
-
-    # Addresses for test data and results
-    la      x1, test_A2_data
-    RVTEST_SIGBASE(x2, test_A2_res)
-
-    # Load testdata
-    lw      x8, 0(x1)
-
-    # Test
-    xori    x9, x8, 1
-    xori    x10, x8, 0x7FF
-    xori    x11, x8, 0xFFFFFFFF
-    xori    x12, x8, 0
-    xori    x13, x8, 0xFFFFF800
-
-    # Store results
-
-    RVTEST_SIGUPD(x2, x8,  0x00000001)
-    RVTEST_SIGUPD(x2, x9,  0x00000000)
-    RVTEST_SIGUPD(x2, x10, 0x000007FE)
-    RVTEST_SIGUPD(x2, x11, 0xFFFFFFFE)
-    RVTEST_SIGUPD(x2, x12, 0x00000001)
-    RVTEST_SIGUPD(x2, x13, 0xFFFFF801)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A2  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3 - general test of value -1 with 0, 1, -1, MIN, MAX immediate values\n");
-
-    # Addresses for test data and results
-    la      x1, test_A3_data
-    RVTEST_SIGBASE(x2, test_A3_res)
-
-    # Load testdata
-    lw      x13, 0(x1)
-
-    # Test
-    xori    x14, x13, 1
-    xori    x15, x13, 0x7FF
-    xori    x16, x13, 0xFFFFFFFF
-    xori    x17, x13, 0
-    xori    x18, x13, 0xFFFFF800
-
-    # Store results
-
-    RVTEST_SIGUPD(x2, x13, 0xFFFFFFFF)
-    RVTEST_SIGUPD(x2, x14, 0xFFFFFFFE)
-    RVTEST_SIGUPD(x2, x15, 0xFFFFF800)
-    RVTEST_SIGUPD(x2, x16, 0x00000000)
-    RVTEST_SIGUPD(x2, x17, 0xFFFFFFFF)
-    RVTEST_SIGUPD(x2, x18, 0x000007FF)
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A3  - Complete\n");
-
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4 - general test of value 0x7FFFFFFF with 0, 1, -1, MIN, MAX immediate values\n");
 
-    # Addresses for test data and results
-    la      x1, test_A4_data
-    RVTEST_SIGBASE(x2, test_A4_res)
+	RVMODEL_IO_INIT
+	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
 
-    # Load testdata
-    lw      x18, 0(x1)
+#ifdef TEST_CASE_1
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
 
-    # Test
-    xori    x19, x18, 1
-    xori    x20, x18, 0x7FF
-    xori    x21, x18, 0xFFFFFFFF
-    xori    x22, x18, 0
-    xori    x23, x18, 0xFFFFF800
+	# ---------------------------------------------------------------------------------------------
 
-    # Store results
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 1\n")
 
-    RVTEST_SIGUPD(x2, x18, 0x7FFFFFFF)
-    RVTEST_SIGUPD(x2, x19, 0x7FFFFFFE)
-    RVTEST_SIGUPD(x2, x20, 0x7FFFF800)
-    RVTEST_SIGUPD(x2, x21, 0x80000000)
-    RVTEST_SIGUPD(x2, x22, 0x7FFFFFFF)
-    RVTEST_SIGUPD(x2, x23, 0x800007FF)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A4  - Complete\n");
+    # address for test results
+	la	x5, test_1_res
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A5 - general test of value 0x80000000 with 0, 1, -1, MIN, MAX immediate values\n");
+	TEST_IMM_OP(xori, x0, x31, 0x0, -0x1, 0x0, x5, 0, x6)   # Testcase 0
+	TEST_IMM_OP(xori, x1, x30, 0xfffff800, 0x1, -0x7ff, x5, 4, x6)   # Testcase 1
+	TEST_IMM_OP(xori, x2, x29, 0xffffffff, 0x0, -0x1, x5, 8, x6)   # Testcase 2
+	TEST_IMM_OP(xori, x3, x28, 0xffffffff, 0x7ff, -0x800, x5, 12, x6)   # Testcase 3
+	TEST_IMM_OP(xori, x4, x27, 0xfffff800, 0x0, 0x800, x5, 16, x6)   # Testcase 4
 
-    # Addresses for test data and results
-    la      x1, test_A5_data
-    RVTEST_SIGBASE(x2, test_A5_res)
 
-    # Load testdata
-    lw      x23, 0(x1)
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 2\n")
 
-    # Test
-    xori    x24, x23, 1
-    xori    x25, x23, 0x7FF
-    xori    x26, x23, 0xFFFFFFFF
-    xori    x27, x23, 0
-    xori    x28, x23, 0xFFFFF800
 
-    # Store results
+    # address for test results
+	la	x1, test_2_res
 
-    RVTEST_SIGUPD(x2, x23, 0x80000000)
-    RVTEST_SIGUPD(x2, x24, 0x80000001)
-    RVTEST_SIGUPD(x2, x25, 0x800007FF)
-    RVTEST_SIGUPD(x2, x26, 0x7FFFFFFF)
-    RVTEST_SIGUPD(x2, x27, 0x80000000)
-    RVTEST_SIGUPD(x2, x28, 0x7FFFF800)
+	TEST_IMM_OP(xori, x5, x26, 0xfffff000, 0x800, 0x800, x1, 0, x2)   # Testcase 5
+	TEST_IMM_OP(xori, x6, x25, 0xf89abb21, 0x7654321, 0x800, x1, 4, x2)   # Testcase 6
+	TEST_IMM_OP(xori, x7, x24, 0x7ffffffe, 0x7fffffff, 0x1, x1, 8, x2)   # Testcase 7
+	TEST_IMM_OP(xori, x8, x23, 0xfffff801, 0x1, 0x800, x1, 12, x2)   # Testcase 8
+	TEST_IMM_OP(xori, x9, x22, 0x7ff, 0xffffffff, 0x800, x1, 16, x2)   # Testcase 9
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part A5  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B - testing forwarding between instructions\n");
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 3\n")
 
-    # Addresses for test data and results
-    la      x26, test_B_data
-    RVTEST_SIGBASE(x27, test_B_res)
 
-    # Load testdata
-    lw      x28, 0(x26)
+    # address for test results
+	la	x1, test_3_res
 
-    # Test
-    xori    x29, x28, 0x7F
-    xori    x30, x29, 0x3F
-    xori    x31, x30, 0x1F
-    xori    x1, x31, 0x0F
-    xori    x2, x1, 0x07
-    xori    x3, x2, 0x03
+	TEST_IMM_OP(xori, x10, x21, 0xffffea34, 0x1234, 0x800, x1, 0, x7)   # Testcase 10
+	TEST_IMM_OP(xori, x11, x20, 0x80000000, 0x80000000, 0x0, x1, 4, x7)   # Testcase 11
+	TEST_IMM_OP(xori, x12, x19, 0xffffea33, -0x1234, 0x7ff, x1, 8, x7)   # Testcase 12
+	TEST_IMM_OP(xori, x13, x18, 0x0, -0x1, -0x1, x1, 12, x7)   # Testcase 13
+	TEST_IMM_OP(xori, x14, x17, 0xfffff800, -0x7ff, 0x1, x1, 16, x7)   # Testcase 14
 
-    # Store results
 
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 4\n")
 
-    RVTEST_SIGUPD(x27, x28, 0xABCDFFFF)
-    RVTEST_SIGUPD(x27, x29, 0xABCDFF80)
-    RVTEST_SIGUPD(x27, x30, 0xABCDFFBF)
-    RVTEST_SIGUPD(x27, x31, 0xABCDFFA0)
-    RVTEST_SIGUPD(x27, x1,  0xABCDFFAF)
-    RVTEST_SIGUPD(x27, x2,  0xABCDFFA8)
-    RVTEST_SIGUPD(x27, x3,  0xABCDFFAB)
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part B  - Complete\n");
+    # address for test results
+	la	x2, test_4_res
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C - testing writing to x0\n");
+	TEST_IMM_OP(xori, x15, x16, 0x0, 0x0, 0x0, x2, 0, x3)   # Testcase 15
+	TEST_IMM_OP(xori, x16, x15, 0xffffffff, -0x1, 0x0, x2, 4, x3)   # Testcase 16
+	TEST_IMM_OP(xori, x17, x14, 0xfffff800, 0x1, -0x7ff, x2, 8, x3)   # Testcase 17
+	TEST_IMM_OP(xori, x18, x13, 0xffffffff, 0x0, -0x1, x2, 12, x3)   # Testcase 18
+	TEST_IMM_OP(xori, x19, x12, 0xffffffff, 0x7ff, -0x800, x2, 16, x3)   # Testcase 19
 
-    # Addresses for test data and results
-    la      x1, test_C_data
-    RVTEST_SIGBASE(x2, test_C_res)
 
-    # Load testdata
-    lw      x5, 0(x1)
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 5\n")
 
-    # Test
-    xori    x0, x5, 1
 
-    # Store results
+    # address for test results
+	la	x1, test_5_res
 
-    RVTEST_SIGUPD(x2, x0, 0x00000000)
+	TEST_IMM_OP(xori, x20, x11, 0xfffff800, 0x0, 0x800, x1, 0, x2)   # Testcase 20
+	TEST_IMM_OP(xori, x21, x10, 0xfffff000, 0x800, 0x800, x1, 4, x2)   # Testcase 21
+	TEST_IMM_OP(xori, x22, x9, 0xf89abb21, 0x7654321, 0x800, x1, 8, x2)   # Testcase 22
+	TEST_IMM_OP(xori, x23, x8, 0x7ffffffe, 0x7fffffff, 0x1, x1, 12, x2)   # Testcase 23
+	TEST_IMM_OP(xori, x24, x7, 0xfffff801, 0x1, 0x800, x1, 16, x2)   # Testcase 24
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part C  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D - testing forwarding throught x0\n");
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 6\n")
 
-    # Addresses for test data and results
-    la      x1, test_D_data
-    RVTEST_SIGBASE(x2, test_D_res)
 
-    # Load testdata
-    lw      x5, 0(x1)
+    # address for test results
+	la	x1, test_6_res
 
-    # Test
-    xori    x0, x5, 1
-    xori    x5, x0, 1
+	TEST_IMM_OP(xori, x25, x6, 0x7ff, 0xffffffff, 0x800, x1, 0, x7)   # Testcase 25
+	TEST_IMM_OP(xori, x26, x5, 0xffffea34, 0x1234, 0x800, x1, 4, x7)   # Testcase 26
+	TEST_IMM_OP(xori, x27, x4, 0x80000000, 0x80000000, 0x0, x1, 8, x7)   # Testcase 27
+	TEST_IMM_OP(xori, x28, x3, 0xffffea33, -0x1234, 0x7ff, x1, 12, x7)   # Testcase 28
+	TEST_IMM_OP(xori, x29, x2, 0x0, -0x1, -0x1, x1, 16, x7)   # Testcase 29
 
-    # Store results
 
-    RVTEST_SIGUPD(x2, x0, 0x00000000)
-    RVTEST_SIGUPD(x2, x5, 0x00000001)
+	# ---------------------------------------------------------------------------------------------
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 7\n")
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part D  - Complete\n");
 
-    # ---------------------------------------------------------------------------------------------
-    RVMODEL_IO_WRITE_STR(x31, "# Test part E - testing moving (xori with 0)\n");
+    # address for test results
+	la	x2, test_7_res
 
-    # Addresses for test data and results
-    la      x1, test_E_data
-    RVTEST_SIGBASE(x2, test_E_res)
+	TEST_IMM_OP(xori, x30, x1, 0xfffff800, -0x7ff, 0x1, x2, 0, x3)   # Testcase 30
+	TEST_IMM_OP(xori, x31, x0, 0x0, 0x0, 0x0, x2, 4, x3)   # Testcase 31
 
-    # Load testdata
-    lw      x3, 0(x1)
 
-    # Test
-    xori    x4, x3, 0
-    xori    x5, x4, 0
-    xori    x6, x5, 0
-    xori    x14, x6, 0
-    xori    x15, x14, 0
-    xori    x16, x15, 0
-    xori    x25, x16, 0
-    xori    x26, x25, 0
-    xori    x27, x26, 0
+	# ---------------------------------------------------------------------------------------------
+	
+	RVMODEL_IO_WRITE_STR(x31, "Test End\n")
 
-    # Store results
+#endif
 
-    RVTEST_SIGUPD(x2, x3, 0x36925814)
-    RVTEST_SIGUPD(x2, x4, 0x36925814)
-    RVTEST_SIGUPD(x2, x26, 0x36925814)
-    RVTEST_SIGUPD(x2, x27, 0x36925814)
+	# ---------------------------------------------------------------------------------------------
 
-    RVMODEL_IO_WRITE_STR(x31, "# Test part E  - Complete\n");
-
-    RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
-  #endif
- # ---------------------------------------------------------------------------------------------
-    # HALT
-    RVMODEL_HALT
+	RVMODEL_HALT
 
 RVTEST_CODE_END
 
 # Input data section.
-    .data
-    .align 4
-
-test_A1_data:
-    .word 0
-test_A2_data:
-    .word 1
-test_A3_data:
-    .word -1
-test_A4_data:
-    .word 0x7FFFFFFF
-test_A5_data:
-    .word 0x80000000
-test_B_data:
-    .word 0xABCDFFFF
-test_C_data:
-    .word 0x12345678
-test_D_data:
-    .word 0xFEDCBA98
-test_E_data:
-    .word 0x36925814
-
+	.data
 
 # Output data section.
 RVMODEL_DATA_BEGIN
-    .align 4
 
-test_A1_res:
-    .fill 6, 4, -1
-test_A2_res:
-    .fill 6, 4, -1
-test_A3_res:
-    .fill 6, 4, -1
-test_A4_res:
-    .fill 6, 4, -1
-test_A5_res:
-    .fill 6, 4, -1
-test_B_res:
-    .fill 7, 4, -1
-test_C_res:
-    .fill 1, 4, -1
-test_D_res:
-    .fill 2, 4, -1
-test_E_res:
-    .fill 4, 4, -1
+test_1_res:
+	.fill 5, 4, -1
+test_2_res:
+	.fill 5, 4, -1
+test_3_res:
+	.fill 5, 4, -1
+test_4_res:
+	.fill 5, 4, -1
+test_5_res:
+	.fill 5, 4, -1
+test_6_res:
+	.fill 5, 4, -1
+test_7_res:
+	.fill 5, 4, -1
 
 RVMODEL_DATA_END
+
