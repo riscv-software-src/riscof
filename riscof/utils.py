@@ -6,10 +6,27 @@ import sys
 import subprocess
 import operator
 import shlex
-import oyaml as yaml
 import riscof.utils as utils
+import ruamel
+from ruamel.yaml import YAML
 
 logger = logging.getLogger(__name__)
+
+yaml = YAML(typ="rt")
+yaml.default_flow_style = False
+yaml.allow_unicode = True
+
+
+def load_yaml(foo):
+    try:
+        with open(foo, "r") as file:
+            return yaml.load(file)
+    except ruamel.yaml.constructor.DuplicateKeyError as msg:
+        logger = logging.getLogger(__name__)
+        error = "\n".join(str(msg).split("\n")[2:-7])
+        logger.error(error)
+        raise SystemExit
+
 
 
 
@@ -79,6 +96,7 @@ class makeUtil():
 
         """
         utils.shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
+
 
 class Command():
     """
@@ -270,11 +288,6 @@ class shellCommand(Command):
         return True
 
 
-def load_yaml(foo):
-    with open(foo, "r") as file:
-        return yaml.safe_load(file)
-
-
 class ColoredFormatter(logging.Formatter):
     """
         Class to create a log output which is colored based on level.
@@ -344,7 +357,9 @@ def riscof_cmdline_args():
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
                         help='The Path to the config file.',
-                        metavar= 'PATH')
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./config.ini').absolute())
+                          )
     optional.add_argument('--setup',
                         action='store_true',
                         help='Initiate setup for riscof.')

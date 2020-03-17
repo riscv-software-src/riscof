@@ -6,8 +6,7 @@ from pathlib import Path
 import difflib
 import ast
 
-import oyaml as yaml
-
+from riscof.utils import yaml
 import riscof.utils as utils
 import riscof.constants as constants
 
@@ -168,7 +167,7 @@ def generate_test_pool(ispec, pspec):
         test_list[entry[0]]=temp
 
     with open(os.path.join(constants.work_dir,"test_list.yaml"),"w") as tfile:
-        yaml.safe_dump(test_list,tfile)
+        yaml.dump(test_list,tfile)
 
     return (test_list, test_pool)
 

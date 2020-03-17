@@ -12,6 +12,9 @@ here = os.path.abspath(os.path.dirname(__file__))
 def read(*parts):
     with codecs.open(os.path.join(here, *parts), 'r') as fp:
         return fp.read()
+def read_requires():
+    with open(os.path.join(here, "requirements.txt"),"r") as reqfile:
+        return reqfile.read().splitlines()
 
 
 #Long Description
@@ -41,13 +44,10 @@ setup(name="riscof",
               'suite/rv64i_m/I/*.S',
               'framework/database.yaml', 'Templates/report.html',
               'Templates/style.css', 'Templates/setup/*',
-              'Templates/setup/env/*', 'Templates/setup/model/*'
+              'Templates/setup/model/env/*', 'Templates/setup/model/*'
           ]
       },
-      install_requires=[
-          'Cerberus>=1.3.1', 'GitPython>=2.1.11', 'oyaml>=0.9', 'PyYAML>=5.1.1',
-          'jinja2>=2.10.1', 'pytz>=2019.1', 'riscv-config==1.0.2'
-      ],
+      install_requires=read_requires(),
       python_requires=">=3.7.0",
       entry_points={
           "console_scripts": ["riscof=riscof.main:execute"],
