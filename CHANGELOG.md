@@ -6,6 +6,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.13.2] - 2020-03-17
+### Fixed 
+- Removed duplicate env folder.
+- Fixed exclusion of env folder in pip package.
+- Reduced python package dependencies
+
 ## [1.13.1] - 2020-02-26
 ### Fixed
 - shipping the model folder as well

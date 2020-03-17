@@ -2,7 +2,8 @@ import os
 import git
 import sys
 import re
-import oyaml as yaml
+from riscof.utils import yaml
+import riscof.utils as utils
 import collections
 
 import riscof.constants as constants
@@ -14,11 +15,11 @@ class DbgenError(Exception):
 
 def dirwalk(dir):
     '''
-        Recursively searches a directory and returns a list of 
+        Recursively searches a directory and returns a list of
         relative paths(from the directory) of the files which end with ".S"(excluding any folder named wip).
-        
+
         :params: dir - The directory in which the files have to be searched for.
-        
+
         :return: a list of all .S file paths relative to the riscof home.
     '''
     list = []
@@ -122,7 +123,7 @@ def generate_standard():
     tree = repo.tree()
     try:
         with open(dbfile, "r") as temp:
-            db = yaml.safe_load(temp)
+            db = utils.load_yaml(temp)
             delkeys = []
             for key in db.keys():
                 if key not in list:
@@ -153,9 +154,7 @@ def generate_standard():
             continue
     with open(dbfile, "w") as wrfile:
         yaml.dump(orderdict(db),
-                  wrfile,
-                  default_flow_style=False,
-                  allow_unicode=True)
+                  wrfile)
 
 def generate():
     list = dirwalk(constants.suite)
@@ -169,9 +168,7 @@ def generate():
             continue
     with open(dbfile, "w") as wrfile:
         yaml.dump(orderdict(db),
-                  wrfile,
-                  default_flow_style=False,
-                  allow_unicode=True)
+                  wrfile)
 
 
 if __name__ == '__main__':
