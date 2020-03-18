@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.13.3] - 2020-03-18
+### Fixed 
+- moved requirements.txt inside riscof
+
 ## [1.13.2] - 2020-03-17
 ### Fixed 
 - Removed duplicate env folder.

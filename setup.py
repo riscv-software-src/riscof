@@ -13,7 +13,7 @@ def read(*parts):
     with codecs.open(os.path.join(here, *parts), 'r') as fp:
         return fp.read()
 def read_requires():
-    with open(os.path.join(here, "requirements.txt"),"r") as reqfile:
+    with open(os.path.join(here, "riscof/requirements.txt"),"r") as reqfile:
         return reqfile.read().splitlines()
 
 
@@ -38,6 +38,7 @@ setup(name="riscof",
       package_dir={'riscof': 'riscof/'},
       package_data={
           'riscof': [
+              'requirements.txt',
               'suite/env/*', 'suite/rv32i_m/I/*.S', 'suite/rv32i_m/M/*.S',
               'suite/rv32i_m/C/*.S', 'suite/rv32i_m/A/*.S',
               'suite/rv32i_m/Zicsr/*.S', 'suite/rv32i_m/Zifencei/*.S',
