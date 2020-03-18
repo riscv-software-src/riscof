@@ -6,6 +6,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+
+## [1.13.4] - 2020-03-18
+### Fixed 
+- load_yaml function in utils forced to return dict type.
+
 ## [1.13.3] - 2020-03-18
 ### Fixed 
 - moved requirements.txt inside riscof

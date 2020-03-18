@@ -20,7 +20,7 @@ yaml.allow_unicode = True
 def load_yaml(foo):
     try:
         with open(foo, "r") as file:
-            return yaml.load(file)
+            return dict(yaml.load(file))
     except ruamel.yaml.constructor.DuplicateKeyError as msg:
         logger = logging.getLogger(__name__)
         error = "\n".join(str(msg).split("\n")[2:-7])
