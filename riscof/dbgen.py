@@ -120,16 +120,16 @@ def generate_standard():
     repo_path = os.path.normpath(constants.root+"/../")
     repo = git.Repo(repo_path)
     dbfile = constants.framework_db
+    print(dbfile)
     tree = repo.tree()
     try:
-        with open(dbfile, "r") as temp:
-            db = utils.load_yaml(temp)
-            delkeys = []
-            for key in db.keys():
-                if key not in list:
-                    delkeys.append(key)
-            for key in delkeys:
-                del db[key]
+        db = utils.load_yaml(dbfile)
+        delkeys = []
+        for key in db.keys():
+            if key not in list:
+                delkeys.append(key)
+        for key in delkeys:
+            del db[key]
     except FileNotFoundError:
         db = {}
     cur_dir = constants.root

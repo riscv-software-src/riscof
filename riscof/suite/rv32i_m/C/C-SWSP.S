@@ -28,113 +28,90 @@
 # Specification: RV32IMC Base Integer Instruction Set, Version 2.0
 # Description: Testing instruction C.SWSP.
 
-
 #include "compliance_test.h"
 #include "compliance_model.h"
 
 RVTEST_ISA("RV32IC")
 
-
-
 RVTEST_CODE_BEGIN
 
-  RVMODEL_IO_INIT
-  RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+	RVMODEL_IO_INIT
+	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
     #ifdef TEST_CASE_1
     RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_CASE_1=True")
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x1, test_1_res)
+	# address for test results
+	la	x1, test_1_res
 
-  la x2,test_data;
-li  x3, 0x0;
-c.swsp  x3, 0(x2);
-lw  x3, 0(x2);
-RVTEST_SIGUPD( x1, x3, 0x0)
+	TEST_CSWSP(test_data, x3, 0x11111111, 0, x1, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x1, test_2_res)
+	# address for test results
+	la	x1, test_2_res
 
-  la x2,test_data;
-li  x4, 0x1;
-c.swsp  x4, 4(x2);
-lw  x4, 4(x2);
-RVTEST_SIGUPD( x1, x4, 0x1)
+	TEST_CSWSP(test_data, x4, 0x22222222, 4, x1, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x1, test_3_res)
+	# address for test results
+	la	x1, test_3_res
 
-  la x2,test_data;
-li  x16, 0xffffffff;
-c.swsp  x16, 64(x2);
-lw  x16, 64(x2);
-RVTEST_SIGUPD( x1, x16, 0xffffffff)
+	TEST_CSWSP(test_data, x16, 0x33333333, 8, x1, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x1, test_4_res)
+	# address for test results
+	la	x1, test_4_res
 
-  la x2,test_data;
-li  x24, 0x7fff;
-c.swsp  x24, 120(x2);
-lw  x24, 120(x2);
-RVTEST_SIGUPD( x1, x24, 0x7fff)
+	TEST_CSWSP(test_data, x24, 0x44444444, 16, x1, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x1, test_5_res)
+	# address for test results
+	la	x1, test_5_res
 
-  la x2,test_data;
-li  x21, 0x8000;
-c.swsp  x21, 252(x2);
-lw  x21, 252(x2);
-RVTEST_SIGUPD( x1, x21, 0x8000)
+	TEST_CSWSP(test_data, x21, 0x55555555, 124, x1, 0 , x31)
 
 
-  RVMODEL_IO_WRITE_STR(x31, "Test End\n")
+	RVMODEL_IO_WRITE_STR(x31, "Test End\n")
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-    
-    #endif
-  RVMODEL_HALT
+	#endif
+    RVMODEL_HALT
 
 RVTEST_CODE_END
 
 # Input data section.
-  .data
-test_data:
-  .fill 32, 4, -1
+	.data
 
 # Output data section.
 RVMODEL_DATA_BEGIN
 test_1_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_2_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_3_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_4_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_5_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
+test_data:
+	.fill 32, 4, -1
 
 RVMODEL_DATA_END

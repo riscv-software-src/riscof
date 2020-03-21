@@ -28,110 +28,87 @@
 # Specification: RV32IMC Base Integer Instruction Set, Version 2.0
 # Description: Testing instruction C.BNEZ.
 
-
 #include "compliance_test.h"
 #include "compliance_model.h"
 
 RVTEST_ISA("RV32IC")
 
-
-
 RVTEST_CODE_BEGIN
 
-  RVMODEL_IO_INIT
-  RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+	RVMODEL_IO_INIT
+	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
     #ifdef TEST_CASE_1
     RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_CASE_1=True")
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_1_res)
+	# address for test results
+	la	x2, test_1_res
 
-  li x13, 0x0;
-c.bnez x13,3f;
-li x13,0x00;
-3:
-RVTEST_SIGUPD( x2,x13, 0x0);
+	TEST_CBNEZ(x13, 0x0, x2, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_2_res)
+	# address for test results
+	la	x2, test_2_res
 
-  li x14, 0x1;
-c.bnez x14,3f;
-li x14,0x00;
-3:
-RVTEST_SIGUPD( x2,x14, 0x1);
+	TEST_CBNEZ(x14, 0x1, x2, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_3_res)
+	# address for test results
+	la	x2, test_3_res
 
-  li x15, 0xffffffff;
-c.bnez x15,3f;
-li x15,0x00;
-3:
-RVTEST_SIGUPD( x2,x15, 0xffffffff);
+	TEST_CBNEZ(x15, -0x1, x2, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_4_res)
+	# address for test results
+	la	x2, test_4_res
 
-  li x8, 0x7fff;
-c.bnez x8,3f;
-li x8,0x00;
-3:
-RVTEST_SIGUPD( x2,x8, 0x7fff);
+	TEST_CBNEZ(x8, 0x7fff, x2, 0 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_5_res)
+	# address for test results
+	la	x2, test_5_res
 
-  li x9, 0x8000;
-c.bnez x9,3f;
-li x9,0x00;
-3:
-RVTEST_SIGUPD( x2,x9, 0x8000);
+	TEST_CBNEZ(x9, 0x8000, x2, 0 , x31)
 
-  RVMODEL_IO_WRITE_STR(x31, "Test End\n")
+	RVMODEL_IO_WRITE_STR(x31, "Test End\n")
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-    
-    #endif
-  RVMODEL_HALT
+	#endif
+    RVMODEL_HALT
 
 RVTEST_CODE_END
 
 # Input data section.
-  .data
+	.data
 
 # Output data section.
 RVMODEL_DATA_BEGIN
 test_1_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_2_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_3_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_4_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 test_5_res:
-  .fill 1, 4, -1
+	.fill 1, 4, -1
 
 RVMODEL_DATA_END
