@@ -6,6 +6,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.14.0] - 2020-03-21
+### Fixed 
+- Migrated C-extension tests to those available on github. This required adding and fixing special
+  macros
+- C.SWSP test has been fixed to not access regions outside the signature region
+- Moved ECALL, EBREAK and MIS-ALIGNED tests to a separate folder. Also their respective TEST_CASE
+  conditions have been updated
+- Moved Atomic tests to wip folder.
+- renamed I-IO.S to I-IO-01.S
 
 ## [1.13.4] - 2020-03-18
 ### Fixed 

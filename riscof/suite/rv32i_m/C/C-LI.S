@@ -28,160 +28,107 @@
 # Specification: RV32IMC Base Integer Instruction Set, Version 2.0
 # Description: Testing instruction C.LI.
 
-
 #include "compliance_test.h"
 #include "compliance_model.h"
 
 RVTEST_ISA("RV32IC")
 
-
-
 RVTEST_CODE_BEGIN
 
-  RVMODEL_IO_INIT
-  RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
+	RVMODEL_IO_INIT
+	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
+	RVMODEL_IO_WRITE_STR(x31, "Test Begin Reserved regs ra(x1) a0(x10) t0(x5)\n")
     #ifdef TEST_CASE_1
     RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*C.*); def TEST_CASE_1=True")
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 1 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_1_res)
+	# address for test results
+	la	x2, test_1_res
 
-  li  x3, 0x0;
-c.li  x3, 0x0;
-RVTEST_SIGUPD( x2, x3, 0x0)
-  li  x4, 0x0;
-c.li  x4, 0x1;
-RVTEST_SIGUPD( x2, x4, 0x1)
-  li  x8, 0x0;
-c.li  x8, 0x10;
-RVTEST_SIGUPD( x2, x8, 0x10)
-  li  x9, 0x0;
-c.li  x9, 0x1f;
-RVTEST_SIGUPD( x2, x9, 0x1f)
-  li  x11, 0x0;
-c.li  x11, -0x1f;
-RVTEST_SIGUPD( x2, x11, 0xffffffe1)
+	TEST_CI_OP(c.li, x3, 0x0, 0x0, 0x0, x2, 0 , x31)
+	TEST_CI_OP(c.li, x4, 0x1, 0x0, 0x1, x2, 4 , x31)
+	TEST_CI_OP(c.li, x8, 0x10, 0x0, 0x10, x2, 8 , x31)
+	TEST_CI_OP(c.li, x9, 0x1f, 0x0, 0x1f, x2, 12 , x31)
+	TEST_CI_OP(c.li, x11, 0xffffffe1, 0x0, -0x1f, x2, 16 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 2 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_2_res)
+	# address for test results
+	la	x2, test_2_res
 
-  li  x12, 0x1;
-c.li  x12, 0x0;
-RVTEST_SIGUPD( x2, x12, 0x0)
-  li  x13, 0x1;
-c.li  x13, 0x1;
-RVTEST_SIGUPD( x2, x13, 0x1)
-  li  x14, 0x1;
-c.li  x14, 0x10;
-RVTEST_SIGUPD( x2, x14, 0x10)
-  li  x15, 0x1;
-c.li  x15, 0x1f;
-RVTEST_SIGUPD( x2, x15, 0x1f)
-  li  x16, 0x1;
-c.li  x16, -0x1f;
-RVTEST_SIGUPD( x2, x16, 0xffffffe1)
+	TEST_CI_OP(c.li, x12, 0x0, 0x1, 0x0, x2, 0 , x31)
+	TEST_CI_OP(c.li, x13, 0x1, 0x1, 0x1, x2, 4 , x31)
+	TEST_CI_OP(c.li, x14, 0x10, 0x1, 0x10, x2, 8 , x31)
+	TEST_CI_OP(c.li, x15, 0x1f, 0x1, 0x1f, x2, 12 , x31)
+	TEST_CI_OP(c.li, x16, 0xffffffe1, 0x1, -0x1f, x2, 16 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 3 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_3_res)
+	# address for test results
+	la	x2, test_3_res
 
-  li  x17, -0x1;
-c.li  x17, 0x0;
-RVTEST_SIGUPD( x2, x17, 0x0)
-  li  x18, -0x1;
-c.li  x18, 0x1;
-RVTEST_SIGUPD( x2, x18, 0x1)
-  li  x19, -0x1;
-c.li  x19, 0x10;
-RVTEST_SIGUPD( x2, x19, 0x10)
-  li  x20, -0x1;
-c.li  x20, 0x1f;
-RVTEST_SIGUPD( x2, x20, 0x1f)
-  li  x21, -0x1;
-c.li  x21, -0x1f;
-RVTEST_SIGUPD( x2, x21, 0xffffffe1)
+	TEST_CI_OP(c.li, x17, 0x0, -0x1, 0x0, x2, 0 , x31)
+	TEST_CI_OP(c.li, x18, 0x1, -0x1, 0x1, x2, 4 , x31)
+	TEST_CI_OP(c.li, x19, 0x10, -0x1, 0x10, x2, 8 , x31)
+	TEST_CI_OP(c.li, x20, 0x1f, -0x1, 0x1f, x2, 12 , x31)
+	TEST_CI_OP(c.li, x21, 0xffffffe1, -0x1, -0x1f, x2, 16 , x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 4 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_4_res)
+	# address for test results
+	la	x2, test_4_res
 
-  li  x22, 0x7ffff;
-c.li  x22, 0x0;
-RVTEST_SIGUPD( x2, x22, 0x0)
-  li  x23, 0x7ffff;
-c.li  x23, 0x1;
-RVTEST_SIGUPD( x2, x23, 0x1)
-  li  x24, 0x7ffff;
-c.li  x24, 0x10;
-RVTEST_SIGUPD( x2, x24, 0x10)
-  li  x25, 0x7ffff;
-c.li  x25, 0x1f;
-RVTEST_SIGUPD( x2, x25, 0x1f)
-  li  x26, 0x7ffff;
-c.li  x26, -0x1f;
-RVTEST_SIGUPD( x2, x26, 0xffffffe1)
+	TEST_CI_OP(c.li, x22, 0x0, 0x7ffff, 0x0, x2, 0 , x31)
+	TEST_CI_OP(c.li, x23, 0x1, 0x7ffff, 0x1, x2, 4 , x31)
+	TEST_CI_OP(c.li, x24, 0x10, 0x7ffff, 0x10, x2, 8 , x31)
+	TEST_CI_OP(c.li, x25, 0x1f, 0x7ffff, 0x1f, x2, 12 , x31)
+	TEST_CI_OP(c.li, x26, 0xffffffe1, 0x7ffff, -0x1f, x2, 16, x31)
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-  RVMODEL_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
+	RVMODEL_IO_WRITE_STR(x31, "# Test number 5 - corner cases\n")
 
-  # address for test results
-  RVTEST_SIGBASE(	x2, test_5_res)
+	# address for test results
+	la	x2, test_5_res
 
-  li  x27, 0x80000;
-c.li  x27, 0x0;
-RVTEST_SIGUPD( x2, x27, 0x0)
-  li  x28, 0x80000;
-c.li  x28, 0x1;
-RVTEST_SIGUPD( x2, x28, 0x1)
-  li  x29, 0x80000;
-c.li  x29, 0x10;
-RVTEST_SIGUPD( x2, x29, 0x10)
-  li  x30, 0x80000;
-c.li  x30, 0x1f;
-RVTEST_SIGUPD( x2, x30, 0x1f)
-  li  x21, 0x80000;
-c.li  x21, -0x1f;
-RVTEST_SIGUPD( x2, x21, 0xffffffe1)
+	TEST_CI_OP(c.li, x27, 0x0, 0x80000, 0x0, x2, 0 , x31)
+	TEST_CI_OP(c.li, x28, 0x1, 0x80000, 0x1, x2, 4 , x31)
+	TEST_CI_OP(c.li, x29, 0x10, 0x80000, 0x10, x2, 8 , x31)
+	TEST_CI_OP(c.li, x30, 0x1f, 0x80000, 0x1f, x2, 12 , x31)
+	TEST_CI_OP(c.li, x21, 0xffffffe1, 0x80000, -0x1f, x2, 16 , x31)
 
-  RVMODEL_IO_WRITE_STR(x31, "Test End\n")
+	RVMODEL_IO_WRITE_STR(x31, "Test End\n")
 
-  # ---------------------------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------------------------
 
-    
-    #endif
-  RVMODEL_HALT
+	#endif
+    RVMODEL_HALT
 
 RVTEST_CODE_END
 
 # Input data section.
-  .data
+	.data
 
 # Output data section.
 RVMODEL_DATA_BEGIN
 test_1_res:
-  .fill 5, 4, -1
+	.fill 5, 4, -1
 test_2_res:
-  .fill 5, 4, -1
+	.fill 5, 4, -1
 test_3_res:
-  .fill 5, 4, -1
+	.fill 5, 4, -1
 test_4_res:
-  .fill 5, 4, -1
+	.fill 5, 4, -1
 test_5_res:
-  .fill 5, 4, -1
+	.fill 5, 4, -1
 
 RVMODEL_DATA_END
