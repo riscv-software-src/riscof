@@ -345,54 +345,110 @@ class MyParser(argparse.ArgumentParser):
         sys.stderr.write('error: %s\n' % message)
         self.print_help()
         raise SystemExit
+    def format_help(self):
+        formatter = self._get_formatter()
+
+        # usage
+        formatter.add_usage(self.usage, self._actions,
+                            self._mutually_exclusive_groups)
+
+        # description
+        formatter.add_text(self.description)
+
+        # positionals, optionals and user-defined groups
+        for action_group in self._action_groups:
+            formatter.start_section(action_group.title)
+            formatter.add_text(action_group.description)
+            formatter.add_arguments(action_group._group_actions)
+            formatter.end_section()
+
+        # epilog
+        formatter.add_text(self.epilog)
+
+        # determine help from format above
+        return formatter.format_help()
+    def print_help(self,file=None):
+        if file is None:
+            file = sys.stdout
+        self._print_message(self.format_help(), file)
+        subparsers_actions = [
+        action for action in self._actions
+        if isinstance(action, argparse._SubParsersAction)]
+        for subparsers_action in subparsers_actions:
+            for choice, subparser in subparsers_action.choices.items():
+               self._print_message("Action '{}'\n\n".format(choice),file)
+               self._print_message("\t"+(subparser.format_help()).replace("\n","\n\t")+"\n",file)
 
 def riscof_cmdline_args():
     parser = MyParser(
         formatter_class=SortingHelpFormatter,
         prog="riscof",
         description="This program checks compliance for a DUT.")
-    required = parser.add_argument_group('required arguments')
-    optional = parser.add_argument_group('optional arguments')
-    optional.add_argument('--config',
+    parser.add_argument('--version','-v',
+                        help='Print version of RISCOF being used',
+                        action='store_true')
+    parser.add_argument('--verbose',
+                        action='store',
+                        default='info',
+                        choices = ['debug','info','warning','error'],
+                        help='[Default=info]',
+                        metavar="")
+    subparsers = parser.add_subparsers(dest='command',title="Action",description="The action to be performed by riscof.",help="List of actions supported by riscof.")
+
+    generatedb = subparsers.add_parser('gendb',help='Generate Database for the standard suite.',formatter_class=SortingHelpFormatter)
+    generatedb.add_argument('--suite',
+                            type= lambda p: str(pathlib.Path(p).absolute()),
+                            action='store',
+                            help='The Path to the custom suite directory.',
+                            metavar= 'PATH')
+    setup = subparsers.add_parser('setup',help='Initiate setup for riscof.',formatter_class=SortingHelpFormatter)
+    setup.add_argument('--dutname',
+                        action='store',
+                        help='Name of DUT plugin. [Default=spike]',
+                        default='spike',
+                        metavar= 'NAME')
+    setup.add_argument('--refname',
+                        action='store',
+                        help='Name of Reference plugin. [Default=riscvOVPsim]',
+                        default='riscvOVPsim',
+                        metavar= 'NAME')
+    validate = subparsers.add_parser('validateyaml',
+                        help='Validate the Input YAMLs using riscv-config.',formatter_class=SortingHelpFormatter)
+    validate.add_argument('--config',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        help='The Path to the config file.',
+                        help='The Path to the config file. [Default=./config.ini]',
                         metavar= 'PATH',
                         default=str(pathlib.Path('./config.ini').absolute())
                           )
-    optional.add_argument('--setup',
-                        action='store_true',
-                        help='Initiate setup for riscof.')
-    optional.add_argument('--validateyaml',
-                        action='store_true',
-                        help='Validate the Input YAMLs using riscv-config')
-    optional.add_argument('--testlist',
-                        action='store_true',
-                        help='Generate the testlist only. [subsumes --validateyaml]')
-    optional.add_argument('--run',
-                        action='store_true',
-                        help='Run riscof. [subsumes --testlist and --validateyaml]')
-    optional.add_argument('--verbose',
+    run = subparsers.add_parser('run',
+                        help='Run the tests on DUT and reference and compare signatures.',formatter_class=SortingHelpFormatter)
+    run.add_argument('--config',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        default='info',
-                        help='debug | info | warning | error',
-                        metavar="")
-    optional.add_argument('--suite',
+                        help='The Path to the config file. [Default=./config.ini]',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./config.ini').absolute())
+                          )
+    run.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
-    optional.add_argument('--dutname',
+    run.add_argument('--no-browser',action='store_true',
+                     help="Do not open the browser for showing the test report.")
+    testlist = subparsers.add_parser('testlist',
+                        help='Generate the test list for the given DUT and suite. Uses the compliance suite by default.',formatter_class=SortingHelpFormatter)
+    testlist.add_argument('--config',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        help='Name of DUT plugin. [used with setup command only]',
-                        default='spike',
-                        metavar= 'NAME')
-    optional.add_argument('--refname',
+                        help='The Path to the config file. [Default=./config.ini]',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./config.ini').absolute())
+                          )
+    testlist.add_argument('--suite',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        help='Name of Reference plugin. [used with setup command only]',
-                        default='riscvOVPsim',
-                        metavar= 'NAME')
-    optional.add_argument('--version','-v',
-                        help='Print version of RISCOF being used',
-                        action='store_true')
+                        help='The Path to the custom suite directory.',
+                        metavar= 'PATH')
     return parser

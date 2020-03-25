@@ -80,25 +80,74 @@ Once you have RISCOF installed, executing ``riscof --help`` should print the fol
 
 .. code-block:: bash
 
-  usage: riscof [-h] --config PATH [--setup] [--validateyaml] [--testlist]
-                [--run] [--verbose] [--suite PATH] [--dutname NAME]
-                [--refname NAME] [--version]
-  
-  This program checks compliance for a DUT.
-  
-  optional arguments:
-    --config PATH   The Path to the config file.
-    --dutname NAME  Name of DUT plugin.
-    --refname NAME  Name of Reference plugin.
-    --run           Run riscof in current directory.
-    --setup         Initiate setup for riscof.
-    --suite PATH    The Path to the custom suite directory.
-    --testlist      Generate the testlist only.
-    --validateyaml  Validate the Input YAMLs using riscv-config
-    --verbose       debug | info | warning | error
-    --version, -v   Print version of RISCOF being used
-    -h, --help      show this help message and exit
 
+    usage: riscof [-h] [--version] [--verbose]
+                  {gendb,setup,validateyaml,run,testlist} ...
+    
+    This program checks compliance for a DUT.
+    
+    optional arguments:
+      --verbose             [Default=info]
+      --version, -v         Print version of RISCOF being used
+      -h, --help            show this help message and exit
+    
+    Action:
+      The action to be performed by riscof.
+    
+      {gendb,setup,validateyaml,run,testlist}
+                            List of actions supported by riscof.
+        gendb               Generate Database for the standard suite.
+        setup               Initiate setup for riscof.
+        validateyaml        Validate the Input YAMLs using riscv-config.
+        run                 Run the tests on DUT and reference and compare
+                            signatures.
+        testlist            Generate the test list for the given DUT and suite.
+                            Uses the compliance suite by default.
+    Action 'gendb'
+    
+    	usage: riscof gendb [-h] [--suite PATH]
+    	
+    	optional arguments:
+    	  --suite PATH  The Path to the custom suite directory.
+    	  -h, --help    show this help message and exit
+    	
+    Action 'setup'
+    
+    	usage: riscof setup [-h] [--dutname NAME] [--refname NAME]
+    	
+    	optional arguments:
+    	  --dutname NAME  Name of DUT plugin. [Default=spike]
+    	  --refname NAME  Name of Reference plugin. [Default=riscvOVPsim]
+    	  -h, --help      show this help message and exit
+    	
+    Action 'validateyaml'
+    
+    	usage: riscof validateyaml [-h] [--config PATH]
+    	
+    	optional arguments:
+    	  --config PATH  The Path to the config file. [Default=./config.ini]
+    	  -h, --help     show this help message and exit
+    	
+    Action 'run'
+    
+    	usage: riscof run [-h] [--config PATH] [--suite PATH] [--no-browser]
+    	
+    	optional arguments:
+    	  --config PATH  The Path to the config file. [Default=./config.ini]
+    	  --no-browser   Do not open the browser for showing the test report.
+    	  --suite PATH   The Path to the custom suite directory.
+    	  -h, --help     show this help message and exit
+    	
+    Action 'testlist'
+    
+    	usage: riscof testlist [-h] [--config PATH] [--suite PATH]
+    	
+    	optional arguments:
+    	  --config PATH  The Path to the config file. [Default=./config.ini]
+    	  --suite PATH   The Path to the custom suite directory.
+    	  -h, --help     show this help message and exit
+    
+    
 Install RISCV-GNU Toolchain
 ---------------------------
 
@@ -266,7 +315,7 @@ the ``riscv-config`` on both the isa and platform yaml files indicated in the ``
 
 .. code-block:: bash
 
-  riscof --config=config.ini --validateyaml
+  riscof validateyaml --config=config.ini
 
 This should print the following:
 
@@ -292,7 +341,7 @@ compliance.
 
 .. code-block:: bash
 
-  riscof --config=config.ini --testlist
+  riscof testlist --config=config.ini
 
 This step calls the validate-step and thus the output adds one more line to the above dump:
 
@@ -328,7 +377,7 @@ guarantee correctness.
 
 .. code-block:: bash
 
-  riscof --config=config.ini --run
+  riscof run --config=config.ini
 
 This should compile and execute the tests on each of the models and end up with the following log:
 

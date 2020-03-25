@@ -55,7 +55,7 @@ Usage
 .. code-block:: bash
 
     cd riscof
-    python -m riscof.dbgen
+    python -m riscof.main gendb
 
 Output:
 

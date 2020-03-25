@@ -43,12 +43,57 @@ def execute():
     fh = logging.FileHandler('run.log', 'w')
     logger.addHandler(fh)
 
-    print('RISCOF: RISC-V Compliance Framework')
-    print('Version: '+riscof.__version__)
-    if (args.version):
-        raise SystemExit
 
-    if (args.run or args.testlist or args.validateyaml):
+    if (args.version):
+        print('RISCOF: RISC-V Compliance Framework')
+        print('Version: '+riscof.__version__)
+        return 0
+    elif (args.command=='setup'):
+        logger.info("Setting up sample plugin requirements [Old files will \
+be overwritten]")
+        try:
+            cwd = os.getcwd()
+            logger.info("Creating sample Plugin directory for [DUT]: " +\
+                    args.dutname + ' [Ref]: '+args.refname)
+            dutname = args.dutname
+            src = os.path.join(constants.root, "Templates/setup/model/")
+            dest = os.path.join(cwd, dutname)
+            distutils.dir_util.copy_tree(src, dest)
+            os.rename(cwd+'/'+args.dutname+'/model_isa.yaml',
+                    cwd+'/'+args.dutname+'/'+args.dutname+'_isa.yaml')
+            os.rename(cwd+'/'+args.dutname+'/model_platform.yaml',
+                    cwd+'/'+args.dutname+'/'+args.dutname+'_platform.yaml')
+            os.rename(cwd+'/'+args.dutname+'/riscof_model.py',
+                    cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py')
+            logger.info("Creating Sample Config File")
+            configfile = open('config.ini','w')
+            configfile.write(constants.config_temp.format(args.refname, \
+                    cwd+'/'+args.refname, args.dutname,cwd+'/'+args.dutname))
+            logger.info('**NOTE**: Please update the paths of the reference \
+and DUT plugins in the config.ini file')
+            configfile.close()
+            return 0
+        except FileExistsError as err:
+            logger.error(err)
+            return 1
+    else:
+        work_dir = constants.work_dir
+        #Creating work directory
+        if not os.path.exists(work_dir):
+            logger.debug('Creating new work directory: ' + work_dir)
+            os.mkdir(work_dir)
+        else:
+            logger.debug('Removing old work directory: ' + work_dir)
+            shutil.rmtree(work_dir)
+            logger.debug('Creating new work directory: ' + work_dir)
+            os.mkdir(work_dir)
+
+    if args.command=='gendb':
+        if args.suite is None:
+            dbgen.generate_standard()
+            logger.info('Database File Generated: '+constants.framework_db)
+
+    if (args.command=='run' or args.command=='testlist' or args.command=='validateyaml'):
         config = configparser.ConfigParser()
         logger.info("Reading configuration from: "+args.config)
         try:
@@ -93,25 +138,6 @@ def execute():
         isa_file = dut.isa_spec
         platform_file = dut.platform_spec
 
-        work_dir = constants.work_dir
-        #Creating work directory
-        if not os.path.exists(work_dir):
-            logger.debug('Creating new work directory: ' + work_dir)
-            os.mkdir(work_dir)
-        else:
-            logger.debug('Removing old work directory: ' + work_dir)
-            shutil.rmtree(work_dir)
-            logger.debug('Creating new work directory: ' + work_dir)
-            os.mkdir(work_dir)
-
-        if args.suite is not None:
-            logger.info("Generating database for custom suite.")
-            work_dir = constants.work_dir
-            constants.suite = args.suite
-            constants.framework_db = os.path.join(work_dir,"framework.yaml")
-            logger.debug('Suite used: '+constants.suite)
-            dbgen.generate()
-            logger.debug('Database File Generated: '+constants.framework_db)
 
         try:
             isa_file, platform_file = riscv_config.check_specs(
@@ -120,8 +146,28 @@ def execute():
             logger.error(msg)
             return 1
 
-        if(args.validateyaml):
-          exit(0)
+        isa_specs = utils.load_yaml(isa_file)
+        platform_specs = utils.load_yaml(platform_file)
+
+    if args.command=='gendb' or args.command=='run' or args.command=='testlist':
+        if args.suite is not None:
+            logger.info("Generating database for custom suite.")
+            work_dir = constants.work_dir
+            constants.suite = args.suite
+            constants.framework_db = os.path.join(work_dir,"database.yaml")
+            logger.debug('Suite used: '+constants.suite)
+            dbgen.generate()
+            logger.info('Database File Generated: '+constants.framework_db)
+
+    if args.command == 'testlist':
+        test_routines.generate_test_pool(isa_specs, platform_specs)
+
+    if args.command=='run':
+        with open(isa_file, "r") as isafile:
+            ispecs = isafile.read()
+
+        with open(platform_file, "r") as platfile:
+            pspecs = platfile.read()
 
         report_objects = {}
         report_objects['date'] = (datetime.now(
@@ -129,19 +175,6 @@ def execute():
         report_objects['version'] = riscof.__version__
         report_objects['dut'] = (dut.__model__).replace("_", " ")
         report_objects['reference'] = (base.__model__).replace("_", " ")
-
-        isa_specs = utils.load_yaml(isa_file)
-        platform_specs = utils.load_yaml(platform_file)
-
-        if(args.testlist):
-            test_routines.generate_test_pool(isa_specs, platform_specs)
-            return 0
-
-        with open(isa_file, "r") as isafile:
-            ispecs = isafile.read()
-
-        with open(platform_file, "r") as platfile:
-            pspecs = platfile.read()
 
         report_objects['isa'] = isa_specs['ISA']
         report_objects['usv'] = isa_specs['User_Spec_Version']
@@ -175,39 +208,14 @@ def execute():
         shutil.copyfile(constants.css,
                         os.path.join(constants.work_dir, "style.css"))
 
-        try:
-            import webbrowser
-            webbrowser.open(reportfile)
-        except:
-            return 0
-    elif (args.setup):
-        logger.info("Setting up sample plugin requirements [Old files will \
-be overwritten]")
-        try:
-            cwd = os.getcwd()
-            logger.info("Creating sample Plugin directory for [DUT]: " +\
-                    args.dutname + ' [Ref]: '+args.refname)
-            dutname = args.dutname
-            src = os.path.join(constants.root, "Templates/setup/model/")
-            dest = os.path.join(cwd, dutname)
-            distutils.dir_util.copy_tree(src, dest)
-            os.rename(cwd+'/'+args.dutname+'/model_isa.yaml',
-                    cwd+'/'+args.dutname+'/'+args.dutname+'_isa.yaml')
-            os.rename(cwd+'/'+args.dutname+'/model_platform.yaml',
-                    cwd+'/'+args.dutname+'/'+args.dutname+'_platform.yaml')
-            os.rename(cwd+'/'+args.dutname+'/riscof_model.py',
-                    cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py')
-            logger.info("Creating Sample Config File")
-            configfile = open('config.ini','w')
-            configfile.write(constants.config_temp.format(args.refname, \
-                    cwd+'/'+args.refname, args.dutname,cwd+'/'+args.dutname))
-            logger.info('**NOTE**: Please update the paths of the reference \
-and DUT plugins in the config.ini file')
-            configfile.close()
-            return 0
-        except FileExistsError as err:
-            logger.error(err)
-            return 1
+        logger.info("Test report generated at "+reportfile+".")
+        if not args.no_browser:
+            try:
+                import webbrowser
+                logger.info("Openning test report in web-browser")
+                webbrowser.open(reportfile)
+            except:
+                return 1
 
 
 if __name__ == "__main__":

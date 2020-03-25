@@ -19,7 +19,7 @@ suite. Please follow the below steps for such contributions:
 
    .. code-block:: bash
    
-     python -m riscof.dbgen
+     python -m riscof.main gendb
 
    The above command will generate a new file: ``framework/database.yaml``
    For more information on the dbgen utility please refer: :ref:`database`
