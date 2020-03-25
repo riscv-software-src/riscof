@@ -5,9 +5,11 @@ import re
 from riscof.utils import yaml
 import riscof.utils as utils
 import collections
-
+import logging
+from git import InvalidGitRepositoryError
 import riscof.constants as constants
 
+logger = logging.getLogger(__name__)
 
 class DbgenError(Exception):
     pass
@@ -118,7 +120,11 @@ def createdict(file):
 def generate_standard():
     list = dirwalk(constants.suite)
     repo_path = os.path.normpath(constants.root+"/../")
-    repo = git.Repo(repo_path)
+    try:
+        repo = git.Repo(repo_path)
+    except InvalidGitRepositoryError:
+        logger.error("This feature is available for developers only.")
+        raise SystemExit
     dbfile = constants.framework_db
     print(dbfile)
     tree = repo.tree()

@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.14.1] - 
+### Changed
+- Changed the command line args to use subparsers and added relevant documentation.
+
 ## [1.14.0] - 2020-03-21
 ### Fixed 
 - Migrated C-extension tests to those available on github. This required adding and fixing special
