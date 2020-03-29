@@ -1,6 +1,31 @@
 stages:
+    - pre-merge-check
     - deploy
-    - doc
+    - post-deploy-check
+
+pre-merge-check:
+  stage: pre-merge-check
+  script:
+    - export PATH="/home/gitlab-runner/.pyenv/bin:$PATH"
+    - eval "$(pyenv init -)"
+    - eval "$(pyenv virtualenv-init -)"
+    - pyenv activate venv
+    - ./version_check.sh
+    - pip install --upgrade pip
+    - pip install -r riscof/requirements.txt -U
+    - source /tools/setup.sh
+    - git clone https://gitlab.com/incoresemi/riscof-plugins.git
+    - python -m riscof.main --help
+    - python -m riscof.main setup --refname=riscvOVPsim --dutname=spike_simple
+    - sed -i 's/riscof/riscof\/riscof-plugins/g' config.ini
+    - cat config.ini
+    - python -m riscof.main run --config=config.ini --no-browser
+    - python setup.py sdist
+  only:
+    refs:
+      - merge_requests
+  tags:
+    - incore-group
 
 deploy:
     stage: deploy
@@ -8,27 +33,41 @@ deploy:
         - python setup.py sdist
         - python -m twine upload --username $pypiusername --password $pypipassword dist/*
         - python /scratch/version-extract.py
+        - cd docs
+        - make latexpdf
+        - cd ..
+        - mv docs/build/latex/RISCVComplianceFramework.pdf .
     only:
         refs:
             - master
-    tags:
-        - incore-group 
-    except:
-      - schedules
-
-doc:
-    stage: doc
-    script:
-      - cd docs
-      - make latexpdf
-      - cd ..
-      - mv docs/build/latex/RISCVComplianceFramework.pdf .
-    only:
-      refs:
-        - master
     artifacts:
       name: RISCVComplianceFramework
       paths: 
         - ./RISCVComplianceFramework.pdf
     tags:
-      - incore-group
+        - incore-group 
+    except:
+      - schedules
+
+post-deploy-check:
+  stage: post-deploy-check
+  script:
+    - export PATH="/home/gitlab-runner/.pyenv/bin:$PATH"
+    - eval "$(pyenv init -)"
+    - eval "$(pyenv virtualenv-init -)"
+    - pyenv activate venv
+    - pip install --upgrade pip
+    - pip install -U riscof
+    - source /tools/setup.sh
+    - git clone https://gitlab.com/incoresemi/riscof-plugins.git
+    - riscof --help
+    - riscof setup --refname=riscvOVPsim --dutname=spike_simple
+    - sed -i 's/riscof/riscof\/riscof-plugins/g' config.ini
+    - cat config.ini
+    - riscof run --config=config.ini --no-browser
+  only:
+    refs:
+      - master
+  tags:
+    - incore-group
+

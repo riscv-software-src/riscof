@@ -6,9 +6,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
-## [1.14.1] - 
+## [1.15.0] - 2020-03-29
+### Added
+- Supports riscv-config version > 2.0
+- Added Test-format spec to the docs
+- adding ci for checks on each pull-request. 
+### Fixed
+- Fixed hyperlink to test-format-spec in new-test sections
+
+## [1.14.1] - 2020-03-25
 ### Changed
 - Changed the command line args to use subparsers and added relevant documentation.
+
 
 ## [1.14.0] - 2020-03-21
 ### Fixed 
