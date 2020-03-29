@@ -5,6 +5,7 @@ Welcome to RISCOF
 .. toctree::
    :glob:
    :maxdepth: 2
+   :numbered:
 
    intro
    overview
@@ -13,7 +14,7 @@ Welcome to RISCOF
    testlist
    database
    newtest
-   test_format
+   testformat
    RISCV-Config [External] <https://riscv-config.readthedocs.io/>
    code-doc
 
