@@ -69,13 +69,13 @@ The *test suite signature* is defined as a set of :ref:`test signature <test_sig
 
 The target shell
 ^^^^^^^^^^^^^^^^
-The :ref:`target shell <target_shell>` is the software and hardware environment around the :ref:`test target <test_target>` that enables it to communicate with the framework, including assembling and linking tests, loading tests into memory, executing tests, and extracting the signature. The input to the :ref:`target shell <target_shell>` is a .S :ref:`compliance test <compliance_test>` file, and the output is a :ref:`test signature <test_signature>`.
+The :ref:`target shell<target_shell>` is a vendor-supplied software and hardware environment around the :ref:`test target <test_target>` that enables it to communicate with the framework, including assembling and linking tests, loading tests into memory, executing tests, and extracting the signature. The input to the :ref:`target shell<target_shell>` is a .S :ref:`compliance test <compliance_test>` file, and the output is a :ref:`test signature <test_signature>`.
 
 .. _test_target:
 
 The test target
 ^^^^^^^^^^^^^^^
-The :ref:`test target <test_target>` can be either a RISC-V Instruction Set Simulator (ISS), a RISC-V emulator, a RISC-V RTL model running on an HDL simulator, a RISC-V FPGA implementation or a physical chip. Each of the target types offers specific features and represents specific interface challenges. It is a role of the  :ref:`target shell <target_shell>` to handle different targets while using the same :ref:`compliance test pool <compliance_test_pool>` as a test source.
+The :ref:`test target <test_target>` can include a RISC-V Instruction Set Simulator (ISS), a RISC-V emulator, a RISC-V RTL model running on an HDL simulator, a RISC-V FPGA implementation or a physical chip or ohter model type. Each of the target types offers specific features and represents specific interface challenges. It is a role of the  :ref:`target shell <target_shell>` to handle different targets while using the same :ref:`compliance test pool <compliance_test_pool>` as a test source.
 
 .. The RISC-V processor (device) configuration
 .. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -90,6 +90,8 @@ The :ref:`compliance test framework <compliance_test_framework>` selects and con
 
 Compliance test pool 
 --------------------
+
+.. _test_pool_structure:
 
 Test pool structure
 ^^^^^^^^^^^^^^^^^^^
@@ -129,7 +131,7 @@ The naming convention of a single test:
   
   * **test number** - number of the test. It is expected that multiple tests may be specified for one test objective. We recommend to break down complex tests into a set of small tests. A simple rule of thumb is one simple test objective = one simple test. The code becomes more readable and the test of the objective can be improved just by adding :ref:`test case <test_case>`. The typical example are instruction tests for the F extension. 
   
-  *  A test name shall not include an ISA category as part of its name (i.e. the directory, subdirectory names). Experience has shown that including ISA category in the test name leads to very long test names. Instead, we have introduced the <<Test pool structure,test pool structure>> where the full name is composed of the test path in the <<Test pool structure,test pool structure>> and the simple test name. Since full names can be reconstructed easily it is not necessary to include the path in test names.
+  *  A test name shall not include an ISA category as part of its name (i.e. the directory, subdirectory names). Experience has shown that including ISA category in the test name leads to very long test names. Instead, we have introduced the :ref:`Test pool structure<test_pool_structure>` where the full name is composed of the test path in the :ref:`Test pool structure<test_pool_structure>` and the simple test name. Since full names can be reconstructed easily it is not necessary to include the path in test names.
 
 The test structure of a compliance test
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

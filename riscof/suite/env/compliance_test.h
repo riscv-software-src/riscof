@@ -19,18 +19,17 @@
 #define RVTEST_ISA(_STR)
 
 //RV_COMPLIANCE_CODE_BEGIN
-#define RVTEST_CODE_BEGIN                                               \
-        .section .text.init;                                            \
-        .align  6;                                                      \
-        .weak stvec_handler;                                            \
-        .weak mtvec_handler;                                            \
-        .globl _start;                                                  \
-_start:                                                                 \
-        RVMODEL_BOOT                                                    \
+#define RVTEST_CODE_BEGIN                                         \
+  .section .text.init;                                            \
+  .align  6;                                                      \
+  .weak stvec_handler;                                            \
+  .weak mtvec_handler;                                            \
+  .globl _start;                                                  \
+_start:                                                           \
 begin_testcode:
 
 //RV_COMPLIANCE_CODE_END                                                             
-#define RVTEST_CODE_END                                                \
+#define RVTEST_CODE_END                                           \
         unimp               
 
 #define RVTEST_CASE(_PNAME,_DSTR)                               

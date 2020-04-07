@@ -32,7 +32,7 @@
 #include "compliance_model.h"
 
 RVTEST_ISA("RV32IM")
-
+RVMODEL_BOOT
 RVTEST_CODE_BEGIN
 
 	RVMODEL_IO_INIT

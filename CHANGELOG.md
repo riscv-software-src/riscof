@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.15.1] - 2020-04-07
+### Added
+- doc updates for test-format structure
+### Changed
+- RVMODEL_BOOT is no longer subsumed within the RVTEST_COMPLIANCE_BEGIN macro
+
+
 ## [1.15.0] - 2020-03-29
 ### Added
 - Supports riscv-config version > 2.0
