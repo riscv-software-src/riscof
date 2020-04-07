@@ -6,7 +6,6 @@ import sys
 import subprocess
 import operator
 import shlex
-import riscof.utils as utils
 import ruamel
 from ruamel.yaml import YAML
 
@@ -85,7 +84,7 @@ class makeUtil():
 
         """
         assert tname in self.targets, "Target does not exist."
-        utils.shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
+        shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
     def execute_all(self,cwd):
         """
         Function to execute all the defined targets.
@@ -95,7 +94,7 @@ class makeUtil():
         :type cwd: str
 
         """
-        utils.shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
+        shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
 
 
 class Command():
