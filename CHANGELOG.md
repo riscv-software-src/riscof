@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.15.2] - 2020-05-18
+- changed python vrsion to be 3.6 or above. This makes installation of python easy
+- update docs with more details on installation and fixed other typos as well.
+
 ## [1.15.1] - 2020-04-07
 ### Added
 - doc updates for test-format structure

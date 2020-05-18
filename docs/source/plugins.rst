@@ -9,14 +9,14 @@ provide a quick and standard way of building any model, compiling any/all the te
 executing the tests on the models. 
 
 Generate Templates
-------------------
+==================
 
 A sample template of the plugin and all other required collaterals can be generated through RISCOF
 using the following command :
 
 .. code-block:: bash
 
-  riscof --setup --refname=riscvOVPsim --dutname=spike_simple
+  riscof setup --refname=riscvOVPsim --dutname=spike_simple
 
 This above command should generate a spike_simple folder with the following contents:
 
@@ -42,7 +42,7 @@ The command will also generate a ``config.ini`` file with the following contents
   ispec=/scratch/git-repo/incoresemi/riscof/spike_simple/spike_simple_isa.yaml                                 
   pspec=/scratch/git-repo/incoresemi/riscof/spike_simple/spike_simple_platform.yaml
 
-Post running the ``--setup`` command the user needs to make the following changes for:
+Post running the ``setup`` command the user needs to make the following changes for:
 
 1. Fix the paths in the ``config.ini`` to point to the folder containing the respective riscof_*.py files.
 2. The macros in the ``spike_simple/env/compliance_model.h`` can be updated based on the model. Definitions of
@@ -63,7 +63,7 @@ Please note the user is free to add more custom functions in this file which are
 three base functions (as mentioned above).
 
 Config.ini Syntax
------------------
+=================
 
 The config.ini file generate using the above command is used by RISCOF to locate the DUT and Golden
 plugins and necessary collaterals. The config file also allows you to define specific nodes/fields
@@ -76,7 +76,7 @@ The idea here is to have a single place of change which is easy rather than hard
 within the plugins
 
 Function Definitions
---------------------
+====================
 
 We now define what are the various arguments and expected functionality of each of the above
 mentioned functions. Please note, this is not strict guide and the users can choose to perform
@@ -84,7 +84,8 @@ different actions in different functions as opposed to what is outlined in this 
 they comply with the order of the functions being called and the signatures are generated in their respective directories at the end of the runTest function.
 
 initialize (suite, workdir, env)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------
+
 This function is typically meant to create and initialize all necessary variables such as :
 compilation commands, elf2hex utility command, objdump command, include directories, etc.
 This function provides the following arguments which can be used:
@@ -115,7 +116,7 @@ An example of this function is shown below:
 
 
 build(isa_yaml, platform_yaml)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 This function is used to build the DUT model/target. This can involve actions such as configuring a
 simulator or building an RTL executable. This function provides the following arguments which can be
 used:
@@ -134,7 +135,7 @@ An example of this function is show below:
     self.isa = ispec['ISA']
 
 runTests(testlist)
-^^^^^^^^^^^^^^^^^^
+------------------
 
 This function is responsible for executing/running each test on the mode and produce individual
 signature files. A common approach is to create a simple Makefile with each test as a target using
@@ -218,12 +219,12 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
       make.execute_all(self.work_dir)
 
 Other Utilities available
--------------------------
+=========================
 
 RISCOF also provides various standard and quick utilities that can be used by the plugins
 
 logger
-^^^^^^
+------
 
 This utility is used for colored and prioritized printing on the terminal. It provides the following
 levels (in increasing order)
@@ -239,7 +240,7 @@ Usage:
   logger.debug('Performing Compile')
 
 Other utilities
-^^^^^^^^^^^^^^^
+---------------
 
 More utilities like makeUtil and shellcommand execution are available to the users. Details can be
 found here: :ref:`utils`

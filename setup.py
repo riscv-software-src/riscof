@@ -26,7 +26,7 @@ setup(name="riscof",
       description="Risc-V Compliance Framework",
       long_description=long_description,
       classifiers=[
-          "Programming Language :: Python :: 3.7",
+          "Programming Language :: Python :: 3.6",
           "License :: OSI Approved :: BSD License",
           "Development Status :: 4 - Beta"
       ],
@@ -49,7 +49,7 @@ setup(name="riscof",
           ]
       },
       install_requires=read_requires(),
-      python_requires=">=3.7.0",
+      python_requires=">=3.6.0",
       entry_points={
           "console_scripts": ["riscof=riscof.main:execute"],
       })
