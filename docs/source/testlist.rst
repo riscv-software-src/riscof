@@ -10,7 +10,7 @@ generated using the following command:
 
 .. code-block:: bash
 
-  riscof --config=config.ini --testlist
+  riscof testlist --config=config.ini 
 
 The above command generates a file: ``riscof_work/test_list.yaml``. This file has the following
 syntax:

@@ -12,8 +12,8 @@ The database can be generated for a given suite/folder using the ``dbgen`` (a.k.
 generator) utility available for developers in the RISCOF git repository. 
 
 
-**NOTE**: This utility is meant for developers contributing to the assembly suite and is not 
-intended to be used as a standalone utility.
+.. warning:: This utility is meant for developers contributing to the assembly suite and is not 
+  intended to be used as a standalone utility.
 
 The ``dbgen`` utility recursively walks the specified directory/suite/modified to find all .S files 
 in them and constructs a dictionary of sorts, for the framework.

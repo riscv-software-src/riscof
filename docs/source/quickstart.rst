@@ -7,74 +7,108 @@ Quickstart
 This doc is meant to serve as a quick-guide to setup RISCOF and perform a sample compliance check
 between ``spike`` (DUT in this case) and ``riscvOVPsim`` (Golden model in this case).
 
-Install Python Dependencies
+Install Python
+==============
+
+Ubuntu
+------
+
+Ubuntu 17.10 and 18.04 by default come with python-3.6.9 which is sufficient for using riscv-config.
+
+If you are are Ubuntu 16.10 and 17.04 you can directly install python3.6 using the Universe
+repository::
+
+  $ sudo apt-get install python3.6
+  $ pip3 install --upgrade pip
+
+If you are using Ubuntu 14.04 or 16.04 you need to get python3.6 from a Personal Package Archive 
+(PPA)::
+
+  $ sudo add-apt-repository ppa:deadsnakes/ppa
+  $ sudo apt-get update
+  $ sudo apt-get install python3.6 -y 
+  $ pip3 install --upgrade pip
+
+You should now have 2 binaries: ``python3`` and ``pip3`` available in your $PATH. 
+You can check the versions as below::
+
+  $ python3 --version
+  Python 3.6.9
+  $ pip3 --version
+  pip 20.1 from <user-path>.local/lib/python3.6/site-packages/pip (python 3.6)
+
+Centos:7
+--------
+The CentOS 7 Linux distribution includes Python 2 by default. However, as of CentOS 7.7, Python 3 
+is available in the base package repository which can be installed using the following commands::
+
+  $ sudo yum update -y
+  $ sudo yum install -y python3
+  $ pip3 install --upgrade pip
+
+For versions prior to 7.7 you can install python3.6 using third-party repositories, such as the 
+IUS repository::
+
+  $ sudo yum update -y
+  $ sudo yum install yum-utils
+  $ sudo yum install https://centos7.iuscommunity.org/ius-release.rpm
+  $ sudo yum install python36u
+  $ pip3 install --upgrade pip
+
+You can check the versions::
+
+  $ python3 --version
+  Python 3.6.8
+  $ pip --version
+  pip 20.1 from <user-path>.local/lib/python3.6/site-packages/pip (python 3.6)
+
+
+Using Virtualenv for Python 
 ---------------------------
 
-RISCOF requires `pip` and `python` (>=3.7) to be available on your system. If you have issues, instead of
-installing either of these directly on your system, we suggest using a virtual environment
-like `pyenv` to make things easy.
+Many a times users face issues in installing and managing multiple python versions. This is actually 
+a major issue as many gui elements in Linux use the default python versions, in which case installing
+python3.6 using the above methods might break other software. We thus advise the use of **pyenv** to
+install python3.6.
 
-Installing Pyenv [optional]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For Ubuntu and CentosOS, please follow the steps here: https://github.com/pyenv/pyenv#basic-github-checkout
 
-If you are working on Ubuntu/Debian systems make sure you have the following libraries installed:
+RHEL users can find more detailed guides for virtual-env here: https://developers.redhat.com/blog/2018/08/13/install-python3-rhel/#create-env
 
-.. code-block:: bash
+Once you have pyenv installed do the following to install python 3.6.0::
 
-  $ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+  $ pyenv install 3.6.0
+  $ pip3 install --upgrade pip
+  $ pyenv shell 3.6.0
+  
+You can check the version in the **same shell**::
 
-Download and install pyenv:
-
-.. code-block:: bash
-
-  $ curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
-
-Add the following lines to your .bashrc:
-
-.. code-block:: bash
-
-  $ export PATH="/home/<username>/.pyenv/bin:$PATH"
-  $ eval "$(pyenv init -)"
-  $ eval "$(pyenv virtualenv-init -)"
-
-Open a new terminal and create a virtual environment using the following
-
-.. code-block:: bash
-
-  $ pyenv install 3.7.0
-  $ pyenv virtualenv 3.7.0 riscof_env
-
-
-Now you can activate this virtual environment using the following command:
-
-.. code-block:: bash
-
-  $ pyenv activate riscof_env
   $ python --version
+  Python 3.6.0
+  $ pip --version
+  pip 20.1 from <user-path>.local/lib/python3.6/site-packages/pip (python 3.6)
 
 Install RISCOF
------------------
+==============
 
-**NOTE**: If you are using `pyenv` as mentioned above, make sure to enable that environment before
-performing the following steps.
+.. note:: If you are using `pyenv` as mentioned above, make sure to enable that environment before
+ performing the following steps.
 
 .. code-block:: bash
 
-  $ pip install riscof
+  $ pip3 install riscof
 
 To update an already installed version of RISCOF to the latest version:
 
 .. code-block:: bash
 
-  $ pip install -U riscof
+  $ pip3 install -U riscof
 
 To checkout a specific version of riscof:
 
 .. code-block:: bash
 
-  $ pip install riscof==1.x.x
+  $ pip3 install riscof==1.x.x
 
 Once you have RISCOF installed, executing ``riscof --help`` should print the following on the terminal:
 
@@ -149,27 +183,45 @@ Once you have RISCOF installed, executing ``riscof --help`` should print the fol
     
     
 Install RISCV-GNU Toolchain
----------------------------
+===========================
 
 This guide will use the 32-bit riscv-gnu tool chain to compile the compliance suite.
+If you already have the 32-bit gnu-toolchain available, you can skip to the next section.
 
-**NOTE**: The git clone and installation will take significant time. Please be patient!
+.. note:: The git clone and installation will take significant time. Please be patient. If you face
+   issues with any of the following steps please refer to
+   https://github.com/riscv/riscv-gnu-toolchain for further help in installation.
+
+
+Ubuntu Users
+------------
 
 .. code-block:: bash
-
-  $ mkdir /path/to/install/riscv/toolchain
-  $ export RISCV=/path/to/install/riscv/toolchain
-  $ sudo apt-get install autoconf automake autotools-dev curl libmpc-dev libmpfr-dev libgmp-dev libusb-1.0-0-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev device-tree-compiler pkg-config libexpat-dev
-  $ git clone --recursive https://github.com/riscv/riscv-opcodes.git
+  
+  $ sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev \
+        libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool \
+        patchutils bc zlib1g-dev libexpat-dev
   $ git clone --recursive https://github.com/riscv/riscv-gnu-toolchain
+  $ git clone --recursive https://github.com/riscv/riscv-opcodes.git
   $ cd riscv-gnu-toolchain
-  $ ./configure --prefix=$RISCV --with-arch=rv32gc --with-abi=ilp32d # for  32-bit toolchain
-  $ make
+  $ ./configure --prefix=/path/to/install --with-arch=rv32gc --with-abi=ilp32d # for 32-bit toolchain
+  $ [sudo] make # sudo is required depending on the path chosen in the previous setup
 
-Make sure to add the path ``/path/to/install/riscv/toolchain/bin`` to your `$PATH` in the .bashrc
-With this you should now have all the following available as command line arguments:
+CentosOS/RHEL
+-------------
 
 .. code-block:: bash
+
+  $ sudo yum install autoconf automake python3 libmpc-devel mpfr-devel gmp-devel \
+        gawk  bison flex texinfo patchutils gcc gcc-c++ zlib-devel expat-devel
+  $ git clone --recursive https://github.com/riscv/riscv-gnu-toolchain
+  $ git clone --recursive https://github.com/riscv/riscv-opcodes.git
+  $ cd riscv-gnu-toolchain
+  $ ./configure --prefix=/path/to/install --with-arch=rv32gc --with-abi=ilp32d # for 32-bit toolchain
+  $ [sudo] make # sudo is required depending on the path chosen in the previous setup
+
+Make sure to add the path ``/path/to/install`` to your `$PATH` in the .bashrc/cshrc
+With this you should now have all the following available as command line arguments::
 
   riscv32-unknown-elf-addr2line      riscv32-unknown-elf-elfedit
   riscv32-unknown-elf-ar             riscv32-unknown-elf-g++
@@ -188,31 +240,27 @@ With this you should now have all the following available as command line argume
   riscv32-unknown-elf-strings        riscv32-unknown-elf-strip
 
 Install DUT and Golden Models
------------------------------
+=============================
 
 This guide is going to prove compliance of the spike model (the DUT) against the riscvOVPsim model
 (the Golden model), both of which need to be installed.
 
 Installing SPIKE (a.k.a riscv-isa-sim)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------
 
 .. code-block:: bash
 
   $ git clone https://github.com/riscv/riscv-isa-sim.git
-  $ export RISCV=/path/to/install/riscv/toolchain
   $ cd riscv-isa-sim
   $ mkdir build
   $ cd build
-  $ ../configure --prefix=$RISCV
+  $ ../configure --prefix=/path/to/install
   $ make
-  $ make install
+  $ [sudo] make install #sudo is required depending on the path chosen in the previous setup
 
-Once installed, executing ``spike-help`` should print the following on your terminal:
+Make sure to add the path ``/path/to/install`` to your `$PATH` in the .bashrc/cshrc
+Once installed, executing ``spike`` on the terminal should print the following::
 
-.. code-block::
-
-  Spike RISC-V ISA Simulator 1.0.1-dev
-  
   usage: spike [host options] <target program> [target options]
   Host Options:
     -p<n>                 Simulate <n> processors [default 1]
@@ -222,49 +270,40 @@ Once installed, executing ``spike-help`` should print the following on your term
     -d                    Interactive debug mode
     -g                    Track histogram of PCs
     -l                    Generate a log of execution
-    -h, --help            Print this help message
+    -h                    Print this help message
     -H                    Start halted, allowing a debugger to connect
     --isa=<name>          RISC-V ISA string [default RV64IMAFDC]
-    --varch=<name>        RISC-V Vector uArch string [default v128:e32:s128]
     --pc=<address>        Override ELF entry point
     --hartids=<a,b,...>   Explicitly specify hartids, default is 0,1,...
     --ic=<S>:<W>:<B>      Instantiate a cache model with S sets,
     --dc=<S>:<W>:<B>        W ways, and B-byte blocks (with S and
     --l2=<S>:<W>:<B>        B both powers of 2).
-    --log-cache-miss      Generate a log of cache miss
     --extension=<name>    Specify RoCC Extension
     --extlib=<name>       Shared library to load
     --rbb-port=<port>     Listen on <port> for remote bitbang connection
     --dump-dts            Print device tree string and exit
     --disable-dtb         Don't write the device tree blob into memory
-    --dm-progsize=<words> Progsize for the debug module [default 2]
-    --dm-sba=<bits>       Debug bus master supports up to <bits> wide accesses [default 0]
-    --dm-auth             Debug module requires debugger to authenticate
-    --dmi-rti=<n>         Number of Run-Test/Idle cycles required for a DMI access [default 0]
-    --dm-abstract-rti=<n> Number of Run-Test/Idle cycles required for an abstract command to execute [default 0]
-    --dm-no-hasel         Debug module supports hasel
-    --dm-no-abstract-csr  Debug module won't support abstract to authenticate
-    --dm-no-halt-groups   Debug module won't support halt groups
-
+    --progsize=<words>    Progsize for the debug module [default 2]
+    --debug-sba=<bits>    Debug bus master supports up to <bits> wide accesses [default 0]
+    --debug-auth          Debug module requires debugger to authenticate
+  
 
 Installing riscvOVPsim
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
 .. code-block:: bash
 
   $ git clone https://github.com/riscv/riscv-ovpsim.git --recursive
   $ export PATH=$PATH:<path_downloaded>/riscv-ovpsim/bin/Linux64/
 
-Once installed, executing ``riscvOVPsim.exe --version`` should print the version of the binary:
-
-.. code-block:: bash
+Once installed, open a new terminal and check the version::
 
   $ riscvOVPsim.exe --version 
   20200206.0
 
 
 Create Neccesary Env Files
---------------------------
+==========================
 
 RISCOF requires python plugins for each model (DUT and Golden) to be submitted. These plugins
 provide a quick and standard way of building the model, compiling the tests and executing the tests
@@ -275,22 +314,33 @@ RISCOF as a header file: ``compliance_model.h``.
 
 For the sake of this guide, we will use some of the pre-built plugins for riscof available at: 
 `riscof-plugins <https://gitlab.com/incoresemi/riscof-plugins>`_. We will specifically use the
-spike_simple and riscvOVPsim plugins for
-this guide. 
+spike_simple and riscvOVPsim plugins. 
 
-**NOTE**: If you are using `pyenv` as mentioned above, make sure to enable that evironment before
-performing the following steps since we will now start using riscof.
+.. note:: If you are using `pyenv` as mentioned above, make sure to enable that evironment before
+  performing the following steps since we will now start using riscof.
 
 .. code-block:: bash
   
-  git clone https://gitlab.com/incoresemi/riscof-plugins.git
-  cd riscof-plugins
+  $ git clone https://gitlab.com/incoresemi/riscof-plugins.git
 
-Copy the ``conig.ini`` file generated using the ``--setup`` above and make sure to change the
-ReferencePluginPath, DUTPluginPath and the ispec/pspec paths. The final config.ini should look
-similar to :
-  
-.. code-block:: bash
+To create necessary environment files use the following command::
+
+  $ riscof setup --dutname=spike_simple --refname=riscvOVPsim
+
+The above command will generate a file named ``config.ini`` and a folder named ``spike_simple``.
+The ``config.ini`` file is used to capture specific paths of the plugins of reference and dut model,
+along with the paths to isa and platform input YAMLs. The folder ``spike_simple`` contains 
+various templates of files that would be required for compliance of any generic DUT. 
+Components of this folder will be modified by the user as per the DUT spec. 
+Since we are going to use pre-built plugins for this guide, we will ignore the ``spike_simple``
+folder for now. 
+
+.. note:: For specific examples on modifications to environment files, please check the 
+   corresponding files for various targets available in the riscof-plugins directory.
+
+Based on the path you have downloaded the riscof-plugins directory, you will need to modify the
+``config.ini`` file to look similar to the following::
+
 
   [RISCOF]                                                                                            
   ReferencePlugin=riscvOVPsim                                                                         
@@ -304,10 +354,10 @@ similar to :
   ispec=/path/to/riscof-plugins/spike_simple/spike_simple_isa.yaml                                           
   pspec=/path/to/riscof-plugins/spike_simple/spike_simple_platform.yaml 
 
-
+We are now ready to run compliance via RISCOF
 
 Running RISCOF
---------------
+==============
 
 The RISCOF run is divided into three steps as shown in the overview Figure.
 The first step is to check if the input yaml files are configured correctly. This step internally calls
