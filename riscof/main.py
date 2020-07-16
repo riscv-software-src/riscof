@@ -161,6 +161,8 @@ and DUT plugins in the config.ini file')
             logger.debug('Suite used: '+constants.suite)
             dbgen.generate()
             logger.info('Database File Generated: '+constants.framework_db)
+            constants.env = os.path.join(args.suite,"env/")
+            logger.info('Env path set to'+constants.env)
 
     if args.command == 'testlist':
         test_routines.generate_test_pool(isa_specs, platform_specs)

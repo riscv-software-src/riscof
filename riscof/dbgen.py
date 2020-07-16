@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 class DbgenError(Exception):
     pass
 
+isa_regex = re.compile('''RVTEST_ISA\(\"(?P<isa>.*)\"\)''')
+case_regex = re.compile('''RVTEST_CASE\((?P<id>.*),\"(?P<cond>.*)\",(?P<cov_label>.*)\)''')
 
 def dirwalk(dir,ignore_dirs=[]):
     '''
@@ -67,9 +69,10 @@ def createdict(file):
         code_start = False
         part_start = False
         isa = None
-        part_number = ''
+        part_number = 'START'
         i = 0
         part_dict = {}
+        line_prev = ''
         while i < len(lines):
             line = lines[i]
             i += 1
@@ -78,37 +81,43 @@ def createdict(file):
                 continue
             if (line.startswith("#") or line.startswith("//")):
                 continue
-            if "RVTEST_ISA" in line:
-                isa = (((line.strip()).replace('RVTEST_ISA(\"',
-                                               "")).replace("\")", "")).strip()
+            re_search = isa_regex.search(line)
+            if re_search is not None:
+                isa = re_search.group('isa')
             if "RVTEST_CASE(" in line:
-                args = [(temp.strip()).replace("\"", '') for temp in (
-                    line.strip()).replace('RVTEST_CASE', '')[1:-1].split(',')]
-                part_number = args[0]
-                conditions = (','.join(args[1:]).replace("//", '')).split(";")
-                while (line.endswith('\\')):
-                    line = lines[i]
-                    i += 1
-                    line = (line.strip()).replace("//", '')
-                    conditions.append(str(
-                        (line.replace("\")", '')).replace("//", '')).split(";"))
-                    # args.append([(temp.strip()).replace("\")",'') for temp in (line.strip())[:-1]].split)
-                    if ("\")" in line):
-                        break
-                if (part_number in part_dict.keys()):
-                    logger.warning("{}:{}: Incorrect Naming of Test Case after ({})".
-                          format(file, i, part_number))
-                    raise DbgenError
+                temp = ''
+                lno = i
+                if line.endswith('\\'):
+                    temp += (line.strip()).replace("\\", '')
+                    while (line.endswith('\\')):
+                        line = lines[i]
+                        i += 1
+                        temp += (line.strip()).replace("\\", '')
+                else:
+                    temp = line.strip()
+                re_search = case_regex.search(temp)
+                if re_search is not None:
+                    part_number = re_search.group("id")
+                    conditions = (re_search.group("cond").replace("//",'')).split(";")
+                    labels = [l.strip() for l in (re_search.group("cov_label")).split(",")]
 
-                check = []
-                define = []
-                for cond in conditions:
-                    cond = cond.strip()
-                    if (cond.startswith('check')):
-                        check.append(cond)
-                    elif (cond.startswith('def')):
-                        define.append(cond)
-                part_dict[part_number] = {'check': check, 'define': define}
+                    if (part_number in part_dict.keys()):
+                        logger.warning("{}:{}: Incorrect Naming of Test Case after ({})".
+                              format(file, lno, part_number))
+                        raise DbgenError
+
+                    check = []
+                    define = []
+                    for cond in conditions:
+                        cond = cond.strip()
+                        if (cond.startswith('check')):
+                            check.append(cond)
+                        elif (cond.startswith('def')):
+                            define.append(cond)
+                    part_dict[part_number] = {'check': check, 'define': define,'coverage_labels':labels}
+                else:
+                    logger.warning("{}:{}: Incorrect Case String ({})".format(file, lno, part_number))
+                    raise DbgenError
     if (isa is None):
         logger.warning("{}:ISA not specified.".format( file))
         raise DbgenError
