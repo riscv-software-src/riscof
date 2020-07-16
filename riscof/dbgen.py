@@ -15,7 +15,7 @@ class DbgenError(Exception):
     pass
 
 
-def dirwalk(dir):
+def dirwalk(dir,ignore_dirs=[]):
     '''
         Recursively searches a directory and returns a list of
         relative paths(from the directory) of the files which end with ".S"(excluding any folder named wip).
@@ -25,8 +25,8 @@ def dirwalk(dir):
         :return: a list of all .S file paths relative to the riscof home.
     '''
     list = []
-    for root, dirs, files in os.walk(os.path.join(constants.root, dir)):
-        if "/wip" not in root:
+    for root, dirs, files in os.walk(dir):
+        if not any([i in root for i in ignore_dirs]):
             path = root[root.find(dir):] + "/"
             for file in files:
                 if file.endswith(".S"):
@@ -84,21 +84,22 @@ def createdict(file):
             if "RVTEST_CASE(" in line:
                 args = [(temp.strip()).replace("\"", '') for temp in (
                     line.strip()).replace('RVTEST_CASE', '')[1:-1].split(',')]
+                part_number = args[0]
+                conditions = (','.join(args[1:]).replace("//", '')).split(";")
                 while (line.endswith('\\')):
                     line = lines[i]
                     i += 1
                     line = (line.strip()).replace("//", '')
-                    args[1] = args[1] + str(
-                        (line.replace("\")", '')).replace("//", ''))
+                    conditions.append(str(
+                        (line.replace("\")", '')).replace("//", '')).split(";"))
                     # args.append([(temp.strip()).replace("\")",'') for temp in (line.strip())[:-1]].split)
                     if ("\")" in line):
                         break
-                if (args[0] in part_dict.keys()):
-                    print("{}:{}: Incorrect Naming of Test Case after ({})".
+                if (part_number in part_dict.keys()):
+                    logger.warning("{}:{}: Incorrect Naming of Test Case after ({})".
                           format(file, i, part_number))
                     raise DbgenError
-                part_number = args[0]
-                conditions = (args[1].replace("//", '')).split(";")
+
                 check = []
                 define = []
                 for cond in conditions:
@@ -109,16 +110,16 @@ def createdict(file):
                         define.append(cond)
                 part_dict[part_number] = {'check': check, 'define': define}
     if (isa is None):
-        print("{}:ISA not specified.", file)
+        logger.warning("{}:ISA not specified.".format( file))
         raise DbgenError
     if len(part_dict.keys()) == 0:
-        print("{}: Atleast one part must exist in the test.".format(file))
+        logger.warning("{}: Atleast one part must exist in the test.".format(file))
         raise DbgenError
     return {'isa': str(isa), 'parts': orderdict(part_dict)}
 
 
 def generate_standard():
-    list = dirwalk(constants.suite)
+    list = dirwalk(os.path.join(constants.root, constants.suite),['/wip'])
     repo_path = os.path.normpath(constants.root+"/../")
     try:
         repo = git.Repo(repo_path)
@@ -126,7 +127,7 @@ def generate_standard():
         logger.error("This feature is available for developers only.")
         raise SystemExit
     dbfile = constants.framework_db
-    print(dbfile)
+    logger.debug("Using "+dbfile)
     tree = repo.tree()
     try:
         db = utils.load_yaml(dbfile)
@@ -163,10 +164,10 @@ def generate_standard():
                   wrfile)
 
 def generate():
-    list = dirwalk(constants.suite)
+    file_list = dirwalk(constants.suite)
     dbfile = constants.framework_db
     db = {}
-    for file in list:
+    for file in file_list:
         try:
             temp = createdict(file)
             db[file] = {'commit_id':'0',**temp}

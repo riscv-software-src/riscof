@@ -394,6 +394,22 @@ def riscof_cmdline_args():
                         metavar="")
     subparsers = parser.add_subparsers(dest='command',title="Action",description="The action to be performed by riscof.",help="List of actions supported by riscof.")
 
+    coverage = subparsers.add_parser('coverage',help='Generate Coverage Report for the given YAML spec.',formatter_class=SortingHelpFormatter)
+    coverage.add_argument('--config',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the config file. [Default=./config.ini]',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./config.ini').absolute())
+                          )
+    coverage.add_argument('--suite',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom suite directory.',
+                        metavar= 'PATH')
+    coverage.add_argument('--no-browser',action='store_true',
+                     help="Do not open the browser for showing the test report.")
+
     generatedb = subparsers.add_parser('gendb',help='Generate Database for the standard suite.',formatter_class=SortingHelpFormatter)
     generatedb.add_argument('--suite',
                             type= lambda p: str(pathlib.Path(p).absolute()),
