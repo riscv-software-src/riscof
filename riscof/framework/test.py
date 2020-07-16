@@ -5,10 +5,13 @@ import os
 from pathlib import Path
 import difflib
 import ast
+import random
+from datetime import datetime
 
 from riscof.utils import yaml
 import riscof.utils as utils
 import riscof.constants as constants
+from riscv_config.warl import warl_interpreter
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +45,11 @@ def compare_signature(file1, file2):
         status = 'Failed'
     return status, res
 
+def get_node(spec,node):
+    keys = node.split(">")
+    for key in keys:
+        spec = spec[key]
+    return spec
 
 def eval_cond(condition, spec):
     '''
@@ -56,17 +64,34 @@ def eval_cond(condition, spec):
         :type spec: dict
 
         :return: A boolean value specifying whether the condition is satisfied by
+!!omap
             the given specifications or not.
     '''
     condition = (condition.replace("check", '')).strip()
-    if ':=' in condition:
+    if 'writable' in condition:
+        parts = condition.split("=")
+        func_args = ((parts[0].replace("writable(","")).replace(")","")).split(",")
+        if writable(spec,int(func_args[0]),func_args[1]) == eval(parts[1]):
+            return True
+        else:
+            return False
+    elif 'islegal' in condition:
+        func_args = ((condition.replace("islegal(","")).replace(")","")).split(",")
+        try:
+            spec = get_node(spec,func_args[2])
+        except KeyError:
+            return False
+        if 'warl' in spec['type']:
+            warl = warl_interpreter(spec['type']['warl'])
+            deps = warl.dependencies()
+            return warl.islegal(func_args[0],eval(func_args[1]))
+        return False
+    elif ':=' in condition:
         temp = condition.split(":=")
-        keys = temp[0].split(">")
-        for key in keys:
-            try:
-                spec = spec[key]
-            except KeyError:
-                return False
+        try:
+            spec = get_node(spec,temp[0])
+        except KeyError:
+            return False
         if "regex(" in temp[1]:
             exp = temp[1].replace("regex(", "r\"")[:-1] + ("\"")
             x = re.match(eval(exp), spec)
@@ -78,7 +103,83 @@ def eval_cond(condition, spec):
             return True
         else:
             return False
+    elif '=' in condition:
+        temp = condition.split("=")
+        try:
+            spec = get_node(spec,temp[0])
+        except KeyError:
+            return False
+        if temp[1] in spec:
+            return True
+        else:
+            return False
 
+def getlegal(spec,dep_vals,num,node):
+    end_vals = []
+    try:
+        spec = get_node(spec,node)
+    except KeyError:
+        return []
+    if 'warl' in spec['type']:
+        warl = (warl_interpreter(spec['type']['warl']))
+        deps = warl.dependencies()
+        vals = warl.legal(eval(dep_vals))
+        end_vals = [ hex(int(li[0],base=16)<<spec['lsb']) if '0x' in li[0] else hex(int(li[0])<<spec['lsb']) for li in vals ]
+    elif 'ro_constant' in spec['type']:
+        end_vals = [hex(spec['type']['ro_constant'][0]<<spec['lsb'])]
+    num = int(num)
+    if num < len(end_vals):
+        end_vals = end_vals[:num]
+    else:
+        end_vals.extend([end_vals[-1]]*(num-len(end_vals)))
+    return end_vals
+
+def writable(spec,bit,node):
+    try:
+        spec = get_node(spec,node)
+    except KeyError:
+        return False
+
+    bit_width = spec['msb']-spec['lsb']+1
+    if bit>bit_width:
+        return False
+    if 'warl' in spec['type']:
+        warl = (warl_interpreter(spec['type']['warl']))
+        deps = warl.dependencies()
+        vals = warl.legal([])
+        legal = [ bin(int(li[0],base=16))[2:].zfill(bit_width) if '0x' in li[0] else bin(int(li[0]))[2:].zfill(bit_width) for li in vals ]
+        if any([x[bit_width-bit-1]=='1' for x in legal]) and any([x[bit_width-bit-1]=='0' for x in legal]):
+            return True
+        else:
+            return False
+
+def getillegal(spec,dep_vals,num,node):
+    end_vals = []
+    legal = []
+    try:
+        spec = get_node(spec,node)
+    except KeyError:
+        return []
+    bit_width = spec['msb']-spec['lsb']+1
+    if 'warl' in spec['type']:
+        warl = (warl_interpreter(spec['type']['warl']))
+        deps = warl.dependencies()
+        vals = warl.legal(eval(dep_vals))
+        legal = [ bin(int(li[0],base=16))[2:].zfill(bit_width) if '0x' in li[0] else bin(int(li[0]))[2:].zfill(bit_width) for li in vals ]
+    elif 'ro_constant' in spec['type']:
+        legal = [bin(spec['type']['ro_constant'][0])[2:].zfill(bit_width)]
+    num = int(num)
+    if legal:
+        while len(end_vals) < num:
+            random.seed(datetime.now())
+            flip_bits = random.sample(list(range(0,bit_width)),random.randint(0,bit_width-1))
+            val = legal[random.randint(0,len(legal)-1)]
+            flip = lambda x: '1' if x=='0' else '0'
+            ill_val = ''.join([flip(val[i]) if i in flip_bits else val[i] for i in range(0,bit_width)])
+            if ill_val not in legal:
+                end_vals.append(ill_val)
+    end_vals = [hex(int(x,base=2)<<spec['lsb']) for x in end_vals]
+    return end_vals
 
 def eval_macro(macro, spec):
     '''
@@ -98,8 +199,24 @@ def eval_macro(macro, spec):
 
     '''
     args = (macro.replace("def ", "")).split("=")
-    if (">" not in args[1]):
-        return (True, str(args[0]) + "=" + str(args[1]))
+    if ("True" in args[1]):
+        return (True, [str(args[0]).strip() + "=" + str(args[1]).strip()])
+    elif "getlegal" in args[1]:
+        func_args = ((args[1].replace("getlegal(","")).replace(")","")).split(",")
+        vals = getlegal(spec,func_args[0],func_args[1],func_args[2])
+        if vals:
+            return (True, [str(j).strip()+ "=" + str(k) for j,k in zip(args[0].split(","),vals)])
+        else:
+            return (False,[])
+    elif "getillegal" in args[1]:
+        func_args = ((args[1].replace("getillegal(","")).replace(")","")).split(",")
+        vals = getillegal(spec,func_args[0],func_args[1],func_args[2])
+        if vals:
+            return (True, [str(j).strip()+ "=" + str(k) for j,k in zip(args[0].split(","),vals)])
+        else:
+            return (False,[])
+    else:
+        return (False,[])
 
 
 def generate_test_pool(ispec, pspec):
@@ -134,10 +251,11 @@ def generate_test_pool(ispec, pspec):
             logger.debug("Checking conditions for {}-{}".format(file, part))
             for condition in part_dict['check']:
                 include = include and eval_cond(condition, spec)
-            for macro in part_dict['define']:
-                temp = eval_macro(macro, spec)
-                if (temp[0] and include):
-                    macros.append(temp[1])
+            if include:
+                for macro in part_dict['define']:
+                    temp = eval_macro(macro, spec)
+                    if (temp[0]):
+                        macros.extend(temp[1])
         if not macros == []:
             if '32' in db[file]['isa']:
                 xlen = '32'
@@ -197,6 +315,7 @@ def run_tests(dut, base, ispec, pspec):
     dut.runTests(test_list)
     logger.info("Running Tests on Reference Model.")
     base.runTests(test_list)
+
 
     logger.info("Initiating signature checking.")
     for entry in test_pool:

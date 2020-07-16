@@ -6,6 +6,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.16.0] - 2020-06-18
+- Adding coverage generation support through spike --log-commits
+- CGF file for rv32i for now.
+- Also added pipecleaning tests under wip
+
 ## [1.15.2] - 2020-05-18
 - changed python vrsion to be 3.6 or above. This makes installation of python easy
 - update docs with more details on installation and fixed other typos as well.
