@@ -402,6 +402,12 @@ def riscof_cmdline_args():
                         metavar= 'PATH',
                         default=str(pathlib.Path('./config.ini').absolute())
                           )
+    coverage.add_argument('--cgf',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        required=True,
+                        help='The Path to the cgf file.',
+                        metavar= 'PATH')
     coverage.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
@@ -461,6 +467,7 @@ def riscof_cmdline_args():
                         metavar= 'PATH',
                         default=str(pathlib.Path('./config.ini').absolute())
                           )
+
     testlist.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',

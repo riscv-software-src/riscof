@@ -176,7 +176,7 @@ and DUT plugins in the config.ini file')
         with open(platform_file, "r") as platfile:
             pspecs = platfile.read()
         report, for_html = framework.run_coverage(base, isa_file, platform_file,
-                constants.cgf_file)
+                args.cgf)
         report_file = open(constants.work_dir+'/suite_coverage.rpt','w')
         report_file.write(report)
         report_file.close()
