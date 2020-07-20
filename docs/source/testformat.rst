@@ -148,6 +148,8 @@ in the order as follows:
 
 .. note:: there is no a requirement that the code or scratch data sections must be contiguous in memory, or that they be located before or after data or code sections (configured by embedded directives recognized by the linker)
 
+.. _available_macros:
+
 Available Macros
 ^^^^^^^^^^^^^^^^
 There are both pre-defined and model-specific macros which shall be used in every test to 
@@ -293,3 +295,103 @@ In addition, the framework may collect the assertion values and save them as a s
 .. Instead, each of those should be a separate :ref:`test case <test_case>` whose conditions are defined in
 ..  the common reference document entry for that test and test case number.
 
+RVTEST_CASE Condition Formating
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This section describes the format for the conditions `CondStr` to be followed while writing the ``RVTEST_CASE`` macro. 
+Each of the statements within this macro ends with a ';' .
+
+The macro follows the convention mentioned :ref:`here <available_macros>`. This section describes
+the syntax to be followed by the CondStr of the ``RVTEST_CASE`` macro.
+
+
+.. note::
+  A keylist is a string of '>' separated words(keys) which is used to navigate the supplied specs. The schema may be used to specify them. Only valid keys and their combinations are allowed(as present in the scema).
+
+There are two types of valid statements allowed.
+
+1. ``check`` statements 
+
+    These statements get translated into the condtions which need to be true for the part to be enabled.
+    The condition can be structured in one of the following allowed ways.
+    
+    * keylist:=value
+
+        The *keylist* specifies the path to the field in the ISA YAML dictionary whose value needs to be checked. 
+        The *value* is the value against which the entry in the input yaml is checked.
+        The *value* can be a regular expression as well, in which case it should be specified as *regex("expression")*
+
+        Example: 
+
+        .. code-block:: none
+
+           check ISA:=regex(.*I.*Zicsr.*);  # checks if ISA node supports I and Zicsr extensions.
+
+           check hw_data_misaligned_support:=True; # checks if the misaligned support is available.
+    
+    * keylist=key
+
+        The *keylist* specifies the path to the field whose keys needs to be checked. 
+        The *key* is the key whose presence needs to be checked in the field specified by the keylist.
+
+        Example:
+
+        .. code-block:: none
+
+           check mtvec>rv32>base>type=warl; # checks if mtvec is a warl field
+
+    * function_call=Rval
+      
+        The *function_call* specifies the function to be called along with the arguments to be specified to the function. The node from the yaml which has to be passed to the function can be specified using the *keylist*. 
+        *Rval* is the value against which the return value of the function is checked. The list of different functions,arguments and their return values is listed below.
+        
+        **Function Signatures**
+
+            * writable(bit_position,keylist_for_field) -> bool
+              
+                Checks whether the bit at *bit_position* for a particular *csr_field_name* is writable. This function is typically used for *WARL* nodes.
+            * islegal(value,dependency_values_list,keylist_for_field) -> bool
+              
+                This function is valid only for *WARL* fields in the csrs. Checks whether the *value* is a legal value when the values of the fields listed as dependency for the field in question on is equal to the *dependency_values_list*.
+
+        Example:
+
+        .. code-block:: none
+            
+            check writable(12,misa>rv32>extensions)=True; # checks if 12th bit in MISA is writable.
+
+2. ``def`` statements
+    
+    .. code-block:: none
+        
+        def macro(s)(=value/keylist/function);
+    
+    These statements specify which macros to be defined for the part to run and their values(optional).
+    * The macro specifies the name of the macro.
+    * Multiple macros can be specified using a comma inbetween them.
+    * A keylist specifying the path of the field whose value has to be passed as the value of the macro can also be given.
+    * A function along with the arguments can also be specified. At runtime the function is called using the specified arguments and its return values are assigned to the macro(s) specified. The list of functions supported are as follows.
+
+        **Function Signatures**
+        
+            * getlegal(dependency_values_list,num_vals,key_list_for_field) -> list(int)
+              
+                This function is valid only for *WARL* fields in the csrs. It returns a list of legal values for the specified field when the values of the fields listed as dependency for the field in question on is equal to the *dependency_values_list*. The length of the list returned is equal to *num_vals*. Each entry in the list is assigned to the corresponding macro listed on the left hand side of the *=* sign.
+
+            * getillegal(dependency_values_list,num_vals,key_list_for_field) -> list(int)
+              
+                This function is valid only for *WARL* fields in the csrs. It returns a list of illegal values for the specified field when the values of the fields listed as dependency for the field in question on is equal to the *dependency_values_list*. The length of the list returned is equal to *num_vals*. Each entry in the list is assigned to the corresponding macro listed on the left hand side of the *=* sign.
+
+    Example:
+
+    .. code-block:: none
+
+        def TEST_CASE_1=True; # enables TEST_CASE_1 macro during compilation phase.
+
+        def rvtest_mtrap_routine=True; #enabled trap routines during compilation phase.
+
+        # Assigns a legal value(for the base field in mtvec) to LEGAL_2_1
+        def LEGAL_2_1 = getlegal([0],1,mtvec>rv32>base);             
+        
+        # Assigns an illegal value(for the base field in mtvec) each to ILLEGAL_2_1 and ILLEGAL_2_2
+        def ILLEGAL_2_1,ILLEGAL_2_2 = getillegal([0],2,mtvec>rv32>base);  
