@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.16.1] - 2020-07-20
+- Adding docs for rvtest_case condition string syntax.
+
 ## [1.16.0] - 2020-06-18
 - Adding coverage generation support through spike --log-commits
 - CGF file for rv32i for now.
