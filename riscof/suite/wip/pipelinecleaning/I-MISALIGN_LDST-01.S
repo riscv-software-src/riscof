@@ -44,6 +44,21 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_ASSERT_GPR_EQ(x30, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
+## Test Objective
+# This particular test case tests for misaligned ld/st.
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if 
+# one of the two conditions are satisfied -
+#     1. Hardware support for misaligned data is present
+#        Reason - When Hardware support for misaligned data is present, which enables 
+#                 us to load from and store to misaligned addresses.
+#     2. Hardware support for misaligned data is not present and Zicsr extension is present.
+#        Reason - When hardware support for misaligned data is absent, a illegal load/store
+#                 results in a fault. The standard trap handler is included in this case, 
+#                 which enables the test to check the correct behaviour. The Zicsr extension 
+#                 is necessary for the trap handler to function because it contains csrr and 
+#                 csrw operations. In the absence of a Zicsr extension, it is 
+#                 difficult for the golden model to replicate the behaviour of DUT.
+
 #ifdef TEST_CASE_1
     RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check hw_data_misaligned_support:=True; def TEST_CASE_1=True")
     RVTEST_CASE(2,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*Zicsr.*); check hw_data_misaligned_support:=False; def rvtest_mtrap_routine=True; def TEST_CASE_1=True")

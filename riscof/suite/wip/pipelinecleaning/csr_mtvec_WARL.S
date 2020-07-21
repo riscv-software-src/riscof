@@ -10,6 +10,14 @@ RVTEST_CODE_BEGIN
 	RVMODEL_IO_INIT
 	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
+## Test Objective
+# This particular test case tests the behaviour of base field in mtvec.
+# The following test writes a LEGAL and 2 ILLEGAL values onto the base field
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if
+# the following conditions are satisfied-
+#     1. Zicsr extension is present.
+#        Reason - The test performs csr operations.
+#     2. The base field is warl and independent.
 
 #ifdef TEST_CASE_1
   RVTEST_CASE(1,"// check ISA:=regex(.*I.*Zicsr.*); check mtvec>rv32>base>type=warl; check mtvec>rv32>base>type>warl>dependency_fields:=[];def LEGAL_1_1 = getlegal([],1,mtvec>rv32>base);def ILLEGAL_1_1,ILLEGAL_1_2 = getillegal([],2,mtvec>rv32>base); def TEST_CASE_1=True;")
@@ -30,6 +38,17 @@ RVTEST_CODE_BEGIN
     lw t4, 8(t1)
     csrw 0x305,t4
 #endif
+
+## Test Objective
+# This particular test case tests the behaviour of base field in mtvec.
+# The following test writes a LEGAL and 2 ILLEGAL values onto the base field
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if
+# the following conditions are satisfied-
+#     1. Zicsr extension is present.
+#        Reason - The test performs csr operations.
+#     2. The base field is warl and dependent on mode field of mtvec.
+#     3. The value 0 for mode is legal.
+
 #ifdef TEST_CASE_2
   RVTEST_CASE(2,"// check ISA:=regex(.*I.*Zicsr.*); check mtvec>rv32>base>type=warl; check mtvec>rv32>base>type>warl>dependency_fields:=['mtvec::mode']; check islegal(0,[0],mtvec>rv32>mode);def LEGAL_2_1 = getlegal([0],1,mtvec>rv32>base);def ILLEGAL_2_1,ILLEGAL_2_2 = getillegal([0],2,mtvec>rv32>base); def TEST_CASE_2=True;")
     
@@ -53,6 +72,17 @@ RVTEST_CODE_BEGIN
     csrw 0x305,t4
 #endif
 	# ---------------------------------------------------------------------------------------------
+
+## Test Objective
+# This particular test case tests the behaviour of base field in mtvec.
+# The following test writes a LEGAL and 2 ILLEGAL values onto the base field
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if
+# the following conditions are satisfied-
+#     1. Zicsr extension is present.
+#        Reason - The test performs csr operations.
+#     2. The base field is warl and dependent on mode field of mtvec.
+#     3. The value 1 for mode is legal.
+
 #ifdef TEST_CASE_3
   RVTEST_CASE(3,"// check ISA:=regex(.*I.*Zicsr.*); check mtvec>rv32>base>type=warl; check mtvec>rv32>base>type>warl>dependency_fields:=['mtvec::mode']; check islegal(1,[1],mtvec>rv32>mode);def LEGAL_3_1 = getlegal([1],1,mtvec>rv32>base);def ILLEGAL_3_1,ILLEGAL_3_2 = getillegal([1],2,mtvec>rv32>base); def TEST_CASE_3=True;")
     

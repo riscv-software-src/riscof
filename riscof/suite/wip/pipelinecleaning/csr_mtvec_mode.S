@@ -10,8 +10,17 @@ RVTEST_CODE_BEGIN
 	RVMODEL_IO_INIT
 	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
+## Test Objective
+# This particular test case tests the behaviour of mode field(when 0 is legal) in mtvec.
+# This will generate a machine software interrupt in direct mode.
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if
+# the following conditions are satisfied-
+#     1. Zicsr extension is present.
+#        Reason - The test performs csr operations.
+#
+#    Trap Handler required.
+#    Reason - 
 
-// This will generate a machine software interrupt in direct mode.
 #ifdef TEST_CASE_1
   RVTEST_CASE(1,"// check ISA:=regex(.*I.*Zicsr.*); check islegal(0,[],mtvec>rv32>mode); def TEST_CASE_1=True; def rvtest_mtrap_routine=True;")
     csrw  mie, x0
@@ -22,7 +31,17 @@ RVTEST_CODE_BEGIN
     wfi
 #endif
 
-// This will generate a machine software interrupt in vectored mode.
+## Test Objective
+# This particular test case tests the behaviour of mode field(when 1 is legal) in mtvec.
+# This will generate a machine software interrupt in vectored mode.
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if
+# the following conditions are satisfied-
+#     1. Zicsr extension is present.
+#        Reason - The test performs csr operations.
+#
+#    Trap Handler required.
+#    Reason - 
+
 #ifdef TEST_CASE_2
   RVTEST_CASE(2,"// check ISA:=regex(.*I.*Zicsr.*); check islegal(1,[],mtvec>rv32>mode); def TEST_CASE_2=True; def rvtest_mtrap_routine=True;")
     csrw mie, x0
@@ -34,7 +53,19 @@ RVTEST_CODE_BEGIN
     wfi
 #endif
 
-// The following two tests will check if writing reserved values to mtvec.mode
+## Test Objective
+# This particular test case tests the behaviour of mode field in mtvec.
+# The following two tests will check if writing reserved values to mtvec.mode
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if
+# the following conditions are satisfied-
+#     1. Zicsr extension is present.
+#        Reason - The test performs csr operations.
+#
+#    Trap Handler required.
+#    Reason - 
+
+#ifdef TEST_CASE_3
+  RVTEST_CASE(3,"// check ISA:=regex(.*I.*Zicsr.*); def TEST_CASE_3=True;")
   la t2, test_res
   csrci mtvec, 0x3
   csrsi mtvec, 0x3  // illegal value 0x3. Should probably reflect in writing 0x1
@@ -47,6 +78,7 @@ RVTEST_CODE_BEGIN
   csrr t1, mtvec
   andi t1, t1, 0x3
   sw t1, 4(t2)
+#endif
 
 RVTEST_CODE_END
 

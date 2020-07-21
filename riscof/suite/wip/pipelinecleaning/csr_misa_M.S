@@ -29,17 +29,20 @@ RVTEST_CODE_BEGIN
 # This particular test case tests the behaviour of M bit in misa.extensions . 
 # Assumption - In the absence of the M extension, any opcode in that space is illegal 
 #              and raises an illegal instruction exception.
-# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only 
-# if the following conditions are satisfied-
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if 
+# the following conditions are satisfied-
 #     1. M bit in extensions(bit position 12) is writable
 #     2. Zicsr extension is present.
-#        Reason - When M extension is not present, when any instruction in the 
-#                 M extension is encountered the core traps. The standard trap 
-#                 handler is included in this case, which enables the test to 
-#                 check the correct behaviour. The Zicsr extension is necessary 
-#                 for the trap handler to function because it contains csrr and 
-#                 csrw operations. In the absence of a Zicsr extension, it is 
-#                 difficult for the golden model to replicate the behaviour of DUT.
+#        Reason - The test performs csr operations.
+#    
+#    Trap handler required.
+#    Reason - When M extension is not present, when any instruction in the 
+#            M extension is encountered the core traps. The standard trap 
+#            handler is included in this case, which enables the test to 
+#            check the correct behaviour. The Zicsr extension is necessary 
+#            for the trap handler to function because it contains csrr and 
+#            csrw operations. In the absence of a Zicsr extension, it is 
+#            difficult for the golden model to replicate the behaviour of DUT.
 
 
 #ifdef TEST_CASE_1

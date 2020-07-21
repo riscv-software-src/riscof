@@ -45,9 +45,10 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
 ## Test Objective
-# This particular test case tests for misaligned jumps to a 2 byte boundary. 
-# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only 
-# if one of the two conditions are satisfied -
+# This particular test case tests for misaligned jumps to a 2 byte boundary. It is 
+# also equivalent to testing jalr for jumps to a 3 byte boundary.
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if 
+# one of the two conditions are satisfied -
 #     1. C extension is present
 #        Reason - When C extension is present and activated, the IALIGN is 16, 
 #                 which enables us to perform jumps to 2 byte aligned addresses.
@@ -116,6 +117,61 @@ RVTEST_CODE_BEGIN
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -2
+        nop
+        jal     x0, 2f 
+    1:
+        .fill 1,2 ,0x00
+        RVTEST_SIGUPD(x1,x2,0x66666666)
+        jal     x0, 2f 
+        .fill 1,2 ,0x00
+    2:
+        li      x2, 0x22222222
+        la      x4, 1f
+        jalr    x0, x4, 3
+        nop
+        jal     x0, 2f 
+    1:
+        .fill 1,2 ,0x00
+        RVTEST_SIGUPD(x1,x2,0x22222222)
+        jal     x0, 2f 
+        .fill 1,2 ,0x00
+    2:
+        li      x2, 0x33333333
+        la      x4, 1f+1
+        jalr    x0, x4, 2
+        nop
+        jal     x0, 2f 
+    1:
+        .fill 1,2 ,0x00
+        RVTEST_SIGUPD(x1,x2,0x33333333)
+        jal     x0, 2f 
+        .fill 1,2 ,0x00
+    2:
+        li      x2, 0x44444444
+        la      x4, 1f+2
+        jalr    x0, x4, 1
+        nop
+        jal     x0, 2f 
+    1:
+        .fill 1,2 ,0x00
+        RVTEST_SIGUPD(x1,x2,0x44444444)
+        jal     x0, 2f 
+        .fill 1,2 ,0x00
+    2:
+        li      x2, 0x55555555
+        la      x4, 1f+3
+        jalr    x0, x4, 0
+        nop
+        jal     x0, 2f 
+    1:
+        .fill 1,2 ,0x00
+        RVTEST_SIGUPD(x1,x2,0x55555555)
+        jal     x0, 2f 
+        .fill 1,2 ,0x00
+    2:
+        li      x2, 0x66666666
+        la      x4, 1f+4
+        jalr    x0, x4, -1
         nop
         jal     x0, 2f 
     1:
@@ -282,6 +338,7 @@ RVTEST_CODE_BEGIN
 
 
 #endif
+
 ## Test Objective
 # This particular test case tests for misaligned jumps to a 1 byte boundary. 
 # This part is enabled when I extesnsion is present and XLEN=32
@@ -345,11 +402,9 @@ RVTEST_CODE_BEGIN
         nop
     RVMODEL_IO_CHECK()
     RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
-    # Address for test results
-   
 #endif
  
-    RVMODEL_IO_WRITE_STR(x30, "# Test End\n")
+    RVMODEL_IO_WRITE_STR(x31, "# Test End\n")
     # HALT
 
 RVTEST_CODE_END
@@ -367,7 +422,7 @@ RVMODEL_DATA_BEGIN
     .align 4
 
 test_A1_res:
-    .fill 5, 4, 0xdeaddead
+    .fill 10, 4, 0xdeaddead
 test_A2_res:
     .fill 1, 4, 0xdeaddead
 test_B1_res:
@@ -385,6 +440,6 @@ test_B6_res:
 test_3_A1_res:
     .fill 5, 4, 0xdeaddead
 mtrap_sigptr:
-  .fill 64, 4, 0xdeaddead
+  .fill 128, 4, 0xdeaddead
 
 RVMODEL_DATA_END
