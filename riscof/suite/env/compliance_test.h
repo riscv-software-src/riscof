@@ -384,7 +384,7 @@ mscratch_save:
   la _R,_TAG;\
   .set offset,0;
 
-#define RVTEST_SIGUPD(_BR,_R,_TAG)\
+#define RVTEST_SIGUPD(_BR,_R,_VAL)\
   SREG _R,offset(_BR);\
   .set offset,offset+REGWIDTH;
 

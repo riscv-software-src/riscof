@@ -44,6 +44,22 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_ASSERT_GPR_EQ(x30, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
+## Test Objective
+# This particular test case tests for misaligned jumps to a 2 byte boundary. 
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only 
+# if one of the two conditions are satisfied -
+#     1. C extension is present
+#        Reason - When C extension is present and activated, the IALIGN is 16, 
+#                 which enables us to perform jumps to 2 byte aligned addresses.
+#     2. C extension is not present and Zicsr extension is present.
+#        Reason - When C extension is not present, IALIGN is 32, which means any 
+#                 jump to a non 4 byte aligned address traps. The standard trap 
+#                 handler is included in this case, which enables the test to 
+#                 check the correct behaviour. The Zicsr extension is necessary 
+#                 for the trap handler to function because it contains csrr and 
+#                 csrw operations. In the absence of a Zicsr extension, it is 
+#                 difficult for the golden model to replicate the behaviour of DUT.
+
 #ifdef TEST_CASE_1
     RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*C.*); def TEST_CASE_1=True;")
     RVTEST_CASE(2,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*Zicsr.*); check ISA:=regex(^[^C]+$); def TEST_CASE_1=True;def rvtest_mtrap_routine=True;")
@@ -51,110 +67,85 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x30, "# Test part A1 - test JALR\n");
 
     # Address for test results
-    la      x1, test_A1_res
+    RVTEST_SIGBASE(x1, test_A1_res)
 
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x22222222)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
-    
         li      x2, 0x33333333
         la      x4, 1f+1
         jalr    x0, x4, 1
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x33333333)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
-
-
         li      x2, 0x44444444
         la      x4, 1f+2
         jalr    x0, x4, 0
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x44444444)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
-
         li      x2, 0x55555555
         la      x4, 1f+3
         jalr    x0, x4, -1
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x55555555)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
-
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x66666666)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
-
     RVMODEL_IO_CHECK()
     RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
     RVMODEL_IO_WRITE_STR(x30, "# Test part A2 - test JAL\n");
 
     # Address for test results
-    la      x1, test_A2_res
+    RVTEST_SIGBASE(x1, test_A2_res)
 
         li      x2, 0x77777777
         jal    x0, 1f+2 
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x77777777)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
-
     RVMODEL_IO_WRITE_STR(x30, "# Test part A2  - Complete\n");
 
     RVMODEL_IO_WRITE_STR(x30, "# Test part B1 - test BEQ\n");
 
-    la      x1, test_B1_res
+    RVTEST_SIGBASE(x1, test_B1_res)
 
         # Register initialization
         li      x5, 5
@@ -164,24 +155,20 @@ RVTEST_CODE_BEGIN
         li      x2, 0x99999999
         beq     x5, x6, 1f + 2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x99999999)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
-    
     RVMODEL_IO_WRITE_STR(x30, "# Test part B1  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x30, "# Test part B2 - test BNE\n");
 
     # Address for test results
-    la      x1, test_B2_res
+    RVTEST_SIGBASE(x1, test_B2_res)
 
     # Register initialization
     li      x5, 5
@@ -191,23 +178,20 @@ RVTEST_CODE_BEGIN
     li      x2, 0x88888888
         bne     x5, x6, 1f + 2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0x88888888)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
     RVMODEL_IO_WRITE_STR(x30, "# Test part B2  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x30, "# Test part B3 - test BLT\n");
 
     # Address for test results
-    la      x1, test_B3_res
+    RVTEST_SIGBASE(x1, test_B3_res)
     
     
     # Register initialization
@@ -218,23 +202,20 @@ RVTEST_CODE_BEGIN
     li      x2, 0xAAAAAAAA
         blt     x5, x6, 1f + 2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0xAAAAAAAA)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
     RVMODEL_IO_WRITE_STR(x30, "# Test part B3 - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x30, "# Test part B4 - test BLTU\n");
 
     # Address for test results
-    la      x1, test_B4_res
+    RVTEST_SIGBASE(x1, test_B4_res)
 
     # Register initialization
     li      x5, 5
@@ -244,23 +225,20 @@ RVTEST_CODE_BEGIN
     li      x2, 0xBBBBBBBB
         bltu     x5, x6, 1f + 2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0xBBBBBBBB)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4
     RVMODEL_IO_WRITE_STR(x30, "# Test part B4  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x30, "# Test part B5 - test BGE\n");
 
     # Address for test results
-    la      x1, test_B5_res
+    RVTEST_SIGBASE(x1, test_B5_res)
 
     # Register initialization
     li      x5, 5
@@ -270,24 +248,20 @@ RVTEST_CODE_BEGIN
     li      x2, 0xCCCCCCCC
         bge     x6, x5, 1f + 2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0xCCCCCCCC)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4    
-    
     RVMODEL_IO_WRITE_STR(x30, "# Test part B5  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x30, "# Test part B6 - test BGEU\n");
 
     # Address for test results
-    la      x1, test_B6_res
+    RVTEST_SIGBASE(x1, test_B6_res)
 
     # Register initialization
     li      x5, 5
@@ -297,24 +271,85 @@ RVTEST_CODE_BEGIN
     li      x2, 0xDDDDDDDD
         bgeu     x6, x5, 1f + 2
         nop
-        li      x2, 0
-        sw      x2, 0(x1)
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        sw      x2, 0(x1)
+        RVTEST_SIGUPD(x1,x2,0xDDDDDDDD)
         jal     x0, 2f 
         .fill 1,2 ,0x00
     2:
-        addi    x1, x1, 4    
     RVMODEL_IO_WRITE_STR(x30, "# Test part B6  - Complete\n");
 
 
-
-    RVMODEL_IO_WRITE_STR(x30, "# Test End\n")
-
 #endif
-  
+## Test Objective
+# This particular test case tests for misaligned jumps to a 1 byte boundary. 
+# This part is enabled when I extesnsion is present and XLEN=32
+#   Reason - The target address is obtained by adding the sign-extended 12-bit 
+#            I-immediate to the register rs1, then setting the least-significant 
+#            bit of the result to zero.  
+ 
+#ifdef TEST_CASE_3
+    RVTEST_CASE(3,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_3=True;")
+    # ---------------------------------------------------------------------------------------------
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A1 - test JALR without exception\n");
+
+    # Address for test results
+    RVTEST_SIGBASE(x1, test_3_A1_res)
+
+        li      x2, 0x22222222
+        la      x4, 1f
+        jalr    x0, x4, 1
+        nop
+        jal     x0, 2f 
+    1:
+        RVTEST_SIGUPD(x1,x2,0x22222222)
+        jal     x0, 2f 
+    2:
+        li      x2, 0x33333333
+        la      x4, 1f
+        jalr    x0, x4, 1
+        nop
+        jal     x0, 2f 
+    1:
+        RVTEST_SIGUPD(x1,x2,0x33333333)
+        jal     x0, 2f 
+    2:
+        li      x2, 0x44444444
+        la      x4, 1f+1
+        jalr    x0, x4, 0
+        nop
+        jal     x0, 2f 
+    1:
+        RVTEST_SIGUPD(x1,x2,0x44444444)
+        jal     x0, 2f 
+    2:
+        li      x2, 0x55555555
+        la      x4, 1f+2
+        jalr    x0, x4, -1
+        nop
+        jal     x0, 2f 
+    1:
+        RVTEST_SIGUPD(x1,x2,0x55555555)
+        jal     x0, 2f 
+    2:
+        li      x2, 0x66666666
+        la      x4, 1f+4
+        jalr    x0, x4, -3
+        nop
+        jal     x0, 2f 
+    1:
+        RVTEST_SIGUPD(x1,x2,0x66666666)
+        jal     x0, 2f 
+    2:
+        nop
+    RVMODEL_IO_CHECK()
+    RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
+    # Address for test results
+   
+#endif
+ 
+    RVMODEL_IO_WRITE_STR(x30, "# Test End\n")
     # HALT
 
 RVTEST_CODE_END
@@ -347,6 +382,8 @@ test_B5_res:
     .fill 1, 4, 0xdeaddead
 test_B6_res:
     .fill 1, 4, 0xdeaddead 
+test_3_A1_res:
+    .fill 5, 4, 0xdeaddead
 mtrap_sigptr:
   .fill 64, 4, 0xdeaddead
 

@@ -25,6 +25,22 @@ RVTEST_CODE_BEGIN
 	RVMODEL_IO_INIT
 	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
+## Test Objective
+# This particular test case tests the behaviour of M bit in misa.extensions . 
+# Assumption - In the absence of the M extension, any opcode in that space is illegal 
+#              and raises an illegal instruction exception.
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only 
+# if the following conditions are satisfied-
+#     1. M bit in extensions(bit position 12) is writable
+#     2. Zicsr extension is present.
+#        Reason - When M extension is not present, when any instruction in the 
+#                 M extension is encountered the core traps. The standard trap 
+#                 handler is included in this case, which enables the test to 
+#                 check the correct behaviour. The Zicsr extension is necessary 
+#                 for the trap handler to function because it contains csrr and 
+#                 csrw operations. In the absence of a Zicsr extension, it is 
+#                 difficult for the golden model to replicate the behaviour of DUT.
+
 
 #ifdef TEST_CASE_1
   RVTEST_CASE(1,"// check ISA:=regex(.*32I.*);check ISA:=regex(.*M.*);check misa>rv32>extensions>type=warl; check writable(12,misa>rv32>extensions)=True;def TEST_CASE_1=True; def rvtest_mtrap_routine=True")
