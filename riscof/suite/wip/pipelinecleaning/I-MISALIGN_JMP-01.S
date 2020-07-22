@@ -34,6 +34,7 @@
 #include "compliance_test.h"
 
 # Test Virtual Machine (TVM) used by program.
+# The entire test is compiled without the compressed extension to the compiler.
 RVTEST_ISA("RV32I")
 
 # Test code region
@@ -70,6 +71,10 @@ RVTEST_CODE_BEGIN
     # Address for test results
     RVTEST_SIGBASE(x1, test_A1_res)
 
+    # each sub-part tests if the jalr to a 2 byte boundary traps or passes through. When the jalr
+    # traps the signature is updated by the trap handler the RVTEST_SIGUPD is skipped. However, if
+    # compressed is enabled by the design then JALR falls through to the RVTEST_SIGUPD which updates
+    # the signature with a unique value stored in x2.
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 2
@@ -80,6 +85,10 @@ RVTEST_CODE_BEGIN
         RVTEST_SIGUPD(x1,x2,0x22222222)
         jal     x0, 2f 
         .fill 1,2 ,0x00
+
+    # each of the following part is similar to the above one but with different manipulations of the base
+    # and offset to reach a 2 byte aligned boundary
+
     2:
         li      x2, 0x33333333
         la      x4, 1f+1
@@ -124,6 +133,10 @@ RVTEST_CODE_BEGIN
         RVTEST_SIGUPD(x1,x2,0x66666666)
         jal     x0, 2f 
         .fill 1,2 ,0x00
+
+    # the following subparts will work similar to the above ones, with the difference of setting the
+    # LSB bit to 1, i.e. attempting a jump to a 3-byte aligned address. The effect should be the
+    # same as 2-byte aligned addresses since LSB of the effective address should be made zero by the DUT.
     2:
         li      x2, 0x22222222
         la      x4, 1f
@@ -184,6 +197,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
     RVMODEL_IO_WRITE_STR(x30, "# Test part A2 - test JAL\n");
 
+    # The following subparts are structured similar to the above cases, but test JAL instruction.
     # Address for test results
     RVTEST_SIGBASE(x1, test_A2_res)
 
@@ -223,6 +237,7 @@ RVTEST_CODE_BEGIN
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x30, "# Test part B2 - test BNE\n");
 
+    # The following sub-parts is for forward branch instructions being misaligned.
     # Address for test results
     RVTEST_SIGBASE(x1, test_B2_res)
 
