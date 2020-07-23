@@ -1,17 +1,41 @@
-#include "compliance_test.h"
 #include "compliance_model.h"
+#include "compliance_test.h"
+
 
 RVTEST_ISA("RV32IM")
 
+//TODO: rvtest_code_begin and rvtest_code_end are now standard labels within the RVTEST_CODE_BEGIN
+//and RVTEST_CODE_END macros respectively
+
+RVMODEL_BOOT
 RVTEST_CODE_BEGIN
 
 
 	RVMODEL_IO_INIT
 	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)
 	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
+## Test Objective
+# This particular test case tests the behaviour of M bit in misa.extensions . 
+# Assumption - In the absence of the M extension, any opcode in that space is illegal 
+#              and raises an illegal instruction exception.
+# Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if 
+# the following conditions are satisfied-
+#     1. M bit in extensions(bit position 12) is writable
+#     2. Zicsr extension is present.
+#        Reason - The test performs csr operations.
+#    
+#    Trap handler required.
+#    Reason - When M extension is not present, when any instruction in the 
+#            M extension is encountered the core traps. The standard trap 
+#            handler is included in this case, which enables the test to 
+#            check the correct behaviour. The Zicsr extension is necessary 
+#            for the trap handler to function because it contains csrr and 
+#            csrw operations. In the absence of a Zicsr extension, it is 
+#            difficult for the golden model to replicate the behaviour of DUT.
+
 
 #ifdef TEST_CASE_1
-  RVTEST_CASE(1,"// check ISA:=regex(.*32I.*);check ISA:=regex(.*M.*);check misa>rv32>extensions>type=warl; check writable(12,misa>rv32>extensions)=True;def TEST_CASE_1=True;")
+  RVTEST_CASE(1,"// check ISA:=regex(.*32I.*);check ISA:=regex(.*M.*);check misa>rv32>extensions>type=warl; check writable(12,misa>rv32>extensions)=True;def TEST_CASE_1=True; def rvtest_mtrap_routine=True")
     
     RVTEST_SIGBASE(t5,begin_sig)
     la t1,test_data
@@ -41,10 +65,11 @@ RVTEST_CODE_BEGIN
 
 	# ---------------------------------------------------------------------------------------------
 
-	RVMODEL_HALT
-
 RVTEST_CODE_END
 
+	RVMODEL_HALT
+
+RVTEST_DATA_BEGIN
 # Input data section.
 	.data
 	.align 4
@@ -54,11 +79,16 @@ test_data:
     .word 0x00000000
 amo_operand:
     .dword 0
+RVTEST_DATA_END
+
 # Output data section.
 RVMODEL_DATA_BEGIN
     .align 4
 begin_sig:
-	.fill 4, 4, -1
+	.fill 4, 4, 0xdeaddead 
+mtrap_sigptr:                       /* mscratch points here */
+  .fill 32, 4, 0xdeaddead // TODO: do not use -1 as default since it could be an expected result.
+RVMODEL_DATA_END
 
 RVMODEL_DATA_END
 

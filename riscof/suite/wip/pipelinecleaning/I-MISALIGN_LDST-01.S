@@ -44,6 +44,12 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_ASSERT_GPR_EQ(x30, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
+## RISCOF Objective
+# Here we show how RISCOF is able to enable the same test-part using 2 different mutually exclusive
+# isa configurations from the YAML. It is also able to enable the trap routines only when required
+# and not always. The condition generates a separate signature.
+#
+
 ## Test Objective
 # This particular test case tests for misaligned ld/st.
 # Apart from the ISA having I extesnsion and XLEN=32, this part is enabled only if 

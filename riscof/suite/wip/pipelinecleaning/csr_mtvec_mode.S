@@ -6,6 +6,10 @@ RVTEST_ISA("RV32I")
 
 RVTEST_CODE_BEGIN
 
+## RISCOF Objective
+# 
+# The assembly test also shows how multiple parts can be enabled/disabled based on the
+# configurations of the DUT.
 
 	RVMODEL_IO_INIT
 	RVMODEL_IO_ASSERT_GPR_EQ(x31, x0, 0x00000000)

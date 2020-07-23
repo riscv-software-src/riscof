@@ -45,6 +45,17 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_ASSERT_GPR_EQ(x30, x0, 0x00000000)
     RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
+## RISCOF Objective
+# Here we show how RISCOF is able to enable the same test-part using 2 different mutually exclusive
+# isa configurations from the YAML. It is also able to enable the trap routines only when required
+# and not always. The condition generates a separate signature.
+#
+# The same is completely skipped is both Compressed and Zicsr extensions are not
+# available. 
+#
+# The test also includes another part which is enabled by default for all implementations
+
+
 ## Test Objective
 # This particular test case tests for misaligned jumps to a 2 byte boundary. It is 
 # also equivalent to testing jalr for jumps to a 3 byte boundary.
@@ -78,70 +89,68 @@ RVTEST_CODE_BEGIN
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 2
-        nop
+        li      x2, 0x20202020 // this should never get executed since the return from trap is PC+8
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x22222222)
         jal     x0, 2f 
         .fill 1,2 ,0x00
+    2:  RVTEST_SIGUPD(x1,x2,0x22222222) // for either case the value to be checked is 0x22222222
 
     # each of the following part is similar to the above one but with different manipulations of the base
     # and offset to reach a 2 byte aligned boundary
 
-    2:
         li      x2, 0x33333333
         la      x4, 1f+1
         jalr    x0, x4, 1
-        nop
+        li      x2, 0x30303030
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x33333333)
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x33333333)
+
         li      x2, 0x44444444
         la      x4, 1f+2
         jalr    x0, x4, 0
-        nop
+        li      x2, 0x40404040
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x44444444)
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x44444444)
+
         li      x2, 0x55555555
         la      x4, 1f+3
         jalr    x0, x4, -1
-        nop
+        li      x2, 0x50505050
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x55555555)
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x55555555)
+
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -2
-        nop
+        li      x2, 0x60606060
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x66666666)
         jal     x0, 2f 
         .fill 1,2 ,0x00
+    2:  RVTEST_SIGUPD(x1,x2,0x66666666)
 
     # the following subparts will work similar to the above ones, with the difference of setting the
     # LSB bit to 1, i.e. attempting a jump to a 3-byte aligned address. The effect should be the
     # same as 2-byte aligned addresses since LSB of the effective address should be made zero by the DUT.
-    2:
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 3
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -152,7 +161,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x33333333
         la      x4, 1f+1
         jalr    x0, x4, 2
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -163,7 +172,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x44444444
         la      x4, 1f+2
         jalr    x0, x4, 1
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -174,7 +183,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x55555555
         la      x4, 1f+3
         jalr    x0, x4, 0
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -185,14 +194,14 @@ RVTEST_CODE_BEGIN
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -1
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x66666666)
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x66666666)
+
     RVMODEL_IO_CHECK()
     RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
     RVMODEL_IO_WRITE_STR(x30, "# Test part A2 - test JAL\n");
@@ -203,14 +212,14 @@ RVTEST_CODE_BEGIN
 
         li      x2, 0x77777777
         jal    x0, 1f+2 
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x77777777)
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x77777777)
+
     RVMODEL_IO_WRITE_STR(x30, "# Test part A2  - Complete\n");
 
     RVMODEL_IO_WRITE_STR(x30, "# Test part B1 - test BEQ\n");
@@ -224,14 +233,15 @@ RVTEST_CODE_BEGIN
         # Test
         li      x2, 0x99999999
         beq     x5, x6, 1f + 2
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x99999999)
+        
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x99999999)
+
     RVMODEL_IO_WRITE_STR(x30, "# Test part B1  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
@@ -248,14 +258,15 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0x88888888
         bne     x5, x6, 1f + 2
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0x88888888)
+        
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x88888888)
+
     RVMODEL_IO_WRITE_STR(x30, "# Test part B2  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
@@ -272,14 +283,15 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xAAAAAAAA
         blt     x5, x6, 1f + 2
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0xAAAAAAAA)
+        
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0xAAAAAAAA)
+
     RVMODEL_IO_WRITE_STR(x30, "# Test part B3 - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
@@ -295,14 +307,14 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xBBBBBBBB
         bltu     x5, x6, 1f + 2
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0xBBBBBBBB)
+        
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0xBBBBBBBB)
     RVMODEL_IO_WRITE_STR(x30, "# Test part B4  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
@@ -318,14 +330,14 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xCCCCCCCC
         bge     x6, x5, 1f + 2
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0xCCCCCCCC)
+        
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0xCCCCCCCC)
     RVMODEL_IO_WRITE_STR(x30, "# Test part B5  - Complete\n");
 
     # ---------------------------------------------------------------------------------------------
@@ -341,14 +353,14 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xDDDDDDDD
         bgeu     x6, x5, 1f + 2
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
-        RVTEST_SIGUPD(x1,x2,0xDDDDDDDD)
+        
         jal     x0, 2f 
         .fill 1,2 ,0x00
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0xDDDDDDDD)
     RVMODEL_IO_WRITE_STR(x30, "# Test part B6  - Complete\n");
 
 
@@ -372,49 +384,48 @@ RVTEST_CODE_BEGIN
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 1
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
-        RVTEST_SIGUPD(x1,x2,0x22222222)
         jal     x0, 2f 
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x22222222)
+
         li      x2, 0x33333333
         la      x4, 1f
         jalr    x0, x4, 1
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
-        RVTEST_SIGUPD(x1,x2,0x33333333)
         jal     x0, 2f 
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x33333333)
+
         li      x2, 0x44444444
         la      x4, 1f+1
         jalr    x0, x4, 0
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
-        RVTEST_SIGUPD(x1,x2,0x44444444)
         jal     x0, 2f 
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x44444444)
+
+
         li      x2, 0x55555555
         la      x4, 1f+2
         jalr    x0, x4, -1
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
-        RVTEST_SIGUPD(x1,x2,0x55555555)
         jal     x0, 2f 
-    2:
+    2:  RVTEST_SIGUPD(x1,x2,0x55555555)
+
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -3
-        nop
+        li      x2, 0xbabecafe
         jal     x0, 2f 
     1:
-        RVTEST_SIGUPD(x1,x2,0x66666666)
         jal     x0, 2f 
-    2:
-        nop
+    2:  RVTEST_SIGUPD(x1,x2,0x66666666)
     RVMODEL_IO_CHECK()
     RVMODEL_IO_WRITE_STR(x30, "# Test part A1  - Complete\n");
 #endif
