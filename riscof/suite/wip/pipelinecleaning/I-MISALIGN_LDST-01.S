@@ -83,17 +83,17 @@ RVTEST_CODE_BEGIN
 
     li      x4, 0x22222222
     lw      x4, 1(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 4(x2)
 
     li      x4, 0x33333333
     lw      x4, 2(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 8(x2)
 
     li      x4, 0x44444444
     lw      x4, 3(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 12(x2)
 
     //
@@ -112,42 +112,42 @@ RVTEST_CODE_BEGIN
     # Test
     li      x4, 0x55555555
     lh      x4, 0(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 0(x2)
 
     li      x4, 0x66666666
     lh      x4, 1(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 4(x2)
 
     li      x4, 0x77777777
     lh      x4, 2(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 8(x2)
 
     li      x4, 0x88888888
     lh      x4, 3(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 12(x2)
 
     li      x4, 0x99999999
     lhu     x4, 0(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 16(x2)
 
     li      x4, 0xAAAAAAAA
     lhu     x4, 1(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 20(x2)
 
     li      x4, 0xBBBBBBBB
     lhu     x4, 2(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 24(x2)
 
     li      x4, 0xCCCCCCCC
     lhu     x4, 3(x3)
-    nop
+    li      x2, 0xbabecafe
     sw      x4, 28(x2)
 
     RVMODEL_IO_WRITE_STR(x30, "# Test part A2  - Complete\n");
@@ -170,19 +170,19 @@ RVTEST_CODE_BEGIN
 
     # Test
     sw      x6, 0(x2)
-    nop
+    li      x2, 0xbabecafe
     addi    x2, x2, 4
 
     sw      x6, 1(x2)
-    nop
+    li      x2, 0xbabecafe
     addi    x2, x2, 4
 
     sw      x6, 2(x2)
-    nop
+    li      x2, 0xbabecafe
     addi    x2, x2, 4
 
     sw      x6, 3(x2)
-    nop
+    li      x2, 0xbabecafe
 
     RVMODEL_IO_WRITE_STR(x30, "# Test part A3  - Complete\n");
 

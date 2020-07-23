@@ -112,7 +112,6 @@ RVTEST_CODE_BEGIN
     lw t4, 8(t1)
     csrw mtvec,t4
 #endif
-	RVMODEL_HALT
 
 RVTEST_CODE_END
 
