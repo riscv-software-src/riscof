@@ -24,6 +24,8 @@ RVTEST_CODE_BEGIN
 #
 #    Trap Handler required.
 #    Reason - 
+#       The test generates a software interrupt and a wfi instruction. We would require
+#       the trap handler to handle this scenario.
 
 #ifdef TEST_CASE_1
   RVTEST_CASE(1,"// check ISA:=regex(.*I.*Zicsr.*); check islegal(0,[],mtvec>rv32>mode); def TEST_CASE_1=True; def rvtest_mtrap_routine=True;")
@@ -44,7 +46,9 @@ RVTEST_CODE_BEGIN
 #        Reason - The test performs csr operations.
 #
 #    Trap Handler required.
-#    Reason - 
+#    Reason -
+#       The test generates a software interrupt and a wfi instruction. We would require
+#       the trap handler to handle this scenario.
 
 #ifdef TEST_CASE_2
   RVTEST_CASE(2,"// check ISA:=regex(.*I.*Zicsr.*); check islegal(1,[],mtvec>rv32>mode); def TEST_CASE_2=True; def rvtest_mtrap_routine=True;")
@@ -65,8 +69,6 @@ RVTEST_CODE_BEGIN
 #     1. Zicsr extension is present.
 #        Reason - The test performs csr operations.
 #
-#    Trap Handler required.
-#    Reason - 
 
 #ifdef TEST_CASE_3
   RVTEST_CASE(3,"// check ISA:=regex(.*I.*Zicsr.*); def TEST_CASE_3=True;")
