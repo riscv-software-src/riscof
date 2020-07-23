@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Privilege tests for machine csrs.
 - Spec Coverage
 
+## [1.16.2] - 2020-07-23
+- Adding privlege test examples showing the benefits of RISCOF
+
 ## [1.16.1] - 2020-07-20
 - Adding docs for rvtest_case condition string syntax.
 
