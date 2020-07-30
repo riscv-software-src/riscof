@@ -18,19 +18,19 @@ logger = logging.getLogger(__name__)
 
 def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     '''
-        Entry point for the framework module. This function initializes and sets up the required 
+        Entry point for the framework module. This function initializes and sets up the required
         variables for the tests to run.
 
         :param dut: The class instance for the DUT model.
 
         :param base: The class instance for the BASE model.
 
-        :param dut_isa_spec: The absolute path to the checked yaml containing 
+        :param dut_isa_spec: The absolute path to the checked yaml containing
             the DUT isa specification.
-        
-        :param dut_platform_spec: The absolute path to the checked yaml containing 
+
+        :param dut_platform_spec: The absolute path to the checked yaml containing
             the DUT platform specification.
-        
+
         :type dut_platform_spec: str
 
         :type dut_isa_spec: str
@@ -58,10 +58,10 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     cov_files = []
     for entry in test_pool:
         work_dir = test_list[entry[0]]['work_dir']
-        cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],'spike.dump.cgf'))
-        
+        cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],'dump.cgf'))
 
-    results = isac.merge_coverage(cov_files, cgf_file, True) 
+
+    results = isac.merge_coverage(cov_files, cgf_file, True)
 
 
     results_yaml = yaml.load(results)
@@ -82,19 +82,19 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
 
 def run(dut, base, dut_isa_spec, dut_platform_spec):
     '''
-        Entry point for the framework module. This function initializes and sets up the required 
+        Entry point for the framework module. This function initializes and sets up the required
         variables for the tests to run.
 
         :param dut: The class instance for the DUT model.
 
         :param base: The class instance for the BASE model.
 
-        :param dut_isa_spec: The absolute path to the checked yaml containing 
+        :param dut_isa_spec: The absolute path to the checked yaml containing
             the DUT isa specification.
-        
-        :param dut_platform_spec: The absolute path to the checked yaml containing 
+
+        :param dut_platform_spec: The absolute path to the checked yaml containing
             the DUT platform specification.
-        
+
         :type dut_platform_spec: str
 
         :type dut_isa_spec: str
