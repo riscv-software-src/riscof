@@ -60,8 +60,10 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
         work_dir = test_list[entry[0]]['work_dir']
         cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],'dump.cgf'))
 
-
-    results = isac.merge_coverage(cov_files, cgf_file, True)
+    if 64 in ispec['supported_xlen']:
+        results = isac.merge_coverage(cov_files, cgf_file, True, 64)
+    elif 32 in ispec['supported_xlen']:
+        results = isac.merge_coverage(cov_files, cgf_file, True, 32)
 
 
     results_yaml = yaml.load(results)
