@@ -249,7 +249,8 @@ def generate_test_pool(ispec, pspec):
         for part in db[file]['parts']:
             include = True
             part_dict = db[file]['parts'][part]
-            cov_labels.extend(part_dict['coverage_labels'])
+            if 'coverage_labels' in part_dict:
+                cov_labels.extend(part_dict['coverage_labels'])
             logger.debug("Checking conditions for {}-{}".format(file, part))
             for condition in part_dict['check']:
                 include = include and eval_cond(condition, spec)

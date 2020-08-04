@@ -16,6 +16,25 @@ yaml.allow_unicode = True
 
 logger = logging.getLogger(__name__)
 
+def filter_coverage(cgf_file,ispec,pspec,results):
+    cgf = utils.load_yaml(cgf_file)
+    spec = {**ispec,**pspec}
+    cover_points = []
+    for key,node in cgf.items():
+        if key == 'datasets':
+            continue
+        include = True
+        if 'config' in node:
+            for entry in node['config'].split(";"):
+                if 'check' in entry:
+                    include = include and test.eval_cond(entry, spec)
+        if include:
+            cover_points.append(key)
+    result_filtered = {}
+    for key in cover_points:
+        result_filtered[key] = results[key]
+    return result_filtered
+
 def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     '''
         Entry point for the framework module. This function initializes and sets up the required
@@ -67,6 +86,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
 
 
     results_yaml = yaml.load(results)
+    results_yaml = filter_coverage(cgf_file,ispec,pspec,results_yaml)
     for_html = []
     for cov_labels in results_yaml:
         coverage = results_yaml[cov_labels]['coverage']
