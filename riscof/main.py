@@ -18,7 +18,6 @@ import riscof.dbgen as dbgen
 import riscof.utils as utils
 import riscof.constants as constants
 from riscv_config.errors import ValidationError
-import riscv_isac.coverage as isac
 
 
 def execute():
@@ -164,58 +163,6 @@ and DUT plugins in the config.ini file')
 
     if args.command == 'testlist':
         test_routines.generate_test_pool(isa_specs, platform_specs)
-
-    if args.command == 'coverage':
-        logger.info('Will collect Coverage using RISCV-ISAC')
-        logger.info('CGF file being used : ' + str(constants.cgf_file))
-        with open(isa_file, "r") as isafile:
-            ispecs = isafile.read()
-
-        with open(platform_file, "r") as platfile:
-            pspecs = platfile.read()
-        report, for_html = framework.run_coverage(base, isa_file, platform_file,
-                constants.cgf_file)
-        report_file = open(constants.work_dir+'/suite_coverage.rpt','w')
-        report_file.write(report)
-        report_file.close()
-
-        report_objects = {}
-        report_objects['date'] = (datetime.now(
-            pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
-        report_objects['version'] = riscof.__version__
-        report_objects['reference'] = (base.__model__).replace("_", " ")
-
-        report_objects['isa'] = isa_specs['ISA']
-        report_objects['usv'] = isa_specs['User_Spec_Version']
-        report_objects['psv'] = isa_specs['Privilege_Spec_Version']
-        report_objects['isa_yaml'] = isa_file
-        report_objects['platform_yaml'] = platform_file
-        report_objects['isa_specs'] = ispecs
-        report_objects['platform_specs'] = pspecs
-        report_objects['results'] = for_html
-        #report_objects['results'] = framework.run(dut, base, isa_file,
-        #                                          platform_file)
-        with open(constants.coverage_template, "r") as report_template:
-            template = Template(report_template.read())
-
-        output = template.render(report_objects)
-
-        reportfile = os.path.join(constants.work_dir, "coverage.html")
-        with open(reportfile, "w") as report:
-            report.write(output)
-
-        shutil.copyfile(constants.css,
-                        os.path.join(constants.work_dir, "style.css"))
-
-        logger.info("Test report generated at "+reportfile+".")
-        if not args.no_browser:
-            try:
-                import webbrowser
-                logger.info("Openning test report in web-browser")
-                webbrowser.open(reportfile)
-            except:
-                return 1
-        return 0
 
     if args.command=='run':
         with open(isa_file, "r") as isafile:
