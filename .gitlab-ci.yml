@@ -20,10 +20,6 @@ pre-merge-check:
     - sed -i 's/riscof/riscof\/riscof-plugins/g' config.ini
     - cat config.ini
     - python3 -m riscof.main run --config=config.ini --no-browser
-      #    - python3 -m riscof.main setup --refname=spike_parallel --dutname=spike_parallel
-      #    - sed -i 's/riscof/riscof\/riscof-plugins/g' config.ini
-      #    - cat config.ini
-      #    - python3 -m riscof.main coverage --config config.ini --no-browser
     - python3 setup.py sdist
   only:
     refs:
@@ -69,10 +65,6 @@ post-deploy-check:
     - sed -i 's/riscof/riscof\/riscof-plugins/g' config.ini
     - cat config.ini
     - riscof run --config=config.ini --no-browser
-      #    - riscof setup --refname=spike_parallel --dutname=spike_parallel
-      #    - sed -i 's/riscof/riscof\/riscof-plugins/g' config.ini
-      #    - cat config.ini
-      #    - riscof coverage --config=config.ini --no-browser
   only:
     refs:
       - master
