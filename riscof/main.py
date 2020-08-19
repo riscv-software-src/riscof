@@ -1,3 +1,6 @@
+# See LICENSE.incore for details
+"""Console script for riscof."""
+
 import logging
 import importlib
 from datetime import datetime
@@ -10,7 +13,8 @@ import distutils.dir_util
 
 from jinja2 import Template
 
-import riscof
+from riscof.log import *
+from riscof.__init__ import __version__
 import riscv_config.checker as riscv_config
 import riscof.framework.main as framework
 import riscof.framework.test as test_routines
@@ -35,19 +39,19 @@ def execute():
         raise SystemExit
 
     # Set up the logger
-    utils.setup_logging(args.verbose)
-    logger = logging.getLogger()
-    logger.handlers = []
-    ch = logging.StreamHandler()
-    ch.setFormatter(utils.ColoredFormatter())
-    logger.addHandler(ch)
-    fh = logging.FileHandler('run.log', 'w')
-    logger.addHandler(fh)
+    logger.level(args.verbose)
+    #logger = logging.getLogger()
+    #logger.handlers = []
+    #ch = logging.StreamHandler()
+    #ch.setFormatter(utils.ColoredFormatter())
+    #logger.addHandler(ch)
+    #fh = logging.FileHandler('run.log', 'w')
+    #logger.addHandler(fh)
 
 
     if (args.version):
         print('RISCOF: RISC-V Compliance Framework')
-        print('Version: '+riscof.__version__)
+        print('Version: '+ __version__)
         return 0
     elif (args.command=='setup'):
         logger.info("Setting up sample plugin requirements [Old files will \
@@ -184,7 +188,7 @@ and DUT plugins in the config.ini file')
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
-        report_objects['version'] = riscof.__version__
+        report_objects['version'] = __version__
         report_objects['reference'] = (base.__model__).replace("_", " ")
 
         report_objects['isa'] = isa_specs['ISA']
@@ -229,7 +233,7 @@ and DUT plugins in the config.ini file')
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
-        report_objects['version'] = riscof.__version__
+        report_objects['version'] = __version__
         report_objects['dut'] = (dut.__model__).replace("_", " ")
         report_objects['reference'] = (base.__model__).replace("_", " ")
 
