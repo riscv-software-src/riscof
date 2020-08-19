@@ -1,3 +1,5 @@
+# See LICENSE.incore for details
+
 import pathlib
 import logging
 import argparse
@@ -8,8 +10,8 @@ import operator
 import shlex
 import ruamel
 from ruamel.yaml import YAML
+from riscof.log import logger
 
-logger = logging.getLogger(__name__)
 
 yaml = YAML(typ="rt")
 yaml.default_flow_style = False
