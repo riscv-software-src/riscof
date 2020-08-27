@@ -89,7 +89,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 2
-        li      x2, 0x20202020 // this should never get executed since the return from trap is PC+8
+        li      x2, 0x2 // this should never get executed since the return from trap is PC+8
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -103,7 +103,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x33333333
         la      x4, 1f+1
         jalr    x0, x4, 1
-        li      x2, 0x30303030
+        li      x2, 0x3
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -114,7 +114,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x44444444
         la      x4, 1f+2
         jalr    x0, x4, 0
-        li      x2, 0x40404040
+        li      x2, 0x4
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -125,7 +125,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x55555555
         la      x4, 1f+3
         jalr    x0, x4, -1
-        li      x2, 0x50505050
+        li      x2, 0x5
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -136,7 +136,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -2
-        li      x2, 0x60606060
+        li      x2, 0x6
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -150,7 +150,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 3
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -161,7 +161,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x33333333
         la      x4, 1f+1
         jalr    x0, x4, 2
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -172,7 +172,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x44444444
         la      x4, 1f+2
         jalr    x0, x4, 1
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -183,7 +183,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x55555555
         la      x4, 1f+3
         jalr    x0, x4, 0
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -194,7 +194,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -1
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -212,7 +212,7 @@ RVTEST_CODE_BEGIN
 
         li      x2, 0x77777777
         jal    x0, 1f+2 
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -233,7 +233,7 @@ RVTEST_CODE_BEGIN
         # Test
         li      x2, 0x99999999
         beq     x5, x6, 1f + 2
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -258,7 +258,7 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0x88888888
         bne     x5, x6, 1f + 2
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -283,7 +283,7 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xAAAAAAAA
         blt     x5, x6, 1f + 2
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -307,7 +307,7 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xBBBBBBBB
         bltu     x5, x6, 1f + 2
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -330,7 +330,7 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xCCCCCCCC
         bge     x6, x5, 1f + 2
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -353,7 +353,7 @@ RVTEST_CODE_BEGIN
     # Test
     li      x2, 0xDDDDDDDD
         bgeu     x6, x5, 1f + 2
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         .fill 1,2 ,0x00
@@ -384,7 +384,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x22222222
         la      x4, 1f
         jalr    x0, x4, 1
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         jal     x0, 2f 
@@ -393,7 +393,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x33333333
         la      x4, 1f
         jalr    x0, x4, 1
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         jal     x0, 2f 
@@ -402,7 +402,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x44444444
         la      x4, 1f+1
         jalr    x0, x4, 0
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         jal     x0, 2f 
@@ -412,7 +412,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x55555555
         la      x4, 1f+2
         jalr    x0, x4, -1
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         jal     x0, 2f 
@@ -421,7 +421,7 @@ RVTEST_CODE_BEGIN
         li      x2, 0x66666666
         la      x4, 1f+4
         jalr    x0, x4, -3
-        li      x2, 0xbabecafe
+        li      x2, 0xb
         jal     x0, 2f 
     1:
         jal     x0, 2f 
