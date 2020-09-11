@@ -248,22 +248,6 @@ function is_all_rows_hidden(value) {
   return value.hidden == false;
 }
 
-function filter_table(elem) {
-    var outcome_att = "data-test-result";
-    var outcome = elem.getAttribute(outcome_att);
-    class_outcome = outcome + " results-table-row";
-    var outcome_rows = document.getElementsByClassName(class_outcome);
-
-    for(var i = 0; i < outcome_rows.length; i++){
-        outcome_rows[i].hidden = !elem.checked;
-    }
-
-    var rows = find_all('.results-table-row').filter(is_all_rows_hidden);
-    var all_rows_hidden = rows.length == 0 ? true : false;
-    var not_found_message = document.getElementById("not-found-message");
-    not_found_message.hidden = !all_rows_hidden;
-}
-
 </script>
     <h1>{{ name }}</h1>
     <p>Report generated on {{ date }} by <a href="https://pypi.python.org/pypi/riscof">riscof</a> v{{ version }}</p>
@@ -311,8 +295,8 @@ function filter_table(elem) {
     <p>Please visit <a href="https://riscv-config.readthedocs.io/en/latest/yaml-specs.html">YAML specifications</a> for more information. </p>
     
     <h2>Test Stats</h2>
-    <table>
-      <thead>
+    <table id ="sizes-table">
+      <thead id="sizes-table-head">
         <tr>
           <th col="tname">Test Name</th>
           <th col="tsize">Size (Bytes)</th>
