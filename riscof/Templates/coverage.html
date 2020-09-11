@@ -155,6 +155,7 @@ function init () {
                                   sort_column(elem);
                               }, false)
     });
+    hide_all_extras();
     hide_all_extras1();
 
 };
@@ -308,8 +309,27 @@ function filter_table(elem) {
           </tr>
           </tbody></table>
     <p>Please visit <a href="https://riscv-config.readthedocs.io/en/latest/yaml-specs.html">YAML specifications</a> for more information. </p>
+    
+    <h2>Test Stats</h2>
+    <table>
+      <thead>
+        <tr>
+          <th col="tname">Test Name</th>
+          <th col="tsize">Size (Bytes)</th>
+          <th col="tcov">Covergroups</th>
+        </tr>
+      </thead>
+        {% for result1 in results1 %}
+        <tbody class= "{{ result1.repclass }}  results-table-row" >
+        <tr>
+          <td>{{ result1.test_name }}</td>
+          <td>{{ result1.test_size }}</td>          
+          <td>{{ result1.test_groups }}</td>          
+        </tr></tbody>
+        {% endfor %}
+      </table>
 
-    <h2>Results</h2>
+    <h2>Coverage Report</h2>
     <table id="results-table">
       <thead id="results-table-head">
         <tr>

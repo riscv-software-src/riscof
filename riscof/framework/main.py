@@ -10,6 +10,7 @@ import riscof.constants as constants
 import riscv_isac.coverage as isac
 import ruamel
 from ruamel.yaml import YAML
+from elftools.elf.elffile import ELFFile
 yaml = YAML(typ="rt")
 yaml.default_flow_style = False
 yaml.allow_unicode = True
@@ -34,6 +35,20 @@ def filter_coverage(cgf_file,ispec,pspec,results):
     for key in cover_points:
         result_filtered[key] = results[key]
     return result_filtered
+
+def find_elf_size(elf):
+    with open(elf, 'rb') as f:
+        elffile = ELFFile(f)
+        # elfclass is a public attribute of ELFFile, read from its header
+        symtab = elffile.get_section_by_name('.symtab')
+        e_ehsize = elffile.header['e_ehsize']
+        e_phnum = elffile.header['e_phnum']
+        e_phentsize = elffile.header['e_phentsize']
+        e_shnum = elffile.header['e_shnum']
+        e_shentsize = elffile.header['e_shentsize']
+        e_shoff = elffile.header['e_shoff']
+        size = e_shoff + e_ehsize + (e_phnum * e_phentsize) + (e_shnum * e_shentsize)
+    return size
 
 def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     '''
@@ -75,9 +90,15 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
 
     logger.info("Merging Coverage reports")
     cov_files = []
+    test_stats = []
     for entry in test_pool:
         work_dir = test_list[entry[0]]['work_dir']
         cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],'dump.cgf'))
+        elf = work_dir + '/my.elf'
+        test_stats.append( {'test_name': entry[0], 
+                            'test_size': str(find_elf_size(elf)),
+                            'test_groups': str(test_list[entry[0]]['coverage_labels'])
+                            })
 
     if 64 in ispec['supported_xlen']:
         results = isac.merge_coverage(cov_files, cgf_file, True, 64)
@@ -96,11 +117,11 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
                 'name': cov_labels,
                 'coverage': coverage,
                 'log': string,
-                'percentage': percentage
+                'percentage': percentage,
                 }
         for_html.append(res)
 
-    return results, for_html
+    return results, for_html, test_stats
 
 def run(dut, base, dut_isa_spec, dut_platform_spec):
     '''

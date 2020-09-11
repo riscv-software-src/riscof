@@ -179,7 +179,7 @@ and DUT plugins in the config.ini file')
 
         with open(platform_file, "r") as platfile:
             pspecs = platfile.read()
-        report, for_html = framework.run_coverage(base, isa_file, platform_file,
+        report, for_html, test_stats = framework.run_coverage(base, isa_file, platform_file,
                 args.cgf)
         report_file = open(constants.work_dir+'/suite_coverage.rpt','w')
         report_file.write(report)
@@ -199,6 +199,7 @@ and DUT plugins in the config.ini file')
         report_objects['isa_specs'] = ispecs
         report_objects['platform_specs'] = pspecs
         report_objects['results'] = for_html
+        report_objects['results1'] = test_stats
         #report_objects['results'] = framework.run(dut, base, isa_file,
         #                                          platform_file)
         with open(constants.coverage_template, "r") as report_template:
