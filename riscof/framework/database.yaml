@@ -10,6 +10,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cadd
 - suite/rv32i_m/C/C-ADDI.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -21,6 +23,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - caddi
 - suite/rv32i_m/C/C-ADDI16SP.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -32,6 +36,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - caddi16sp
 - suite/rv32i_m/C/C-ADDI4SPN.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -43,6 +49,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - caddi4sp
 - suite/rv32i_m/C/C-AND.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -54,6 +62,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cand
 - suite/rv32i_m/C/C-ANDI.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -65,6 +75,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - candi
 - suite/rv32i_m/C/C-BEQZ.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -76,6 +88,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cbeqz
 - suite/rv32i_m/C/C-BNEZ.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -87,6 +101,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cbnez
 - suite/rv32i_m/C/C-J.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -98,6 +114,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cj
 - suite/rv32i_m/C/C-JAL.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -109,6 +127,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cjal
 - suite/rv32i_m/C/C-JALR.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -120,6 +140,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cjalr
 - suite/rv32i_m/C/C-JR.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -131,6 +153,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cjr
 - suite/rv32i_m/C/C-LI.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -142,6 +166,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cli
 - suite/rv32i_m/C/C-LUI.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -153,6 +179,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - clui
 - suite/rv32i_m/C/C-LW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -164,6 +192,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - clw
 - suite/rv32i_m/C/C-LWSP.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -175,6 +205,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - clwsp
 - suite/rv32i_m/C/C-MV.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -186,6 +218,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cmv
 - suite/rv32i_m/C/C-OR.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -197,6 +231,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cor
 - suite/rv32i_m/C/C-SLLI.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -208,6 +244,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cslli
 - suite/rv32i_m/C/C-SRAI.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -219,6 +257,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrai
 - suite/rv32i_m/C/C-SRLI.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -230,6 +270,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrli
 - suite/rv32i_m/C/C-SUB.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -241,6 +283,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csub
 - suite/rv32i_m/C/C-SW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -252,6 +296,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csw
 - suite/rv32i_m/C/C-SWSP.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -263,6 +309,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cswsp
 - suite/rv32i_m/C/C-XOR.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IC
@@ -274,6 +322,8 @@
         - check ISA:=regex(.*C.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - cxor
 - suite/rv32i_m/I/I-ADD-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -284,6 +334,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - add
 - suite/rv32i_m/I/I-ADDI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -294,6 +346,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - addi
 - suite/rv32i_m/I/I-AND-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -304,6 +358,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - and
 - suite/rv32i_m/I/I-ANDI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -314,6 +370,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - andi
 - suite/rv32i_m/I/I-AUIPC-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -324,6 +382,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - auipc
 - suite/rv32i_m/I/I-BEQ-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -334,6 +394,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - beq
 - suite/rv32i_m/I/I-BGE-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -344,6 +406,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - bge
 - suite/rv32i_m/I/I-BGEU-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -354,6 +418,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - bgeu
 - suite/rv32i_m/I/I-BLT-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -364,6 +430,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - blt
 - suite/rv32i_m/I/I-BLTU-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -374,6 +442,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - bltu
 - suite/rv32i_m/I/I-BNE-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -384,6 +454,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - bne
 - suite/rv32i_m/I/I-DELAY_SLOTS-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -394,6 +466,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - nop
 - suite/rv32i_m/I/I-ENDIANESS-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -404,6 +478,10 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lui
+        - lbu
+        - lw
 - suite/rv32i_m/I/I-IO-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -414,6 +492,13 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lui
+        - add
+        - addi
+        - ori
+        - xori
+        - slli
 - suite/rv32i_m/I/I-JAL-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -424,6 +509,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - jal
 - suite/rv32i_m/I/I-JALR-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -434,6 +521,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - jalr
 - suite/rv32i_m/I/I-LB-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -444,6 +533,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lb-align
 - suite/rv32i_m/I/I-LBU-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -453,7 +544,9 @@
         - check ISA:=regex(.*32.*)
         - check ISA:=regex(.*I.*)
         define:
-        - def TEST_CASE_1=True
+        - def  TEST_CASE_1=True
+        coverage_labels:
+        - lbu-align
 - suite/rv32i_m/I/I-LH-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -464,6 +557,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lh-align
 - suite/rv32i_m/I/I-LHU-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -474,6 +569,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lhu-align
 - suite/rv32i_m/I/I-LUI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -484,6 +581,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lui
 - suite/rv32i_m/I/I-LW-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -494,6 +593,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lw-align
 - suite/rv32i_m/I/I-NOP-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -504,6 +605,12 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lui
+        - addi
+        - ori
+        - xori
+        - slli
 - suite/rv32i_m/I/I-OR-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -514,6 +621,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - or
 - suite/rv32i_m/I/I-ORI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -524,6 +633,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - ori
 - suite/rv32i_m/I/I-RF_size-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -534,6 +645,12 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lui
+        - addi
+        - ori
+        - xori
+        - slli
 - suite/rv32i_m/I/I-RF_width-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -544,6 +661,12 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lui
+        - addi
+        - ori
+        - xori
+        - slli
 - suite/rv32i_m/I/I-RF_x0-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -554,6 +677,15 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - lui
+        - slli
+        - srli
+        - srai
+        - addi
+        - ori
+        - xori
+        - slli
 - suite/rv32i_m/I/I-SB-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -564,6 +696,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sb-align
 - suite/rv32i_m/I/I-SH-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -573,7 +707,9 @@
         - check ISA:=regex(.*32.*)
         - check ISA:=regex(.*I.*)
         define:
-        - def TEST_CASE_1=True
+        - def  TEST_CASE_1=True
+        coverage_labels:
+        - sh-align
 - suite/rv32i_m/I/I-SLL-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -584,6 +720,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sll
 - suite/rv32i_m/I/I-SLLI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -594,6 +732,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - slli
 - suite/rv32i_m/I/I-SLT-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -604,6 +744,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - slt
 - suite/rv32i_m/I/I-SLTI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -614,6 +756,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - slti
 - suite/rv32i_m/I/I-SLTIU-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -624,6 +768,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sltiu
 - suite/rv32i_m/I/I-SLTU-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -634,6 +780,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sltu
 - suite/rv32i_m/I/I-SRA-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -644,6 +792,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sra
 - suite/rv32i_m/I/I-SRAI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -654,6 +804,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - srai
 - suite/rv32i_m/I/I-SRL-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -664,6 +816,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - srl
 - suite/rv32i_m/I/I-SRLI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -674,6 +828,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - srli
 - suite/rv32i_m/I/I-SUB-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -684,6 +840,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sub
 - suite/rv32i_m/I/I-SW-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -694,6 +852,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sw-align
 - suite/rv32i_m/I/I-XOR-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -704,6 +864,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - xor
 - suite/rv32i_m/I/I-XORI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -714,6 +876,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - xori
 - suite/rv32i_m/M/DIV.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -725,6 +889,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - div
 - suite/rv32i_m/M/DIVU.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -736,6 +902,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - divu
 - suite/rv32i_m/M/MUL.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -747,6 +915,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - mul
 - suite/rv32i_m/M/MULH.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -758,6 +928,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - mulh
 - suite/rv32i_m/M/MULHSU.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -769,6 +941,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - mulhsu
 - suite/rv32i_m/M/MULHU.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -780,6 +954,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - mulhu
 - suite/rv32i_m/M/REM.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -791,6 +967,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - rem
 - suite/rv32i_m/M/REMU.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32IM
@@ -802,6 +980,8 @@
         - check ISA:=regex(.*M.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - remu
 - suite/rv32i_m/Zicsr/I-CSRRC-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -813,6 +993,8 @@
         - check ISA:=regex(.*Zicsr.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrrc
 - suite/rv32i_m/Zicsr/I-CSRRCI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -824,6 +1006,8 @@
         - check ISA:=regex(.*Zicsr.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrrci
 - suite/rv32i_m/Zicsr/I-CSRRS-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -835,6 +1019,8 @@
         - check ISA:=regex(.*Zicsr.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrrs
 - suite/rv32i_m/Zicsr/I-CSRRSI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -846,6 +1032,8 @@
         - check ISA:=regex(.*Zicsr.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrrsi
 - suite/rv32i_m/Zicsr/I-CSRRW-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -857,6 +1045,8 @@
         - check ISA:=regex(.*Zicsr.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrrw
 - suite/rv32i_m/Zicsr/I-CSRRWI-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -868,6 +1058,8 @@
         - check ISA:=regex(.*Zicsr.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - csrrwi
 - suite/rv32i_m/Zifencei/I-FENCE.I-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -879,6 +1071,8 @@
         - check ISA:=regex(.*Zifencei.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - fencei
 - suite/rv32i_m/privilege/I-EBREAK-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -889,6 +1083,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - ebreak
 - suite/rv32i_m/privilege/I-ECALL-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -899,6 +1095,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - ecall
 - suite/rv32i_m/privilege/I-MISALIGN_JMP-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -910,6 +1108,15 @@
         - check ISA:=regex(^[^C]+$)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - misalign-jal
+        - misalign-beq
+        - misalign-bge
+        - misalign-bgeu
+        - misalign-blt
+        - misalign-bltu
+        - misalign-bne
+        - misalign-jalr
 - suite/rv32i_m/privilege/I-MISALIGN_LDST-01.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV32I
@@ -921,6 +1128,12 @@
         - check hw_data_misaligned_support:=False
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - misalign-sw
+        - misalign-sh
+        - misalign-lw
+        - misalign-lhu
+        - misalign-lh
 - suite/rv64i_m/I/ADDIW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -931,6 +1144,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - addiw
 - suite/rv64i_m/I/ADDW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -941,6 +1156,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - addw
 - suite/rv64i_m/I/SLLIW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -951,6 +1168,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - slliw
 - suite/rv64i_m/I/SLLW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -961,6 +1180,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sllw
 - suite/rv64i_m/I/SRAIW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -971,6 +1192,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sraiw
 - suite/rv64i_m/I/SRAW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -981,6 +1204,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - sraw
 - suite/rv64i_m/I/SRLIW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -991,6 +1216,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - srliw
 - suite/rv64i_m/I/SRLW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -1001,6 +1228,8 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - srlw
 - suite/rv64i_m/I/SUBW.S:
     commit_id: 93a0ee80da7cf15e540716e8176687de158b0837
     isa: RV64I
@@ -1011,3 +1240,5 @@
         - check ISA:=regex(.*I.*)
         define:
         - def TEST_CASE_1=True
+        coverage_labels:
+        - subw
