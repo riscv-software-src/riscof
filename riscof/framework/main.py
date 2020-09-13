@@ -25,10 +25,15 @@ def filter_coverage(cgf_file,ispec,pspec,results):
         if key == 'datasets':
             continue
         include = True
-        if 'config' in node:
-            for entry in node['config'].split(";"):
+        if 'cond' in node:
+            for entry in node['cond'].split(";"):
                 if 'check' in entry:
                     include = include and test.eval_cond(entry, spec)
+        elif 'config' in node:
+            for entry in node['config']:
+                for cond in entry.split(";"):
+                    if 'check' in cond:
+                        include = include and test.eval_cond(cond, spec)
         if include:
             cover_points.append(key)
     result_filtered = {}
@@ -95,7 +100,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
         work_dir = test_list[entry[0]]['work_dir']
         cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],'dump.cgf'))
         elf = work_dir + '/my.elf'
-        test_stats.append( {'test_name': entry[0], 
+        test_stats.append( {'test_name': entry[0],
                             'test_size': str(find_elf_size(elf)),
                             'test_groups': str(test_list[entry[0]]['coverage_labels'])
                             })
