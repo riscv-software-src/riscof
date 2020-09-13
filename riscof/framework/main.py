@@ -109,8 +109,10 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     results_yaml = yaml.load(results)
     results_yaml = filter_coverage(cgf_file,ispec,pspec,results_yaml)
     for_html = []
+    coverpoints = 0
     for cov_labels in results_yaml:
         coverage = results_yaml[cov_labels]['coverage']
+        coverpoints += int(coverage.split('/')[1])
         string = isac.pretty_print_yaml(results_yaml[cov_labels])
         percentage = "{:.2f}".format(eval(coverage)*100)
         res = {
@@ -121,7 +123,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
                 }
         for_html.append(res)
 
-    return results, for_html, test_stats
+    return results, for_html, test_stats, coverpoints
 
 def run(dut, base, dut_isa_spec, dut_platform_spec):
     '''
