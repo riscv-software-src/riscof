@@ -44,16 +44,19 @@ def filter_coverage(cgf_file,ispec,pspec,results):
 def find_elf_size(elf):
     with open(elf, 'rb') as f:
         elffile = ELFFile(f)
+        # size = 0
+        # for segment in elffile.iter_segments():
+        #     size += segment['p_memsz']
         # elfclass is a public attribute of ELFFile, read from its header
-        symtab = elffile.get_section_by_name('.symtab')
-        e_ehsize = elffile.header['e_ehsize']
-        e_phnum = elffile.header['e_phnum']
-        e_phentsize = elffile.header['e_phentsize']
-        e_shnum = elffile.header['e_shnum']
-        e_shentsize = elffile.header['e_shentsize']
-        e_shoff = elffile.header['e_shoff']
-        size = e_shoff + e_ehsize + (e_phnum * e_phentsize) + (e_shnum * e_shentsize)
-    return size
+        # symtab = elffile.get_section_by_name('.symtab')
+        # e_ehsize = elffile.header['e_ehsize']
+        # e_phnum = elffile.header['e_phnum']
+        # e_phentsize = elffile.header['e_phentsize']
+        # e_shnum = elffile.header['e_shnum']
+        # e_shentsize = elffile.header['e_shentsize']
+        # e_shoff = elffile.header['e_shoff']
+        # size = e_shoff + e_ehsize + (e_phnum * e_phentsize) + (e_shnum * e_shentsize)
+        return sum([segment['p_memsz'] for segment in elffile.iter_segments()])
 
 def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     '''
