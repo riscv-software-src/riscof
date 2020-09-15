@@ -43,8 +43,11 @@ def filter_coverage(cgf_file,ispec,pspec,results):
 
 def get_addr_from_symtab(symtab,label):
     mains = symtab.get_symbol_by_name(label)
-    main = mains[0]
-    return int(main.entry['st_value'])
+    if mains is not None:
+        main = mains[0]
+        return int(main.entry['st_value'])
+    else:
+        return 0
 def find_elf_size(elf):
     with open(elf, 'rb') as f:
         elffile = ELFFile(f)
