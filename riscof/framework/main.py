@@ -41,9 +41,17 @@ def filter_coverage(cgf_file,ispec,pspec,results):
         result_filtered[key] = results[key]
     return result_filtered
 
+def get_addr_from_symtab(symtab,label):
+    mains = symtab.get_symbol_by_name(label)
+    main = mains[0]
+    return int(main.entry['st_value'])
 def find_elf_size(elf):
     with open(elf, 'rb') as f:
         elffile = ELFFile(f)
+        symtab = elffile.get_section_by_name('.symtab')
+        code_size = get_addr_from_symtab(symtab,'rvtest_code_end') - get_addr_from_symtab(symtab,'rvtest_code_begin')
+        data_size = get_addr_from_symtab(symtab,'rvtest_data_end') - get_addr_from_symtab(symtab,'rvtest_data_begin')
+        sign_size = get_addr_from_symtab(symtab,'end_signature') - get_addr_from_symtab(symtab,'begin_signature')
         # size = 0
         # for segment in elffile.iter_segments():
         #     size += segment['p_memsz']
@@ -56,7 +64,7 @@ def find_elf_size(elf):
         # e_shentsize = elffile.header['e_shentsize']
         # e_shoff = elffile.header['e_shoff']
         # size = e_shoff + e_ehsize + (e_phnum * e_phentsize) + (e_shnum * e_shentsize)
-        return sum([segment['p_memsz'] for segment in elffile.iter_segments()])
+        return (sum([segment['p_memsz'] for segment in elffile.iter_segments()]),code_size,data_size,sign_size)
 
 def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     '''
@@ -104,8 +112,8 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
         cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],'dump.cgf'))
         elf = work_dir + '/my.elf'
         test_stats.append( {'test_name': entry[0],
-                            'test_size': str(find_elf_size(elf)),
-                            'test_groups': str(test_list[entry[0]]['coverage_labels'])
+                            'test_size': [str(entry) for entry in find_elf_size(elf)],
+                            'test_groups': str(set(test_list[entry[0]]['coverage_labels']))
                             })
 
     if 64 in ispec['supported_xlen']:

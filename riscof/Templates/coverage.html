@@ -303,7 +303,10 @@ function is_all_rows_hidden(value) {
       <thead id="sizes-table-head">
         <tr>
           <th class="sortable name initial-sort" col="tname">Test Name</th>
-          <th class="sortable numeric initial-sort" col="tsize">Size (Bytes)</th>
+          <th class="sortable numeric initial-sort" col="tfprint">Mem Footprint (Bytes)</th>
+          <th class="sortable numeric initial-sort" col="tcode">Code size (Bytes)</th>
+          <th class="sortable numeric initial-sort" col="tdata">Data size (Bytes)</th>
+          <th class="sortable numeric initial-sort" col="tsign">Sign size (Bytes)</th>
           <th col="tcov">Covergroups</th>
         </tr>
       </thead>
@@ -311,7 +314,10 @@ function is_all_rows_hidden(value) {
         <tbody class= "{{ result1.repclass }}  sizes-table-row" >
         <tr>
           <td class="col-tname">{{ result1.test_name }}</td>
-          <td class="col-tsize">{{ result1.test_size }}</td>          
+          <td class="col-tfprint">{{ result1.test_size[0] }}</td>          
+          <td class="col-tcode">{{ result1.test_size[1] }}</td>          
+          <td class="col-tdata">{{ result1.test_size[2] }}</td>          
+          <td class="col-tsign">{{ result1.test_size[3] }}</td>          
           <td class="col-tcov">{{ result1.test_groups }}</td>          
         </tr></tbody>
         {% endfor %}
