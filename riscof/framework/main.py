@@ -97,7 +97,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     # Setting up models
     base.initialise(constants.suite, work_dir, constants.env)
     #Loading Specs
-    ispec = utils.load_yaml(dut_isa_spec)
+    ispec = utils.load_yaml(dut_isa_spec)['hart0']
     pspec = utils.load_yaml(dut_platform_spec)
 
     logger.debug("Running Build for Reference")
@@ -181,7 +181,7 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
     logger.debug("Running Build for Reference")
     base.build(dut_isa_spec, dut_platform_spec)
 
-    results = test.run_tests(dut, base, ispec, pspec)
+    results = test.run_tests(dut, base, ispec['hart0'], pspec)
 
     return results
 

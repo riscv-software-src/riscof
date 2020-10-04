@@ -152,7 +152,7 @@ and DUT plugins in the config.ini file')
             logger.error(msg)
             return 1
 
-        isa_specs = utils.load_yaml(isa_file)
+        isa_specs = utils.load_yaml(isa_file)['hart0']
         platform_specs = utils.load_yaml(platform_file)
 
     if args.command=='gendb' or args.command=='run' or \
