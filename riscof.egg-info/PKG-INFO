@@ -1,0 +1,24 @@
+Metadata-Version: 1.2
+Name: riscof
+Version: 1.16.0
+Summary: Risc-V Compliance Framework
+Home-page: https://gitlab.com/incoresemi/riscof
+Author: InCore Semiconductors Pvt. Ltd.
+Author-email: neelgala@incoresemi.com
+License: BSD-3-Clause
+Description: RISCOF
+        ===========
+        **RISCOF** is a RISC-V Compliance Framework.
+        
+        LICENSE: BSD-3 Clause.
+        
+        Latest documentation of RISCOF :
+        
+          * `HTML <https://riscof.readthedocs.io/>`_
+          * `PDF  <https://gitlab.com/incoresemi/riscof/-/jobs/artifacts/master/raw/RISCVComplianceFramework.pdf?job=doc>`_
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.6
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Development Status :: 4 - Beta
+Requires-Python: >=3.6.0

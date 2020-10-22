@@ -146,8 +146,8 @@ and DUT plugins in the config.ini file')
 
 
         try:
-            isa_file, platform_file = riscv_config.check_specs(
-                isa_file, platform_file, work_dir, True)
+            isa_file = riscv_config.check_isa_specs( isa_file, work_dir, True)
+            platform_file = riscv_config.check_platform_specs( platform_file, work_dir, True)
         except ValidationError as msg:
             logger.error(msg)
             return 1
