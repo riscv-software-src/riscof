@@ -13,7 +13,7 @@ import distutils.dir_util
 
 from jinja2 import Template
 
-from riscof.log import *
+#from riscof.log import *
 from riscof.__init__ import __version__
 import riscv_config.checker as riscv_config
 import riscof.framework.main as framework
@@ -39,14 +39,12 @@ def execute():
         raise SystemExit
 
     # Set up the logger
-    logger.level(args.verbose)
-    #logger = logging.getLogger()
-    #logger.handlers = []
-    #ch = logging.StreamHandler()
-    #ch.setFormatter(utils.ColoredFormatter())
-    #logger.addHandler(ch)
-    #fh = logging.FileHandler('run.log', 'w')
-    #logger.addHandler(fh)
+    utils.setup_logging(args.verbose)
+    logger = logging.getLogger()
+    logger.handlers = []
+    ch = logging.StreamHandler()
+    ch.setFormatter(utils.ColoredFormatter())
+    logger.addHandler(ch)
 
 
     if (args.version):
