@@ -2,9 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-- Privilege tests for machine csrs.
-- Spec Coverage
+## [1.16.2] - 2020-08-05
+- Removed coverage support and cgf file(will be reintroduced when riscv-isac is released).
+- Freeze riscv-config to v2.2.2
+
+## [1.16.1] - 2020-07-20
+- Adding docs for rvtest_case condition string syntax.
 
 ## [1.16.0] - 2020-06-18
 - Adding coverage generation support through spike --log-commits
