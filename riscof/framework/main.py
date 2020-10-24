@@ -112,8 +112,9 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     test_stats = []
     for entry in test_pool:
         work_dir = test_list[entry[0]]['work_dir']
-        cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],'dump.cgf'))
-        elf = work_dir + '/my.elf'
+        test_name = work_dir.rsplit('/',1)[1][:-2]
+        cov_files.append(os.path.join(test_list[entry[0]]['work_dir'],test_name + '.cgf'))
+        elf = work_dir + '/' + test_name +'.elf'
         test_stats.append( {'test_name': entry[0],
                             'test_size': [str(entry) for entry in find_elf_size(elf)],
                             'test_groups': str(set(test_list[entry[0]]['coverage_labels']))

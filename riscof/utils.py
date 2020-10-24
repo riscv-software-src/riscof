@@ -10,12 +10,14 @@ import operator
 import shlex
 import ruamel
 from ruamel.yaml import YAML
-from riscof.log import logger
+#from riscof.log import logger
 
 
 yaml = YAML(typ="rt")
 yaml.default_flow_style = False
 yaml.allow_unicode = True
+
+logger = logging.getLogger(__name__)
 
 
 def load_yaml(foo):
@@ -86,7 +88,7 @@ class makeUtil():
 
         """
         assert tname in self.targets, "Target does not exist."
-        shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
+        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
     def execute_all(self,cwd):
         """
         Function to execute all the defined targets.
@@ -96,7 +98,7 @@ class makeUtil():
         :type cwd: str
 
         """
-        shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
+        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
 
 
 class Command():
@@ -310,9 +312,9 @@ class ColoredFormatter(logging.Formatter):
         level_name = str(record.levelname)
         name = str(record.name)
         color_prefix = self.colors[level_name]
-        return '{0}{1:<9s} : {2}{3}'.format(color_prefix,
+        return '{0}{1:<9s} {4}: {2}{3}'.format(color_prefix,
                                             '[' + level_name + ']', msg,
-                                            self.reset)
+                                            self.reset, name)
 
 
 def setup_logging(log_level):
