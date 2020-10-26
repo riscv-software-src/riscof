@@ -312,9 +312,9 @@ class ColoredFormatter(logging.Formatter):
         level_name = str(record.levelname)
         name = str(record.name)
         color_prefix = self.colors[level_name]
-        return '{0}{1:>9s} | [--{4}--]: {2}{3}'.format(color_prefix,
-                                            '[' + level_name + ']', msg,
-                                            self.reset, name)
+        return '{0}{1:>9s} | [--{2}--]: {3}{4}'.format(color_prefix,
+                                            level_name, name, msg,
+                                            self.reset)
 
 
 def setup_logging(log_level):
@@ -409,7 +409,7 @@ def riscof_cmdline_args():
     coverage.add_argument('--cgf',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        required=True,
+#                        required=True,
                         help='The Path to the cgf file.',
                         metavar= 'PATH')
     coverage.add_argument('--suite',

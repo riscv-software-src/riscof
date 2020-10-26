@@ -171,14 +171,19 @@ and DUT plugins in the config.ini file')
 
     if args.command == 'coverage':
         logger.info('Will collect Coverage using RISCV-ISAC')
-        logger.info('CGF file being used : ' + str(constants.cgf_file))
+        if args.cgf is None:
+            cgf_file = constants.cgf_file
+        else:
+            cgf_file = args.cgf_file
+        logger.info('CGF file being used : ' + str(cgf_file))
+
         with open(isa_file, "r") as isafile:
             ispecs = isafile.read()
 
         with open(platform_file, "r") as platfile:
             pspecs = platfile.read()
         report, for_html, test_stats, coverpoints = framework.run_coverage(base, isa_file, platform_file,
-                args.cgf)
+                cgf_file)
         report_file = open(constants.work_dir+'/suite_coverage.rpt','w')
         report_file.write(report)
         report_file.close()
