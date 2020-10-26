@@ -44,7 +44,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
 #ifdef TEST_CASE_1
-  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True",ebreak)
 
     # Save and set trap handler address
     la x1, _trap_handler

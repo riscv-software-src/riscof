@@ -1,3 +1,5 @@
+# See LICENSE.incore for details
+
 import pathlib
 import logging
 import argparse
@@ -8,12 +10,14 @@ import operator
 import shlex
 import ruamel
 from ruamel.yaml import YAML
+#from riscof.log import logger
 
-logger = logging.getLogger(__name__)
 
 yaml = YAML(typ="rt")
 yaml.default_flow_style = False
 yaml.allow_unicode = True
+
+logger = logging.getLogger(__name__)
 
 
 def load_yaml(foo):
@@ -84,7 +88,7 @@ class makeUtil():
 
         """
         assert tname in self.targets, "Target does not exist."
-        shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
+        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
     def execute_all(self,cwd):
         """
         Function to execute all the defined targets.
@@ -94,7 +98,7 @@ class makeUtil():
         :type cwd: str
 
         """
-        shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
+        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
 
 
 class Command():
@@ -308,8 +312,8 @@ class ColoredFormatter(logging.Formatter):
         level_name = str(record.levelname)
         name = str(record.name)
         color_prefix = self.colors[level_name]
-        return '{0}{1:<9s} : {2}{3}'.format(color_prefix,
-                                            '[' + level_name + ']', msg,
+        return '{0}{1:>9s} | [--{2}--]: {3}{4}'.format(color_prefix,
+                                            level_name, name, msg,
                                             self.reset)
 
 
@@ -394,6 +398,28 @@ def riscof_cmdline_args():
                         metavar="")
     subparsers = parser.add_subparsers(dest='command',title="Action",description="The action to be performed by riscof.",help="List of actions supported by riscof.")
 
+    coverage = subparsers.add_parser('coverage',help='Generate Coverage Report for the given YAML spec.',formatter_class=SortingHelpFormatter)
+    coverage.add_argument('--config',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the config file. [Default=./config.ini]',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./config.ini').absolute())
+                          )
+    coverage.add_argument('--cgf',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+#                        required=True,
+                        help='The Path to the cgf file.',
+                        metavar= 'PATH')
+    coverage.add_argument('--suite',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom suite directory.',
+                        metavar= 'PATH')
+    coverage.add_argument('--no-browser',action='store_true',
+                     help="Do not open the browser for showing the test report.")
+
     generatedb = subparsers.add_parser('gendb',help='Generate Database for the standard suite.',formatter_class=SortingHelpFormatter)
     generatedb.add_argument('--suite',
                             type= lambda p: str(pathlib.Path(p).absolute()),
@@ -445,6 +471,7 @@ def riscof_cmdline_args():
                         metavar= 'PATH',
                         default=str(pathlib.Path('./config.ini').absolute())
                           )
+
     testlist.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',

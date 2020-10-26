@@ -44,7 +44,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x30, "# Test Begin Reserved reg x31\n")
 
 #ifdef TEST_CASE_1
-  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(^[^C]+$); def TEST_CASE_1=True")
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True", misalign-jal, misalign-beq, misalign-bge, misalign-bgeu, misalign-blt, misalign-bltu, misalign-bne, misalign-jalr)
 
     # Save and set trap handler address
     la x1, _trap_handler

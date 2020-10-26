@@ -1,4 +1,5 @@
 GitPython>=2.1.11
 Jinja2>=2.10.1
 pytz>=2019.1
-riscv-config==2.2.2
+riscv-config>=2.4.1
+riscv_isac>=0.3.1

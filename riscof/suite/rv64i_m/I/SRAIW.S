@@ -42,7 +42,7 @@ RVTEST_CODE_BEGIN
 	RVMODEL_IO_WRITE_STR(x31, "Test Begin\n")
 
 #ifdef TEST_CASE_1
-  RVTEST_CASE(1,"// check ISA:=regex(.*64.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True")
+  RVTEST_CASE(1,"// check ISA:=regex(.*64.*); check ISA:=regex(.*I.*); def TEST_CASE_1=True",sraiw)
 
 	# ---------------------------------------------------------------------------------------------
 

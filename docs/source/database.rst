@@ -1,8 +1,8 @@
 .. _database:
 
-########################
-Database Generator [Dev]
-########################
+##################
+Database Generator
+##################
 
 RISCOF internally maintains a database of all the assembly tests available in the suite. This
 database is maintained as a YAML file and serves the purpose of selecting relevant tests for a given

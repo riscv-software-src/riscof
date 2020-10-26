@@ -44,7 +44,7 @@ RVTEST_CODE_BEGIN
     RVMODEL_IO_WRITE_STR(x31, "# Test Begin\n")
 
 #ifdef TEST_CASE_1
-  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*Zicsr.*); def TEST_CASE_1=True")
+  RVTEST_CASE(1,"// check ISA:=regex(.*32.*); check ISA:=regex(.*I.*); check ISA:=regex(.*Zicsr.*);  def TEST_CASE_1=True", csrrs)
 
     # ---------------------------------------------------------------------------------------------
     RVMODEL_IO_WRITE_STR(x31, "# Test part A1 - general test of CSRRS\n");

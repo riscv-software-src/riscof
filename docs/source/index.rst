@@ -9,18 +9,12 @@ Welcome to RISCOF
 
    intro
    overview
-   quickstart
+   installation
    plugins
    testlist
    database
    newtest
+   coverage
    testformat
    RISCV-Config [External] <https://riscv-config.readthedocs.io/>
    code-doc
-
-Indices and tables
--------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

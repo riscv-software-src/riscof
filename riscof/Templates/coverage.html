@@ -33,6 +33,9 @@ function find_all(selector, elem) {
 
 function sort_column(elem) {
     toggle_sort_states(elem);
+    name = ((elem).closest('table')).id;
+    console.log("Hi");
+    console.log(name);
     var colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
     var key;
     if (elem.classList.contains('numeric')) {
@@ -42,7 +45,7 @@ function sort_column(elem) {
     } else {
         key = key_alpha;
     }
-    sort_table(elem, key(colIndex));
+    sort_table(elem, key(colIndex), name);
 }
 
 function show_all_extras() {
@@ -155,26 +158,27 @@ function init () {
                                   sort_column(elem);
                               }, false)
     });
+    hide_all_extras();
     hide_all_extras1();
 
 };
 
-function sort_table(clicked, key_func) {
-    var rows = find_all('.results-table-row');
+function sort_table(clicked, key_func, tname) {
+    var rows = find_all('.'+tname+'-row');
     var reversed = !clicked.classList.contains('asc');
     var sorted_rows = sort(rows, key_func, reversed);
     /* Whole table is removed here because browsers acts much slower
      * when appending existing elements.
      */
-    var thead = document.getElementById("results-table-head");
-    document.getElementById('results-table').remove();
+    var thead = document.getElementById(tname+"-head");
+    document.getElementById(tname).remove();
     var parent = document.createElement("table");
-    parent.id = "results-table";
+    parent.id = tname;
     parent.appendChild(thead);
     sorted_rows.forEach(function(elem) {
         parent.appendChild(elem);
     });
-    document.getElementsByTagName("BODY")[0].appendChild(parent);
+    document.getElementsByTagName(tname+"-BODY")[0].appendChild(parent);
 }
 
 function sort(items, key_func, reversed) {
@@ -247,22 +251,6 @@ function is_all_rows_hidden(value) {
   return value.hidden == false;
 }
 
-function filter_table(elem) {
-    var outcome_att = "data-test-result";
-    var outcome = elem.getAttribute(outcome_att);
-    class_outcome = outcome + " results-table-row";
-    var outcome_rows = document.getElementsByClassName(class_outcome);
-
-    for(var i = 0; i < outcome_rows.length; i++){
-        outcome_rows[i].hidden = !elem.checked;
-    }
-
-    var rows = find_all('.results-table-row').filter(is_all_rows_hidden);
-    var all_rows_hidden = rows.length == 0 ? true : false;
-    var not_found_message = document.getElementById("not-found-message");
-    not_found_message.hidden = !all_rows_hidden;
-}
-
 </script>
     <h1>{{ name }}</h1>
     <p>Report generated on {{ date }} by <a href="https://pypi.python.org/pypi/riscof">riscof</a> v{{ version }}</p>
@@ -308,8 +296,36 @@ function filter_table(elem) {
           </tr>
           </tbody></table>
     <p>Please visit <a href="https://riscv-config.readthedocs.io/en/latest/yaml-specs.html">YAML specifications</a> for more information. </p>
+    
+    <sizes-table-body>
+    <h2>Test Stats</h2>
+    <table id ="sizes-table">
+      <thead id="sizes-table-head">
+        <tr>
+          <th class="sortable name initial-sort" col="tname">Test Name</th>
+          <th class="sortable numeric initial-sort" col="tfprint">Mem Footprint (Bytes)</th>
+          <th class="sortable numeric initial-sort" col="tcode">Code size (Bytes)</th>
+          <th class="sortable numeric initial-sort" col="tdata">Data size (Bytes)</th>
+          <th class="sortable numeric initial-sort" col="tsign">Sign size (Bytes)</th>
+          <th col="tcov">Covergroups</th>
+        </tr>
+      </thead>
+        {% for result1 in results1 %}
+        <tbody class= "{{ result1.repclass }}  sizes-table-row" >
+        <tr>
+          <td class="col-tname">{{ result1.test_name }}</td>
+          <td class="col-tfprint">{{ result1.test_size[0] }}</td>          
+          <td class="col-tcode">{{ result1.test_size[1] }}</td>          
+          <td class="col-tdata">{{ result1.test_size[2] }}</td>          
+          <td class="col-tsign">{{ result1.test_size[3] }}</td>          
+          <td class="col-tcov">{{ result1.test_groups }}</td>          
+        </tr></tbody>
+        {% endfor %}
+      </table>
 
-    <h2>Results</h2>
+    </sizes-table-body>
+    <results-table-body>
+    <h2>Coverage Report ( Total Coverpoints: {{ coverpoints }} )</h2>
     <table id="results-table">
       <thead id="results-table-head">
         <tr>
@@ -334,5 +350,6 @@ function filter_table(elem) {
         </tr></tbody>
         {% endfor %}
       </table>
+        </results-table-body>
       </body></html>
 

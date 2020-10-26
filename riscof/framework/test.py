@@ -33,6 +33,9 @@ def compare_signature(file1, file2):
             or "Failed" (if the files are different) and the diff of the files.
 
     '''
+    if not os.path.exists(file1) :
+        logger.error('Signature file : ' + file1 + ' does not exist')
+        sys.exit(1)
     file1_lines = open(file1, "r").readlines()
     res = ("".join(
         difflib.unified_diff(file1_lines,open(file2, "r").readlines(), file1, file2))).strip()
@@ -64,7 +67,6 @@ def eval_cond(condition, spec):
         :type spec: dict
 
         :return: A boolean value specifying whether the condition is satisfied by
-!!omap
             the given specifications or not.
     '''
     condition = (condition.replace("check", '')).strip()
@@ -245,9 +247,12 @@ def generate_test_pool(ispec, pspec):
     db = utils.load_yaml(constants.framework_db)
     for file in db:
         macros = []
+        cov_labels = []
         for part in db[file]['parts']:
             include = True
             part_dict = db[file]['parts'][part]
+            if 'coverage_labels' in part_dict:
+                cov_labels.extend(part_dict['coverage_labels'])
             logger.debug("Checking conditions for {}-{}".format(file, part))
             for condition in part_dict['check']:
                 include = include and eval_cond(condition, spec)
@@ -265,7 +270,7 @@ def generate_test_pool(ispec, pspec):
                 xlen = '128'
             macros.append("XLEN=" + xlen)
             test_pool.append(
-                (file, db[file]['commit_id'], macros, db[file]['isa']))
+                (file, db[file]['commit_id'], macros, db[file]['isa'],cov_labels))
     logger.info("Selecting Tests.")
     for entry in test_pool:
         # logger.info("Test file:" + entry[0])
@@ -278,6 +283,7 @@ def generate_test_pool(ispec, pspec):
         temp['work_dir']=work_dir
         temp['macros']=entry[2]
         temp['isa']=entry[3]
+        temp['coverage_labels'] = entry[4]
         if constants.suite in entry[0]:
             temp['test_path'] = entry[0]
         else:

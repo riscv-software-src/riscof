@@ -133,11 +133,9 @@
   #define mhandler			\
     csrrw   sp, mscratch, sp;	\
     SREG      t6, 6*REGWIDTH(sp);	\
-  	auipc	t6, 0;			\
-  	LREG	t6, 16(t6);		\
+  	la t6, common_mhandler;		\
   	jalr	t6, t6;			\
     nop; \
-  	.dword	common_mhandler		\
   
   /**********************************************************************/
   /**** This is the entry point for all m-modetraps, vectored or not.****/
@@ -378,7 +376,7 @@ mscratch_save:
 .endm
 
 
-#define RVTEST_CASE(_PNAME,_DSTR)                               
+#define RVTEST_CASE(_PNAME,_DSTR,...)                               
 
 #define RVTEST_SIGBASE(_R,_TAG) \
   la _R,_TAG;\
@@ -408,8 +406,9 @@ mscratch_save:
 
 #define TEST_CASE(testreg, destreg, correctval, swreg, offset, code... ) \
     code; \
-    sw destreg, offset(swreg); \
-    RVMODEL_IO_ASSERT_GPR_EQ(testreg, destreg, correctval) \
+    SREG destreg, offset(swreg); 
+
+//   RVMODEL_IO_ASSERT_GPR_EQ(testreg, destreg, correctval)
 
 
 #define TEST_AUIPC(inst, destreg, correctval, imm, swreg, offset, testreg) \
