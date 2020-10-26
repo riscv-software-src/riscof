@@ -6,7 +6,6 @@ chardet==3.0.4
 doc8==0.8.0
 docutils==0.14
 gitdb2==2.0.5
-GitPython==2.1.11
 idna==2.8
 imagesize==1.1.0
 Jinja2==2.10.1
@@ -25,9 +24,13 @@ ruamel.yaml==0.15.97
 six==1.12.0
 smmap2==2.0.5
 snowballstemmer==1.2.1
-Sphinx
+Sphinx==3.0.4
 sphinx-rtd-theme==0.4.3
 sphinxcontrib-autoyaml==0.5.0
+sphinxcontrib-mermaid
 sphinxcontrib-websupport==1.1.2
+sphinxcontrib-bibtex
 stevedore==1.30.1
 urllib3==1.25.3
+twine==1.13.0
+sphinx_tabs

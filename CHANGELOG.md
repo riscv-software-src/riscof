@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.17.1] - 2020-10-26
+- doc fix
+- fix passing of cgf from command line to internal variable
+
 ## [1.17.0] - 2020-10-26
 - Adding coverage support using riscv-isac=0.3.0
 - Adding default CGF file in the suite folder
