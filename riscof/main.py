@@ -22,6 +22,7 @@ import riscof.dbgen as dbgen
 import riscof.utils as utils
 import riscof.constants as constants
 from riscv_config.errors import ValidationError
+import riscv_isac.coverage as isac
 
 
 def execute():
@@ -173,7 +174,7 @@ and DUT plugins in the config.ini file')
         if args.cgf is None:
             cgf_file = constants.cgf_file
         else:
-            cgf_file = args.cgf_file
+            cgf_file = args.cgf
         logger.info('CGF file being used : ' + str(cgf_file))
 
         with open(isa_file, "r") as isafile:

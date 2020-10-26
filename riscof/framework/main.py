@@ -7,6 +7,7 @@ import riscof.framework.test as test
 #from riscof.framework.test import run_tests
 import riscof.utils as utils
 import riscof.constants as constants
+import riscv_isac.coverage as isac
 import ruamel
 from ruamel.yaml import YAML
 from elftools.elf.elffile import ELFFile
