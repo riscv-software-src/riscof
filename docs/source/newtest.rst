@@ -1,8 +1,8 @@
 .. _newtest:
 
-######################
-Adding New Tests [Dev]
-######################
+################
+Adding New Tests
+################
 
 This section pertains to developers who wish to add new tests to the compliance
 suite. Please follow the below steps for such contributions:
@@ -19,7 +19,7 @@ suite. Please follow the below steps for such contributions:
 
    .. code-block:: bash
    
-     python -m riscof.main gendb
+     riscof gendb
 
    The above command will generate a new file: ``framework/database.yaml``
    For more information on the dbgen utility please refer: :ref:`database`

@@ -67,7 +67,6 @@ def eval_cond(condition, spec):
         :type spec: dict
 
         :return: A boolean value specifying whether the condition is satisfied by
-!!omap
             the given specifications or not.
     '''
     condition = (condition.replace("check", '')).strip()

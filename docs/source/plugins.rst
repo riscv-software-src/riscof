@@ -107,13 +107,11 @@ An example of this function is shown below:
           logger.error('Please install spike to proceed further')
           sys.exit(0)
       self.work_dir = work_dir
-      self.compile_cmd = 'riscv32-unknown-elf-gcc -march={0} -mabi=ilp32 \
+      self.compile_cmd = 'riscv{1}-unknown-elf-gcc -march={0} \
        -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles\
        -T '+self.pluginpath+'/env/link.ld\
        -I '+self.pluginpath+'/env/\
        -I ' + compliance_env
-
-
 
 build(isa_yaml, platform_yaml)
 ------------------------------
@@ -131,8 +129,16 @@ An example of this function is show below:
 .. code-block:: python
 
   def build(self, isa_spec, platform_spec):
-    ispec = utils.load_yaml(isa_spec)
-    self.isa = ispec['ISA']
+    ispec = utils.load_yaml(isa_yaml)['hart0']
+    self.xlen = ('64' if 64 in ispec['supported_xlen'] else '32')
+    self.isa = 'rv' + self.xlen
+    self.compile_cmd = self.compile_cmd+' -mabi='+('lp64 ' if 64 in ispec['supported_xlen'] else 'ilp32 ')
+    if "I" in ispec["ISA"]:
+        self.isa += 'i'
+    if "M" in ispec["ISA"]:
+        self.isa += 'm'
+    if "C" in ispec["ISA"]:
+        self.isa += 'c'
 
 runTests(testlist)
 ------------------
@@ -160,27 +166,20 @@ performing the same commands.
     def runTests(self, testList):
         for file in testList:
             testentry = testList[file]
-            test = os.path.join(constants.root, str(file))
+            test = testentry['test_path']
             test_dir = testentry['work_dir']
 
             elf = 'my.elf'
+            sig_file = os.path.join(test_dir, self.name[:-1] + ".signature")
 
-            cmd = self.compile_cmd.format(testentry['isa'].lower()) + ' ' + test + ' -o ' + elf
+            cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen) + ' ' + test + ' -o ' + elf
             compile_cmd = cmd + ' -D' + " -D".join(testentry['macros'])
             logger.debug('Compiling test: ' + test)
             utils.shellCommand(compile_cmd).run(cwd=test_dir)
 
-            execute = 'spike --isa={0} +signature=sign {1}'.format(self.isa, elf)
+            execute = spike_path + 'spike --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
             logger.debug('Executing on Spike ' + execute)
             utils.shellCommand(execute).run(cwd=test_dir)
-
-            sign_fix = 'sh '+self.pluginpath+'/env/sign_fix.sh'
-            logger.debug('Fixing Signature format ' + execute)
-            utils.shellCommand(sign_fix).run(cwd=test_dir)
-
-            logger.debug('Renaming signature file')
-            rename_sign = 'cat sign > ' + os.path.join(test_dir, self.name[:-1] + ".signature")
-            utils.shellCommand(rename_sign).run(cwd=test_dir)
 
 An example which uses the ``makeUtil`` utility is show below. Here a Makefile is first generated
 where every test is a make target. the utility automatically creates the relevant targets and only
@@ -193,8 +192,7 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
 
   def runTests(self, testList):
       make = utils.makeUtil(makefilePath=os.path.join(self.work_dir, "Makefile." + self.name[:-1]))
-      #make.makeCommand = 'make -j8'
-      #make.makeCommand = 'pmake -j 8'
+      make.makeCommand = 'make -j' + parallel_jobs
       for file in testList:
           testentry = testList[file]
           test = testentry['test_path']
@@ -204,17 +202,13 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
 
           execute = "cd "+testentry['work_dir']+";"
 
-          cmd = self.compile_cmd.format(testentry['isa'].lower()) + ' ' + test + ' -o ' + elf
+          cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen) + ' ' + test + ' -o ' + elf
           compile_cmd = cmd + ' -D' + " -D".join(testentry['macros'])
           execute+=compile_cmd+";"
 
-          execute += 'spike --isa={0} +signature=sign {1};'.format(self.isa, elf)
+          sig_file = os.path.join(test_dir, self.name[:-1] + ".signature")
+          execute += spike_path + 'spike --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
 
-          sign_fix = 'sh '+self.pluginpath+'/env/sign_fix.sh'
-          execute+=sign_fix+";"
-
-          rename_sign = 'cat sign > ' + os.path.join(test_dir, self.name[:-1] + ".signature")
-          execute+=rename_sign+";"
           make.add_target(execute)
       make.execute_all(self.work_dir)
 
