@@ -177,9 +177,9 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
     ispec = utils.load_yaml(dut_isa_spec)
     pspec = utils.load_yaml(dut_platform_spec)
 
-    logger.debug("Running Build for DUT")
+    logger.info("Running Build for DUT")
     dut.build(dut_isa_spec, dut_platform_spec)
-    logger.debug("Running Build for Reference")
+    logger.info("Running Build for Reference")
     base.build(dut_isa_spec, dut_platform_spec)
 
     results = test.run_tests(dut, base, ispec['hart0'], pspec)

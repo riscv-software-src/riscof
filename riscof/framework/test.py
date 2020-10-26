@@ -33,6 +33,9 @@ def compare_signature(file1, file2):
             or "Failed" (if the files are different) and the diff of the files.
 
     '''
+    if not os.path.exists(file1) :
+        logger.error('Signature file : ' + file1 + ' does not exist')
+        sys.exit(1)
     file1_lines = open(file1, "r").readlines()
     res = ("".join(
         difflib.unified_diff(file1_lines,open(file2, "r").readlines(), file1, file2))).strip()
