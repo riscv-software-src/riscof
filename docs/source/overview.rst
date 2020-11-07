@@ -2,19 +2,69 @@
 Overview
 ########
 
-The following diagram captures the overall flow of RISCOF.
+The following diagram captures the overall flow of RISCOF and its components. The red bounding box
+denotes the RISCOF framework. Components outside the box either denote user inputs or external tools
+that RISCOF can work with. The inputs and components of RISCOF are discussed in detail in the
+following sections.
 
-.. image:: riscof-flow.png
+.. image:: _static/riscof.png
     :align: center
     :alt: riscof-flow
 
-The user is required to provide the spec files in the plugin. 
+Inputs to the framework
+=======================
 
-**Details on how to write the YAML spec files can be found here**: `Spec Documentation <https://riscv-config.readthedocs.io/en/latest/yaml-specs.html>`_
+As can be seen in the image above, the framework requires 2 specific inputs from the user:
+
+1. A RISCV-CONFIG based YAML specification of the ISA choices made by the user. Details on writing
+   the specific YAML spec can be found here : `Spec Documentation <https://riscv-config.readthedocs.io/en/latest/yaml-specs.html>`_
+2. A Python plugin which can be used by the framwork to compile the test, simulate the test and
+   extract the signature of each test. Steps to define the python plugin is available in the
+   :ref:`plugins` section.
+
+External Dependencies
+=====================
+
+The RISCOF framework currently depends on two major external tools:
+
+1. `RISCV-CONFIG <https://riscv-config.readthedocs.io/en/latest>`_: This tool is required to validate
+   the legality of the input ISA YAML provided by the user. RISCV-CONFIG will capture any
+   irregularities found in the YAML which indicate conflicting choices made by the user as opposed
+   to what is mentioned in the RISC-V specification. Once all the checks are passed, RISCV-CONFIG
+   will produce a standardized/normalized version of the input YAML. This standardized version is
+   further used in the process of selecting tests and configuring the reference model accordingly.
+
+2. `RISCV-ISAC <https://riscv-isac.readthedocs.io/en/latest>`_: This tool is used to provide a
+   coverage analysis and an assesment of the quality of the architectural suite available in RISCOF
+   today. This tool is essentially helpfull for test authors and test contributors to validate if
+   theie tests meet the requirements and standards to be included in the architectural test suite.
+
+Internal Components and Flow
+============================
+
+Apart from the external dependencies mentioned in the previous section, RISCOF also include a few
+internal utilities
+
+- **DBGEN** : RISCOF internally maintains a database of all the assembly tests available in the 
+  architectural test suite. This database is maintained as a YAML file and serves the purpose of 
+  selecting relevant tests for a given DUT model. DBGEN automates the generation of this YAML file
+  based on the tests available in RISCOF. 
+
+  This utility is targetted to be used by test contributors to update the database with their new
+  tests. More information on its features and usage please see :ref:`database`
+
+- **Test Selector**: RISCOF, as it evolves, shall encompass a large number of architectural tests.
+  However, not all of the tests may apply to a given configuration of a RISC-V Target. Thus, the
+  *Test Selector* utility uses the standardized RISCV-CONFIG specification from the user and the
+  database of tests to filter and select only those tests which are applicable to the RISC-V target
+  under consideration. This list is presented as a YAML file and more information on this format is
+  available in :ref:`testlist`. 
+
+  This utility is currently internal to RISCOF and is not available as a separate cli (command line
+  interface). Neither users or contributors should need to deal with this separately.
 
 
-Working
--------
+
 The ISA and Platform spec (in YAML format) need to be provided by the DUT plugin through the abstract method class
 interface.
 
