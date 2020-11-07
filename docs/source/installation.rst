@@ -8,8 +8,8 @@
 Quickstart
 ==========
 
-This doc is meant to serve as a quick-guide to setup RISCOF and perform a sample compliance check
-between ``spike`` (DUT in this case) and ``SAIL-RISCV`` (Golden model in this case).
+This section is meant to serve as a quick-guide to setup RISCOF and perform a sample validation check
+between ``spike`` (DUT in this case) and ``SAIL-RISCV`` (Reference model in this case).
 
 Install Python
 ==============
@@ -301,7 +301,7 @@ Install Plugin Models
 =====================
 
 This section will walk your throguh installing 2 important RISC-V reference models: Spike and SAIL.
-These are often used as reference models to prove compliance of the DUT.
+These are often used as reference models in RISCOF.
 
 .. tabs::
   
@@ -366,7 +366,7 @@ These are often used as reference models to prove compliance of the DUT.
 Create Neccesary Env Files
 ==========================
 
-RISCOF requires python plugins for each model (DUT and Golden) to be submitted. These plugins
+RISCOF requires python plugins for each model (DUT and Reference) to be submitted. These plugins
 provide a quick and standard way of building the model, compiling the tests and executing the tests
 on the models. Along with the python plugins of each model, one would also have to provide the
 `YAML` configuration files of the DUT as per the norms of ``riscv-config``. Some models might also

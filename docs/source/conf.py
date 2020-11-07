@@ -34,9 +34,9 @@ version = get_version()
 # The full version, including alpha/beta/rc tags
 release = version
 
-def setup(app):
-    app.add_stylesheet("custom.css")
-    app.add_css_file("_static/custom.css")
+#def setup(app):
+#    app.add_stylesheet("custom.css")
+#    app.add_css_file("_static/custom.css")
 
 # -- General configuration ---------------------------------------------------
 
@@ -261,7 +261,7 @@ latex_elements = {
 
             %%% Alternating Footer for two side
             \fancyfoot[LO, LE]{\small \bf{Copyright \textcopyright \the\year \textbf{ } InCore Semiconductors Pvt. Ltd.}}
-            %\fancyfoot[LO, LE]{\scriptsize \bf{RISC-V ISA Coverage}}
+            %\fancyfoot[LO, LE]{\scriptsize \bf{RISCOF}}
 
             %%% page number
             \fancyfoot[RO, RE]{\thepage}

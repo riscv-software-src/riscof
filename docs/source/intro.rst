@@ -6,6 +6,9 @@ Introduction
 target (hard or soft implementations) against a standard RISC-V golden reference model using a suite
 of RISC-V architectural assembly tests.
 
+
+.. _intent:
+
 Intent of the architectural test suite
 ======================================
 
@@ -27,6 +30,8 @@ The result that the architecture tests provide to the user is an assurance that 
 has been interpreted correctly and the implementation under test (DUT) can be declared as 
 RISC-V Architecture Test compliant.
 
+.. _audience:
+
 Target Audience
 ===============
 
@@ -38,10 +43,12 @@ Users
 RISCOF, as a utility is targetted towards verification and design engineers who wish to check if 
 their RISC-V implementation (simulation models, HDL models, etc.) is compliant to the RISC-V 
 specification. This document will refer to this category of audience as users of RISCOF in the
-remaining sections.
+remaining sections of this document.
 
 Contributors
 ------------
 
-Engineers contributing tests and 
-
+Engineers who would like to enhance the features of the framework or contribute tests to the
+architectural test suite, will be refered to as contributors/developers in the remaining sections of this
+document. This framework enables engineers to author scalable and parameterized tests which can
+evolve along with the evolution of the specification itself.

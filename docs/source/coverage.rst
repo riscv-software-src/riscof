@@ -81,5 +81,5 @@ Coverage for new tests
 ======================
 
 If you would like to test coverage of new added tests then you can either provide a new ``CGF`` file
-via the command line `--cgf <path to cgf file>`` or update the cgf file present in
+via the command line ``--cgf <path to cgf file>`` or update the cgf file present in
 ``riscof/suite/compliance.cgf`` if you have installed RISCOF in dev mode.
