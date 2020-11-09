@@ -18,7 +18,7 @@ As can be seen in the image above, the framework requires 2 specific inputs from
 
 1. A RISCV-CONFIG based YAML specification of the ISA choices made by the user. Details on writing
    the specific YAML spec can be found here : `Spec Documentation <https://riscv-config.readthedocs.io/en/latest/yaml-specs.html>`_
-2. A Python plugin which can be used by the framwork to compile the test, simulate the test and
+2. A Python plugin which can be used by the framework to compile the test, simulate the test and
    extract the signature of each test. Steps to define the python plugin is available in the
    :ref:`plugins` section.
 
@@ -35,9 +35,9 @@ The RISCOF framework currently depends on two major external tools:
    further used in the process of selecting tests and configuring the reference model accordingly.
 
 2. `RISCV-ISAC <https://riscv-isac.readthedocs.io/en/latest>`_: This tool is used to provide a
-   coverage analysis and an assesment of the quality of the architectural suite available in RISCOF
-   today. This tool is essentially helpfull for test authors and test contributors to validate if
-   theie tests meet the requirements and standards to be included in the architectural test suite.
+   coverage analysis and an assessment of the quality of the architectural suite available in RISCOF
+   today. This tool is essentially helpful for test authors and test contributors to validate if
+   their tests meet the requirements and standards to be included in the architectural test suite.
 
 Internal Components
 ===================
@@ -50,7 +50,7 @@ internal utilities
   selecting relevant tests for a given DUT model. DBGEN automates the generation of this YAML file
   based on the tests available in RISCOF. 
 
-  This utility is targetted to be used by test contributors to update the database with their new
+  This utility is targeted to be used by test contributors to update the database with their new
   tests. More information on its features and usage please see :ref:`database`
 
 - **Test Selector**: RISCOF, as it evolves, shall encompass a large number of architectural tests.
@@ -73,14 +73,14 @@ specification. This subsection will provide an overall working of the RISCOF in 
 validating a RISC-V target against a golden reference model.
 
 .. note:: The following explanation is at an abstract level and assumes that the user has RISCOF and 
-   the respective tooling available. For a walkthrough guide to install RISCOF and setting up the 
+   the respective tooling available. For a walk-through guide to install RISCOF and setting up the 
    required tooling please refer to :ref:`quickstart`
 
 The flow starts with the user providing a YAML specification which captures the choices made in the
 implementation and also providing a python plugin (a python code written with certain defined
 constraints) which can enable compilation and simulation of a test on the implementation. 
 
-The input YAML is first validated using the RISCV-CONFIG tool to confirm the implementaion choices
+The input YAML is first validated using the RISCV-CONFIG tool to confirm the implementation choices
 adhere to the those defined by the RISC-V ISA spec. The output of this is the
 standardized/normalized YAML spec containing all the information of the implementation. 
 
@@ -94,7 +94,7 @@ mimic the implementation as close as possible.
 The *test-list* is next forwarded to both, the user and reference defined python plugins, to
 initiate compilation and execution of the tests on the respective platforms. 
 
-One shuold note the each test in the architectural test suite adheres to the :ref:`test_format_spec`
+One should note the each test in the architectural test suite adheres to the :ref:`test_format_spec`
 and thus produces a signature in the memory region of the test which captures the essence that
 particular test. Thus, it is also the job of the python plugins to extract this signature to a file
 on the host system. 
@@ -117,7 +117,7 @@ A test by a contributor must always adhere to the :ref:`Test Format Spec <test_f
 test can either be auto-generated using tools like `RISCV-CTG <https://gitlab.com/incoresemi/riscv-compliance/riscv_ctg>`_
 or can be handwritten. 
 
-Once a suite or directory of tests is avaialable, the contributor can force RISCOF to use only those
+Once a suite or directory of tests is available, the contributor can force RISCOF to use only those
 tests in the database by using the ``--suite`` argument. This allows the user to validate that the
 tests can be compiled and executed on the implementation and the reference model without having to
 run all the remaining, already checked-in, tests. 
@@ -126,7 +126,7 @@ To provide coverage and quality analysis of the tests being contributed, the con
 RISCOF in coverage mode. Under this mode, RISCOF runs the selected set of tests only on the
 reference model (again in coverage mode) and passes the execution trace of each test to RISCV-ISAC
 which provides a coverage report on the entire suite. Note, one must also provide a CGF-File 
-(Cover Group Format File) which contains all the necessary coverpoints the tests are meant to cover.
+(Cover Group Format File) which contains all the necessary cover-points the tests are meant to cover.
 Details of the CGF and its format is available here: `CGF <https://riscv-isac.readthedocs.io/en/latest/cgf.html>`_ .
 
 Once the tests are ready and have passed the quality checks, the contributor make a

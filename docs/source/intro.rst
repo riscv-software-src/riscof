@@ -35,12 +35,12 @@ RISC-V Architecture Test compliant.
 Target Audience
 ===============
 
-This document is targetted for the following categories of audience
+This document is targeted for the following categories of audience
 
 Users
 -----
 
-RISCOF, as a utility is targetted towards verification and design engineers who wish to check if 
+RISCOF, as a utility is targeted towards verification and design engineers who wish to check if 
 their RISC-V implementation (simulation models, HDL models, etc.) is compliant to the RISC-V 
 specification. This document will refer to this category of audience as users of RISCOF in the
 remaining sections of this document.
@@ -49,6 +49,6 @@ Contributors
 ------------
 
 Engineers who would like to enhance the features of the framework or contribute tests to the
-architectural test suite, will be refered to as contributors/developers in the remaining sections of this
+architectural test suite, will be referred to as contributors/developers in the remaining sections of this
 document. This framework enables engineers to author scalable and parameterized tests which can
 evolve along with the evolution of the specification itself.

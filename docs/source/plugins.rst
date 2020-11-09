@@ -18,7 +18,7 @@ Since the entire RISCOF framework is in python it did not make sense to have the
 user-DUT in a separate environment. It would then cause issues in transferring data across 
 these environments/domains. 
 
-While many prefer the conventional *Makefile/autoconf* approach, transfering the *test-list* in YAML 
+While many prefer the conventional *Makefile/autoconf* approach, transferring the *test-list* in YAML 
 to be used by another Makefile-environment seemed like a bad and an unscalable idea.
 
 Expecting initial hesitation, we have tried to ensure that the python plugins can be made extremely 
@@ -34,7 +34,7 @@ official repository.
 Generate Templates
 ==================
 
-A sample template of the plugin and all other required collaterals can be generated through RISCOF
+A sample template of the plugin and all other required collateral can be generated through RISCOF
 using the following command::
 
   $ riscof setup --refname=sail_cSim --dutname=spike_simple
@@ -144,7 +144,7 @@ RISCOF is not limited to validating only a RTL targets, but can also be used to 
 instruction set simulators (ISS) or modern day core-generators like rocket or chromite. These ISS
 and core generators have to ability to tune themselves to a specific set of options as defined in
 the standardized RISCV-CONFIG YAML. Thus the `build` phase can be used as an intermediate stage to
-build or configure not only these models/targets but also be used to build respective toolchains.
+build or configure not only these models/targets but also be used to build respective tool-chains.
 
 The `build` function provides the following arguments:
 
@@ -179,7 +179,7 @@ This function is responsible for executing/running each test on the mode and pro
 signature files. A common approach is to create a simple Makefile with each test as a target using
 the commands and initializations done during the build and initialization phase. RISCOF also
 provides a simple `makeUtil` utility function which can be used directly, however, users are free to
-define their own execution environments. After the generating the Makefile, the users should also
+define their own execution environments. After generating the Makefile, the users should also
 call the ``make`` or suitable command to execute the run.
 
 The function takes a single argument: `testlist` which is a dictionary of tests and respective meta

@@ -11,8 +11,8 @@ Coverage Stats
 This section will discuss how to generate a coverage statistics report of a given suite using
 `RISCV_ISAC <riscv-isac.readthedocs.io>`_. 
 
-If you have followed the `installation <quickstart>` steps of this guie then ``riscv_isac`` should
-alerady be installed on your system. If not then please follow the installation guide provided `here
+If you have followed the `installation <quickstart>` steps of this guide then ``riscv_isac`` should
+already be installed on your system. If not then please follow the installation guide provided `here
 <riscv-isac.readthedocs.io`_ to install ``riscv_isac``
 
 Coverage statistics are obtained by executing the tests on the ``SAIL-RISCV`` model and parsing the

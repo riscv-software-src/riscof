@@ -75,7 +75,7 @@ The :ref:`target shell<target_shell>` is a vendor-supplied software and hardware
 
 The test target
 ^^^^^^^^^^^^^^^
-The :ref:`test target <test_target>` can include a RISC-V Instruction Set Simulator (ISS), a RISC-V emulator, a RISC-V RTL model running on an HDL simulator, a RISC-V FPGA implementation or a physical chip or ohter model type. Each of the target types offers specific features and represents specific interface challenges. It is a role of the  :ref:`target shell <target_shell>` to handle different targets while using the same :ref:`architectural test pool <architectural_test_pool>` as a test source.
+The :ref:`test target <test_target>` can include a RISC-V Instruction Set Simulator (ISS), a RISC-V emulator, a RISC-V RTL model running on an HDL simulator, a RISC-V FPGA implementation or a physical chip or other model type. Each of the target types offers specific features and represents specific interface challenges. It is a role of the  :ref:`target shell <target_shell>` to handle different targets while using the same :ref:`architectural test pool <architectural_test_pool>` as a test source.
 
 .. The RISC-V processor (device) configuration
 .. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -113,12 +113,12 @@ The structure of :ref:`architectural test <architectural_test>` in the :ref:`arc
 
   <feature(s)> are the lettered extension [A | B | C | M ...] or subextension [Zifencei | Zam | ...] 
   when the tests involve extensions, or more general names when tests cut across extension 
-  definitionss (e.g. Priv, Interrupt, Vm). The feature string consists of an initial capital 
+  definitions (e.g. Priv, Interrupt, Vm). The feature string consists of an initial capital 
   letter, followed by any further letters in lower case.
 
 .. note:: this structure is for organizational purposes, not functional purposes, although full test names will take advantage of it.
 
-Tests that will be executed in different modes, even if the results are identical, should be replicated in each mode directory, e.g. RV32I_M/, RV32I_MS/, and RV32I_MU/. These tests  are typically those involving trapping behavior, e.g load, store, and privilged ops.
+Tests that will be executed in different modes, even if the results are identical, should be replicated in each mode directory, e.g. RV32I_M/, RV32I_MS/, and RV32I_MU/. These tests  are typically those involving trapping behavior, e.g load, store, and privileged ops.
 
 Test naming
 ^^^^^^^^^^^
@@ -392,7 +392,7 @@ There are two types of valid statements allowed.
     
     These statements specify which macros to be defined for the part to run and their values(optional).
     * The macro specifies the name of the macro.
-    * Multiple macros can be specified using a comma inbetween them.
+    * Multiple macros can be specified using a comma in-between them.
     * A keylist specifying the path of the field whose value has to be passed as the value of the macro can also be given.
     * A function along with the arguments can also be specified. At runtime the function is called using the specified arguments and its return values are assigned to the macro(s) specified. The list of functions supported are as follows.
 

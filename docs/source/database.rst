@@ -13,7 +13,7 @@ generator) utility available for developers in the RISCOF git repository.
 
 
 .. warning:: This utility is meant for developers contributing to the assembly suite and is not 
-  intended to be used as a standalone utility.
+  intended to be used as a stand-alone utility.
 
 The ``dbgen`` utility recursively walks the specified directory/suite/modified to find all .S files 
 in them and constructs a dictionary of sorts, for the framework.
@@ -26,7 +26,7 @@ Each test in the database is defined as follows:
 
     * **isa**: Contains the isa required for the compilation of the test. This field is extracted from the *RVTEST_ISA* macro.
 
-    * **parts**: Contains the individual parts present in the test and the conditions and macros required by each of them. The parts are identified by unique names as specified in the test. A test must contain atleast one part for it to be included in the database.
+    * **parts**: Contains the individual parts present in the test and the conditions and macros required by each of them. The parts are identified by unique names as specified in the test. A test must contain at-least one part for it to be included in the database.
 
         * **part name**: This node is extracted from the *RVTEST_CASE_START* macro in the test.
 
@@ -66,7 +66,7 @@ Reasons of Failure
 
 Possible scenarios where database is not generated
 
-  * There does not exist atleast one part in the test.
+  * There does not exist at-least one part in the test.
   * Any part which has started does not end before another part starts or the code ends i.e. *RVTEST_CASE_START* exists for that part but *RVTEST_CASE_END* doesn't.
   * The part names given in a *RVTEST_CASE_START*-*RVTEST_CASE_END* pair doesn't match.
   * *RVTEST_ISA* macro isn't present in the test.

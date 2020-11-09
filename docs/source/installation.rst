@@ -377,7 +377,7 @@ For the sake of this guide, we will use some of the pre-built plugins for riscof
 `riscof-plugins <https://gitlab.com/incoresemi/riscof-plugins>`_. We will specifically use the
 spike_simple and sail_cSim plugins. 
 
-.. note:: If you are using `pyenv` as mentioned above, make sure to enable that evironment before
+.. note:: If you are using `pyenv` as mentioned above, make sure to enable that environment before
   performing the following steps since we will now start using riscof.
 
 .. code-block:: bash
@@ -389,7 +389,7 @@ To create necessary environment files use the following command::
   $ riscof setup --dutname=spike_simple --refname=sail_cSim
 
 The above command will generate a file named ``config.ini`` and a folder named ``spike_simple``.
-The ``config.ini`` file is used to capture specific paths of the plugins of reference and dut model,
+The ``config.ini`` file is used to capture specific paths of the plugins of reference and DUT model,
 along with the paths to isa and platform input YAMLs. The folder ``spike_simple`` contains 
 various templates of files that would be required for compliance of any generic DUT. 
 Components of this folder will be modified by the user as per the DUT spec. 
