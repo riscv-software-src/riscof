@@ -23,7 +23,7 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(name="riscof",
-      version='1.17.1',
+      version='1.17.2',
       description="RISC-V Compliance Framework",
       long_description=readme + '\n\n',
       classifiers=[
