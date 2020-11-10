@@ -5,7 +5,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [1.17.2] - 2020-11-10
 - doc updates
 - added contributing.rst file
-
+- changed version maintenance procedure. Using bumpversion now.
 
 ## [1.17.1] - 2020-10-26
 - doc fix
