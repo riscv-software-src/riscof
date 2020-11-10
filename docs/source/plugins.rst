@@ -1,7 +1,6 @@
-.. _plugins:
-
 .. highlight:: shell
 
+.. _plugins:
 
 ########################
 Create your Model Plugin

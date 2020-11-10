@@ -79,17 +79,17 @@ The :ref:`test target <test_target>` can include a RISC-V Instruction Set Simula
 
 .. The RISC-V processor (device) configuration
 .. ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. The RISC-V ISA specification allows many optional instructions, registers, and other features. Production directed targets typically have a fixed subset of available options. A simulator, on the other hand, may implement all known options which may be constrained to mimic the behavior of the RISC-V processor with the particular configuration.  It is a role of the Compliance Test Framework to build and use the :ref:`architectural test suite <architectural_test_suite>` suitable for the selected RISC-V configuration.
+.. The RISC-V ISA specification allows many optional instructions, registers, and other features. Production directed targets typically have a fixed subset of available options. A simulator, on the other hand, may implement all known options which may be constrained to mimic the behavior of the RISC-V processor with the particular configuration.  It is a role of the Architectural Test Framework to build and use the :ref:`The RISC-V architectural test suite <architectural_test_suite>` suitable for the selected RISC-V configuration. 
 
 .. _architectural_test_framework:
 
 The architectural test framework
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The :ref:`architectural test framework <architectural_test_framework>` selects and configures the :ref:`architectural test suite <architectural_test_suite>` from the :ref:`architectural test pool <architectural_test_pool>` for the selected :ref:`test target <test_target>` based on both the specific architectural choices made by an implementation and those required by the Execution Environment. It causes the :ref:`target shell <target_shell>` to build, execute, and report a signature. The :ref:`architectural test framework <architectural_test_framework>` then compares reported signatures, inserts test part names and version numbers and summarizes differences (or lack of them) into a RISC-V architectural report. The primary role of the well-defined :ref:`architectural test pool <architectural_test_pool>` structure is to provide the tests in a form suitable for the Compliance Test Framework selection engine.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The :ref:`architectural test framework <architectural_test_framework>` selects and configures the :ref:`architectural test suite <architectural_test_suite>` from the :ref:`architectural test pool <architectural_test_pool>` for the selected :ref:`test target <test_target>` based on both the specific architectural choices made by an implementation and those required by the Execution Environment. It causes the :ref:`target shell <target_shell>` to build, execute, and report a signature. The :ref:`architectural test framework <architectural_test_framework>` then compares reported signatures, inserts test part names and version numbers and summarizes differences (or lack of them) into a RISC-V architectural report. The primary role of the well-defined :ref:`architectural test pool <architectural_test_pool>` structure is to provide the tests in a form suitable for the Architectural Test Framework selection engine.
 
 
-Compliance test pool 
---------------------
+Architectural test pool 
+-----------------------
 
 .. _test_pool_structure:
 
@@ -133,157 +133,172 @@ The naming convention of a single test:
   
   *  A test name shall not include an ISA category as part of its name (i.e. the directory, subdirectory names). Experience has shown that including ISA category in the test name leads to very long test names. Instead, we have introduced the :ref:`Test pool structure<test_pool_structure>` where the full name is composed of the test path in the :ref:`Test pool structure<test_pool_structure>` and the simple test name. Since full names can be reconstructed easily it is not necessary to include the path in test names.
 
-The test structure of an architectural test
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-All tests shall use a signature approach. Each test shall be written in the same style, with 
-defined mandatory items.The test structure of an architectural test shall have the following sections 
-in the order as follows:
-
-  * Header + license (including a specification link, a brief test description and RVTEST_ISA macro))
-  * Includes of header files (see Common Header Files section)
-  * Test Virtual Machine (TVM) specification
-  * Test code between “RVTEST_CODE_BEGIN” and “RVTEST_CODE_END”
-  * Input data section, marked with "RVMODEL_DATA_SECTION"
-  * Output data section between “RVMODEL_DATA_BEGIN” and “RVMODEL_DATA_END”.
-
-.. note:: there is no a requirement that the code or scratch data sections must be contiguous in memory, or that they be located before or after data or code sections (configured by embedded directives recognized by the linker)
-
 .. _available_macros:
 
-Available Macros
-^^^^^^^^^^^^^^^^
-There are both pre-defined and model-specific macros which shall be used in every test to 
-guarantee their portability. In addition, there are both pre-defined and model specific macros 
-that are not required, but may be used in tests.
+Assembly macros and test labels
+-------------------------------
 
-  * **Required, Pre-defined Macros** 
+There are both pre-defined and model-specific macros which shall be used in every test to guarantee 
+their portability. In addition, there are both pre-defined and model specific macros that are not required, 
+but may be used in tests for either convenience or debugging purposes.
+
+Required, Pre-defined Macros
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These macros are be defined in the file **compilance_test.h** by the author of the test. A
+significant amount of the framework shall depend on the existence of these macros.
+
   
-    - ``RVTEST_ISA(isa_str)`` : 
-      
+``RVTEST_ISA(isa_str)`` :   
       - defines the Test Virtual Machine (TVM, the ISA being tested)
-      - Empty macro to specify the isa required for compilation of the test.
-      - This is mandated to be present at the start of the test.
+      - empty macro to specify the isa required for compilation of the test.
+      - this is mandated to be present at the start of the test.
   
-    - ``RVTEST_CODE_BEGIN`` :
-
-      - start of code (test) section
-      - Macro to indicate test code start add and where test startup routine is inserted.
-      - No part of the code section should precede this macro
+``RVTEST_CODE_BEGIN`` :
+    - start of code (test) section
+    - macro to indicate test code start add and where test startup routine is inserted. +
+    - no part of the test-code section should precede this macro
+    - this macro includes an initialization routine which pre-loads all the GPRs with unique values
+      (not `0xdeadbeef`). Register t0 and t1 are initialized to point to the labels :
+      `rvtest_code_begin` and `rvtest_code_end` respectively.
+    - the macros contains a label `rvtest_code_begin` after the above initilization routine to mark
+      the begining of the actual test.
   
-    - ``RVTEST_CODE_END`` :
-
-      - end of code (test) section
-      - Macro to indicate test code end.
-      - No part of the code section should follow after this macro.
+``RVTEST_CODE_END`` :
+    - end of code (test) section +
+    - macro to indicate test code end. +
+    - no part of the test-code section should follow after this macro.
+    - the macro enforces a 16-byte boundary alignment
+    - the macro also inlcudes the label `rvtest_code_end` which marks the end of the actual test.
+    - if trap handling is enabled, this macro contains the entire trap handler code required by the
+      test.
   
-    - ``RVTEST_CASE(CaseName, CondStr)`` :  
+``RVTEST_DATA_BEGIN``:
+    - marks the begining of the test data section +
+    - used to provided initialized data regions to be used by the test +
+    - this region starts at a 16-byte boundary +
+    - the start of this is macro can be addressed using the label: `rvtest_data_begin`
+    - when trap handling is enabled, this macro also includes the following labels :
+        . trapreg_sv: This region is used to save the temporary registers used in the trap-handler
+        code
+        . tramptbl_sv: This region is used to save the contents of the test-target's initial
+        code-section which is overwritten with the necessary trampoline table.
+        . mtvec_save: a double-word region to save the test-target specific mtvec register
+        . mscratch_save: a double-word region to save the test-target specific mscratch register
 
-      - execute this case only if condition in cond_str are met
-      - CaseName is arbitrary string 
-      - CondStr is evaluated to determine if the test-case is enabled and sets name variable
-      - CondStr can also define compile time macros required for the test-case to be enabled.
-      - the test-case must be delimited with an #ifdef CaseName/#endif pair
+``RVTEST_DATA_END``:
+    - this macros marks the end of the test input data section.
+    - the start of this macro can be addressed using the label: `rvtest_data_end`
+
+``RVTEST_CASE(CaseName, CondStr)``:
+    - execute this case only if condition in cond_str are met +
+    - caseName is arbitrary string  +
+    - condStr is evaluated to determine if the test-case is enabled and sets name variable +
+    - condStr can also define compile time macros required for the test-case to be enabled. +
+    - the test-case must be delimited with an #ifdef CaseName/#endif pair +
       - the format of CondStr can be found in https://riscof.readthedocs.io/en/latest/cond_spec.html#cond-spec
   
-  
-  * **Required, Model-defined Macros** 
+Required, Model-defined Macros
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    - ``RVMODEL_DATA_BEGIN``:
+These macros are be defined by the owner of the test target in the file **model_test.h**.
+These macros are required to define the signature regions and also the logic required to halt/exit
+the test.
 
-      - start of output data (signature) section
+``RVMODEL_DATA_BEGIN``:   
+    - This macro marks the start of test-target data section. This section may include any of the
+      test-target specific data initialization. This macro however, must include labels (if any) to
+      indicate the begining of the signature region. One must ensure to not enforce any alignment
+      constraints on the signature region to avoid mismatches.
+
+      .. note:: The signature region should always begin at a XLEN-bit boundary.
       
-    - ``RVMODEL_DATA_END``:
+``RVMODEL_DATA_END``:              
+    - This macros marks the signature-region. The entire signature reqgion must be included within
+      the RVMODEL_DATA_BEGIN and the RVMODEL_DATA_END macros. 
 
-      - end of output data (signature) section
+``RVMODEL_HALT``:                  
+    - This macros must define the test-target halt mechanism. This macro is called when the test is
+      to be terminated either due to completion or dur to unsupported behavior. This macro could
+      also include routines to dump the signature region to a file on the host system which can be
+      used for comparison.
       
-    - ``RVMODEL_DATA_SECTION``:          
+Optional, Pre-defined Macros 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-      - model defined data area
-      - contains static input data and intermediate scratch area for the test (e.g. stack) 
+``RVTEST_SIGBASE(BaseReg,Val)``:   
+    - defines the base register used to update signature values +
+    - Register BaseReg is loaded with value Val +
+    - hidden_offset is initialized to zero 
       
-    - ``RVMODEL_HALT``:
+``RVTEST_SIGUPD(BaseReg, SigReg [, Offset])``: 
+    - if Offset is present in the arguments, hidden_offset if set to Offset +
+    - Sigreg is stored at hidden_offset[BaseReg]
+    - hidden_offset is post incremented so repeated uses store signature values sequentially
 
-      - defines model halt mechanism, which starts signature saving
+``RVTEST_BASEUPD(BaseReg[oldBase[,newOff]])``: 
+    - [moves &] updates BaseReg past stored signature +
+    - Register BaseReg is loaded with the oldReg+newOff+hidden_offset +
+    - BaseReg is used if oldBase isn't specified; 0 is used if newOff isn't specified +
+    - hidden_offset is re-initialized to 0 afterwards
 
-  
-  * **Optional, Pre-defined Macros**
-  
-    - ``RVTEST_SIGBASE(BaseReg,Val)``:
+Optional, Model-defined Macros
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-       - defines the base register used to update signature values
-       - Register BaseReg is loaded with value Val
-       - hidden_offset is initialized to zero 
-       
-    - ``RVTEST_SIGUPD(BaseReg, SigReg [,Value, TmpReg])``:
+``RVMODEL_BOOT``:                       
+    - contains boot code for the test-target; may include emulation code or trap stub. If the
+      test-target enforces alignment or value restrictions on the mtvec csr, it is required that
+      this macro sets the value of mtvec to a region which is readable and writable by the machine
+      mode.
 
-       - Register SigReg is stored in mem(BaseReg+hidden_offset)
-       - hidden_offset is post incremented so repeated uses store signature values sequentially
-       - Optionally, if Value and TmpReg are specified and assertions are enabled, RVMODEL_IO_ASSERT_GPR_EQ(SigReg, TmpReg, Value) is enabled.
-       
-    - ``RVTEST_BASEUPD(BaseReg[oldBase[,newOff]])``:
+Test structure
+--------------
 
-       - [moves &] updates BaseReg past stored signature
-       - Register BaseReg is loaded with the oldReg+newOff+hidden_offset
-       - BaseReg is used if oldBase isn't specified; 0 is used if newOff isn't specified
-       - hidden_offset is re-initialized to 0 afterwards
-  
-  * **Optional, Model-defined Macros**
-  
-    - ``RVMODEL_BOOT``:                       
+All tests shall use a signature approach. Each test shall be written in the same style, with defined mandatory items. 
+The test structure of an architectural test shall have the following sections in the order as follows:
 
-      - contains boot code for model; may include emulation code or trap stub
-      
-    - ``RVMODEL_IO_INIT``:                    
+.  Header + license (including a specification link, a brief test description and RVTEST_ISA macro)).
+.  Includes of header files (see Common Header Files section).
+.  Test Virtual Machine (TVM) specification,
+.  Test code between “RVTEST_CODE_BEGIN” and “RVTEST_CODE_END”.
+.  Input data section, marked with "RVTEST_DATA_BEGIN" and "RVTEST_DATA_END".
+.  Output data section between “RVMODEL_DATA_BEGIN” and “RVMODEL_DATA_END”.
 
-      - initializes IO for debug output
-      - this must be invoked if any of the other RV_MODEL_IO_* macros are used
-      
-    - ``RVMODEL_IO_CHECK``:
 
-      - checks IO for debug output
-      - <needs description of how this is used > 
-      
-    - ``RVMODEL_IO_ASSERT_GPR_EQ(ScrReg, Reg, Value)``: 
-
-      - debug assertion that GPR should have value
-      - outputs a debug message if Reg!=Value
-      - ScrReg is a scratch register used by the output routine; its final value cannot be guaranteed
-      
-    - ``RVMODEL_IO_WRITE_STR(ScrReg, String)``:
-
-      - output debug string, using a scratch register
-      - outputs the message String
-      - ScrReg is a scratch register used by the output routine; its final value cannot be guaranteed 
-
-.. note:: Note that there is no a requirement that the code or scratch data sections must be contiguous in memory, or that they be located before or after data or code sections (configured by embedded directives recognized by the linker)
+Note:: Note that there is no requirement that the code or scratch data sections must be contiguous 
+in memory, or that they be located before or after data or code sections 
+(configured by embedded directives recognized by the linker)
 
 Common test format rules
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are the following common rules that shall be applied to each :ref:`architectural test <architectural_test>`:
-1. Always use ``//`` as commentary. ``#`` should be used only for includes and defines.
-2. A test shall be divided into logical blocks (:ref:`test case <test_case>`) according to the test goals. Test cases are enclosed in an `#ifdef <__CaseName__>, #endif` pair and begin with the ``RVTEST_CASE(CaseName,CondStr)`` macro that specifies the test case name, and a string that defines the conditions under which that :ref:`test case <test_case>` can be selected for assembly and execution. Those conditions will be collected and used to generate the database which in turn is used to select tests for inclusion in the test suite for this target.
-3. Tests should use the ``RVTEST_SIGBASE(BaseReg,Val)`` macro to define the GPR used as a pointer to the output signature area, and its initial value. It can be used multiple times within a test to reassign the output area or change the base register. This value will be used by the invocations of the ``RVTEST_SIGUPD`` macro.
-4. Tests should use the ``RVTEST_SIGUPD(BaseReg, SigReg, ScratchReg, Value)`` macro to store signature values using (only) the base register defined in the most recently encountered ``RVTEST_SIGBASE(BaseReg,Val)`` macro. Repeated uses will automatically have an increasing offset that is managed by the macro. 
+There are the following common rules that shall be applied to each :ref:`The architectural test <architectural_test>`:
 
-  - Uses of ``RVTEST_SIGUPD`` shall always be preceded sometime in the test case by ``RVTEST_SIGBASE``.
-  - The ``RVTEST_SIGUPD`` macro may optionally invoke a test assertion macro (e.g. ``RVMODEL_IO_ASSERT_GPR_EQ``) with an assertion value for debugging, determined by the presence of ScratchReg and Value parameters.
+1. Always use “//” as commentary. “#” should be used only for includes and defines.
+2. As part of the initialization code, all GPRs are preloaded with unique predefined values (which is not `0xdeadbeef`). However, t0 is initialized with `rvtest_code_begin` and t1 is initialized with `rvtest_data_begin`.
+3. The signature section of every test is pre-loaded with the word `0xdeadbeef`
+4. The signature region should always begin at a 16-byte boundary
+5. A test shall be divided into logical blocks (:ref:`The test case <test_case>`) according to the test goals. Test cases are enclosed in an `#ifdef <__CaseName__>, #endif` pair and begin with the RVTEST_CASE(CaseName,CondStr) macro that specifies the test case name, and a string that defines the conditions under which that :ref:`The test case <test_case>` can be selected for assembly and execution. Those conditions will be collected and used to generate the database which in turn is used to select tests for inclusion in the test suite for this target.
+6. Tests should use the RVTEST_SIGBASE(BaseReg,Val) macro to define the GPR used as a pointer to the output signature area, and its initial value. It can be used multiple times within a test to reassign the output area or change the base register. This value will be used by the invocations of the RVTEST_SIGUPD macro.
+7. Tests should use the RVTEST_SIGUPD(BaseReg, SigReg, ScratchReg, Value) macro to store signature values using (only) the base register defined in the most recently encountered RVTEST_SIGBASE(BaseReg,Val) macro. Repeated uses will automatically have an increasing offset that is managed by the macro. 
+
+  - Uses of RVTEST_SIGUPD shall always be preceded sometime in the test case by RVTEST_SIGBASE.
   - Tests that use SIGUPD inside a loop or in any section of code that will be repeated (e.g. traps) must use the BASEUPD macro between each loop iteration or repeated code to ensure static values of the base and offset don't overwrite older values. 
 
-5. When macros are needed for debug purposes, only macros from compliance_model.h shall be used. 
+8. When macros are needed for debug purposes, only macros from _model_test.h_ shall be used. 
    Note that using this feature shall not affect the signature results of the test run.
-6. Test shall not include other tests (e.g. #include “../add.S”) to prevent non-complete tests, compilation issues, and problems with code maintenance. 
-7. Tests and test cases shall be skipped if not required for a specific model test configuration based on test conditions defined in the ``RVTEST_CASE`` macro. Tests that are selected may be further configured using variables (e.g. XLEN) which are passed into the tests and used to compile them. In either case, those conditions and variables are derived from the YAML specification of the device and execution environment that are passed into the framework. The flow is to run an architectural test suite built by the :ref:`The architectural test framework <architectural_test_framework>` from the :ref:`The RISC-V architectural test pool <architectural_test_pool>` to determine which tests and test cases to run. 
-8. Tests shall not depend on tool specific features. For example, tests shall avoid usage of internal GCC macros (e..g. ____risc_xlen__), specific syntax (char 'a' instead of 'a) or simulator features (e.g. tohost) etc.
-9. A test will end by either jumping to or implicitly reaching the ``RVTEST_CODE_END`` macro (i.e. rvtest_code_end label). The ``RVTEST_CODE_END`` macro is always followed by the ``RVMODEL_HALT`` macro. 
-10. Macros defined outside of a test shall only be defined in specific predefined header files (see :ref:`Common Header Files <common_header_files>` below), and once they are in use, they may be modified only if the function of all affected tests remains unchanged. It is acceptable that macros use may lead to operand repetition (register X is used every time).
+9. Test shall not include other tests (e.g. #include “../add.S”) to prevent non-complete tests, compilation issues, and problems with code maintenance. 
+10. Tests and test cases shall be skipped if not required for a specific model test configuration based on test conditions defined in the RVTEST_CASE macro. Tests that are selected may be further configured using variables (e.g. XLEN) which are passed into the tests and used to compile them. In either case, those conditions and variables are derived from the YAML specification of the device and execution environment that are passed into the framework. The flow is to run an architectural test suite built by the :ref:`The architectural test framework,<architectural_test_framework>` from the :ref:`The RISC-V architectural test pool <architectural_test_pool>` to determine which tests and test cases to run. 
+11. Tests shall not depend on tool specific features. For example, tests shall avoid usage of internal GCC macros (e..g. ____risc_xlen__), specific syntax (char 'a' instead of 'a) or simulator features (e.g. tohost) etc.
+12. A test will end by either jumping to or implicitly reaching the `RVTEST_CODE_END` macro (i.e. rvtest_code_end label). The `RVTEST_CODE_END` macro is always followed by the `RVMODEL_HALT` macro. 
+13. Macros defined outside of a test shall only be defined in specific predefined header files (see :ref:`Common Header Files <common_header_files>` below), and once they are in use, they may be modified only if the function of all affected tests remains unchanged. It is acceptable that macros use may lead to operand repetition (register X is used every time).
 
-  - The aim of this restriction is to have test code more readable and to avoid side effects which may occur when different contributors will include new :ref:`The architectural test <architectural_test>` or updates of existing ones in the :ref:`The RISC-V architectural test pool <architectural_test_pool>`. This measure results from the negative experience, where the :ref:`The RISC-V architectural test suite <architectural_test_suite>` could be used just for one target while the architectural test code changes were necessary to have it also running for other targets.
+  - The aim of this restriction is to have test code more readable and to avoid side effects which may occur when different contributors will include new :ref:`The architectural test <architectural_test>` or updates of existing ones in the :ref:`The RISC-V architectural test pool <architectural_test_pool>`. This measure results from the negative experience, where the :ref:`The RISC-V architectural test suite, <architectural_test_suite>` could be used just for one target while the architectural test code changes were necessary to have it also running for other targets.
 
-11. All contents of the signature region must always be initialized to ``0xdeadbeef``.
-12. The result of no operation (that is going to be stored in the signature) should be ``0xdeadbeef``.
-13. Pseudo ops other than ``li`` and ``la`` which can map to multiple standard instruction sequences should not be used.
-14. The actual test-section of the assembly must always start with the ``RVTEST_CODE_BEGIN`` which contains a routine to initialize the registers to specific values.
+14. All contents of the signature region must always be initialized to `0xdeadbeef`.
+15. The result of no operation should be stored in the signature even though not register has been altered.
+16. Pseudo ops other than `li` and `la` which can map to multiple standard instruction sequences should not be used.
+17. The actual test-section of the assembly must always start with the `RVTEST_CODE_BEGIN` which contains a routine to initialize the registers to specific values.
 
 
 .. _common_header_files:
@@ -293,34 +308,39 @@ Common Header Files
 
 Each test shall include only the following header files:
 
-  * *compliance_model.h* – defines target-specific macros, both required and optional:  (e.g. ``RVMODEL_xxx``)
-  * *compliance_test.h* –  defines pre-defined test macros both required and optional:  (e.g. ``RVTEST_xxx``)
+. _model_test.h_ – defines target-specific macros, both required and optional:  (e.g. RVMODEL_xxx)
+. _arch_test.h_ –  defines pre-defined test macros both required and optional:  (e.g. RVTEST_xxx)
 
-Adding new header files is forbidden. It may lead to macro redefinition and compilation issues.
-Macros maybe defined and used inside a test, as they will not be defined outside that specific test.
-Assertions will generate code that reports assertion failures (and optionally successes?) only if enabled by the framework.
-In addition, the framework may collect the assertion values and save them as a signature output file if enabled by the framework.
+The inclusion of the _arch_test.h_ should always occur after the _model_test.h_ file.
 
-.. Framework Requirements
-.. ^^^^^^^^^^^^^^^^^^^^^^
-.. 
-.. The framework will import files that describe 
-.. 
-.. - the implemented, target-specific configuration parameters in YAML format
-.. 
-.. - the required, platform-specific  configuration parameters in YAML format
-.. 
-.. The framework will generate intermediate files, including a Test Database YAML file that selects tests from the test pool to generate a test suite for the target.
-.. 
-.. The framework will also invoke the :ref:`target shell <target_shell>` as appropriate to cause tests to be built, loaded, executed, and results reported.
-.. 
-.. The YAML files define both the values of those conditions and values that can be used by the framework to configure tests (e.g. format of WARL CSR fields). 
-.. Tests should not have #if, #ifdef, etc. for conditional assembly except those that surround RVMODEL_CASE macros
-.. Instead, each of those should be a separate :ref:`test case <test_case>` whose conditions are defined in
-..  the common reference document entry for that test and test case number.
+Important points to be noted regarding header files : 
+
+. Adding new header files is forbidden in the test. It may lead to macro redefinition and compilation issues.
+. Macros maybe defined and used inside a test, as they will not be defined and used outside that specific test.
+// . Assertions will generate code that reports assertion failures (and optionally successes?) only if enabled by the framework.
+// . In addition, the framework may collect the assertion values and save them as a signature output file if enabled by the framework.
+
+Framework Requirements
+----------------------
+
+The framework will import files that describe 
+
+- the implemented, target-specific configuration parameters in YAML format
+
+- the required, platform-specific  configuration parameters in YAML format
+
+The framework will generate intermediate files, including a Test Database YAML file that selects tests from the test pool to generate a test suite for the target.
+
+The framework will also invoke the :ref:`The target shell <target_shell>` as appropriate to cause tests to be built, loaded, executed, and results reported.
+
+The YAML files define both the values of those conditions and values that can be used by the framework to configure tests (e.g. format of WARL CSR fields). 
+Tests should not have #if, #ifdef, etc. for conditional assembly except those that surround RVMODEL_CASE macros
+Instead, each of those should be a separate :ref:`The test case <test_case>` whose conditions are defined in
+the common reference document entry for that test and test case number.
+
 
 RVTEST_CASE Condition Formating
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------
 
 This section describes the format for the conditions `CondStr` to be followed while writing the ``RVTEST_CASE`` macro. 
 Each of the statements within this macro ends with a ';' .
