@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.17.2] - 2020-11-10
+- doc updates
+- added contributing.rst file
+
+
 ## [1.17.1] - 2020-10-26
 - doc fix
 - fix passing of cgf from command line to internal variable

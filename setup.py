@@ -3,8 +3,6 @@ import codecs
 import pip
 from setuptools import setup, find_packages
 
-import riscof
-
 # Base directory of package
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -19,12 +17,15 @@ def read_requires():
 
 #Long Description
 with open("README.rst", "r") as fh:
-    long_description = fh.read()
+    readme = fh.read()
+setup_requirements = [ ]
+
+test_requirements = [ ]
 
 setup(name="riscof",
-      version=riscof.__version__,
-      description="Risc-V Compliance Framework",
-      long_description=long_description,
+      version='1.17.1',
+      description="RISC-V Compliance Framework",
+      long_description=readme + '\n\n',
       classifiers=[
           "Programming Language :: Python :: 3.6",
           "License :: OSI Approved :: BSD License",
@@ -52,4 +53,9 @@ setup(name="riscof",
       python_requires=">=3.6.0",
       entry_points={
           "console_scripts": ["riscof=riscof.main:execute"],
-      })
+      },
+    include_package_data=True,
+    keywords='riscv_isac',
+    test_suite='tests',
+    tests_require=test_requirements,
+    zip_safe=False,)
