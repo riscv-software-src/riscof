@@ -8,8 +8,8 @@
 Quickstart
 ==========
 
-This doc is meant to serve as a quick-guide to setup RISCOF and perform a sample compliance check
-between ``spike`` (DUT in this case) and ``SAIL-RISCV`` (Golden model in this case).
+This section is meant to serve as a quick-guide to setup RISCOF and perform a sample validation check
+between ``spike`` (DUT in this case) and ``SAIL-RISCV`` (Reference model in this case).
 
 Install Python
 ==============
@@ -301,7 +301,7 @@ Install Plugin Models
 =====================
 
 This section will walk your throguh installing 2 important RISC-V reference models: Spike and SAIL.
-These are often used as reference models to prove compliance of the DUT.
+These are often used as reference models in RISCOF.
 
 .. tabs::
   
@@ -366,7 +366,7 @@ These are often used as reference models to prove compliance of the DUT.
 Create Neccesary Env Files
 ==========================
 
-RISCOF requires python plugins for each model (DUT and Golden) to be submitted. These plugins
+RISCOF requires python plugins for each model (DUT and Reference) to be submitted. These plugins
 provide a quick and standard way of building the model, compiling the tests and executing the tests
 on the models. Along with the python plugins of each model, one would also have to provide the
 `YAML` configuration files of the DUT as per the norms of ``riscv-config``. Some models might also
@@ -377,7 +377,7 @@ For the sake of this guide, we will use some of the pre-built plugins for riscof
 `riscof-plugins <https://gitlab.com/incoresemi/riscof-plugins>`_. We will specifically use the
 spike_simple and sail_cSim plugins. 
 
-.. note:: If you are using `pyenv` as mentioned above, make sure to enable that evironment before
+.. note:: If you are using `pyenv` as mentioned above, make sure to enable that environment before
   performing the following steps since we will now start using riscof.
 
 .. code-block:: bash
@@ -389,7 +389,7 @@ To create necessary environment files use the following command::
   $ riscof setup --dutname=spike_simple --refname=sail_cSim
 
 The above command will generate a file named ``config.ini`` and a folder named ``spike_simple``.
-The ``config.ini`` file is used to capture specific paths of the plugins of reference and dut model,
+The ``config.ini`` file is used to capture specific paths of the plugins of reference and DUT model,
 along with the paths to isa and platform input YAMLs. The folder ``spike_simple`` contains 
 various templates of files that would be required for compliance of any generic DUT. 
 Components of this folder will be modified by the user as per the DUT spec. 
