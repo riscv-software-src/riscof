@@ -23,7 +23,7 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(name="riscof",
-      version='1.17.2',
+      version='1.18.0',
       description="RISC-V Compliance Framework",
       long_description=readme + '\n\n',
       classifiers=[
@@ -55,7 +55,7 @@ setup(name="riscof",
           "console_scripts": ["riscof=riscof.main:execute"],
       },
     include_package_data=True,
-    keywords='riscv_isac',
-    test_suite='tests',
+    keywords='riscof',
+    test_suite='',
     tests_require=test_requirements,
     zip_safe=False,)

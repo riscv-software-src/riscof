@@ -13,9 +13,9 @@ pre-merge-check:
     - ./version_check.sh
     - pip3 install --upgrade pip
     - pip3 install -r riscof/requirements.txt -U
-    - source /tools/setup.sh
-    - git clone https://gitlab.com/incoresemi/riscof-plugins.git
-    - python3 -m riscof.main --help
+      #- source /tools/setup.sh
+      #- git clone https://gitlab.com/incoresemi/riscof-plugins.git
+      #- python3 -m riscof.main --help
       #    - python3 -m riscof.main setup --refname=riscvOVPsim --dutname=spike_simple
       #    - sed -i 's/riscof/riscof\/riscof-plugins/g' config.ini
       #    - cat config.ini

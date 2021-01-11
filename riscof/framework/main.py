@@ -8,6 +8,8 @@ import riscof.framework.test as test
 import riscof.utils as utils
 import riscof.constants as constants
 import riscv_isac.coverage as isac
+from riscv_isac.utils import load_cgf
+from riscv_isac.cgf_normalize import expand_cgf
 import ruamel
 from ruamel.yaml import YAML
 from elftools.elf.elffile import ELFFile
@@ -18,7 +20,7 @@ yaml.allow_unicode = True
 logger = logging.getLogger(__name__)
 
 def filter_coverage(cgf_file,ispec,pspec,results):
-    cgf = utils.load_yaml(cgf_file)
+    cgf = load_cgf(cgf_file)
     spec = {**ispec,**pspec}
     cover_points = []
     for key,node in cgf.items():
@@ -93,7 +95,6 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
 
     '''
     work_dir = constants.work_dir
-
     # Setting up models
     base.initialise(constants.suite, work_dir, constants.env)
     #Loading Specs
@@ -107,6 +108,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     logger.info("Running Tests on Reference.")
     base.runTests(test_list, cgf_file)
 
+
     logger.info("Merging Coverage reports")
     cov_files = []
     test_stats = []
@@ -119,11 +121,12 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
                             'test_size': [str(entry) for entry in find_elf_size(elf)],
                             'test_groups': str(set(test_list[entry[0]]['coverage_labels']))
                             })
-
     if 64 in ispec['supported_xlen']:
-        results = isac.merge_coverage(cov_files, cgf_file, True, 64)
+        results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,64), True, 64)
     elif 32 in ispec['supported_xlen']:
-        results = isac.merge_coverage(cov_files, cgf_file, True, 32)
+        with open("./out","w") as outfile:
+            utils.yaml.dump(expand_cgf(cgf_file,32),outfile)
+        results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,32), True, 32)
 
 
     results_yaml = yaml.load(results)

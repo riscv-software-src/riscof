@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.18.0] - 2021-01-11
+- updated cli to accept multiple cgf files similar to isac
+- doc updates with fixes to broken links
+
 ## [1.17.2] - 2020-11-10
 - doc updates
 - added contributing.rst file
