@@ -30,6 +30,9 @@ pre-merge-check:
 deploy:
     stage: deploy
     script:
+        - export PATH="/home/gitlab-runner/.pyenv/bin:$PATH"
+        - eval "$(pyenv init -)"
+        - eval "$(pyenv virtualenv-init -)"
         - pyenv shell 3.6.10
         - pip3 install --upgrade pip
         - pip install -U twine
