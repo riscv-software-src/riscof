@@ -30,6 +30,8 @@ pre-merge-check:
 deploy:
     stage: deploy
     script:
+        - pyenv shell 3.6.10
+        - pip3 install --upgrade pip
         - pip install -U twine
         - python setup.py sdist
         - python -m twine upload --username "__token__" --password $pypitoken dist/*
