@@ -381,6 +381,43 @@ class MyParser(argparse.ArgumentParser):
             for choice, subparser in subparsers_action.choices.items():
                self._print_message("Action '{}'\n\n".format(choice),file)
                self._print_message("\t"+(subparser.format_help()).replace("\n","\n\t")+"\n",file)
+class CustomAction(argparse.Action):
+    def __init__(self,
+                 option_strings,
+                 dest,
+                 nargs=None,
+                 const=None,
+                 default=None,
+                 type=None,
+                 choices=None,
+                 required=False,
+                 help=None,
+                 metavar=None):
+        argparse.Action.__init__(self,
+                                 option_strings=option_strings,
+                                 dest=dest,
+                                 nargs=nargs,
+                                 const=const,
+                                 default=default,
+                                 type=type,
+                                 choices=choices,
+                                 required=required,
+                                 help=help,
+                                 metavar=metavar,
+                                 )
+        return
+
+    def __call__(self, parser, namespace, values, option_string=None):
+
+        if isinstance(values, list):
+            values = [ str(pathlib.Path(v).absolute()) for v in values ]
+        else:
+            values = [str(pathlib.Path(values).absolute())]
+        existing_val = getattr(namespace, self.dest, None)
+        if existing_val:
+            setattr(namespace, self.dest, existing_val + values)
+        else:
+            setattr(namespace, self.dest, values)
 
 def riscof_cmdline_args():
     parser = MyParser(
@@ -407,10 +444,9 @@ def riscof_cmdline_args():
                         default=str(pathlib.Path('./config.ini').absolute())
                           )
     coverage.add_argument('--cgf',
-                        type= lambda p: str(pathlib.Path(p).absolute()),
-                        action='store',
+                        action=CustomAction,
 #                        required=True,
-                        help='The Path to the cgf file.',
+                        help='The Path to the cgf file(s). Multiple allowed',
                         metavar= 'PATH')
     coverage.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
