@@ -36,7 +36,7 @@ setup(name="riscof",
       author_email='neelgala@incoresemi.com',
       license='BSD-3-Clause',
       packages=find_packages(),
-      package_dir={'riscof': 'riscof/'},
+      package_dir={'riscof': 'riscof'},
       package_data={
           'riscof': [
               'requirements.txt',
