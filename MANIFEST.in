@@ -1,6 +1,6 @@
 recursive-include riscof/suite *.S *.h
 
-recursive-include riscof/Templates *.html *.css *.ld *.ini *.h
+recursive-include riscof/Templates *
 
 recursive-include riscof/framework *.yaml
 
