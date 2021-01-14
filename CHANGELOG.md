@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.18.2] - 2021-01-14
+- Fixed missing files in PYPI package
+- Added `physical_addr_sz` field in model_isa.yaml
+
 ## [1.18.1] - 2021-01-11
 - updated ci to use latest twine
 - using api-tokens for twine uploads

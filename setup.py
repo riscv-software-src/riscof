@@ -23,7 +23,7 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(name="riscof",
-      version='1.18.1',
+      version='1.18.2',
       description="RISC-V Compliance Framework",
       long_description=readme + '\n\n',
       classifiers=[
@@ -36,7 +36,7 @@ setup(name="riscof",
       author_email='neelgala@incoresemi.com',
       license='BSD-3-Clause',
       packages=find_packages(),
-      package_dir={'riscof': 'riscof'},
+      package_dir={'riscof': 'riscof/'},
       package_data={
           'riscof': [
               'requirements.txt',
