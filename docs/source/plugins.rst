@@ -92,10 +92,21 @@ plugins (along with their necessary collaterals). The config file also allows yo
 which can be used by the respective plugin. For e.g., in the default ``config.ini`` template the
 `pluginpath` variable under the `[spike_simple]` header is available to the riscof_spike_simple.py
 plugins by RISCOF. Similarly one can define more variables and prefixes here which can directly be
-used in the plugins. 
+used in the plugins.
 
 The idea here is to have a single place of change which is easy rather than hard-coding the same
 within the plugins.
+
+File path specification
+-----------------------
+
+Different values are allowed for the entries in ``config.ini`` to specify a path.
+They are checked in the following order, with the first found valid entry being used:
+
+1. Absolute path: Usage of user home (``~``) is allowed.
+2. Relative to current working directory: The path within the location where RISCOF was started.
+3. Relative to ``config.ini`` location: A path staring from the point where ``config.ini`` is stored.
+
 
 Function Definitions
 ====================
