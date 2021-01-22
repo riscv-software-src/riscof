@@ -108,11 +108,15 @@ and DUT plugins in the config.ini file')
         riscof_config = config['RISCOF']
         logger.info("Preparing Models")
 
+        config_dir = os.path.dirname(os.path.abspath(args.config))
+
         # Gathering Models
         dut_model = riscof_config['DUTPlugin']
-        dut_model_path = os.path.abspath(riscof_config['DUTPluginPath'])
+        dut_model_path = utils.absolute_path(config_dir, riscof_config['DUTPluginPath'])
+
         base_model = riscof_config['ReferencePlugin']
-        base_model_path = os.path.abspath(riscof_config['ReferencePluginPath'])
+        base_model_path = utils.absolute_path(config_dir, riscof_config['ReferencePluginPath'])
+
         logger.debug("Importing " + dut_model + " plugin from: "+str(dut_model_path))
         sys.path.append(dut_model_path)
         try:
@@ -122,9 +126,10 @@ and DUT plugins in the config.ini file')
             raise SystemExit
         dut_class = getattr(dut_plugin, dut_model)
         if dut_model in config:
-            dut = dut_class(name="DUT", config=config[dut_model])
+            dut = dut_class(name="DUT", config=config[dut_model], config_dir=config_dir)
         else:
             dut = dut_class(name="DUT")
+
         logger.debug("Importing " + base_model + " plugin from: "+str(base_model_path))
         sys.path.append(base_model_path)
         try:
@@ -134,7 +139,7 @@ and DUT plugins in the config.ini file')
             raise SystemExit
         base_class = getattr(base_plugin, base_model)
         if base_model in config:
-            base = base_class(name="Reference", config=config[base_model])
+            base = base_class(name="Reference", config=config[base_model], config_dir=config_dir)
         else:
             base = base_class(name="Reference")
 

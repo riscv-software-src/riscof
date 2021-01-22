@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.18.3] - 2021-01-21
+- Added support for paths relative to `config.ini` location
+- Plugins get the location of `config.ini` directory with the key `config_dir`
+
 ## [1.18.2] - 2021-01-14
 - Fixed missing files in PYPI package
 - Added `physical_addr_sz` field in model_isa.yaml

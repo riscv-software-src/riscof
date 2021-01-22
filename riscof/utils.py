@@ -30,7 +30,24 @@ def load_yaml(foo):
         logger.error(error)
         raise SystemExit
 
-
+def absolute_path(config_dir, entry_path):
+    """
+    Create an absolute path based on the config's file directory location and a
+    path value from a configuration entry.
+    """
+    # Allow entries relative to user home.
+    entry_path = os.path.expanduser(entry_path)
+    if os.path.exists(entry_path):
+        # If the entry is already a valid path, return the absolute value of it.
+        logger.debug("Path entry found: " + str(entry_path))
+        abs_entry_path = os.path.abspath(entry_path)
+    else:
+        # Assume that the entry is relative to the location of the config file.
+        logger.debug("Path entry '{}' not found. Combine it with config file "\
+                "location '{}'.".format(entry_path, config_dir))
+        abs_entry_path = os.path.abspath(os.path.join(config_dir, entry_path))
+    logger.debug("Using the path: " +str(abs_entry_path))
+    return abs_entry_path
 
 
 class makeUtil():
