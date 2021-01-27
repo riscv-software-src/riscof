@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.18.4] - 2021-01-27
+- Fixed missing coverage.html during pip installation.
+
 ## [1.18.3] - 2021-01-21
 - Added support for paths relative to `config.ini` location
 - Plugins get the location of `config.ini` directory with the key `config_dir`

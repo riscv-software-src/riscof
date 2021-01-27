@@ -43,7 +43,7 @@ setup(name="riscof",
               'suite/env/*', 'suite/rv32i_m/I/*.S', 'suite/rv32i_m/M/*.S',
               'suite/rv32i_m/C/*.S', 'suite/rv32i_m/privilege/*.S',
               'suite/rv32i_m/Zicsr/*.S', 'suite/rv32i_m/Zifencei/*.S',
-              'suite/rv64i_m/I/*.S',
+              'suite/rv64i_m/I/*.S','Templates/coverage.html',
               'framework/database.yaml', 'Templates/report.html',
               'Templates/style.css', 'Templates/setup/*',
               'Templates/setup/model/env/*', 'Templates/setup/model/*'
