@@ -1,8 +1,8 @@
 .. See LICENSE.incore for details
 
-.. _quickstart:
-
 .. highlight:: shell
+
+.. _quickstart:
 
 ==========
 Quickstart
@@ -175,10 +175,12 @@ Once you have installed RISCOF you can execute ``riscof --help`` to print the he
 
 .. code-block:: bash
 
+
   usage: riscof [-h] [--version] [--verbose]
-                {gendb,setup,validateyaml,run,testlist} ...
+                {coverage,gendb,setup,validateyaml,run,testlist} ...
   
-  This program checks compliance for a DUT.
+  RISCOF is a framework used to run the Architectural Tests on a DUT and check
+  compatibility with the RISC-V ISA
   
   optional arguments:
     --verbose             [Default=info]
@@ -188,15 +190,27 @@ Once you have installed RISCOF you can execute ``riscof --help`` to print the he
   Action:
     The action to be performed by riscof.
   
-    {gendb,setup,validateyaml,run,testlist}
+    {coverage,gendb,setup,validateyaml,run,testlist}
                           List of actions supported by riscof.
+      coverage            Generate Coverage Report for the given YAML spec.
       gendb               Generate Database for the standard suite.
       setup               Initiate setup for riscof.
       validateyaml        Validate the Input YAMLs using riscv-config.
       run                 Run the tests on DUT and reference and compare
                           signatures.
       testlist            Generate the test list for the given DUT and suite.
-                          Uses the architectural suite by default.
+  Action 'coverage'
+  
+  	usage: riscof coverage [-h] [--config PATH] [--cgf PATH] [--suite PATH]
+  	                       [--no-browser]
+  	
+  	optional arguments:
+  	  --cgf PATH     The Path to the cgf file(s). Multiple allowed
+  	  --config PATH  The Path to the config file. [Default=./config.ini]
+  	  --no-browser   Do not open the browser for showing the test report.
+  	  --suite PATH   The Path to the custom suite directory.
+  	  -h, --help     show this help message and exit
+  	
   Action 'gendb'
   
   	usage: riscof gendb [-h] [--suite PATH]
@@ -211,7 +225,7 @@ Once you have installed RISCOF you can execute ``riscof --help`` to print the he
   	
   	optional arguments:
   	  --dutname NAME  Name of DUT plugin. [Default=spike]
-  	  --refname NAME  Name of Reference plugin. [Default=riscvOVPsim]
+  	  --refname NAME  Name of Reference plugin. [Default=sail_cSim]
   	  -h, --help      show this help message and exit
   	
   Action 'validateyaml'
@@ -371,54 +385,85 @@ provide a quick and standard way of building the model, compiling the tests and 
 on the models. Along with the python plugins of each model, one would also have to provide the
 `YAML` configuration files of the DUT as per the norms of ``riscv-config``. Some models might also
 require special macros to be executed as prelude or post-testing. These macros can be provided to
-RISCOF as a header file: ``compliance_model.h``. 
+RISCOF as a header file: ``model_test.h``. 
 
-For the sake of this guide, we will use some of the pre-built plugins for riscof available at: 
-`riscof-plugins <https://gitlab.com/incoresemi/riscof-plugins>`_. We will specifically use the
-spike_simple and sail_cSim plugins. 
+For sample templates of pre-built plugins please refer to : `riscof-plugins <https://gitlab.com/incoresemi/riscof-plugins>`_. 
 
-.. note:: If you are using `pyenv` as mentioned above, make sure to enable that environment before
-  performing the following steps since we will now start using riscof.
+To make things even simpler, RISCOF generates standard pre-built templates for DUTs and Reference
+Models for the user via the ``setup`` command as shown below::
 
-.. code-block:: bash
-  
-  $ git clone https://gitlab.com/incoresemi/riscof-plugins.git
+  $ riscof setup --dutname=spike
 
-To create necessary environment files use the following command::
+The above command will generate the following files and directories in the current directory::
 
-  $ riscof setup --dutname=spike_simple --refname=sail_cSim
+ ├──config.ini                   # configuration file for riscof
+ ├──spike/                       # DUT plugin templates
+    ├── env
+    │   ├── link.ld
+    │   └── model_test.h
+    ├── riscof_spike.py
+    ├── spike_isa.yaml
+    └── spike_platform.yaml
+ ├──sail_cSim/                   # reference plugin templates
+    ├── env
+    │   ├── link.ld
+    │   └── model_test.h
+    ├── __init__.py
+    └── riscof_sail_cSim.py
 
-The above command will generate a file named ``config.ini`` and a folder named ``spike_simple``.
+
+
 The ``config.ini`` file is used to capture specific paths of the plugins of reference and DUT model,
-along with the paths to isa and platform input YAMLs. The folder ``spike_simple`` contains 
-various templates of files that would be required for compliance of any generic DUT. 
-Components of this folder will be modified by the user as per the DUT spec. 
-Since we are going to use pre-built plugins for this guide, we will ignore the ``spike_simple``
-folder for now. 
-
-.. note:: For specific examples on modifications to environment files, please check the 
-   corresponding files for various targets available in the riscof-plugins directory.
-
-Based on the path you have downloaded the riscof-plugins directory, you will need to modify the
-``config.ini`` file to look similar to the following::
+along with the paths to isa and platform input YAMLs. The ``config.ini`` will look something like this by default::
 
 
   [RISCOF]                                                                                            
   ReferencePlugin=sail_cSim
-  ReferencePluginPath=/path/to/riscof-plugins/sail_cSim
-  DUTPlugin=spike_simple                                                                        
-  DUTPluginPath=/path/to/riscof-plugins/spike_simple                                                  
+  ReferencePluginPath=/path/to/riscof/sail_cSim
+  DUTPlugin=spike                                                                        
+  DUTPluginPath=/path/to/riscof/spike                                                  
                                                                                                       
   ## Example configuration for spike plugin.                                                          
-  [spike_simple]                                                                                             
-  pluginpath=/path/to/riscof-plugins/spike_simple/
-  ispec=/path/to/riscof-plugins/spike_simple/spike_simple_isa.yaml                                           
-  pspec=/path/to/riscof-plugins/spike_simple/spike_simple_platform.yaml 
+  [spike]                                                                                             
+  pluginpath=/path/to/riscof/spike/
+  ispec=/path/to/riscof/spike/spike_isa.yaml                                           
+  pspec=/path/to/riscof/spike/spike_platform.yaml 
 
   [sail_cSim]
-  pluginpath=/path/to/riscof-plugins/sail_cSim
+  pluginpath=/path/to/riscof/sail_cSim
 
-We are now ready to run compliance via RISCOF
+If the SAIL binaries (i.e. ``riscv_sim_RV32``) are not in your $PATH you may want to add the following to the last line of the
+above config::
+
+  PATH=<path_to_my_Sail_binaries>
+
+
+The folder ``spike`` contains various templates of files that would be required for testing of 
+any generic DUT. Components of this folder will need to be modified by the user as per the DUT spec.
+Since our DUT model in this guide is spike, you will only have to change the execute command at line 100 of
+spike/riscof_spike.py to the following:
+
+.. code-block:: python
+
+  execute += self.dut_exe + ' --log-commits --log dump --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
+
+
+.. note:: Custom DUTs can go through the various ``#TODO`` comments to figure out what changes need to be
+  made in the respective python file.
+
+The configuration of spike we will be using is available in the ``spike/spike_isa.yaml``. Modifying
+this will change the tests applicable for the DUT. For now let's leave it as is. For more
+information on creating and modifying your plugins can be found in :ref:`plugins`
+
+The ``sail_cSim`` directory holds the plugin files for the reference SAIL model. Changes to any of
+the files in this directory are typically not required (unless you know what you are doing)
+
+We are now ready to run the architectural tests on the DUT via RISCOF.
+
+.. tip:: By default RISCOF resorts to using RISC-V's SAIL C Emulator as a reference model. To generate
+ templates for a reference model add the argument '--refname myref' to the setup command above. This
+ will generate a *myref* directory containing template files for defining a reference model plugin.
+ Lookout for the #TODO in the python file for places where changes will be required. 
 
 Running RISCOF
 ==============
@@ -435,23 +480,22 @@ This should print the following:
 
 .. code-block:: bash
 
-  [INFO]    : Reading configuration from: /scratch/git-repo/incoresemi/riscof-plugins/config.ini
+  [INFO]    : Reading configuration from: /scratch/git-repo/incoresemi/riscof/config.ini
   [INFO]    : Preparing Models
   [INFO]    : Input-ISA file
-  [INFO]    : Loading input file: /scratch/git-repo/incoresemi/riscof-plugins/spike_simple/sample_isa.yaml
+  [INFO]    : Loading input file: /scratch/git-repo/incoresemi/riscof/spike/sample_isa.yaml
   [INFO]    : Load Schema /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscv_config/schemas/schema_isa.yaml
   [INFO]    : Initiating Validation
   [INFO]    : No Syntax errors in Input ISA Yaml. :)
-  [INFO]    : Dumping out Normalized Checked YAML: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/sample_isa_checked.yaml
+  [INFO]    : Dumping out Normalized Checked YAML: /scratch/git-repo/incoresemi/riscof/riscof_work/sample_isa_checked.yaml
   [INFO]    : Input-Platform file
-  [INFO]    : Loading input file: /scratch/git-repo/incoresemi/riscof-plugins/spike_simple/sample_platform.yaml
+  [INFO]    : Loading input file: /scratch/git-repo/incoresemi/riscof/spike/sample_platform.yaml
   [INFO]    : Load Schema /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscv_config/schemas/schema_platform.yaml
   [INFO]    : Initiating Validation
   [INFO]    : No Syntax errors in Input Platform Yaml. :)
-  [INFO]    : Dumping out Normalized Checked YAML: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/sample_platform_checked.yaml
+  [INFO]    : Dumping out Normalized Checked YAML: /scratch/git-repo/incoresemi/riscof/riscof_work/sample_platform_checked.yaml
 
-The next step is generate the list of tests that need to be run on the models for declaring
-compliance.
+The next step is generate the list of tests that need to be run on the models.
 
 .. code-block:: bash
 
@@ -469,17 +513,17 @@ something similar to the following:
 .. code-block:: yaml
 
   suite/rv32i_m/C/C-ADD.S:                                                                            
-    work_dir: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/rv32i_m/C/C-ADD.S               
+    work_dir: /scratch/git-repo/incoresemi/riscof/riscof_work/rv32i_m/C/C-ADD.S               
     macros: [TEST_CASE_1=True, XLEN=32]                                                               
     isa: RV32IC                                                                                       
     test_path: /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscof/suite/rv32i_m/C/C-ADD.S
   suite/rv32i_m/C/C-ADDI.S:                                                                           
-    work_dir: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/rv32i_m/C/C-ADDI.S              
+    work_dir: /scratch/git-repo/incoresemi/riscof/riscof_work/rv32i_m/C/C-ADDI.S              
     macros: [TEST_CASE_1=True, XLEN=32]                                                               
     isa: RV32IC                                                                                       
     test_path: /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscof/suite/rv32i_m/C/C-ADDI.S
   suite/rv32i_m/C/C-ADDI16SP.S:                                                                       
-    work_dir: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/rv32i_m/C/C-ADDI16SP.S          
+    work_dir: /scratch/git-repo/incoresemi/riscof/riscof_work/rv32i_m/C/C-ADDI16SP.S          
     macros: [TEST_CASE_1=True, XLEN=32]                                                               
     isa: RV32IC                                                                                       
   ...

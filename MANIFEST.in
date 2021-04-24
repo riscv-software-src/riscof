@@ -1,5 +1,7 @@
 recursive-include riscof/suite *.S *.h
 
+recursive-include riscof/coverage *
+
 recursive-include riscof/Templates *
 
 recursive-include riscof/framework *.yaml

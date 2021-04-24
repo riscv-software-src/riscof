@@ -2,7 +2,7 @@
 Introduction
 ############
 
-**RISCOF** - The RISC-V Compliance Framework is a python based framework which enables testing of a RISC-V
+**RISCOF** - The RISC-V Compatibility Framework is a python based framework which enables testing of a RISC-V
 target (hard or soft implementations) against a standard RISC-V golden reference model using a suite
 of RISC-V architectural assembly tests.
 

@@ -34,9 +34,9 @@ version = get_version()
 # The full version, including alpha/beta/rc tags
 release = version
 
-#def setup(app):
-#    app.add_stylesheet("custom.css")
-#    app.add_css_file("_static/custom.css")
+def setup(app):
+    app.add_stylesheet("custom.css")
+    app.add_css_file("_static/custom.css")
 
 # -- General configuration ---------------------------------------------------
 
@@ -57,7 +57,8 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinxcontrib.autoyaml',
     'sphinxcontrib.bibtex',
-    'sphinx_tabs.tabs'
+    'sphinx_tabs.tabs',
+    'm2r2'
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -163,7 +164,7 @@ html_show_license = True
 
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'RISCVComplianceFrameworkdoc'
+htmlhelp_basename = 'RISCVArchTestFrameworkdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -261,7 +262,7 @@ latex_elements = {
 
             %%% Alternating Footer for two side
             \fancyfoot[LO, LE]{\small \bf{Copyright \textcopyright \the\year \textbf{ } InCore Semiconductors Pvt. Ltd.}}
-            %\fancyfoot[LO, LE]{\scriptsize \bf{RISCOF}}
+            %\fancyfoot[LO, LE]{\scriptsize \bf{RISCOF: RISC-V Architectural Test Framework}}
 
             %%% page number
             \fancyfoot[RO, RE]{\thepage}
@@ -303,7 +304,7 @@ latex_elements = {
                 \includegraphics[scale=0.2]{incore_logo.png}
             \end{figure}
             \vspace*{40mm} %%% * is used to give space from top
-            \textbf{\Huge {RISC-V ISA Coverage}}
+            \textbf{\Huge {RISCOF: RISC-V Architectural Test Framework}}
             \vspace*{40mm} %%% * is used to give space from top
 
 
@@ -374,7 +375,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'RISCVComplianceFramework.tex', 'RISC-V Compliance Framework Documentation',
+    (master_doc, 'RISCVArchTestFramework.tex', 'RISC-V Architectural Test Framework Documentation',
      'InCore Semiconductors Pvt. Ltd.', 'manual'),
 ]
 
@@ -387,7 +388,7 @@ latex_show_pagerefs = True
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'risvcomplianceframework', 'RISCV Compliance Framework Documentation',
+    (master_doc, 'risvarchtestframework', 'RISCV Architectural Test Framework Documentation',
      [author], 1)
 ]
 
@@ -398,8 +399,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'RISCVComplianceFramework', 'RISC-V Compliance Framework Documentation',
-     author, 'RISCVComplianceFramework', 'One line description of project.',
+    (master_doc, 'RISCVArchTestFramework', 'RISC-V Architectural Test Framework Documentation',
+     author, 'RISCVArchTestFramework', 'One line description of project.',
      'Miscellaneous'),
 ]
 

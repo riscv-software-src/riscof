@@ -114,7 +114,7 @@ This subsection describes at an abstract level a typical flow that will have to 
 authors to contribute their tests to RISCOF's architectural test suite.
 
 A test by a contributor must always adhere to the :ref:`Test Format Spec <test_format_spec>`. The
-test can either be auto-generated using tools like `RISCV-CTG <https://gitlab.com/incoresemi/riscv-compliance/riscv_ctg>`_
+test can either be auto-generated using tools like `RISCV-CTG <https://github.com/riscv/riscv-ctg>`_
 or can be handwritten. 
 
 Once a suite or directory of tests is available, the contributor can force RISCOF to use only those
