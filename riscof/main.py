@@ -48,7 +48,7 @@ def execute():
 
 
     if (args.version):
-        print('RISCOF: RISC-V Compliance Framework')
+        print('RISCOF: RISC-V Architectural Test Framework')
         print('Version: '+ __version__)
         return 0
     elif (args.command=='setup'):
@@ -57,17 +57,50 @@ be overwritten]")
         try:
             cwd = os.getcwd()
             logger.info("Creating sample Plugin directory for [DUT]: " +\
-                    args.dutname + ' [Ref]: '+args.refname)
+                    args.dutname)
             dutname = args.dutname
             src = os.path.join(constants.root, "Templates/setup/model/")
             dest = os.path.join(cwd, dutname)
             distutils.dir_util.copy_tree(src, dest)
+
             os.rename(cwd+'/'+args.dutname+'/model_isa.yaml',
                     cwd+'/'+args.dutname+'/'+args.dutname+'_isa.yaml')
             os.rename(cwd+'/'+args.dutname+'/model_platform.yaml',
                     cwd+'/'+args.dutname+'/'+args.dutname+'_platform.yaml')
             os.rename(cwd+'/'+args.dutname+'/riscof_model.py',
                     cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py')
+            with open(cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py', 'r') as file :
+              filedata = file.read()
+            
+            # Replace the target string
+            filedata = filedata.replace('dutname', args.dutname)
+            
+            # Write the file out again
+            with open(cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py', 'w') as file:
+              file.write(filedata)
+
+            logger.info("Creating sample Plugin directory for [REF]: " +\
+                  args.refname)
+            if args.refname == 'sail_cSim':
+                src = os.path.join(constants.root, "Templates/setup/sail_cSim/")
+                dest = os.path.join(cwd, args.refname)
+                distutils.dir_util.copy_tree(src, dest)
+            else:
+                src = os.path.join(constants.root, "Templates/setup/reference/")
+                dest = os.path.join(cwd, args.refname)
+                distutils.dir_util.copy_tree(src, dest)
+                os.rename(cwd+'/'+args.refname+'/riscof_model.py',
+                    cwd+'/'+args.refname+'/riscof_'+args.refname+'.py')
+                with open(cwd+'/'+args.refname+'/riscof_'+args.refname+'.py', 'r') as file :
+                  filedata = file.read()
+                
+                # Replace the target string
+                filedata = filedata.replace('refname', args.refname)
+                
+                # Write the file out again
+                with open(cwd+'/'+args.refname+'/riscof_'+args.refname+'.py', 'w') as file:
+                  file.write(filedata)
+
             logger.info("Creating Sample Config File")
             configfile = open('config.ini','w')
             configfile.write(constants.config_temp.format(args.refname, \

@@ -440,7 +440,7 @@ def riscof_cmdline_args():
     parser = MyParser(
         formatter_class=SortingHelpFormatter,
         prog="riscof",
-        description="This program checks compliance for a DUT.")
+        description="RISCOF is a framework used to run the Architectural Tests on a DUT and check compatibility with the RISC-V ISA")
     parser.add_argument('--version','-v',
                         help='Print version of RISCOF being used',
                         action='store_true')
@@ -487,8 +487,8 @@ def riscof_cmdline_args():
                         metavar= 'NAME')
     setup.add_argument('--refname',
                         action='store',
-                        help='Name of Reference plugin. [Default=riscvOVPsim]',
-                        default='riscvOVPsim',
+                        help='Name of Reference plugin. [Default=sail_cSim]',
+                        default='sail_cSim',
                         metavar= 'NAME')
     validate = subparsers.add_parser('validateyaml',
                         help='Validate the Input YAMLs using riscv-config.',formatter_class=SortingHelpFormatter)
@@ -516,7 +516,7 @@ def riscof_cmdline_args():
     run.add_argument('--no-browser',action='store_true',
                      help="Do not open the browser for showing the test report.")
     testlist = subparsers.add_parser('testlist',
-                        help='Generate the test list for the given DUT and suite. Uses the compliance suite by default.',formatter_class=SortingHelpFormatter)
+                        help='Generate the test list for the given DUT and suite.',formatter_class=SortingHelpFormatter)
     testlist.add_argument('--config',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',

@@ -262,13 +262,18 @@ def generate_test_pool(ispec, pspec):
                     if (temp[0]):
                         macros.extend(temp[1])
         if not macros == []:
-            if '32' in db[file]['isa']:
+            isa = db[file]['isa']
+            if '32' in isa:
                 xlen = '32'
-            elif '64' in db[file]['isa']:
+            elif '64' in isa:
                 xlen = '64'
-            elif '128' in db[file]['isa']:
+            elif '128' in isa:
                 xlen = '128'
             macros.append("XLEN=" + xlen)
+            if re.match(r"^[^(Z,z)]+D.*$",isa):
+                macros.append("FXLEN=64")
+            elif re.match(r"^[^(Z,z)]+F.*$",isa):
+                macros.append("FXLEN=32")
             test_pool.append(
                 (file, db[file]['commit_id'], macros, db[file]['isa'],cov_labels))
     logger.info("Selecting Tests.")

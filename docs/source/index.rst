@@ -18,3 +18,4 @@ Welcome to RISCOF
    testformat
    RISCV-Config [External] <https://riscv-config.readthedocs.io/>
    code-doc
+   changelog

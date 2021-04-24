@@ -71,6 +71,6 @@ A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed.
 Then run::
 
-$ bumpversion --config-file setup.cfg patch  # possible: major / minor / patch
+$ bumpversion --no-tag --config-file setup.cfg patch # possible: major / minor / patch
 $ git push origin name-of-your-branch
 

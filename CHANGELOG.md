@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0] - 2021-04-24
+- Added new rv64i and rv32i tests from arch-test repo
+- Added K_unratified tests from arch-test repo
+- Addded all relevant coverage files 
+- Updated coverage support to pick local coverage files
+- Updated setup phase to dump out sail_cSim reference model
+- Updated the config.ini and model setup files
+- Updated docs
+
 ## [1.18.4] - 2021-01-27
 - Fixed missing coverage.html during pip installation.
 

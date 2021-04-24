@@ -4,8 +4,8 @@
 Adding New Tests
 ################
 
-This section pertains to developers who wish to add new tests to the compliance
-suite. Please follow the below steps for such contributions:
+This section pertains to developers who wish to add new tests to the architectural test suite. 
+Please follow the below steps for such contributions:
 
 1. All tests should strictly follow the test-spec format available here: 
    :ref:`Test Spec Format<test_format_spec>`

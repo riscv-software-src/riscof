@@ -35,7 +35,7 @@ deploy:
         - eval "$(pyenv virtualenv-init -)"
         - pyenv shell 3.6.10
         - pip3 install --upgrade pip
-        - pip install -U twine semver
+        - pip install -U twine semver python-gitlab
         - python setup.py sdist
         - python -m twine upload --username "__token__" --password $pypitoken dist/*
         - python /scratch/version-extract.py

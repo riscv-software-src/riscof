@@ -5,7 +5,7 @@ Test List Format
 ################
 
 For a given ISA and PLATFORM YAML configuration files, RISCOF is capable of generating a list of
-tests that need to be executed on the DUT and Golden model for compliance. This test list can be
+tests that need to be executed on the DUT and Golden model. This test list can be
 generated using the following command:
 
 .. code-block:: bash
@@ -24,7 +24,7 @@ syntax:
     test_path: <absolute path of the source of assembly file>
 
 The test-list is meant to be used by the DUT/Golden model plugins to generate execution
-environments/Makefile for compliance testing.
+environments/Makefile for architectural suite testing.
 
 A sample test_list.yaml would look like the following:
 

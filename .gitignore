@@ -22,3 +22,7 @@ docs/build
 
 ./riscof_work
 ./env
+
+sail_cSim
+
+spike
