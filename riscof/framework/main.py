@@ -17,6 +17,9 @@ yaml = YAML(typ="rt")
 yaml.default_flow_style = False
 yaml.allow_unicode = True
 
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 logger = logging.getLogger(__name__)
 
 def filter_coverage(cgf_file,ispec,pspec,results):
@@ -26,17 +29,19 @@ def filter_coverage(cgf_file,ispec,pspec,results):
     for key,node in cgf.items():
         if key == 'datasets':
             continue
-        include = True
+        include_node = False
         if 'cond' in node:
             for entry in node['cond'].split(";"):
                 if 'check' in entry:
-                    include = include and test.eval_cond(entry, spec)
+                    include = include or test.eval_cond(entry, spec)
         elif 'config' in node:
             for entry in node['config']:
+                include_entry = True
                 for cond in entry.split(";"):
                     if 'check' in cond:
-                        include = include and test.eval_cond(cond, spec)
-        if include:
+                        include_entry = include_entry and test.eval_cond(cond, spec)
+                include_node = include_node or include_entry
+        if include_node:
             cover_points.append(key)
     result_filtered = {}
     for key in cover_points:
