@@ -19,6 +19,8 @@ yaml.allow_unicode = True
 
 logger = logging.getLogger(__name__)
 
+def dump_yaml(foo, outfile):
+    yaml.dump(foo, outfile)
 
 def load_yaml(foo):
     try:
@@ -470,6 +472,13 @@ def riscof_cmdline_args():
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
+    coverage.add_argument('--work-dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the work-dir.',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./riscof_work').absolute())
+                        )
     coverage.add_argument('--no-browser',action='store_true',
                      help="Do not open the browser for showing the test report.")
 
@@ -479,6 +488,13 @@ def riscof_cmdline_args():
                             action='store',
                             help='The Path to the custom suite directory.',
                             metavar= 'PATH')
+    generatedb.add_argument('--work-dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the work-dir.',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./riscof_work').absolute())
+                        )
     setup = subparsers.add_parser('setup',help='Initiate setup for riscof.',formatter_class=SortingHelpFormatter)
     setup.add_argument('--dutname',
                         action='store',
@@ -490,6 +506,13 @@ def riscof_cmdline_args():
                         help='Name of Reference plugin. [Default=sail_cSim]',
                         default='sail_cSim',
                         metavar= 'NAME')
+    setup.add_argument('--work-dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the work-dir.',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./riscof_work').absolute())
+                        )
     validate = subparsers.add_parser('validateyaml',
                         help='Validate the Input YAMLs using riscv-config.',formatter_class=SortingHelpFormatter)
     validate.add_argument('--config',
@@ -499,6 +522,13 @@ def riscof_cmdline_args():
                         metavar= 'PATH',
                         default=str(pathlib.Path('./config.ini').absolute())
                           )
+    validate.add_argument('--work-dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the work-dir.',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./riscof_work').absolute())
+                        )
     run = subparsers.add_parser('run',
                         help='Run the tests on DUT and reference and compare signatures.',formatter_class=SortingHelpFormatter)
     run.add_argument('--config',
@@ -515,8 +545,22 @@ def riscof_cmdline_args():
                         metavar= 'PATH')
     run.add_argument('--no-browser',action='store_true',
                      help="Do not open the browser for showing the test report.")
+    run.add_argument('--work-dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the work-dir.',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./riscof_work').absolute())
+                        )
     testlist = subparsers.add_parser('testlist',
                         help='Generate the test list for the given DUT and suite.',formatter_class=SortingHelpFormatter)
+    testlist.add_argument('--work-dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the work-dir.',
+                        metavar= 'PATH',
+                        default=str(pathlib.Path('./riscof_work').absolute())
+                        )
     testlist.add_argument('--config',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',

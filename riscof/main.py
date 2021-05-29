@@ -113,7 +113,7 @@ and DUT plugins in the config.ini file')
             logger.error(err)
             return 1
     else:
-        work_dir = constants.work_dir
+        work_dir = args.work_dir
         #Creating work directory
         if not os.path.exists(work_dir):
             logger.debug('Creating new work directory: ' + work_dir)
@@ -195,7 +195,7 @@ and DUT plugins in the config.ini file')
             args.command=='testlist' or args.command == 'coverage' :
         if args.suite is not None:
             logger.info("Generating database for custom suite.")
-            work_dir = constants.work_dir
+            work_dir = args.work_dir
             constants.suite = args.suite
             constants.framework_db = os.path.join(work_dir,"database.yaml")
             logger.debug('Suite used: '+constants.suite)
@@ -205,7 +205,7 @@ and DUT plugins in the config.ini file')
             logger.info('Env path set to'+constants.env)
 
     if args.command == 'testlist':
-        test_routines.generate_test_pool(isa_specs, platform_specs)
+        test_routines.generate_test_pool(isa_specs, platform_specs, work_dir)
 
     if args.command == 'coverage':
         logger.info('Will collect Coverage using RISCV-ISAC')
@@ -221,9 +221,9 @@ and DUT plugins in the config.ini file')
         with open(platform_file, "r") as platfile:
             pspecs = platfile.read()
         report, for_html, test_stats, coverpoints = framework.run_coverage(base, isa_file, platform_file,
-                cgf_file)
-        report_file = open(constants.work_dir+'/suite_coverage.rpt','w')
-        report_file.write(report)
+                work_dir, cgf_file)
+        report_file = open(args.work_dir+'/suite_coverage.rpt','w')
+        utils.dump_yaml(report, report_file)
         report_file.close()
 
         report_objects = {}
@@ -249,12 +249,12 @@ and DUT plugins in the config.ini file')
 
         output = template.render(report_objects)
 
-        reportfile = os.path.join(constants.work_dir, "coverage.html")
+        reportfile = os.path.join(args.work_dir, "coverage.html")
         with open(reportfile, "w") as report:
             report.write(output)
 
         shutil.copyfile(constants.css,
-                        os.path.join(constants.work_dir, "style.css"))
+                        os.path.join(args.work_dir, "style.css"))
 
         logger.info("Test report generated at "+reportfile+".")
         if not args.no_browser:
@@ -289,7 +289,7 @@ and DUT plugins in the config.ini file')
         report_objects['platform_specs'] = pspecs
 
         report_objects['results'] = framework.run(dut, base, isa_file,
-                                                  platform_file)
+                                                  platform_file, work_dir)
 
         report_objects['num_passed'] = 0
         report_objects['num_failed'] = 0
@@ -305,12 +305,12 @@ and DUT plugins in the config.ini file')
 
         output = template.render(report_objects)
 
-        reportfile = os.path.join(constants.work_dir, "report.html")
+        reportfile = os.path.join(args.work_dir, "report.html")
         with open(reportfile, "w") as report:
             report.write(output)
 
         shutil.copyfile(constants.css,
-                        os.path.join(constants.work_dir, "style.css"))
+                        os.path.join(args.work_dir, "style.css"))
 
         logger.info("Test report generated at "+reportfile+".")
         if not args.no_browser:

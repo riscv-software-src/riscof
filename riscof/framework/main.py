@@ -76,7 +76,7 @@ def find_elf_size(elf):
         # size = e_shoff + e_ehsize + (e_phnum * e_phentsize) + (e_shnum * e_shentsize)
         return (sum([segment['p_memsz'] for segment in elffile.iter_segments()]),code_size,data_size,sign_size)
 
-def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
+def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None):
     '''
         Entry point for the framework module. This function initializes and sets up the required
         variables for the tests to run.
@@ -99,7 +99,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
             required to generate the report given from the :py:mod:`riscof.framework.test` module.
 
     '''
-    work_dir = constants.work_dir
+#    work_dir = constants.work_dir
     # Setting up models
     base.initialise(constants.suite, work_dir, constants.env)
     #Loading Specs
@@ -129,17 +129,15 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
     if 64 in ispec['supported_xlen']:
         results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,64), True, 64)
     elif 32 in ispec['supported_xlen']:
-        with open("./out","w") as outfile:
-            utils.yaml.dump(expand_cgf(cgf_file,32),outfile)
         results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,32), True, 32)
 
 
-    results_yaml = yaml.load(results)
-    results_yaml = filter_coverage(cgf_file,ispec,pspec,results_yaml)
+#    results_yaml = yaml.load(results)
+    results_yaml = filter_coverage(cgf_file,ispec,pspec,results)
     for_html = []
     coverpoints = 0
     for cov_labels in results_yaml:
-        coverage = results_yaml[cov_labels]['coverage']
+        coverage = results_yaml[cov_labels]['total_coverage']
         coverpoints += int(coverage.split('/')[1])
         string = isac.pretty_print_yaml(results_yaml[cov_labels])
         percentage = "{:.2f}".format(eval(coverage)*100)
@@ -153,7 +151,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, cgf_file=None):
 
     return results, for_html, test_stats, coverpoints
 
-def run(dut, base, dut_isa_spec, dut_platform_spec):
+def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir):
     '''
         Entry point for the framework module. This function initializes and sets up the required
         variables for the tests to run.
@@ -176,7 +174,7 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
             required to generate the report given from the :py:mod:`riscof.framework.test` module.
 
     '''
-    work_dir = constants.work_dir
+#    work_dir = constants.work_dir
 
     # Setting up models
     dut.initialise(constants.suite, work_dir, constants.env)
@@ -190,7 +188,7 @@ def run(dut, base, dut_isa_spec, dut_platform_spec):
     logger.info("Running Build for Reference")
     base.build(dut_isa_spec, dut_platform_spec)
 
-    results = test.run_tests(dut, base, ispec['hart0'], pspec)
+    results = test.run_tests(dut, base, ispec['hart0'], pspec, work_dir)
 
     return results
 

@@ -221,7 +221,7 @@ def eval_macro(macro, spec):
         return (False,[])
 
 
-def generate_test_pool(ispec, pspec):
+def generate_test_pool(ispec, pspec, workdir):
     '''
         Funtion to select the tests which are applicable for the DUT and generate the macros
         necessary for each test.
@@ -281,9 +281,9 @@ def generate_test_pool(ispec, pspec):
         # logger.info("Test file:" + entry[0])
         temp = {}
         if constants.suite in entry[0]:
-            work_dir = os.path.join(constants.work_dir,entry[0].replace(constants.suite, '')[1:])
+            work_dir = os.path.join(workdir,entry[0].replace(constants.suite, '')[1:])
         else:
-            work_dir = os.path.join(constants.work_dir,entry[0].replace("suite/", ''))
+            work_dir = os.path.join(workdir,entry[0].replace("suite/", ''))
         Path(work_dir).mkdir(parents=True, exist_ok=True)
         temp['work_dir']=work_dir
         temp['macros']=entry[2]
@@ -295,13 +295,13 @@ def generate_test_pool(ispec, pspec):
             temp['test_path'] = os.path.join(constants.root,entry[0])
         test_list[entry[0]]=temp
 
-    with open(os.path.join(constants.work_dir,"test_list.yaml"),"w") as tfile:
+    with open(os.path.join(workdir,"test_list.yaml"),"w") as tfile:
         yaml.dump(test_list,tfile)
 
     return (test_list, test_pool)
 
 
-def run_tests(dut, base, ispec, pspec):
+def run_tests(dut, base, ispec, pspec, work_dir):
     '''
         Function to run the tests for the DUT.
 
@@ -320,7 +320,7 @@ def run_tests(dut, base, ispec, pspec):
         :return: A list of dictionary objects containing the necessary information
             required to generate the report.
     '''
-    test_list, test_pool = generate_test_pool(ispec, pspec)
+    test_list, test_pool = generate_test_pool(ispec, pspec, work_dir)
     results = []
     logger.info("Running Tests on DUT.")
     dut.runTests(test_list)
