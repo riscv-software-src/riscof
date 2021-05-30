@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.0] - 2021-05-30
+- work directory is now controlled by user args. Defaults to riscof_work for backward compatibility.
+- when filtering we check the config string in the cgf. The config node can have multiple entries. 
+  If within an entry multiple conditions are detected, then they are andded to create included_entry. 
+  Across all the list of entries in the config list the included_entries are ORed.
+
+
 ## [1.19.0] - 2021-04-24
 - Added new rv64i and rv32i tests from arch-test repo
 - Added K_unratified tests from arch-test repo

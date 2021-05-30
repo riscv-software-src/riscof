@@ -15,7 +15,7 @@ for path in os.listdir(cgf_dir):
 
 framework_db = os.path.join(root, "framework/database.yaml")
 cwd = os.getcwd()
-work_dir = os.path.join(cwd, "riscof_work/")
+#work_dir = os.path.join(cwd, "riscof_work/")
 html_template = os.path.join(root, 'Templates/report.html')
 coverage_template = os.path.join(root, 'Templates/coverage.html')
 css = os.path.join(root, 'Templates/style.css')
