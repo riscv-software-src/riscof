@@ -175,86 +175,91 @@ Once you have installed RISCOF you can execute ``riscof --help`` to print the he
 
 .. code-block:: bash
 
-
-  usage: riscof [-h] [--version] [--verbose]
-                {coverage,gendb,setup,validateyaml,run,testlist} ...
-  
-  RISCOF is a framework used to run the Architectural Tests on a DUT and check
-  compatibility with the RISC-V ISA
-  
-  optional arguments:
-    --verbose             [Default=info]
-    --version, -v         Print version of RISCOF being used
-    -h, --help            show this help message and exit
-  
-  Action:
-    The action to be performed by riscof.
-  
-    {coverage,gendb,setup,validateyaml,run,testlist}
-                          List of actions supported by riscof.
-      coverage            Generate Coverage Report for the given YAML spec.
-      gendb               Generate Database for the standard suite.
-      setup               Initiate setup for riscof.
-      validateyaml        Validate the Input YAMLs using riscv-config.
-      run                 Run the tests on DUT and reference and compare
-                          signatures.
-      testlist            Generate the test list for the given DUT and suite.
-  Action 'coverage'
-  
-  	usage: riscof coverage [-h] [--config PATH] [--cgf PATH] [--suite PATH]
-  	                       [--no-browser]
-  	
-  	optional arguments:
-  	  --cgf PATH     The Path to the cgf file(s). Multiple allowed
-  	  --config PATH  The Path to the config file. [Default=./config.ini]
-  	  --no-browser   Do not open the browser for showing the test report.
-  	  --suite PATH   The Path to the custom suite directory.
-  	  -h, --help     show this help message and exit
-  	
-  Action 'gendb'
-  
-  	usage: riscof gendb [-h] [--suite PATH]
-  	
-  	optional arguments:
-  	  --suite PATH  The Path to the custom suite directory.
-  	  -h, --help    show this help message and exit
-  	
-  Action 'setup'
-  
-  	usage: riscof setup [-h] [--dutname NAME] [--refname NAME]
-  	
-  	optional arguments:
-  	  --dutname NAME  Name of DUT plugin. [Default=spike]
-  	  --refname NAME  Name of Reference plugin. [Default=sail_cSim]
-  	  -h, --help      show this help message and exit
-  	
-  Action 'validateyaml'
-  
-  	usage: riscof validateyaml [-h] [--config PATH]
-  	
-  	optional arguments:
-  	  --config PATH  The Path to the config file. [Default=./config.ini]
-  	  -h, --help     show this help message and exit
-  	
-  Action 'run'
-  
-  	usage: riscof run [-h] [--config PATH] [--suite PATH] [--no-browser]
-  	
-  	optional arguments:
-  	  --config PATH  The Path to the config file. [Default=./config.ini]
-  	  --no-browser   Do not open the browser for showing the test report.
-  	  --suite PATH   The Path to the custom suite directory.
-  	  -h, --help     show this help message and exit
-  	
-  Action 'testlist'
-  
-  	usage: riscof testlist [-h] [--config PATH] [--suite PATH]
-  	
-  	optional arguments:
-  	  --config PATH  The Path to the config file. [Default=./config.ini]
-  	  --suite PATH   The Path to the custom suite directory.
-  	  -h, --help     show this help message and exit
-	
+   usage: riscof [-h] [--version] [--verbose]
+                 {coverage,gendb,setup,validateyaml,run,testlist} ...
+   
+   RISCOF is a framework used to run the Architectural Tests on a DUT and check
+   compatibility with the RISC-V ISA
+   
+   optional arguments:
+     --verbose             [Default=info]
+     --version, -v         Print version of RISCOF being used
+     -h, --help            show this help message and exit
+   
+   Action:
+     The action to be performed by riscof.
+   
+     {coverage,gendb,setup,validateyaml,run,testlist}
+                           List of actions supported by riscof.
+       coverage            Generate Coverage Report for the given YAML spec.
+       gendb               Generate Database for the standard suite.
+       setup               Initiate setup for riscof.
+       validateyaml        Validate the Input YAMLs using riscv-config.
+       run                 Run the tests on DUT and reference and compare
+                           signatures.
+       testlist            Generate the test list for the given DUT and suite.
+   Action 'coverage'
+   
+   	usage: riscof coverage [-h] [--config PATH] [--cgf PATH] [--suite PATH]
+   	                       [--work-dir PATH] [--no-browser]
+   	
+   	optional arguments:
+   	  --cgf PATH       The Path to the cgf file(s). Multiple allowed
+   	  --config PATH    The Path to the config file. [Default=./config.ini]
+   	  --no-browser     Do not open the browser for showing the test report.
+   	  --suite PATH     The Path to the custom suite directory.
+   	  --work-dir PATH  The Path to the work-dir.
+   	  -h, --help       show this help message and exit
+   	
+   Action 'gendb'
+   
+   	usage: riscof gendb [-h] [--suite PATH] [--work-dir PATH]
+   	
+   	optional arguments:
+   	  --suite PATH     The Path to the custom suite directory.
+   	  --work-dir PATH  The Path to the work-dir.
+   	  -h, --help       show this help message and exit
+   	
+   Action 'setup'
+   
+   	usage: riscof setup [-h] [--dutname NAME] [--refname NAME] [--work-dir PATH]
+   	
+   	optional arguments:
+   	  --dutname NAME   Name of DUT plugin. [Default=spike]
+   	  --refname NAME   Name of Reference plugin. [Default=sail_cSim]
+   	  --work-dir PATH  The Path to the work-dir.
+   	  -h, --help       show this help message and exit
+   	
+   Action 'validateyaml'
+   
+   	usage: riscof validateyaml [-h] [--config PATH] [--work-dir PATH]
+   	
+   	optional arguments:
+   	  --config PATH    The Path to the config file. [Default=./config.ini]
+   	  --work-dir PATH  The Path to the work-dir.
+   	  -h, --help       show this help message and exit
+   	
+   Action 'run'
+   
+   	usage: riscof run [-h] [--config PATH] [--suite PATH] [--no-browser]
+   	                  [--work-dir PATH]
+   	
+   	optional arguments:
+   	  --config PATH    The Path to the config file. [Default=./config.ini]
+   	  --no-browser     Do not open the browser for showing the test report.
+   	  --suite PATH     The Path to the custom suite directory.
+   	  --work-dir PATH  The Path to the work-dir.
+   	  -h, --help       show this help message and exit
+   	
+   Action 'testlist'
+   
+   	usage: riscof testlist [-h] [--work-dir PATH] [--config PATH] [--suite PATH]
+   	
+   	optional arguments:
+   	  --config PATH    The Path to the config file. [Default=./config.ini]
+   	  --suite PATH     The Path to the custom suite directory.
+   	  --work-dir PATH  The Path to the work-dir.
+   	  -h, --help       show this help message and exit
 
 Install RISCV-GNU Toolchain
 ===========================
