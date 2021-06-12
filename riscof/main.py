@@ -71,10 +71,10 @@ be overwritten]")
                     cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py')
             with open(cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py', 'r') as file :
               filedata = file.read()
-            
+
             # Replace the target string
             filedata = filedata.replace('dutname', args.dutname)
-            
+
             # Write the file out again
             with open(cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py', 'w') as file:
               file.write(filedata)
@@ -93,10 +93,10 @@ be overwritten]")
                     cwd+'/'+args.refname+'/riscof_'+args.refname+'.py')
                 with open(cwd+'/'+args.refname+'/riscof_'+args.refname+'.py', 'r') as file :
                   filedata = file.read()
-                
+
                 # Replace the target string
                 filedata = filedata.replace('refname', args.refname)
-                
+
                 # Write the file out again
                 with open(cwd+'/'+args.refname+'/riscof_'+args.refname+'.py', 'w') as file:
                   file.write(filedata)
@@ -201,8 +201,11 @@ and DUT plugins in the config.ini file')
             logger.debug('Suite used: '+constants.suite)
             dbgen.generate()
             logger.info('Database File Generated: '+constants.framework_db)
-            constants.env = os.path.join(args.suite,"env/")
-            logger.info('Env path set to'+constants.env)
+        if args.env is None:
+            constants.env = os.path.join(constants.suite,"env/")
+        else:
+            constants.env = args.env
+        logger.info('Env path set to'+constants.env)
 
     if args.command == 'testlist':
         test_routines.generate_test_pool(isa_specs, platform_specs, work_dir)
