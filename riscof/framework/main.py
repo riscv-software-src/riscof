@@ -33,7 +33,7 @@ def filter_coverage(cgf_file,ispec,pspec,results):
         if 'cond' in node:
             for entry in node['cond'].split(";"):
                 if 'check' in entry:
-                    include = include or test.eval_cond(entry, spec)
+                    include_node = include_node or test.eval_cond(entry, spec)
         elif 'config' in node:
             for entry in node['config']:
                 include_entry = True
