@@ -96,13 +96,13 @@
         coverage_labels:
         - cbnez
 - suite/rv32i_m/C/cebreak-01.S:
-    commit_id: 3dd5d13b561e0745cc69886341117ae81119b2cb
+    commit_id: 20aced3a7e09ad68a3d57d51840d804c3d51d363
     isa: RV32IC
     parts: !!omap
     - '1':
         check:
         - check ISA:=regex(.*32.*)
-        - check ISA:=regex(.*I.*Zicsr.*.C*)
+        - check ISA:=regex(.*I.*Zicsr.*C.*)
         define:
         - def rvtest_mtrap_routine=True
         - def TEST_CASE_1=True
@@ -568,7 +568,7 @@
     commit_id: 3dd5d13b561e0745cc69886341117ae81119b2cb
     isa: RV32I
     parts: !!omap
-    - numcase:
+    - '0':
         check:
         - check ISA:=regex(.*32.*)
         - check ISA:=regex(.*I.*)
@@ -2261,13 +2261,13 @@
         coverage_labels:
         - cbnez
 - suite/rv64i_m/C/cebreak-01.S:
-    commit_id: 3dd5d13b561e0745cc69886341117ae81119b2cb
+    commit_id: 20aced3a7e09ad68a3d57d51840d804c3d51d363
     isa: RV64IC
     parts: !!omap
     - '1':
         check:
         - check ISA:=regex(.*64.*)
-        - check ISA:=regex(.*I.*Zicsr.*.C*)
+        - check ISA:=regex(.*I.*Zicsr.*C.*)
         define:
         - def rvtest_mtrap_routine=True
         - def TEST_CASE_1=True
