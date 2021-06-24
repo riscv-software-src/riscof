@@ -15,7 +15,7 @@ from jinja2 import Template
 
 #from riscof.log import *
 from riscof.__init__ import __version__
-import riscv_config.checker as riscv_config
+import riscv_config.checker as checker
 import riscof.framework.main as framework
 import riscof.framework.test as test_routines
 import riscof.dbgen as dbgen
@@ -23,6 +23,8 @@ import riscof.utils as utils
 import riscof.constants as constants
 from riscv_config.errors import ValidationError
 import riscv_isac.coverage as isac
+import riscv_isac
+import riscv_config
 
 
 def execute():
@@ -47,9 +49,11 @@ def execute():
     logger.addHandler(ch)
 
 
+    logger.info('RISCOF: RISC-V Architectural Test Framework')
+    logger.info('Version: '+ __version__)
+    logger.info('using riscv_isac version : ' + str(riscv_isac.__version__))
+    logger.info('using riscv_config version : ' + str(riscv_config.__version__))
     if (args.version):
-        print('RISCOF: RISC-V Architectural Test Framework')
-        print('Version: '+ __version__)
         return 0
     elif (args.command=='setup'):
         logger.info("Setting up sample plugin requirements [Old files will \
@@ -182,8 +186,8 @@ and DUT plugins in the config.ini file')
 
 
         try:
-            isa_file = riscv_config.check_isa_specs( isa_file, work_dir, True)
-            platform_file = riscv_config.check_platform_specs( platform_file, work_dir, True)
+            isa_file = checker.check_isa_specs( isa_file, work_dir, True)
+            platform_file = checker.check_platform_specs( platform_file, work_dir, True)
         except ValidationError as msg:
             logger.error(msg)
             return 1
