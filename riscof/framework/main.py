@@ -109,7 +109,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None)
     logger.debug("Running Build for Reference")
     base.build(dut_isa_spec, dut_platform_spec)
 
-    test_list, test_pool = test.generate_test_pool(ispec, pspec)
+    test_list, test_pool = test.generate_test_pool(ispec, pspec, work_dir)
     logger.info("Running Tests on Reference.")
     base.runTests(test_list, cgf_file)
 
