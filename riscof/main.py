@@ -15,7 +15,7 @@ from jinja2 import Template
 
 #from riscof.log import *
 from riscof.__init__ import __version__
-import riscv_config.checker as riscv_config
+import riscv_config.checker as checker
 import riscof.framework.main as framework
 import riscof.framework.test as test_routines
 import riscof.dbgen as dbgen
@@ -23,6 +23,8 @@ import riscof.utils as utils
 import riscof.constants as constants
 from riscv_config.errors import ValidationError
 import riscv_isac.coverage as isac
+import riscv_isac
+import riscv_config
 
 
 def execute():
@@ -47,9 +49,11 @@ def execute():
     logger.addHandler(ch)
 
 
+    logger.info('RISCOF: RISC-V Architectural Test Framework')
+    logger.info('Version: '+ __version__)
+    logger.info('using riscv_isac version : ' + str(riscv_isac.__version__))
+    logger.info('using riscv_config version : ' + str(riscv_config.__version__))
     if (args.version):
-        print('RISCOF: RISC-V Architectural Test Framework')
-        print('Version: '+ __version__)
         return 0
     elif (args.command=='setup'):
         logger.info("Setting up sample plugin requirements [Old files will \
@@ -71,10 +75,10 @@ be overwritten]")
                     cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py')
             with open(cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py', 'r') as file :
               filedata = file.read()
-            
+
             # Replace the target string
             filedata = filedata.replace('dutname', args.dutname)
-            
+
             # Write the file out again
             with open(cwd+'/'+args.dutname+'/riscof_'+args.dutname+'.py', 'w') as file:
               file.write(filedata)
@@ -93,10 +97,10 @@ be overwritten]")
                     cwd+'/'+args.refname+'/riscof_'+args.refname+'.py')
                 with open(cwd+'/'+args.refname+'/riscof_'+args.refname+'.py', 'r') as file :
                   filedata = file.read()
-                
+
                 # Replace the target string
                 filedata = filedata.replace('refname', args.refname)
-                
+
                 # Write the file out again
                 with open(cwd+'/'+args.refname+'/riscof_'+args.refname+'.py', 'w') as file:
                   file.write(filedata)
@@ -182,8 +186,8 @@ and DUT plugins in the config.ini file')
 
 
         try:
-            isa_file = riscv_config.check_isa_specs( isa_file, work_dir, True)
-            platform_file = riscv_config.check_platform_specs( platform_file, work_dir, True)
+            isa_file = checker.check_isa_specs( isa_file, work_dir, True)
+            platform_file = checker.check_platform_specs( platform_file, work_dir, True)
         except ValidationError as msg:
             logger.error(msg)
             return 1
@@ -201,8 +205,11 @@ and DUT plugins in the config.ini file')
             logger.debug('Suite used: '+constants.suite)
             dbgen.generate()
             logger.info('Database File Generated: '+constants.framework_db)
-            constants.env = os.path.join(args.suite,"env/")
-            logger.info('Env path set to'+constants.env)
+        if args.env is None:
+            constants.env = os.path.join(constants.suite,"env/")
+        else:
+            constants.env = args.env
+        logger.info('Env path set to'+constants.env)
 
     if args.command == 'testlist':
         test_routines.generate_test_pool(isa_specs, platform_specs, work_dir)

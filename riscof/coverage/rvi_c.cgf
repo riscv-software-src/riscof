@@ -2,7 +2,7 @@
 
 cebreak:
   config: 
-    - check ISA:=regex(.*I.*Zicsr.*.C*)
+    - check ISA:=regex(.*I.*Zicsr.*C.*)
   opcode: 
     c.ebreak: 0
 

@@ -472,6 +472,11 @@ def riscof_cmdline_args():
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
+    coverage.add_argument('--env',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom env directory.',
+                        metavar= 'PATH')
     coverage.add_argument('--work-dir',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
@@ -487,6 +492,11 @@ def riscof_cmdline_args():
                             type= lambda p: str(pathlib.Path(p).absolute()),
                             action='store',
                             help='The Path to the custom suite directory.',
+                            metavar= 'PATH')
+    generatedb.add_argument('--env',
+                            type= lambda p: str(pathlib.Path(p).absolute()),
+                            action='store',
+                            help='The Path to the custom env directory.',
                             metavar= 'PATH')
     generatedb.add_argument('--work-dir',
                         type= lambda p: str(pathlib.Path(p).absolute()),
@@ -543,6 +553,11 @@ def riscof_cmdline_args():
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
+    run.add_argument('--env',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom env directory.',
+                        metavar= 'PATH')
     run.add_argument('--no-browser',action='store_true',
                      help="Do not open the browser for showing the test report.")
     run.add_argument('--work-dir',
@@ -567,11 +582,16 @@ def riscof_cmdline_args():
                         help='The Path to the config file. [Default=./config.ini]',
                         metavar= 'PATH',
                         default=str(pathlib.Path('./config.ini').absolute())
-                          )
+                        )
 
     testlist.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
                         help='The Path to the custom suite directory.',
+                        metavar= 'PATH')
+    testlist.add_argument('--env',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom env directory.',
                         metavar= 'PATH')
     return parser
