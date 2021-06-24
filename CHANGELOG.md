@@ -2,11 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.20.1] - 2021-06-12
+## [1.20.1] - 2021-06-24
 - Added env argument to the cli.
 - printing versions of isac and confing in log for better debugging
 - fixed issues pointed out in #51
 - fixed regex conditions for cebreak tests and also updated database
+- Updated tests based on latest coverpoints.
 
 ## [1.20.0] - 2021-05-30
 - work directory is now controlled by user args. Defaults to riscof_work for backward compatibility.
