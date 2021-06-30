@@ -3143,7 +3143,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3151,7 +3151,7 @@
         - aes64ds
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3163,7 +3163,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3171,7 +3171,7 @@
         - aes64ds
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3183,7 +3183,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3191,7 +3191,7 @@
         - aes64dsm
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3203,7 +3203,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3211,7 +3211,7 @@
         - aes64dsm
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3223,7 +3223,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3231,7 +3231,7 @@
         - aes64es
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3243,7 +3243,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3251,7 +3251,7 @@
         - aes64es
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3263,7 +3263,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3271,7 +3271,7 @@
         - aes64esm
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3283,7 +3283,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3291,7 +3291,7 @@
         - aes64esm
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3303,7 +3303,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3311,7 +3311,7 @@
         - aes64im
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3323,7 +3323,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3331,7 +3331,7 @@
         - aes64im
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3343,7 +3343,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3351,7 +3351,7 @@
         - aes64ks1i
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3363,7 +3363,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3371,7 +3371,7 @@
         - aes64ks1i
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3383,7 +3383,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3391,7 +3391,7 @@
         - aes64ks2
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3403,7 +3403,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3411,7 +3411,7 @@
         - aes64ks2
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3423,7 +3423,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3431,7 +3431,7 @@
         - andn
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3439,7 +3439,7 @@
         - andn
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3451,7 +3451,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3459,7 +3459,7 @@
         - clmul
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3467,7 +3467,7 @@
         - clmul
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3479,7 +3479,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3487,7 +3487,7 @@
         - clmulh
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3495,7 +3495,7 @@
         - clmulh
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3507,7 +3507,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3515,7 +3515,7 @@
         - orn
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3523,7 +3523,7 @@
         - orn
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3535,7 +3535,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3543,7 +3543,7 @@
         - pack
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3551,7 +3551,7 @@
         - pack
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3563,7 +3563,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3571,7 +3571,7 @@
         - packh
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3579,7 +3579,7 @@
         - packh
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3591,7 +3591,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3599,7 +3599,7 @@
         - packu
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3607,7 +3607,7 @@
         - packu
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3619,7 +3619,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3627,7 +3627,7 @@
         - packuw
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3635,7 +3635,7 @@
         - packuw
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3647,7 +3647,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3655,7 +3655,7 @@
         - packw
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3663,7 +3663,7 @@
         - packw
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3675,7 +3675,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3683,7 +3683,7 @@
         - rev.b
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3691,7 +3691,7 @@
         - rev.b
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3703,7 +3703,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3711,7 +3711,7 @@
         - rev8
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3719,7 +3719,7 @@
         - rev8
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3731,7 +3731,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3739,7 +3739,7 @@
         - rev8.w
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3747,7 +3747,7 @@
         - rev8.w
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3759,7 +3759,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3767,7 +3767,7 @@
         - rol
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3775,7 +3775,7 @@
         - rol
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3787,7 +3787,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3795,7 +3795,7 @@
         - rolw
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3803,7 +3803,7 @@
         - rolw
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3815,7 +3815,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3823,7 +3823,7 @@
         - ror
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3831,7 +3831,7 @@
         - ror
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3843,7 +3843,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3851,7 +3851,7 @@
         - rori
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3859,7 +3859,7 @@
         - rori
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3871,7 +3871,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3879,7 +3879,7 @@
         - roriw
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3887,7 +3887,7 @@
         - roriw
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3899,7 +3899,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3907,7 +3907,7 @@
         - rorw
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3915,7 +3915,7 @@
         - rorw
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -3927,7 +3927,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3935,7 +3935,7 @@
         - sha256sig0
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3947,7 +3947,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3955,7 +3955,7 @@
         - sha256sig1
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3967,7 +3967,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3975,7 +3975,7 @@
         - sha256sum0
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -3987,7 +3987,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -3995,7 +3995,7 @@
         - sha256sum0
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4007,7 +4007,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -4015,7 +4015,7 @@
         - sha512sig0
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4027,7 +4027,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -4035,7 +4035,7 @@
         - sha512sig1
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4047,7 +4047,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -4055,7 +4055,7 @@
         - sha512sum0
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4067,7 +4067,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -4075,7 +4075,7 @@
         - sha512sum1
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4087,7 +4087,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4099,7 +4099,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4111,7 +4111,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4123,7 +4123,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4135,7 +4135,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4147,7 +4147,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4159,7 +4159,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -4167,7 +4167,7 @@
         - xnor
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4175,7 +4175,7 @@
         - xnor
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4187,7 +4187,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -4195,7 +4195,7 @@
         - xperm.b
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4203,7 +4203,7 @@
         - xperm.b
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True
@@ -4215,7 +4215,7 @@
     parts: !!omap
     - '0':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*K.*)
         define:
         - def TEST_CASE_1=True
@@ -4223,7 +4223,7 @@
         - xperm.n
     - '1':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zkn.*)
         define:
         - def TEST_CASE_1=True
@@ -4231,7 +4231,7 @@
         - xperm.n
     - '2':
         check:
-        - check ISA:=regex(.*32.*)
+        - check ISA:=regex(.*64.*)
         - check ISA:=regex(.*I.*Zks.*)
         define:
         - def TEST_CASE_1=True

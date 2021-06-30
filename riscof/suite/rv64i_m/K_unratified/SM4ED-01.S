@@ -42,7 +42,7 @@ RVTEST_CODE_BEGIN
 
 
     
-    RVTEST_CASE(0,"//check ISA:=regex(.*32.*);check ISA:=regex(.*I.*Zks.*);def TEST_CASE_1=True;",sm4ed)
+    RVTEST_CASE(0,"//check ISA:=regex(.*64.*);check ISA:=regex(.*I.*Zks.*);def TEST_CASE_1=True;",sm4ed)
 
 	RVTEST_SIGBASE(x6,signature_1_0)
 

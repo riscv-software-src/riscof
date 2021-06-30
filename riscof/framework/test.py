@@ -294,6 +294,9 @@ def generate_test_pool(ispec, pspec, workdir):
         else:
             temp['test_path'] = os.path.join(constants.root,entry[0])
         test_list[entry[0]]=temp
+    if (len(test_list) == 0):
+        logger.error('No Tests Selected')
+        sys.exit(1)
 
     with open(os.path.join(workdir,"test_list.yaml"),"w") as tfile:
         yaml.dump(test_list,tfile)
