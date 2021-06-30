@@ -29,7 +29,12 @@ class refname(pluginTemplate):
         self.ref_exe = os.path.join(config['PATH'] if 'PATH' in config else "","refname")
         self.num_jobs = str(config['jobs'] if 'jobs' in config else 1)
         self.pluginpath=os.path.abspath(config['pluginpath'])
-
+        self.isa_spec = os.path.abspath(config['ispec']) if 'ispec' in config else ''
+        self.platform_spec = os.path.abspath(config['pspec']) if 'ispec' in config else ''
+        self.make = config['make'] if 'make' in config else 'make'
+        logger.debug("refname plugin initialised using the following configuration.")
+        for entry in config:
+            logger.debug(entry+' : '+config[entry])
         return sclass
 
     def initialise(self, suite, work_dir, archtest_env):
@@ -75,7 +80,7 @@ class refname(pluginTemplate):
 
     def runTests(self, testList, cgf_file=None):
         make = utils.makeUtil(makefilePath=os.path.join(self.work_dir, "Makefile." + self.name[:-1]))
-        make.makeCommand = 'make -j' + self.num_jobs
+        make.makeCommand = self.make + ' -j' + self.num_jobs
         for file in testList:
             testentry = testList[file]
             test = testentry['test_path']
