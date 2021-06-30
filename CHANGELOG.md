@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.20.3] - 2021-06-30
+- Updated docs with guide on running riscv-arch-tests with RISCOF
+
 ## [1.20.2] - 2021-06-30
 - Fixed ISA check typo for 64-bit K extension tests and database.yaml
 - Fixed the issue pointed out in #53. Now riscof will through an error if test_list.yaml is empty and will not proceed furthur.

@@ -23,11 +23,19 @@ class sail_cSim(pluginTemplate):
         sclass = super().__init__(*args, **kwargs)
 
         config = kwargs.get('config')
+        if config is None:
+            logger.error("Config node for sail_cSim missing.")
+            raise SystemExit
         self.num_jobs = str(config['jobs'] if 'jobs' in config else 1)
         self.pluginpath = os.path.abspath(config['pluginpath'])
         self.sail_exe = { '32' : os.path.join(config['PATH'] if 'PATH' in config else "","riscv_sim_RV32"),
                 '64' : os.path.join(config['PATH'] if 'PATH' in config else "","riscv_sim_RV64")}
-
+        self.isa_spec = os.path.abspath(config['ispec']) if 'ispec' in config else ''
+        self.platform_spec = os.path.abspath(config['pspec']) if 'ispec' in config else ''
+        self.make = config['make'] if 'make' in config else 'make'
+        logger.debug("SAIL CSim plugin initialised using the following configuration.")
+        for entry in config:
+            logger.debug(entry+' : '+config[entry])
         return sclass
 
     def initialise(self, suite, work_dir, archtest_env):
@@ -55,10 +63,25 @@ class sail_cSim(pluginTemplate):
             self.isa += 'f'
         if "D" in ispec["ISA"]:
             self.isa += 'd'
+        objdump = "riscv{0}-unknown-elf-objdump".format(self.xlen)
+        if shutil.which(objdump) is None:
+            logger.error(objdump+": executable not found. Please check environment setup.")
+            raise SystemExit
+        compiler = "riscv{0}-unknown-elf-gcc".format(self.xlen)
+        if shutil.which(compiler) is None:
+            logger.error(compiler+": executable not found. Please check environment setup.")
+            raise SystemExit
+        if shutil.which(self.sail_exe[self.xlen]) is None:
+            logger.error(self.sail_exe[self.xlen]+ ": executable not found. Please check environment setup.")
+            raise SystemExit
+        if shutil.which(self.make) is None:
+            logger.error(self.make+": executable not found. Please check environment setup.")
+            raise SystemExit
+
 
     def runTests(self, testList, cgf_file=None):
         make = utils.makeUtil(makefilePath=os.path.join(self.work_dir, "Makefile." + self.name[:-1]))
-        make.makeCommand = 'make -j' + self.num_jobs
+        make.makeCommand = self.make + ' -j' + self.num_jobs
         for file in testList:
             testentry = testList[file]
             test = testentry['test_path']
@@ -84,7 +107,7 @@ class sail_cSim(pluginTemplate):
 
             if cgf_file is not None:
                 coverage_cmd = 'riscv_isac --verbose info coverage -d \
-                        -t {0}.log --mode c_sail -o coverage.rpt  \
+                        -t {0}.log --parser-name c_sail -o coverage.rpt  \
                         --sig-label begin_signature  end_signature \
                         --test-label rvtest_code_begin rvtest_code_end \
                         -e ref.elf -c {1} -x{2} {3};'.format(\
