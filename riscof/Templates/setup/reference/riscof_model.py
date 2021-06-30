@@ -109,7 +109,7 @@ class refname(pluginTemplate):
             #    cov_str+=' -l '+label
             #if cgf_file is not None:
             #    coverage_cmd = 'riscv_isac --verbose info coverage -d \
-            #            -t {0}.log --mode c_sail -o coverage.rpt  \
+            #            -t {0}.log --parser-name c_sail -o coverage.rpt  \
             #            --sig-label begin_signature  end_signature \
             #            --test-label rvtest_code_begin rvtest_code_end \
             #            -e {0}.elf -c {1} -x{2} {3};'.format(\
