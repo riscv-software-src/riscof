@@ -475,7 +475,7 @@ this will change the tests applicable for the DUT. For now let's leave it as is.
 information on creating and modifying your plugins can be found in :ref:`plugins`
 
 The ``sail_cSim`` directory holds the plugin files for the reference SAIL model. Changes to any of
-the files in this directory are typically not required (unless you know what you are doing)
+the files in this directory are typically not required (unless you know what you are doing).
 
 We are now ready to run the architectural tests on the DUT via RISCOF.
 
@@ -483,6 +483,10 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
  templates for a reference model add the argument '--refname myref' to the setup command above. This
  will generate a *myref* directory containing template files for defining a reference model plugin.
  Lookout for the #TODO in the python file for places where changes will be required. 
+
+.. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
+
+.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/blob/master/sail_cSim/README.md 
 
 Running RISCOF
 ==============

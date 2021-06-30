@@ -46,6 +46,10 @@ Create a config.ini file
       [sail_cSim]
       pluginpath=/path/to/riscof-plugins/sail_cSim
 
+    .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
+
+.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/blob/master/sail_cSim/README.md
+
 Cloning the riscv-arch-test repo
   1. You will also need to download/clone the riscv-arch-test repository:
 
