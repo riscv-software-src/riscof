@@ -11,6 +11,7 @@ Welcome to RISCOF
    overview
    installation
    plugins
+   arch-tests
    testlist
    database
    newtest

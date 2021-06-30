@@ -9,7 +9,14 @@ Quickstart
 ==========
 
 This section is meant to serve as a quick-guide to setup RISCOF and perform a sample validation check
-between ``spike`` (DUT in this case) and ``SAIL-RISCV`` (Reference model in this case).
+between ``spike`` (DUT in this case) and ``SAIL-RISCV`` (Reference model in this case). This guide
+will help you setup all the required tooling for running riscof on your system.
+
+If you would like to know how to build a plugin for your DUT please refer to the :ref:`plugins`
+section for more details.
+
+If you have your DUT plugin ready and would like to run the riscv-arch-tests on it using RISCOF,
+please refer to section :ref:`arch-tests`
 
 Install Python
 ==============
@@ -105,6 +112,7 @@ You can check the version in the **same shell**::
   $ pip --version
   pip 20.1 from <user-path>.local/lib/python3.6/site-packages/pip (python 3.6)
 
+.. _install_riscof:
 
 Install RISCOF
 ==============
@@ -316,6 +324,8 @@ With this you should now have all the following available as command line argume
   riscv32-unknown-elf-run            riscv32-unknown-elf-size
   riscv32-unknown-elf-strings        riscv32-unknown-elf-strip
 
+.. _plugin_models:
+
 Install Plugin Models
 =====================
 
@@ -369,14 +379,18 @@ These are often used as reference models in RISCOF.
 
     .. code-block:: bash
 
-       $ sudo apt-get install opam
-       $ opam switch create 4.06.1
+       $ sudo apt-get install opam  build-essential libgmp-dev z3 pkg-config zlib1g-dev
+       $ opam init -y --disable-sandboxing
+       $ opam switch create ocaml-base-compiler.4.06.1
+       $ opam install sail -y
        $ eval $(opam config env)
-       $ sudo apt-get install build-essential libgmp-dev z3 pkg-config zlib1g-dev
        $ git clone https://github.com/rems-project/sail-riscv.git
        $ cd sail-riscv
        $ make
        $ ARCH=RV32 make
+       $ ARCH=RV64 make
+       $ ln -s sail-riscv/c_emulator/riscv_sim_RV64 /usr/bin/riscv_sim_RV64
+       $ ln -s sail-riscv/c_emulator/riscv_sim_RV32 /usr/bin/riscv_sim_RV32
 
     This will create a C simulator in ``c_emulator/riscv_sim_RV64` and
     ``c_emulator/riscv_sim_RV32``. You will not need to add these paths in your ``$PATH`` or an
