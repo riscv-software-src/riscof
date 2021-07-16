@@ -29,13 +29,13 @@ used to check for coverage. A sample ``config.ini`` is shown below::
    [RISCOF]                                                                                            
    ReferencePlugin=cSail                                                                               
    ReferencePluginPath=/home/neel/temp/riscof-plugins/sail_cSim                                        
-   DUTPlugin=spike_simple                                                                              
-   DUTPluginPath=/home/neel/temp/riscof-plugins/spike_simple                                           
+   DUTPlugin=spike                                                                              
+   DUTPluginPath=/home/neel/temp/riscof-plugins/spike                                           
                                                                                                        
-   [spike_simple]                                                                                      
-   pluginpath=/home/neel/temp/riscof-plugins/spike_simple                                              
-   ispec=/home/neel/temp/riscof-plugins/spike_simple/spike_simple_isa.yaml                                 
-   pspec=/home/neel/temp/riscof-plugins/spike_simple/spike_simple_platform.yaml                        
+   [spike]                                                                                      
+   pluginpath=/home/neel/temp/riscof-plugins/spike                                              
+   ispec=/home/neel/temp/riscof-plugins/spike/spike_isa.yaml                                 
+   pspec=/home/neel/temp/riscof-plugins/spike/spike_platform.yaml                        
                                                                                                        
    [cSail]                                                                                             
    pluginpath=/home/neel/temp/riscof-plugins/sail_cSim
@@ -53,19 +53,19 @@ The log of the above command is shown below:
      INFO | [--root--]: Reading configuration from: /home/neel/temp/config.ini
      INFO | [--root--]: Preparing Models
      INFO | [--riscv_config.checker--]: Input-ISA file
-     INFO | [--riscv_config.checker--]: Loading input file: /home/neel/temp/riscof-plugins/spike_simple/spike_simple_isa.yaml
+     INFO | [--riscv_config.checker--]: Loading input file: /home/neel/temp/riscof-plugins/spike/spike_isa.yaml
      INFO | [--riscv_config.checker--]: Load Schema /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscv_config/schemas/schema_isa.yaml
      INFO | [--riscv_config.checker--]: Processing Hart: hart0
      INFO | [--riscv_config.checker--]: Initiating Validation
      INFO | [--riscv_config.checker--]: No errors for Hart: 0 :)
      INFO | [--riscv_config.checker--]: Initiating post processing and reset value checks.
-     INFO | [--riscv_config.checker--]: Dumping out Normalized Checked YAML: /home/neel/temp/riscof_work/spike_simple_isa_checked.yaml
+     INFO | [--riscv_config.checker--]: Dumping out Normalized Checked YAML: /home/neel/temp/riscof_work/spike_isa_checked.yaml
      INFO | [--riscv_config.checker--]: Input-Platform file
-     INFO | [--riscv_config.checker--]: Loading input file: /home/neel/temp/riscof-plugins/spike_simple/spike_simple_platform.yaml
+     INFO | [--riscv_config.checker--]: Loading input file: /home/neel/temp/riscof-plugins/spike/spike_platform.yaml
      INFO | [--riscv_config.checker--]: Load Schema /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscv_config/schemas/schema_platform.yaml
      INFO | [--riscv_config.checker--]: Initiating Validation
      INFO | [--riscv_config.checker--]: No Syntax errors in Input Platform Yaml. :)
-     INFO | [--riscv_config.checker--]: Dumping out Normalized Checked YAML: /home/neel/temp/riscof_work/spike_simple_platform_checked.yaml
+     INFO | [--riscv_config.checker--]: Dumping out Normalized Checked YAML: /home/neel/temp/riscof_work/spike_platform_checked.yaml
      INFO | [--root--]: Will collect Coverage using RISCV-ISAC
      INFO | [--root--]: CGF file being used : /scratch/git-repo/incoresemi/riscof/riscof/suite/compliance.cgf
      INFO | [--riscof.framework.test--]: Selecting Tests.
