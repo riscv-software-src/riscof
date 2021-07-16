@@ -464,7 +464,7 @@ def riscof_cmdline_args():
                           )
     coverage.add_argument('--cgf',
                         action=CustomAction,
-#                        required=True,
+                        required=True,
                         help='The Path to the cgf file(s). Multiple allowed',
                         metavar= 'PATH')
     coverage.add_argument('--suite',

@@ -208,11 +208,8 @@ and DUT plugins in the config.ini file')
 
     if args.command == 'coverage':
         logger.info('Will collect Coverage using RISCV-ISAC')
-        if args.cgf is None:
-            cgf_file = constants.cgf_file
-        else:
-            cgf_file = args.cgf
-        logger.info('CGF file being used : ' + str(cgf_file))
+        cgf_file = args.cgf
+        logger.info('CGF file(s) being used : ' + str(cgf_file))
 
         with open(isa_file, "r") as isafile:
             ispecs = isafile.read()
