@@ -197,18 +197,15 @@ and DUT plugins in the config.ini file')
 
     if args.command=='gendb' or args.command=='run' or \
             args.command=='testlist' or args.command == 'coverage' :
-        if args.suite is not None:
-            logger.info("Generating database for custom suite.")
-            work_dir = args.work_dir
-            constants.suite = args.suite
-            constants.framework_db = os.path.join(work_dir,"database.yaml")
-            logger.debug('Suite used: '+constants.suite)
-            dbgen.generate()
-            logger.info('Database File Generated: '+constants.framework_db)
-        if args.env is None:
-            constants.env = os.path.join(constants.suite,"env/")
-        else:
-            constants.env = args.env
+        logger.info("Generating database for suite: "+args.suite)
+        work_dir = args.work_dir
+        constants.suite = args.suite
+        constants.framework_db = os.path.join(work_dir,"database.yaml")
+        logger.debug('Suite used: '+constants.suite)
+        logger.debug('ENV used: '+ args.env)
+        dbgen.generate()
+        logger.info('Database File Generated: '+constants.framework_db)
+        constants.env = args.env
         logger.info('Env path set to'+constants.env)
 
     if args.command == 'testlist':
