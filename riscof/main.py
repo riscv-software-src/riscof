@@ -128,11 +128,6 @@ and DUT plugins in the config.ini file')
             logger.debug('Creating new work directory: ' + work_dir)
             os.mkdir(work_dir)
 
-    if args.command=='gendb':
-        if args.suite is None:
-            dbgen.generate_standard()
-            logger.info('Database File Generated: '+constants.framework_db)
-
     if (args.command=='run' or args.command=='testlist' or \
             args.command=='validateyaml' or args.command == 'coverage'):
         config = configparser.ConfigParser()

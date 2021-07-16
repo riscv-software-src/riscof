@@ -127,50 +127,50 @@ def createdict(file):
     return {'isa': str(isa), 'parts': orderdict(part_dict)}
 
 
-def generate_standard():
-    list = dirwalk(os.path.join(constants.root, constants.suite),['/wip'])
-    repo_path = os.path.normpath(constants.root+"/../")
-    try:
-        repo = git.Repo(repo_path)
-    except InvalidGitRepositoryError:
-        logger.error("This feature is available for developers only.")
-        raise SystemExit
-    dbfile = constants.framework_db
-    logger.debug("Using "+dbfile)
-    tree = repo.tree()
-    try:
-        db = utils.load_yaml(dbfile)
-        delkeys = []
-        for key in db.keys():
-            if key not in list:
-                delkeys.append(key)
-        for key in delkeys:
-            del db[key]
-    except FileNotFoundError:
-        db = {}
-    cur_dir = constants.root
-    existing = db.keys()
-    new = [x for x in list if x not in existing]
-    for file in existing:
-        try:
-            commit = next(
-                repo.iter_commits(paths=file, max_count=1))
-            if (str(commit) != db[file]['commit_id']):
-                temp = createdict(os.path.join(cur_dir, file))
-                db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
-        except DbgenError:
-            del db[file.replace(os.path.join(repo_path,"riscof/"),"")]
-    for file in new:
-        try:
-            commit = next(
-                repo.iter_commits(paths=file, max_count=1))
-            temp = createdict(os.path.join(cur_dir, file))
-            db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
-        except DbgenError:
-            continue
-    with open(dbfile, "w") as wrfile:
-        yaml.dump(orderdict(db),
-                  wrfile)
+#def generate_standard():
+#    list = dirwalk(os.path.join(constants.root, constants.suite),['/wip'])
+#    repo_path = os.path.normpath(constants.root+"/../")
+#    try:
+#        repo = git.Repo(repo_path)
+#    except InvalidGitRepositoryError:
+#        logger.error("This feature is available for developers only.")
+#        raise SystemExit
+#    dbfile = constants.framework_db
+#    logger.debug("Using "+dbfile)
+#    tree = repo.tree()
+#    try:
+#        db = utils.load_yaml(dbfile)
+#        delkeys = []
+#        for key in db.keys():
+#            if key not in list:
+#                delkeys.append(key)
+#        for key in delkeys:
+#            del db[key]
+#    except FileNotFoundError:
+#        db = {}
+#    cur_dir = constants.root
+#    existing = db.keys()
+#    new = [x for x in list if x not in existing]
+#    for file in existing:
+#        try:
+#            commit = next(
+#                repo.iter_commits(paths=file, max_count=1))
+#            if (str(commit) != db[file]['commit_id']):
+#                temp = createdict(os.path.join(cur_dir, file))
+#                db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
+#        except DbgenError:
+#            del db[file.replace(os.path.join(repo_path,"riscof/"),"")]
+#    for file in new:
+#        try:
+#            commit = next(
+#                repo.iter_commits(paths=file, max_count=1))
+#            temp = createdict(os.path.join(cur_dir, file))
+#            db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
+#        except DbgenError:
+#            continue
+#    with open(dbfile, "w") as wrfile:
+#        yaml.dump(orderdict(db),
+#                  wrfile)
 
 def generate():
     file_list = dirwalk(constants.suite)
