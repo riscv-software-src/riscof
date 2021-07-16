@@ -125,7 +125,7 @@ Install RISCOF
      
      .. code-block:: console
      
-         $ pip3 install git+https://gitlab.com/incoresemi/riscof.git
+         $ pip3 install git+https://github.com/riscv/riscof.git
      
      This is the preferred method to install RISCOF, as it will always install the most recent stable release.
      
@@ -158,13 +158,13 @@ Install RISCOF
 
    .. tab:: for Dev
 
-     The sources for RISCOF can be downloaded from the `GitLab repo`_.
+     The sources for RISCOF can be downloaded from the `Github repo`_.
      
      You can clone the repository:
      
      .. code-block:: console
      
-         $ git clone https://gitlab.com/incoresemi/riscof.git
+         $ git clone https://github.com/riscv/riscof.git
      
      
      Once you have a copy of the source, you can install it with:
@@ -174,7 +174,7 @@ Install RISCOF
          $ cd riscof
          $ pip3 install --editable .
      
-     .. _Gitlab repo: https://gitlab.com/incoresemi/riscof
+     .. _Github repo: https://github.com/riscv/riscof
 
 Test RISCOF
 ===========
@@ -406,7 +406,9 @@ on the models. Along with the python plugins of each model, one would also have 
 require special macros to be executed as prelude or post-testing. These macros can be provided to
 RISCOF as a header file: ``model_test.h``. 
 
-For sample templates of pre-built plugins please refer to : `riscof-plugins <https://gitlab.com/incoresemi/riscof-plugins>`_. 
+.. For sample templates of pre-built plugins please refer to : `riscof-plugins <https://github.com/riscv/riscof-plugins>`_. 
+
+For sample templates of pre-built plugins please refer to :ref:`prebuilt_plugins`. 
 
 To make things even simpler, RISCOF generates standard pre-built templates for DUTs and Reference
 Models for the user via the ``setup`` command as shown below::
@@ -486,7 +488,7 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
-.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/blob/master/sail_cSim/README.md 
+.. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugins/README.md 
 
 Running RISCOF
 ==============

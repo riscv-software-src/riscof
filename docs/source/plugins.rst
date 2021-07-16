@@ -30,6 +30,8 @@ to their custom domain.
 If you do feel the flow can be further improved or changed please do drop in an issue on the
 official repository.
 
+.. include:: ../../PLUGINS.rst
+
 Generate Templates
 ==================
 

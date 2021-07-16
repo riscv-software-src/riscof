@@ -21,7 +21,10 @@ Setup all the DUT and Ref Plugins
      .. code-block:: console
 
         $ cd ~/
-        $ git clone https://gitlab.com/incoresemi/riscof-plugins.git
+        $ git clone https://github.com/rems-project/sail-riscv.git
+
+     You will need the path of the `riscof-plugins` directory from the above repo for the next
+     steps.
 
   3. You will also need to create a riscof-plugin for you own DUT. If you haven't already done so,
      please refer to the :ref:`plugins` section for details on building one.
@@ -33,7 +36,7 @@ Create a config.ini file
 
       [RISCOF]
       ReferencePlugin=sail_cSim
-      ReferencePluginPath=/path/to/riscof-plugins/sail_cSim
+      ReferencePluginPath=/path/to/sail-riscv/riscof-plugins/sail_cSim
       DUTPlugin=<your-dut-plugin-name>
       DUTPluginPath=/path/to/your/dut-plugin-directory
       
@@ -44,11 +47,11 @@ Create a config.ini file
       pspec=/path/to/your/dut-plugin-directory/dut_platform.yaml
       
       [sail_cSim]
-      pluginpath=/path/to/riscof-plugins/sail_cSim
+      pluginpath=/path/to/sail-riscv/riscof-plugins/sail_cSim
 
     .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
-.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/blob/master/sail_cSim/README.md
+.. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugins/README.md
 
 Cloning the riscv-arch-test repo
   1. You will also need to download/clone the riscv-arch-test repository:
