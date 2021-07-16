@@ -3,15 +3,15 @@ import os
 root = os.path.abspath(os.path.dirname(__file__))
 
 suite = os.path.join(root,"suite/")
-cgf_dir = os.path.join(root,"coverage/")
-
-cgf_file = []
-cgf_file.append(os.path.join(root,"coverage/dataset.cgf"))
-for path in os.listdir(cgf_dir):
-    if path != 'dataset.cgf':
-        full_path = os.path.join(cgf_dir, path)
-        if os.path.isfile(full_path):
-            cgf_file.append(full_path)
+#cgf_dir = os.path.join(root,"coverage/")
+#
+#cgf_file = []
+#cgf_file.append(os.path.join(root,"coverage/dataset.cgf"))
+#for path in os.listdir(cgf_dir):
+#    if path != 'dataset.cgf':
+#        full_path = os.path.join(cgf_dir, path)
+#        if os.path.isfile(full_path):
+#            cgf_file.append(full_path)
 
 framework_db = os.path.join(root, "framework/database.yaml")
 cwd = os.getcwd()
