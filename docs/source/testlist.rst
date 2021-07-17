@@ -21,6 +21,7 @@ syntax:
     work_dir: <absolute path where the file needs to be copied and compiled>
     macros: [ <list of macros that need to be defined during compilation of the test> ]
     isa: <string from the RVTEST_ISA macro from the assembly file>
+    coverage_labels: [ <list of covergroups that need to be hit by the test> ]
     test_path: <absolute path of the source of assembly file>
 
 The test-list is meant to be used by the DUT/Golden model plugins to generate execution
@@ -30,20 +31,36 @@ A sample test_list.yaml would look like the following:
 
 .. code-block:: yaml
 
-  suite/rv32i_m/C/C-ADD.S:                                                                            
-    work_dir: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/rv32i_m/C/C-ADD.S               
-    macros: [TEST_CASE_1=True, XLEN=32]                                                               
-    isa: RV32IC                                                                                       
-    test_path: /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscof/suite/rv32i_m/C/C-ADD.S
-  suite/rv32i_m/C/C-ADDI.S:                                                                           
-    work_dir: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/rv32i_m/C/C-ADDI.S              
-    macros: [TEST_CASE_1=True, XLEN=32]                                                               
-    isa: RV32IC                                                                                       
-    test_path: /home/neel/.pyenv/versions/3.7.0/envs/venv/lib/python3.7/site-packages/riscof/suite/rv32i_m/C/C-ADDI.S
-  suite/rv32i_m/C/C-ADDI16SP.S:                                                                       
-    work_dir: /scratch/git-repo/incoresemi/riscof-plugins/riscof_work/rv32i_m/C/C-ADDI16SP.S          
-    macros: [TEST_CASE_1=True, XLEN=32]                                                               
-    isa: RV32IC                                                                                       
+  /scratch/git-repo/github/riscv-arch-test/riscv-test-suite/rv64i_m/M/src/div-01.S:
+    work_dir: /scratch/git-repo/incoresemi/temp/riscof_work/src/div-01.S
+    macros:
+    - TEST_CASE_1=True
+    - XLEN=64
+    isa: RV64IM
+    coverage_labels:
+    - div
+    test_path: /scratch/git-repo/github/riscv-arch-test/riscv-test-suite/rv64i_m/M/src/div-01.S
+
+  /scratch/git-repo/github/riscv-arch-test/riscv-test-suite/rv64i_m/M/src/divu-01.S:
+    work_dir: /scratch/git-repo/incoresemi/temp/riscof_work/src/divu-01.S
+    macros:
+    - TEST_CASE_1=True
+    - XLEN=64
+    isa: RV64IM
+    coverage_labels:
+    - divu
+    test_path: /scratch/git-repo/github/riscv-arch-test/riscv-test-suite/rv64i_m/M/src/divu-01.S
+
+  /scratch/git-repo/github/riscv-arch-test/riscv-test-suite/rv64i_m/M/src/divuw-01.S:
+    work_dir: /scratch/git-repo/incoresemi/temp/riscof_work/src/divuw-01.S
+    macros:
+    - TEST_CASE_1=True
+    - XLEN=64
+    isa: RV64IM
+    coverage_labels:
+    - divuw
+    test_path: /scratch/git-repo/github/riscv-arch-test/riscv-test-suite/rv64i_m/M/src/divuw-01.S
+
   ...
   ...
   ...

@@ -107,8 +107,8 @@ suites.
 At the end of execution, RISCOF generates an HTML report which provides details of the 
 implementation and tests that were passed/failed by the implementation. 
 
-Execution flow for Contributors
-===============================
+Execution flow for Test Developers
+==================================
 
 This subsection describes at an abstract level a typical flow that will have to be used by test
 authors to contribute their tests to RISCOF's architectural test suite.
@@ -117,10 +117,8 @@ A test by a contributor must always adhere to the :ref:`Test Format Spec <test_f
 test can either be auto-generated using tools like `RISCV-CTG <https://github.com/riscv/riscv-ctg>`_
 or can be handwritten. 
 
-Once a suite or directory of tests is available, the contributor can force RISCOF to use only those
-tests in the database by using the ``--suite`` argument. This allows the user to validate that the
-tests can be compiled and executed on the implementation and the reference model without having to
-run all the remaining, already checked-in, tests. 
+Once a suite or directory of tests is available, the user can validate that the
+tests can be compiled and executed on the implementation and the reference model.
 
 To provide coverage and quality analysis of the tests being contributed, the contributor can run
 RISCOF in coverage mode. Under this mode, RISCOF runs the selected set of tests only on the
@@ -129,6 +127,8 @@ which provides a coverage report on the entire suite. Note, one must also provid
 (Cover Group Format File) which contains all the necessary cover-points the tests are meant to cover.
 Details of the CGF and its format is available here: `CGF <https://riscv-isac.readthedocs.io/en/latest/cgf.html>`_ .
 
-Once the tests are ready and have passed the quality checks, the contributor make a
-pull-request/merge-request on the RISCOF repository with the tests placed in the write order.
+.. note:: Generating a coverage report for each test requires support from the reference plugin
+   itself. RISCOF only performs the function of merging the individual coverage reports.
 
+Once the tests are ready, the contributor can make a pull request on the
+`RISCV-ARCH-TEST <https://github.com/riscv/riscv-arch-test>`_ repository.

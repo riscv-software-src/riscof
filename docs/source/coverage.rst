@@ -1,7 +1,7 @@
 
-.. _coverage:
-
 .. highlight:: shell
+
+.. _coverage:
 
 
 ##############
@@ -11,7 +11,7 @@ Coverage Stats
 This section will discuss how to generate a coverage statistics report of a given suite using
 `RISCV_ISAC <https://riscv-isac.readthedocs.io/en/latest>`_. 
 
-If you have followed the `installation <quickstart>` steps of this guide then ``riscv_isac`` should
+If you have followed the :ref:`quickstart` steps of this guide then ``riscv_isac`` should
 already be installed on your system. If not then please follow the installation guide provided `here
 <https://riscv-isac.readthedocs.io/en/latest/installation.html>`_ to install ``riscv_isac``
 
@@ -44,7 +44,7 @@ To run coverage
 
 .. code-block:: shell-session
 
-   $ riscof coverage
+   $ riscof --verbose debug coverage --suite /path/to/suite --env /path/to/suite
 
 The log of the above command is shown below:
 

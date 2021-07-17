@@ -13,6 +13,8 @@ to the :ref:`install_riscof` section for the same.
 
 
 Setup all the DUT and Ref Plugins
+---------------------------------
+
   1. You will first need to install the SAIL C-emulator on your system.  You can refer to the
      :ref:`plugin_models` section for steps on installing the SAIL C-emulator.
   2. You will then need to download/clone the ``sail_cSim`` riscof plugin. You can do this with the
@@ -30,6 +32,8 @@ Setup all the DUT and Ref Plugins
      please refer to the :ref:`plugins` section for details on building one.
 
 Create a config.ini file
+------------------------
+
   1. You will need to create a `config.ini` file with the following contents.
 
     .. code-block:: ini
@@ -37,14 +41,14 @@ Create a config.ini file
       [RISCOF]
       ReferencePlugin=sail_cSim
       ReferencePluginPath=/path/to/sail-riscv/riscof-plugins/sail_cSim
-      DUTPlugin=<your-dut-plugin-name>
-      DUTPluginPath=/path/to/your/dut-plugin-directory
+      DUTPlugin=<your-dut-name>
+      DUTPluginPath=/path/to/your/dut-directory
       
       ## Example configuration for spike plugin.
-      [dut-plugin-name]
-      pluginpath=/path/to/your/dut-plugin-directory
-      ispec=/path/to/your/dut-plugin-directory/dut_isa.yaml
-      pspec=/path/to/your/dut-plugin-directory/dut_platform.yaml
+      [dut-name]
+      pluginpath=/path/to/your/dut-directory
+      ispec=/path/to/your/dut-directory/dut_isa.yaml
+      pspec=/path/to/your/dut-directory/dut_platform.yaml
       
       [sail_cSim]
       pluginpath=/path/to/sail-riscv/riscof-plugins/sail_cSim
@@ -54,6 +58,8 @@ Create a config.ini file
 .. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugins/README.md
 
 Cloning the riscv-arch-test repo
+--------------------------------
+
   1. You will also need to download/clone the riscv-arch-test repository:
 
     .. code-block:: console
@@ -62,6 +68,8 @@ Cloning the riscv-arch-test repo
         $ git clone https://github.com/riscv/riscv-arch-test.git
 
 Running Tests with RISCOF
+-------------------------
+
   1. Run the tests using the following:
 
      .. code-block:: console

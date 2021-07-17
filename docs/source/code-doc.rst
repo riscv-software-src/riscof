@@ -27,6 +27,8 @@ Utils
    :special-members:
    :private-members:
 
+.. _abstract_class:
+
 Abstract Base Classes
 ^^^^^^^^^^^^^^^^^^^^^^
 
