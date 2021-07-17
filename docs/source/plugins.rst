@@ -46,7 +46,7 @@ This above command should generate a spike folder with the following contents:
 
 .. code-block:: bash
 
-  env                                 # contains sample header file and linker file   
+  env                          # contains sample header file and linker file   
   riscof_spike.py              # sample spike plugin for RISCOF
   spike_isa.yaml               # sample ISA YAML configuration file
   spike_platform.yaml          # sample PLATFORM YAML configuration file
@@ -93,11 +93,35 @@ Config.ini Syntax
 =================
 
 The ``config.ini`` file generated using the above ``--setup`` command is used by RISCOF to locate the DUT and Reference
-plugins (along with their necessary collaterals). The config file also allows you to define specific nodes/fields
-which can be used by the respective model plugins. For e.g., in the default ``config.ini`` template the
-`pluginpath` variable under the `[spike]` header is available to the riscof_spike.py
+plugins (along with their necessary collaterals). A template is provided below:
+
+.. code-block:: ini
+
+   [RISCOF] <-- keyword. DO NOT CHANGE
+
+   ReferencePlugin=<name-of-ref-plugin>
+   ReferencePluginPath<path-to-ref-plugin>
+   DUTPlugin=<name-of-dut-plugin>
+   DUTPluginPath=<path-to-dut-plugin>
+
+   [dut-name]
+   pluginpath=<path-to-dut-plugin>
+   ispec=<path-to-isa-spec>
+   pspec=<path-to-platform-spec>
+   jobs=<num-of-jobs> #OPTIONAL
+   PATH=<executable-path> #OPTIONAL
+
+   [ref-name]
+   pluginpath=<path-to-dut-plugin>
+   jobs=<num-of-jobs> #OPTIONAL
+   PATH=<executable-path> #OPTIONAL
+
+
+The config file also allows you to define specific nodes/fields
+which can be used by the respective model plugins. For e.g., in the above template the
+`pluginpath` variable under the `[dut-name]` header is available to the `riscof_spike.py`
 plugin via RISCOF. Similarly one can define more variables and prefixes here which can directly be
-used in the plugins.
+used in the respective plugins.
 
 For example, in the case of sail we can define a `PATH` variable which can point to where the C
 emulator binaries are located. This allows the plugin to directly probe which variable and use this
