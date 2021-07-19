@@ -18,6 +18,7 @@ from riscof.__init__ import __version__
 import riscv_config.checker as checker
 import riscof.framework.main as framework
 import riscof.framework.test as test_routines
+import riscof.arch_test as arch_test
 import riscof.dbgen as dbgen
 import riscof.utils as utils
 import riscof.constants as constants
@@ -53,6 +54,7 @@ def execute():
     logger.info('Version: '+ __version__)
     logger.info('using riscv_isac version : ' + str(riscv_isac.__version__))
     logger.info('using riscv_config version : ' + str(riscv_config.__version__))
+
     if (args.version):
         return 0
     elif (args.command=='setup'):
@@ -116,6 +118,20 @@ and DUT plugins in the config.ini file')
         except FileExistsError as err:
             logger.error(err)
             return 1
+    elif (args.command == 'arch-tests'):
+        if(args.clone):
+            if os.path.exists(args.dir):
+                shutil.rmtree(args.dir)
+            arch_test.clone(args.dir,'master' if args.get_version == 'latest' else args.get_version)
+        elif(args.update):
+            arch_test.update(args.dir,'master' if args.get_version == 'latest' else args.get_version)
+        elif(args.show_version):
+            version, is_repo = arch_test.get_version(args.dir)
+            if not is_repo:
+                logger.error("Not the riscv-arch-test repo.")
+            else:
+                logger.info("Clonned version {0} of the repository with commit hash {1} ".format(
+                        repo.head.tags[0],repo.head.commit))
     else:
         work_dir = args.work_dir
         #Creating work directory

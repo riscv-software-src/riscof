@@ -1,3 +1,4 @@
+# See LICENSE.incore for details
 import os
 import git
 import sys
@@ -8,6 +9,7 @@ import collections
 import logging
 from git import InvalidGitRepositoryError
 import riscof.constants as constants
+import riscof.arch_test as arch_test
 
 logger = logging.getLogger(__name__)
 
@@ -126,66 +128,52 @@ def createdict(file):
         raise DbgenError
     return {'isa': str(isa), 'parts': orderdict(part_dict)}
 
-
-#def generate_standard():
-#    list = dirwalk(os.path.join(constants.root, constants.suite),['/wip'])
-#    repo_path = os.path.normpath(constants.root+"/../")
-#    try:
-#        repo = git.Repo(repo_path)
-#    except InvalidGitRepositoryError:
-#        logger.error("This feature is available for developers only.")
-#        raise SystemExit
-#    dbfile = constants.framework_db
-#    logger.debug("Using "+dbfile)
-#    tree = repo.tree()
-#    try:
-#        db = utils.load_yaml(dbfile)
-#        delkeys = []
-#        for key in db.keys():
-#            if key not in list:
-#                delkeys.append(key)
-#        for key in delkeys:
-#            del db[key]
-#    except FileNotFoundError:
-#        db = {}
-#    cur_dir = constants.root
-#    existing = db.keys()
-#    new = [x for x in list if x not in existing]
-#    for file in existing:
-#        try:
-#            commit = next(
-#                repo.iter_commits(paths=file, max_count=1))
-#            if (str(commit) != db[file]['commit_id']):
-#                temp = createdict(os.path.join(cur_dir, file))
-#                db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
-#        except DbgenError:
-#            del db[file.replace(os.path.join(repo_path,"riscof/"),"")]
-#    for file in new:
-#        try:
-#            commit = next(
-#                repo.iter_commits(paths=file, max_count=1))
-#            temp = createdict(os.path.join(cur_dir, file))
-#            db[file.replace(os.path.join(repo_path,"riscof/"),"")] = {'commit_id': str(commit), **temp}
-#        except DbgenError:
-#            continue
-#    with open(dbfile, "w") as wrfile:
-#        yaml.dump(orderdict(db),
-#                  wrfile)
+def check_commit(repo, fpath, old_commit):
+    commit = next(
+        repo.iter_commits(paths=fpath, max_count=1))
+    if (str(commit) != old_commit):
+        update = True
+    return str(commit), update
 
 def generate():
-    file_list = dirwalk(constants.suite)
+    flist = dirwalk(constants.suite)
+
+    _ , is_repo = arch_test.get_version(constants.suite)
+
     dbfile = constants.framework_db
-    db = {}
-    for file in file_list:
-        try:
-            temp = createdict(file)
-            db[file] = {'commit_id':'0',**temp}
-        except DbgenError:
-            continue
+    logger.debug("Using "+dbfile)
+    if is_repo:
+        repo = git.Repo(constants.suite,search_parent_directories=True)
+        tree = repo.tree()
+    try:
+        db = utils.load_yaml(dbfile)
+        delkeys = []
+        for key in db.keys():
+            if key not in list:
+                delkeys.append(key)
+        for key in delkeys:
+            del db[key]
+    except FileNotFoundError:
+        db = {}
+    existing = db.keys()
+    new = [x for x in flist if x not in existing]
+    deleted_files = [x for x in existing if x not in flist]
+    for entry in deleted_files:
+        del db[entry]
+    if is_repo:
+        for fpath in existing:
+            commit_id, update = check_commit(repo,fpath,db[fpath]['commit_id'])
+            if(update):
+                temp = createdict(fpath)
+                db[fpath] = {'commit_id': commit_id, **temp}
+        for fpath in new:
+            commit_id, update = check_commit(repo,fpath,'-')
+            temp = createdict(fpath)
+            db[fpath] = {'commit_id': commit_id, **temp}
+    else:
+        for fpath in new:
+            temp = createdict(fpath)
+            db[fpath] = {'commit_id': '-', **temp}
     with open(dbfile, "w") as wrfile:
         yaml.dump(orderdict(db),
                   wrfile)
-
-
-if __name__ == '__main__':
-    generate_standard()

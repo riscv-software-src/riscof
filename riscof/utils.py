@@ -454,6 +454,29 @@ def riscof_cmdline_args():
                         metavar="")
     subparsers = parser.add_subparsers(dest='command',title="Action",description="The action to be performed by riscof.",help="List of actions supported by riscof.")
 
+    arch_tests =  subparsers.add_parser('arch-tests',help='Setup and maintenance for Architectural \
+            Test Suite.',formatter_class=SortingHelpFormatter)
+    arch_tests.add_argument('--dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the directory to initialise/containing the tests.',
+                        default='./riscv-arch-test',
+                        metavar= 'PATH')
+    arch_tests.add_argument('--get-version',
+                        action='store',
+                        default='latest',
+                        help='Version of the repository to get.',
+                        metavar="")
+    arch_tests.add_argument('--clone',
+                        action='store_true',
+                        help='Clone and setup the architectural tests from the remote repository.')
+    arch_tests.add_argument('--update',
+                        action='store_true',
+                        help='Update the architectural tests to the latest release.')
+    arch_tests.add_argument('--show-version',
+                        action='store_true',
+                        help='Print the version of the architectural tests being used.')
+
     coverage = subparsers.add_parser('coverage',help='Generate Coverage Report for the given YAML spec.',formatter_class=SortingHelpFormatter)
     coverage.add_argument('--config',
                         type= lambda p: str(pathlib.Path(p).absolute()),

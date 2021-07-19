@@ -13,6 +13,9 @@ suite = os.path.join(root,"suite/")
 #        if os.path.isfile(full_path):
 #            cgf_file.append(full_path)
 
+https_url = 'https://github.com/riscv/riscv-arch-test.git'
+ssh_url = 'git@github.com:riscv/riscv-arch-test.git'
+
 framework_db = os.path.join(root, "framework/database.yaml")
 cwd = os.getcwd()
 #work_dir = os.path.join(cwd, "riscof_work/")
