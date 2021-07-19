@@ -238,11 +238,16 @@ and DUT plugins in the config.ini file')
         utils.dump_yaml(report, report_file)
         report_file.close()
 
+
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
-        report_objects['version'] = __version__
+        report_objects['riscof_version'] = __version__
         report_objects['reference'] = (base.__model__).replace("_", " ")
+
+        rvarch, _ = arch_test.get_version(constants.suite)
+        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else
+                                            rvarch['commit']
 
         report_objects['isa'] = isa_specs['ISA']
         report_objects['usv'] = isa_specs['User_Spec_Version']
@@ -288,9 +293,13 @@ and DUT plugins in the config.ini file')
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
-        report_objects['version'] = __version__
+        report_objects['riscof_version'] = __version__
         report_objects['dut'] = (dut.__model__).replace("_", " ")
         report_objects['reference'] = (base.__model__).replace("_", " ")
+
+        rvarch, _ = arch_test.get_version(constants.suite)
+        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else
+                                            rvarch['commit']
 
         report_objects['isa'] = isa_specs['ISA']
         report_objects['usv'] = isa_specs['User_Spec_Version']
