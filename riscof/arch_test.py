@@ -39,7 +39,9 @@ def update(path,branch='master'):
         logger.debug("Current commit hash of the repository: " + version['commit'])
         repo = git.Repo(path)
         repo.git.pull('origin','master')
-        repo.git.checkout(branch)
+        latest_tag = (repo.tags)[-1]
+        checkout_target = latest_tag if branch=='latest' else branch
+        repo.git.checkout(checkout_target)
         version,_ = get_version(path)
         logger.info("Updated version of the repository: " + version['version'])
         logger.info("Updated commit hash of the repository: " + version['commit'])
@@ -47,9 +49,11 @@ def update(path,branch='master'):
         logger.info("Directory does not contain the riscv-arch-test repo.")
 
 def clone(path,branch="master"):
-    print(branch)
     logger.info("Clonning repository at "+str(path))
-    repo = git.Repo.clone_from(constants.https_url, path, branch=branch)
+    repo = git.Repo.clone_from(constants.https_url, path)
+    latest_tag = (repo.tags)[-1]
+    checkout_target = latest_tag if branch=='latest' else branch
+    repo.git.checkout(checkout_target)
     version, _ = get_version(path)
     logger.info("Clonned version {0} of the repository with commit hash {1} ".format(
                     str(version['version']),version['commit']))

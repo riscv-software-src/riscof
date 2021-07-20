@@ -122,9 +122,9 @@ and DUT plugins in the config.ini file')
         if(args.clone):
             if os.path.exists(args.dir):
                 shutil.rmtree(args.dir)
-            arch_test.clone(args.dir,'master' if args.get_version == 'latest' else args.get_version)
+            arch_test.clone(args.dir,args.get_version)
         elif(args.update):
-            arch_test.update(args.dir,'master' if args.get_version == 'latest' else args.get_version)
+            arch_test.update(args.dir,args.get_version)
         elif(args.show_version):
             version, is_repo = arch_test.get_version(args.dir)
             if not is_repo:

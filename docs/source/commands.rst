@@ -8,12 +8,30 @@ RISCOF Commands
 This section provides an overview and working of the various sub commands available in RISCOF.
 The current list of subcommands includes:
 
+- arch-tests
 - coverage
 - gendb
 - setup
 - validateyaml
 - testlist
 - run
+
+arch-tests
+----------
+This command is used to clone and update the tests from the official `riscv-arch-test <https://github.com/riscv/riscv-arch-test>`_ repository.
+
+This command requires one of the following flags to be specified from the cli.
+
+- show-version: Display the current version of the official suite present at the specified directory path.
+- clone: Clone the suite from github.
+- update: Update the suite to reflect latest changes from github.
+
+Optional arguments from the cli:
+
+- get-version: The specific version of the tests to be fetched. Can be used with both the clone and
+  update flags. The latest release is fetched if skipped.
+- dir: The path to the directory where the suite is to be cloned to. Defaults to
+  ``./riscv-arch-test`` if skipped.
 
 coverage
 --------
