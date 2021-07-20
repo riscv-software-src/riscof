@@ -131,7 +131,7 @@ and DUT plugins in the config.ini file')
                 logger.error("Not the riscv-arch-test repo.")
             else:
                 logger.info("Clonned version {0} of the repository with commit hash {1} ".format(
-                        repo.head.tags[0],repo.head.commit))
+                        version['version'],version['commit']))
     else:
         work_dir = args.work_dir
         #Creating work directory
