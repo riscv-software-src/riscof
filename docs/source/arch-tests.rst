@@ -64,8 +64,7 @@ Cloning the riscv-arch-test repo
 
     .. code-block:: console
         
-        $ cd ~/
-        $ git clone https://github.com/riscv/riscv-arch-test.git
+        $ riscof --verbose info arch-tests --clone
 
 Running Tests with RISCOF
 -------------------------
@@ -74,7 +73,7 @@ Running Tests with RISCOF
 
      .. code-block:: console
 
-       $ riscof --verbose run --config ~/config.ini --suite ~/riscv-arch-test/riscv-test-suite/rv32i_m --env ~/riscv-arch-test/riscv-test-suite/env
+       $ riscof --verbose info run --config ~/config.ini --suite ./riscv-arch-test/riscv-test-suite/rv32i_m --env ./riscv-arch-test/riscv-test-suite/env
 
      The above step will first create a database of the all tests from the ``rv32i_m`` directory 
      (recursively). This database can be found in the `riscof_work/database.yaml` file that is 

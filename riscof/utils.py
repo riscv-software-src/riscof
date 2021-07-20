@@ -459,13 +459,15 @@ def riscof_cmdline_args():
     arch_tests.add_argument('--dir',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        help='The Path to the directory to initialise/containing the tests.',
+                        help='The Path to the directory to initialise/containing the tests.[Default \
+= ./riscv-arch-test]',
                         default='./riscv-arch-test',
                         metavar= 'PATH')
     arch_tests.add_argument('--get-version',
                         action='store',
                         default='latest',
-                        help='Version of the repository to get.',
+                        help='Version of the repository to get. To be used with the update/clone \
+argument. [Default = latest]',
                         metavar="")
     arch_tests.add_argument('--clone',
                         action='store_true',

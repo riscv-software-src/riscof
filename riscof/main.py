@@ -132,6 +132,8 @@ and DUT plugins in the config.ini file')
             else:
                 logger.info("Clonned version {0} of the repository with commit hash {1} ".format(
                         version['version'],version['commit']))
+        else:
+            logger.error("Please specify one of [update,clone,show-version] flags.")
     else:
         work_dir = args.work_dir
         #Creating work directory
