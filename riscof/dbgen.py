@@ -106,6 +106,8 @@ def createdict(file):
                     if (part_number in part_dict.keys()):
                         logger.warning("{}:{}: Incorrect Naming of Test Case after ({})".
                               format(file, lno, part_number))
+                        logger.warning("Skipping file {}. This test will not be included in the\
+ database.".format(file))
                         raise DbgenError
 
                     check = []
@@ -119,6 +121,8 @@ def createdict(file):
                     part_dict[part_number] = {'check': check, 'define': define,'coverage_labels':labels}
                 else:
                     logger.warning("{}:{}: Incorrect Case String ({})".format(file, lno, part_number))
+                    logger.warning("Skipping file {}. This test will not be included in the\
+ database.".format(file))
                     raise DbgenError
     if (isa is None):
         logger.warning("{}:ISA not specified.".format( file))
@@ -164,15 +168,25 @@ def generate():
         for fpath in existing:
             commit_id, update = check_commit(repo,fpath,db[fpath]['commit_id'])
             if(update):
-                temp = createdict(fpath)
+                try:
+                    temp = createdict(fpath)
+                except DbgenError:
+                    del db[fpath]
+                    continue
                 db[fpath] = {'commit_id': commit_id, **temp}
         for fpath in new:
             commit_id, update = check_commit(repo,fpath,'-')
-            temp = createdict(fpath)
+            try:
+                temp = createdict(fpath)
+            except DbgenError:
+                continue
             db[fpath] = {'commit_id': commit_id, **temp}
     else:
         for fpath in new:
-            temp = createdict(fpath)
+            try:
+                temp = createdict(fpath)
+            except:
+                continue
             db[fpath] = {'commit_id': '-', **temp}
     with open(dbfile, "w") as wrfile:
         yaml.dump(orderdict(db),

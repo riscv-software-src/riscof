@@ -246,7 +246,7 @@ and DUT plugins in the config.ini file')
         report_objects['reference'] = (base.__model__).replace("_", " ")
 
         rvarch, _ = arch_test.get_version(constants.suite)
-        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else
+        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else \
                                             rvarch['commit']
 
         report_objects['isa'] = isa_specs['ISA']
@@ -298,7 +298,7 @@ and DUT plugins in the config.ini file')
         report_objects['reference'] = (base.__model__).replace("_", " ")
 
         rvarch, _ = arch_test.get_version(constants.suite)
-        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else
+        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else \
                                             rvarch['commit']
 
         report_objects['isa'] = isa_specs['ISA']
