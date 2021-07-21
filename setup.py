@@ -23,7 +23,7 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(name="riscof",
-      version='1.20.3',
+      version='1.21.0',
       description="RISC-V Architectural Test Framework",
       long_description=readme + '\n\n',
       classifiers=[
@@ -31,7 +31,7 @@ setup(name="riscof",
           "License :: OSI Approved :: BSD License",
           "Development Status :: 4 - Beta"
       ],
-      url='https://gitlab.com/incoresemi/riscof',
+      url='https://github.com/riscv/riscof',
       author='InCore Semiconductors Pvt. Ltd.',
       author_email='neelgala@incoresemi.com',
       license='BSD-3-Clause',

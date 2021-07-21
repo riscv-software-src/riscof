@@ -10,13 +10,12 @@ Welcome to RISCOF
    intro
    overview
    installation
+   commands
+   inputs
    plugins
    arch-tests
    testlist
    database
-   newtest
    coverage
-   testformat
-   RISCV-Config [External] <https://riscv-config.readthedocs.io/>
    code-doc
    changelog

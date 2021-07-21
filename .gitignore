@@ -6,6 +6,8 @@ common/__pycache__/
 
 framework/__pycache__/
 
+riscv-arch-test/
+
 dbgen/__pycache__/
 
 *work/

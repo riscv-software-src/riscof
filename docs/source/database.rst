@@ -4,18 +4,11 @@
 Database Generator
 ##################
 
-RISCOF internally maintains a database of all the assembly tests available in the suite. This
-database is maintained as a YAML file and serves the purpose of selecting relevant tests for a given
-DUT model. 
+RISCOF includes an internal utility which is used to generate a database of all the assembly tests
+available in a ``suite`` directory. This database is maintained as a YAML file and serves the 
+purpose of selecting relevant tests for a given DUT model. 
 
-The database can be generated for a given suite/folder using the ``dbgen`` (a.k.a database
-generator) utility available for developers in the RISCOF git repository. 
-
-
-.. warning:: This utility is meant for developers contributing to the assembly suite and is not 
-  intended to be used as a stand-alone utility.
-
-The ``dbgen`` utility recursively walks the specified directory/suite/modified to find all .S files 
+The ``dbgen`` utility recursively walks the specified ``suite`` to find all .S files 
 in them and constructs a dictionary of sorts, for the framework.
 The tests in the directory are identified by their relative path from the repository home.
 Each test in the database is defined as follows:
@@ -54,12 +47,7 @@ Usage
 
 .. code-block:: bash
 
-    cd riscof
-    python -m riscof.main gendb
-
-Output:
-
-    Currently the database is stored in 'framework/database.yaml'.
+    riscof --verbose debug gendb --env /path/to/env/ --suite /path/to/suite/
 
 Reasons of Failure
 ^^^^^^^^^^^^^^^^^^
@@ -76,6 +64,6 @@ Notes
 
 1. The database is always alphabetically ordered
 2. The database checks for macro sanity - i.e. certain macros exists and in the correct order.
-3. Each time a new test is added the database utility has to be run manually and the database.yaml
+3. Each time a new test is added to the ``suite`` directory, the database utility has to be run manually and the database.yaml
    has to be up-streamed manually to the repository.
 

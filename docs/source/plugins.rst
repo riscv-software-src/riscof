@@ -2,36 +2,72 @@
 
 .. _plugins:
 
-########################
-Create your Model Plugin
-########################
+##########################
+Building your Model Plugin
+##########################
 
-RISCOF requires python plugins for each model (DUT and Reference) to be submitted. These plugins
-provide a quick and standard way of building any model, compiling any/all the tests and
-executing the tests on the models. 
 
-Why Python Plugins ?
-====================
+As mentioned in the :ref:`inputs` section, the DUT and Reference plugin directories (and their
+items) are the most crucial components required by the RISCOF framework for successful execution.
+This section will walk you through in detail on how to build the various items of the DUT plugin
+directories.
 
-Since the entire RISCOF framework is in python it did not make sense to have the 
-user-DUT in a separate environment. It would then cause issues in transferring data across 
-these environments/domains. 
+A typical DUT plugin directory has the following structure::
 
-While many prefer the conventional *Makefile/autoconf* approach, transferring the *test-list* in YAML 
-to be used by another Makefile-environment seemed like a bad and an unscalable idea.
+ ├──dut-name/                    # DUT plugin templates
+    ├── env
+    │   ├── link.ld              # DUT linker script
+    │   └── model_test.h         # DUT specific header file
+    ├── riscof_dut-name.py       # DUT python plugin
+    ├── dut-name_isa.yaml        # DUT ISA yaml based on riscv-config
+    └── dut-name_platform.yaml   # DUT Platform yaml based on riscv-config
 
-Expecting initial hesitation, we have tried to ensure that the python plugins can be made extremely 
-simple (as crude as writing out bash instructions using shellCommand libraries). 
+The ``env`` directory in must contain:
 
-Considering there would be a few backlashes in these choices, we have given enough pit-stops in the 
-flow: ``validation, test-list, coverage, etc`` so one can stop at any point in the flow and move 
-to their custom domain. 
+  - ``model_test.h`` header file which provides the model specific macros as described in the
+    `TestFormat Spec
+    <https://github.com/riscv/riscv-arch-test/blob/master/spec/TestFormatSpec.adoc>`_.
+  - ``link.ld`` linker script which can be used by the plugin during test-compilation.
 
+The ``env`` folder can also contain other necessary plugin specific files for pre/post processing of
+logs, signatures, elfs, etc.
+
+The yaml specs in the DUT plugin directory are the most important inputs to the RISCOF framework.
+All decisions of filtering tests depend on the these YAML files. The files must follow the
+syntax/format specified by `riscv-config <https://github.com/riscv/riscv-config>`_. These YAMLs are
+validated in RISCOF using riscv-config. 
+
+The python plugin files capture the behavior of model for compiling tests, executing them on the DUT
+and finally extracting the signature for each test. The following sections provide a detailed
+explanation on how to build the python files for your model.
+
+
+Why Python Based Plugins ?
+==========================
+
+- Since the entire RISCOF framework is in python it did not make sense to have the 
+  user-DUT in a separate environment. It would then cause issues in transferring data across 
+  these environments/domains. 
+  
+- While many prefer the conventional *Makefile/autoconf* approach, transferring the *test-list* in YAML 
+  to be used by another Makefile-environment seemed like a bad and an unscalable idea.
+  
+- Expecting initial hesitation, we have tried to ensure that the python plugins can be made extremely 
+  simple (as crude as writing out bash instructions using shellCommand libraries). 
+  
+- Considering there would be a few backlashes in these choices, we have given enough pit-stops in the 
+  flow: ``validation, test-list, coverage, etc`` so one can stop at any point in the flow and move 
+  to their custom domain. 
+
+- Having a python plugin **does not change your test-bench** in anyway. The plugins only act as a common
+  interface between your environment and RISCOF. All you need to do is call the respective sim
+  commands from within the python plugin.
+  
 If you do feel the flow can be further improved or changed please do drop in an issue on the
 official repository.
 
-Generate Templates
-==================
+Start with Templates
+====================
 
 A sample template of the plugin and all other required collateral can be generated through RISCOF
 using the following command::
@@ -44,7 +80,7 @@ This above command should generate a spike folder with the following contents:
 
 .. code-block:: bash
 
-  env                                 # contains sample header file and linker file   
+  env                          # contains sample header file and linker file   
   riscof_spike.py              # sample spike plugin for RISCOF
   spike_isa.yaml               # sample ISA YAML configuration file
   spike_platform.yaml          # sample PLATFORM YAML configuration file
@@ -76,50 +112,28 @@ The following changes need to be made:
    paragraphs.
 
 The plugin file in the ``spike`` folder: riscof_spike.py is the one that needs to be
-changed and updated for each model. As can be seen from this python file, it creates a Metaclass for the plugins 
-supported by the abstract base class. This class basically offers the users three basic 
-functions: ``initialize`` , ``build`` and ``runTests``. For each model RISCOF calls these functions in the following order:
+changed and updated for each model as described in the next section.
+
+
+Please note the user is free to add more custom functions in this file which are called within the
+three base functions (as mentioned above).
+
+.. _plugin_def:
+
+Plugin Function Definitions
+===========================
+
+As can be seen from the template python file, it creates a Metaclass for the plugins 
+supported by the :ref:`abstract_class`. This class basically offers the users three basic 
+functions: ``initialize`` , ``build`` and ``runTests``. 
+For each model RISCOF calls these functions in the following order:
 
 .. code-block:: bash
 
   initialize --> build --> runTests
 
-Please note the user is free to add more custom functions in this file which are called within the
-three base functions (as mentioned above).
-
-Config.ini Syntax
-=================
-
-The ``config.ini`` file generated using the above ``--setup`` command is used by RISCOF to locate the DUT and Reference
-plugins (along with their necessary collaterals). The config file also allows you to define specific nodes/fields
-which can be used by the respective model plugins. For e.g., in the default ``config.ini`` template the
-`pluginpath` variable under the `[spike]` header is available to the riscof_spike.py
-plugin via RISCOF. Similarly one can define more variables and prefixes here which can directly be
-used in the plugins.
-
-For example, in the case of sail we can define a `PATH` variable which can point to where the C
-emulator binaries are located. This allows the plugin to directly probe which variable and use this
-as part of the execution commands.
-
-The idea here is to have a single place of change which is easy rather than hard-coding the same
-within the plugins.
-
-File path specification
------------------------
-
-Different values are allowed for the entries in ``config.ini`` to specify a path.
-They are checked in the following order, with the first found valid entry being used:
-
-1. Absolute path: Usage of user home (``~``) is allowed.
-2. Relative to current working directory: The path within the location where RISCOF was started.
-3. Relative to ``config.ini`` location: A path staring from the point where ``config.ini`` is stored.
-
-
-Function Definitions
-====================
-
 We now define the various arguments and expected functionality of each of the above
-mentioned functions. Please note, this is not strict guide and the users can choose to perform
+mentioned functions. Please note, this is not a strict guide and the users can choose to perform
 different actions in different functions as opposed to what is outlined in this guide as long as
 they comply with the order of the functions being called and the signatures are generated in their 
 respective directories at the end of the `runTest` function.
@@ -331,6 +345,9 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
 
           make.add_target(execute)
       make.execute_all(self.work_dir)
+
+.. include:: ../../PLUGINS.rst
+
 
 Other Utilities available
 =========================

@@ -454,6 +454,31 @@ def riscof_cmdline_args():
                         metavar="")
     subparsers = parser.add_subparsers(dest='command',title="Action",description="The action to be performed by riscof.",help="List of actions supported by riscof.")
 
+    arch_tests =  subparsers.add_parser('arch-tests',help='Setup and maintenance for Architectural \
+            Test Suite.',formatter_class=SortingHelpFormatter)
+    arch_tests.add_argument('--dir',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the directory to initialise/containing the tests.[Default \
+= ./riscv-arch-test]',
+                        default='./riscv-arch-test',
+                        metavar= 'PATH')
+    arch_tests.add_argument('--get-version',
+                        action='store',
+                        default='latest',
+                        help='Version of the repository to get. To be used with the update/clone \
+argument. [Default = latest]',
+                        metavar="")
+    arch_tests.add_argument('--clone',
+                        action='store_true',
+                        help='Clone and setup the architectural tests from the remote repository.')
+    arch_tests.add_argument('--update',
+                        action='store_true',
+                        help='Update the architectural tests to the latest release.')
+    arch_tests.add_argument('--show-version',
+                        action='store_true',
+                        help='Print the version of the architectural tests being used.')
+
     coverage = subparsers.add_parser('coverage',help='Generate Coverage Report for the given YAML spec.',formatter_class=SortingHelpFormatter)
     coverage.add_argument('--config',
                         type= lambda p: str(pathlib.Path(p).absolute()),
@@ -464,16 +489,18 @@ def riscof_cmdline_args():
                           )
     coverage.add_argument('--cgf',
                         action=CustomAction,
-#                        required=True,
+                        required=True,
                         help='The Path to the cgf file(s). Multiple allowed',
                         metavar= 'PATH')
     coverage.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
+                        required=True,
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
     coverage.add_argument('--env',
                         type= lambda p: str(pathlib.Path(p).absolute()),
+                        required=True,
                         action='store',
                         help='The Path to the custom env directory.',
                         metavar= 'PATH')
@@ -490,11 +517,13 @@ def riscof_cmdline_args():
     generatedb = subparsers.add_parser('gendb',help='Generate Database for the standard suite.',formatter_class=SortingHelpFormatter)
     generatedb.add_argument('--suite',
                             type= lambda p: str(pathlib.Path(p).absolute()),
+                            required=True,
                             action='store',
                             help='The Path to the custom suite directory.',
                             metavar= 'PATH')
     generatedb.add_argument('--env',
                             type= lambda p: str(pathlib.Path(p).absolute()),
+                            required=True,
                             action='store',
                             help='The Path to the custom env directory.',
                             metavar= 'PATH')
@@ -550,11 +579,13 @@ def riscof_cmdline_args():
                           )
     run.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
+                        required=True,
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
     run.add_argument('--env',
                         type= lambda p: str(pathlib.Path(p).absolute()),
+                        required=True,
                         action='store',
                         help='The Path to the custom env directory.',
                         metavar= 'PATH')
@@ -586,11 +617,13 @@ def riscof_cmdline_args():
 
     testlist.add_argument('--suite',
                         type= lambda p: str(pathlib.Path(p).absolute()),
+                        required=True,
                         action='store',
                         help='The Path to the custom suite directory.',
                         metavar= 'PATH')
     testlist.add_argument('--env',
                         type= lambda p: str(pathlib.Path(p).absolute()),
+                        required=True,
                         action='store',
                         help='The Path to the custom env directory.',
                         metavar= 'PATH')

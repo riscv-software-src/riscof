@@ -125,7 +125,7 @@ Install RISCOF
      
      .. code-block:: console
      
-         $ pip3 install git+https://gitlab.com/incoresemi/riscof.git
+         $ pip3 install git+https://github.com/riscv/riscof.git
      
      This is the preferred method to install RISCOF, as it will always install the most recent stable release.
      
@@ -158,13 +158,13 @@ Install RISCOF
 
    .. tab:: for Dev
 
-     The sources for RISCOF can be downloaded from the `GitLab repo`_.
+     The sources for RISCOF can be downloaded from the `Github repo`_.
      
      You can clone the repository:
      
      .. code-block:: console
      
-         $ git clone https://gitlab.com/incoresemi/riscof.git
+         $ git clone https://github.com/riscv/riscof.git
      
      
      Once you have a copy of the source, you can install it with:
@@ -174,7 +174,7 @@ Install RISCOF
          $ cd riscof
          $ pip3 install --editable .
      
-     .. _Gitlab repo: https://gitlab.com/incoresemi/riscof
+     .. _Github repo: https://github.com/riscv/riscof
 
 Test RISCOF
 ===========
@@ -183,91 +183,115 @@ Once you have installed RISCOF you can execute ``riscof --help`` to print the he
 
 .. code-block:: bash
 
-   usage: riscof [-h] [--version] [--verbose]
-                 {coverage,gendb,setup,validateyaml,run,testlist} ...
-   
-   RISCOF is a framework used to run the Architectural Tests on a DUT and check
-   compatibility with the RISC-V ISA
-   
-   optional arguments:
-     --verbose             [Default=info]
-     --version, -v         Print version of RISCOF being used
-     -h, --help            show this help message and exit
-   
-   Action:
-     The action to be performed by riscof.
-   
-     {coverage,gendb,setup,validateyaml,run,testlist}
-                           List of actions supported by riscof.
-       coverage            Generate Coverage Report for the given YAML spec.
-       gendb               Generate Database for the standard suite.
-       setup               Initiate setup for riscof.
-       validateyaml        Validate the Input YAMLs using riscv-config.
-       run                 Run the tests on DUT and reference and compare
-                           signatures.
-       testlist            Generate the test list for the given DUT and suite.
-   Action 'coverage'
-   
-   	usage: riscof coverage [-h] [--config PATH] [--cgf PATH] [--suite PATH]
-   	                       [--work-dir PATH] [--no-browser]
-   	
-   	optional arguments:
-   	  --cgf PATH       The Path to the cgf file(s). Multiple allowed
-   	  --config PATH    The Path to the config file. [Default=./config.ini]
-   	  --no-browser     Do not open the browser for showing the test report.
-   	  --suite PATH     The Path to the custom suite directory.
-   	  --work-dir PATH  The Path to the work-dir.
-   	  -h, --help       show this help message and exit
-   	
-   Action 'gendb'
-   
-   	usage: riscof gendb [-h] [--suite PATH] [--work-dir PATH]
-   	
-   	optional arguments:
-   	  --suite PATH     The Path to the custom suite directory.
-   	  --work-dir PATH  The Path to the work-dir.
-   	  -h, --help       show this help message and exit
-   	
-   Action 'setup'
-   
-   	usage: riscof setup [-h] [--dutname NAME] [--refname NAME] [--work-dir PATH]
-   	
-   	optional arguments:
-   	  --dutname NAME   Name of DUT plugin. [Default=spike]
-   	  --refname NAME   Name of Reference plugin. [Default=sail_cSim]
-   	  --work-dir PATH  The Path to the work-dir.
-   	  -h, --help       show this help message and exit
-   	
-   Action 'validateyaml'
-   
-   	usage: riscof validateyaml [-h] [--config PATH] [--work-dir PATH]
-   	
-   	optional arguments:
-   	  --config PATH    The Path to the config file. [Default=./config.ini]
-   	  --work-dir PATH  The Path to the work-dir.
-   	  -h, --help       show this help message and exit
-   	
-   Action 'run'
-   
-   	usage: riscof run [-h] [--config PATH] [--suite PATH] [--no-browser]
-   	                  [--work-dir PATH]
-   	
-   	optional arguments:
-   	  --config PATH    The Path to the config file. [Default=./config.ini]
-   	  --no-browser     Do not open the browser for showing the test report.
-   	  --suite PATH     The Path to the custom suite directory.
-   	  --work-dir PATH  The Path to the work-dir.
-   	  -h, --help       show this help message and exit
-   	
-   Action 'testlist'
-   
-   	usage: riscof testlist [-h] [--work-dir PATH] [--config PATH] [--suite PATH]
-   	
-   	optional arguments:
-   	  --config PATH    The Path to the config file. [Default=./config.ini]
-   	  --suite PATH     The Path to the custom suite directory.
-   	  --work-dir PATH  The Path to the work-dir.
-   	  -h, --help       show this help message and exit
+    usage: riscof [-h] [--version] [--verbose]
+                  {arch-tests,coverage,gendb,setup,validateyaml,run,testlist} ...
+    
+    RISCOF is a framework used to run the Architectural Tests on a DUT and check
+    compatibility with the RISC-V ISA
+    
+    optional arguments:
+      --verbose             [Default=info]
+      --version, -v         Print version of RISCOF being used
+      -h, --help            show this help message and exit
+    
+    Action:
+      The action to be performed by riscof.
+    
+      {arch-tests,coverage,gendb,setup,validateyaml,run,testlist}
+                            List of actions supported by riscof.
+        arch-tests          Setup and maintenance for Architectural Test Suite.
+        coverage            Generate Coverage Report for the given YAML spec.
+        gendb               Generate Database for the standard suite.
+        setup               Initiate setup for riscof.
+        validateyaml        Validate the Input YAMLs using riscv-config.
+        run                 Run the tests on DUT and reference and compare
+                            signatures.
+        testlist            Generate the test list for the given DUT and suite.
+    Action 'arch-tests'
+    
+    	usage: riscof arch-tests [-h] [--dir PATH] [--get-version] [--clone]
+    	                         [--update] [--show-version]
+    	
+    	optional arguments:
+    	  --clone         Clone and setup the architectural tests from the remote
+    	                  repository.
+    	  --dir PATH      The Path to the directory to initialise/containing the
+    	                  tests.[Default = ./riscv-arch-test]
+    	  --get-version   Version of the repository to get. To be used with the
+    	                  update/clone argument. [Default = latest]
+    	  --show-version  Print the version of the architectural tests being used.
+    	  --update        Update the architectural tests to the latest release.
+    	  -h, --help      show this help message and exit
+    	
+    Action 'coverage'
+    
+    	usage: riscof coverage [-h] [--config PATH] --cgf PATH --suite PATH --env PATH
+    	                       [--work-dir PATH] [--no-browser]
+    	
+    	optional arguments:
+    	  --cgf PATH       The Path to the cgf file(s). Multiple allowed
+    	  --config PATH    The Path to the config file. [Default=./config.ini]
+    	  --env PATH       The Path to the custom env directory.
+    	  --no-browser     Do not open the browser for showing the test report.
+    	  --suite PATH     The Path to the custom suite directory.
+    	  --work-dir PATH  The Path to the work-dir.
+    	  -h, --help       show this help message and exit
+    	
+    Action 'gendb'
+    
+    	usage: riscof gendb [-h] --suite PATH --env PATH [--work-dir PATH]
+    	
+    	optional arguments:
+    	  --env PATH       The Path to the custom env directory.
+    	  --suite PATH     The Path to the custom suite directory.
+    	  --work-dir PATH  The Path to the work-dir.
+    	  -h, --help       show this help message and exit
+    	
+    Action 'setup'
+    
+    	usage: riscof setup [-h] [--dutname NAME] [--refname NAME] [--work-dir PATH]
+    	
+    	optional arguments:
+    	  --dutname NAME   Name of DUT plugin. [Default=spike]
+    	  --refname NAME   Name of Reference plugin. [Default=sail_cSim]
+    	  --work-dir PATH  The Path to the work-dir.
+    	  -h, --help       show this help message and exit
+    	
+    Action 'validateyaml'
+    
+    	usage: riscof validateyaml [-h] [--config PATH] [--work-dir PATH]
+    	
+    	optional arguments:
+    	  --config PATH    The Path to the config file. [Default=./config.ini]
+    	  --work-dir PATH  The Path to the work-dir.
+    	  -h, --help       show this help message and exit
+    	
+    Action 'run'
+    
+    	usage: riscof run [-h] [--config PATH] --suite PATH --env PATH [--no-browser]
+    	                  [--work-dir PATH]
+    	
+    	optional arguments:
+    	  --config PATH    The Path to the config file. [Default=./config.ini]
+    	  --env PATH       The Path to the custom env directory.
+    	  --no-browser     Do not open the browser for showing the test report.
+    	  --suite PATH     The Path to the custom suite directory.
+    	  --work-dir PATH  The Path to the work-dir.
+    	  -h, --help       show this help message and exit
+    	
+    Action 'testlist'
+    
+    	usage: riscof testlist [-h] [--work-dir PATH] [--config PATH] --suite PATH
+    	                       --env PATH
+    	
+    	optional arguments:
+    	  --config PATH    The Path to the config file. [Default=./config.ini]
+    	  --env PATH       The Path to the custom env directory.
+    	  --suite PATH     The Path to the custom suite directory.
+    	  --work-dir PATH  The Path to the work-dir.
+    	  -h, --help       show this help message and exit
+    
+	
 
 Install RISCV-GNU Toolchain
 ===========================
@@ -399,16 +423,40 @@ These are often used as reference models in RISCOF.
 Create Neccesary Env Files
 ==========================
 
-RISCOF requires python plugins for each model (DUT and Reference) to be submitted. These plugins
-provide a quick and standard way of building the model, compiling the tests and executing the tests
-on the models. Along with the python plugins of each model, one would also have to provide the
-`YAML` configuration files of the DUT as per the norms of ``riscv-config``. Some models might also
-require special macros to be executed as prelude or post-testing. These macros can be provided to
-RISCOF as a header file: ``model_test.h``. 
+In order to run tests via RISCOF you will need to provide the following items :
 
-For sample templates of pre-built plugins please refer to : `riscof-plugins <https://gitlab.com/incoresemi/riscof-plugins>`_. 
+  - **config.ini**: This file is a basic configuration file following the `ini` syntax. This file
+    will capture information like: name of the dut/reference plugins, path to the plugins, path to
+    the riscv-config based yamls, etc. For more information on the contents and syntax please refer
+    to the :ref:`config_syntax` section
+  - **dut-plugin directory**: RISCOF requires that the DUT model for testing is presented in the
+    form of a python plugin. The python plugin is nothing more than a python file which includes
+    certain standard and defined functions to carry out the activities of test-compilation,
+    execution and signature extraction. This python file name needs to be prefixed with ``riscof_``
+    and must be present in the dut-plugin directory. One can refer to the :ref:`plugin_def` section
+    for more details on how to write this python file.
 
-To make things even simpler, RISCOF generates standard pre-built templates for DUTs and Reference
+    The directory will also need to contain the `riscv-config` based isa and platform yamls which provide
+    a definition of the DUT. These yamls will be used to filter tests that need to be run on the
+    DUT.
+
+    Finally, an env directory will also need to be present in the dut-plugin directory, which
+    contains the environment files like the ``model_test.h`` that is required to compile and run the tests
+    on the DUT. Refer to the `TestFormat spec
+    <https://github.com/riscv/riscv-arch-test/blob/master/spec/TestFormatSpec.adoc>`_ for definition of macros that can be used in the
+    ``model_test.h`` file. The env directory may also include other files like the linker script,
+    post-processing scripts that the user may want.
+
+  - **reference-plugin directory**: Similar to the DUT plugin, RISCOF also expects a reference model
+    plugin. The structure of the directory and files is the same as that of the DUT. However, the
+    isa and platform yamls are not required since RISCOF will always pick the yamls from the DUT
+    plugin for all purposes.
+
+.. For sample templates of pre-built plugins please refer to : `riscof-plugins <https://github.com/riscv/riscof-plugins>`_. 
+
+For sample templates of pre-built plugins please refer to :ref:`prebuilt_plugins`. 
+
+To make things simpler, RISCOF generates standard pre-built templates for DUTs and Reference
 Models for the user via the ``setup`` command as shown below::
 
   $ riscof setup --dutname=spike
@@ -418,22 +466,19 @@ The above command will generate the following files and directories in the curre
  ├──config.ini                   # configuration file for riscof
  ├──spike/                       # DUT plugin templates
     ├── env
-    │   ├── link.ld
-    │   └── model_test.h
-    ├── riscof_spike.py
-    ├── spike_isa.yaml
-    └── spike_platform.yaml
+    │   ├── link.ld              # DUT linker script
+    │   └── model_test.h         # DUT specific header file
+    ├── riscof_spike.py          # DUT python plugin
+    ├── spike_isa.yaml           # DUT ISA yaml based on riscv-config
+    └── spike_platform.yaml      # DUT Platform yaml based on riscv-config
  ├──sail_cSim/                   # reference plugin templates
     ├── env
-    │   ├── link.ld
-    │   └── model_test.h
+    │   ├── link.ld              # Reference linker script
+    │   └── model_test.h         # Reference model specific header file
     ├── __init__.py
-    └── riscof_sail_cSim.py
+    └── riscof_sail_cSim.py      # Reference model python plugin.
 
-
-
-The ``config.ini`` file is used to capture specific paths of the plugins of reference and DUT model,
-along with the paths to isa and platform input YAMLs. The ``config.ini`` will look something like this by default::
+The generate template ``config.ini`` will look something like this by default::
 
 
   [RISCOF]                                                                                            
@@ -456,16 +501,17 @@ above config::
 
   PATH=<path_to_my_Sail_binaries>
 
-
 The folder ``spike`` contains various templates of files that would be required for testing of 
 any generic DUT. Components of this folder will need to be modified by the user as per the DUT spec.
+By default the ``model_test.h`` files and the ``link.ld`` file will work out of the box for
+``spike`` and ``sail`` models.
+
 Since our DUT model in this guide is spike, you will only have to change the execute command at line 100 of
 spike/riscof_spike.py to the following:
 
 .. code-block:: python
 
   execute += self.dut_exe + ' --log-commits --log dump --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
-
 
 .. note:: Custom DUTs can go through the various ``#TODO`` comments to figure out what changes need to be
   made in the respective python file.
@@ -486,7 +532,7 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
-.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/blob/master/sail_cSim/README.md 
+.. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugin/README.md 
 
 Running RISCOF
 ==============
@@ -518,7 +564,7 @@ This should print the following:
   [INFO]    : No Syntax errors in Input Platform Yaml. :)
   [INFO]    : Dumping out Normalized Checked YAML: /scratch/git-repo/incoresemi/riscof/riscof_work/sample_platform_checked.yaml
 
-The next step is generate the list of tests that need to be run on the models.
+The next step is to generate the list of tests that need to be run on the models.
 
 .. code-block:: bash
 

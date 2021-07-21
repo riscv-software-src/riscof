@@ -18,6 +18,7 @@ from riscof.__init__ import __version__
 import riscv_config.checker as checker
 import riscof.framework.main as framework
 import riscof.framework.test as test_routines
+import riscof.arch_test as arch_test
 import riscof.dbgen as dbgen
 import riscof.utils as utils
 import riscof.constants as constants
@@ -53,6 +54,7 @@ def execute():
     logger.info('Version: '+ __version__)
     logger.info('using riscv_isac version : ' + str(riscv_isac.__version__))
     logger.info('using riscv_config version : ' + str(riscv_config.__version__))
+
     if (args.version):
         return 0
     elif (args.command=='setup'):
@@ -116,6 +118,22 @@ and DUT plugins in the config.ini file')
         except FileExistsError as err:
             logger.error(err)
             return 1
+    elif (args.command == 'arch-tests'):
+        if(args.clone):
+            if os.path.exists(args.dir):
+                shutil.rmtree(args.dir)
+            arch_test.clone(args.dir,args.get_version)
+        elif(args.update):
+            arch_test.update(args.dir,args.get_version)
+        elif(args.show_version):
+            version, is_repo = arch_test.get_version(args.dir)
+            if not is_repo:
+                logger.error("Not the riscv-arch-test repo.")
+            else:
+                logger.info("Clonned version {0} of the repository with commit hash {1} ".format(
+                        version['version'],version['commit']))
+        else:
+            logger.error("Please specify one of [update,clone,show-version] flags.")
     else:
         work_dir = args.work_dir
         #Creating work directory
@@ -127,11 +145,6 @@ and DUT plugins in the config.ini file')
             shutil.rmtree(work_dir)
             logger.debug('Creating new work directory: ' + work_dir)
             os.mkdir(work_dir)
-
-    if args.command=='gendb':
-        if args.suite is None:
-            dbgen.generate_standard()
-            logger.info('Database File Generated: '+constants.framework_db)
 
     if (args.command=='run' or args.command=='testlist' or \
             args.command=='validateyaml' or args.command == 'coverage'):
@@ -197,18 +210,15 @@ and DUT plugins in the config.ini file')
 
     if args.command=='gendb' or args.command=='run' or \
             args.command=='testlist' or args.command == 'coverage' :
-        if args.suite is not None:
-            logger.info("Generating database for custom suite.")
-            work_dir = args.work_dir
-            constants.suite = args.suite
-            constants.framework_db = os.path.join(work_dir,"database.yaml")
-            logger.debug('Suite used: '+constants.suite)
-            dbgen.generate()
-            logger.info('Database File Generated: '+constants.framework_db)
-        if args.env is None:
-            constants.env = os.path.join(constants.suite,"env/")
-        else:
-            constants.env = args.env
+        logger.info("Generating database for suite: "+args.suite)
+        work_dir = args.work_dir
+        constants.suite = args.suite
+        constants.framework_db = os.path.join(work_dir,"database.yaml")
+        logger.debug('Suite used: '+constants.suite)
+        logger.debug('ENV used: '+ args.env)
+        dbgen.generate()
+        logger.info('Database File Generated: '+constants.framework_db)
+        constants.env = args.env
         logger.info('Env path set to'+constants.env)
 
     if args.command == 'testlist':
@@ -216,11 +226,8 @@ and DUT plugins in the config.ini file')
 
     if args.command == 'coverage':
         logger.info('Will collect Coverage using RISCV-ISAC')
-        if args.cgf is None:
-            cgf_file = constants.cgf_file
-        else:
-            cgf_file = args.cgf
-        logger.info('CGF file being used : ' + str(cgf_file))
+        cgf_file = args.cgf
+        logger.info('CGF file(s) being used : ' + str(cgf_file))
 
         with open(isa_file, "r") as isafile:
             ispecs = isafile.read()
@@ -233,11 +240,16 @@ and DUT plugins in the config.ini file')
         utils.dump_yaml(report, report_file)
         report_file.close()
 
+
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
-        report_objects['version'] = __version__
+        report_objects['riscof_version'] = __version__
         report_objects['reference'] = (base.__model__).replace("_", " ")
+
+        rvarch, _ = arch_test.get_version(constants.suite)
+        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else \
+                                            rvarch['commit']
 
         report_objects['isa'] = isa_specs['ISA']
         report_objects['usv'] = isa_specs['User_Spec_Version']
@@ -283,9 +295,13 @@ and DUT plugins in the config.ini file')
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
-        report_objects['version'] = __version__
+        report_objects['riscof_version'] = __version__
         report_objects['dut'] = (dut.__model__).replace("_", " ")
         report_objects['reference'] = (base.__model__).replace("_", " ")
+
+        rvarch, _ = arch_test.get_version(constants.suite)
+        report_objects['rvarch_version'] = rvarch['version'] if rvarch['version'] != "-" else \
+                                            rvarch['commit']
 
         report_objects['isa'] = isa_specs['ISA']
         report_objects['usv'] = isa_specs['User_Spec_Version']
