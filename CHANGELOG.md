@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1] - 2021-07-21
+- Added support for intermediate run start points #1
+- --testfile is added to directly run tests on the target and reference (assumes the testlist has been correctly generated)
+- --no-ref-run is added so that tests do not run on reference and quit before signature comparison
+- --no-dut-run is added so that tests do not run on DUT and quit before signature comparison 
+
 ## [1.21.0] - 2021-07-21
 - Changed CI script from gitlab to github actions
 - Removing hosted cgf files
