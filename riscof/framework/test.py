@@ -300,11 +300,13 @@ def generate_test_pool(ispec, pspec, workdir):
 
     with open(os.path.join(workdir,"test_list.yaml"),"w") as tfile:
         yaml.dump(test_list,tfile)
+    with open(os.path.join(workdir,"test_pool.yaml"),"w") as tpfile:
+        yaml.dump(test_pool,tpfile)
 
     return (test_list, test_pool)
 
 
-def run_tests(dut, base, ispec, pspec, work_dir):
+def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
     '''
         Function to run the tests for the DUT.
 
@@ -315,6 +317,8 @@ def run_tests(dut, base, ispec, pspec, work_dir):
         :param ispec: The isa specifications of the DUT.
 
         :param pspec: The platform specifications of the DUT.
+        
+        :param cntr_args: testfile, no_ref_run, no_dut_run
 
         :type ispec: dict
 
@@ -323,13 +327,29 @@ def run_tests(dut, base, ispec, pspec, work_dir):
         :return: A list of dictionary objects containing the necessary information
             required to generate the report.
     '''
-    test_list, test_pool = generate_test_pool(ispec, pspec, work_dir)
+    if cntr_args[0]:
+        with open(os.path.join(work_dir,"test_pool.yaml"),"r") as tpfile:
+            test_pool = yaml.load(tpfile)
+        with open(os.path.join(work_dir,"test_list.yaml"),"r") as tfile:
+            test_list = yaml.load(tfile)
+    else:
+        test_list, test_pool = generate_test_pool(ispec, pspec, work_dir)
     results = []
-    logger.info("Running Tests on DUT.")
-    dut.runTests(test_list)
-    logger.info("Running Tests on Reference Model.")
-    base.runTests(test_list)
-
+    if cntr_args[1]:
+        logger.info("Running Tests on DUT.")
+        dut.runTests(test_list)
+        logger.info("Tests run on DUT done.")
+        raise SystemExit
+    elif cntr_args[2]:
+        logger.info("Running Tests on Reference Model.")
+        base.runTests(test_list)
+        logger.info("Tests run on Reference done.")
+        raise SystemExit
+    else:
+        logger.info("Running Tests on DUT.")
+        dut.runTests(test_list)
+        logger.info("Running Tests on Reference Model.")
+        base.runTests(test_list)
 
     logger.info("Initiating signature checking.")
     for entry in test_pool:

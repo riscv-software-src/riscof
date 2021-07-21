@@ -140,7 +140,7 @@ and DUT plugins in the config.ini file')
         if not os.path.exists(work_dir):
             logger.debug('Creating new work directory: ' + work_dir)
             os.mkdir(work_dir)
-        else:
+        elif not args.testfile:
             logger.debug('Removing old work directory: ' + work_dir)
             shutil.rmtree(work_dir)
             logger.debug('Creating new work directory: ' + work_dir)
@@ -196,14 +196,17 @@ and DUT plugins in the config.ini file')
         #Run riscv_config on inputs
         isa_file = dut.isa_spec
         platform_file = dut.platform_spec
-
-
-        try:
-            isa_file = checker.check_isa_specs( isa_file, work_dir, True)
-            platform_file = checker.check_platform_specs( platform_file, work_dir, True)
-        except ValidationError as msg:
-            logger.error(msg)
-            return 1
+        
+        if args.testfile:
+            isa_file = work_dir+ '/' + (isa_file.rsplit('/', 1)[1]).rsplit('.')[0] + "_checked.yaml"
+            platform_file = work_dir+ '/' + (platform_file.rsplit('/', 1)[1]).rsplit('.')[0] + "_checked.yaml"
+        else:
+            try:
+                isa_file = checker.check_isa_specs( isa_file, work_dir, True)
+                platform_file = checker.check_platform_specs( platform_file, work_dir, True)
+            except ValidationError as msg:
+                logger.error(msg)
+                return 1
 
         isa_specs = utils.load_yaml(isa_file)['hart0']
         platform_specs = utils.load_yaml(platform_file)
@@ -291,7 +294,9 @@ and DUT plugins in the config.ini file')
 
         with open(platform_file, "r") as platfile:
             pspecs = platfile.read()
-
+        
+        cntr_args = [args.testfile,args.no_ref_run,args.no_dut_run]
+        
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
@@ -312,7 +317,7 @@ and DUT plugins in the config.ini file')
         report_objects['platform_specs'] = pspecs
 
         report_objects['results'] = framework.run(dut, base, isa_file,
-                                                  platform_file, work_dir)
+                                                  platform_file, work_dir, cntr_args)
 
         report_objects['num_passed'] = 0
         report_objects['num_failed'] = 0
