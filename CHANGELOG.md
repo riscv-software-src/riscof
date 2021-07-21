@@ -2,6 +2,26 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.0] - 2021-07-21
+- Changed CI script from gitlab to github actions
+- Removing hosted cgf files
+- Removing hosted riscv-test-suite
+- Removing hosted database.yaml
+- Updated report to capture the version of the riscv-arch-test suite used during run
+- Added new cli - 'arch-test' to automatically clone, update and maintain the riscv-arch-test repo
+- Using annotated tags for CI releases
+- `suite` and `env` are now required cli args
+- updated docs 
+  - added new sections on commands and inputs. 
+  - Revised the installation and riscv-arch-test sections. 
+  - Fixed testlist and dbgen usage and formats
+  - Cleaned up examples. 
+  - Removed testformat spec.
+  - Removed section on adding new tests.
+  - Adding new doc on available PLUGINS for RISCOF.
+  - Fixed links for new repo transition
+
+
 ## [1.20.3] - 2021-06-30
 - Updated docs with guide on running riscv-arch-tests with RISCOF
 
