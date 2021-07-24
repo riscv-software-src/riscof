@@ -276,9 +276,9 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
                 xlen = '128'
             macros.append("XLEN=" + xlen)
             if re.match(r"^[^(Z,z)]+D.*$",isa):
-                macros.append("FXLEN=64")
+                macros.append("FLEN=64")
             elif re.match(r"^[^(Z,z)]+F.*$",isa):
-                macros.append("FXLEN=32")
+                macros.append("FLEN=32")
             test_pool.append(
                 (file, db[file]['commit_id'], macros, db[file]['isa'],cov_labels))
     logger.info("Selecting Tests.")
