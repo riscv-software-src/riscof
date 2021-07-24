@@ -4,9 +4,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [1.21.1] - 2021-07-21
 - Added support for intermediate run start points #1
+- --dbfile is added to generate the test-list and then run tests on the target and reference
 - --testfile is added to directly run tests on the target and reference (assumes the testlist has been correctly generated)
 - --no-ref-run is added so that tests do not run on reference and quit before signature comparison
 - --no-dut-run is added so that tests do not run on DUT and quit before signature comparison 
+- Added a timestamp comment on the generated database.yaml and testlist.yaml files
 
 ## [1.21.0] - 2021-07-21
 - Changed CI script from gitlab to github actions

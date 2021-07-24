@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import difflib
 import ast
+import pytz
 import random
 from datetime import datetime
 
@@ -221,7 +222,7 @@ def eval_macro(macro, spec):
         return (False,[])
 
 
-def generate_test_pool(ispec, pspec, workdir):
+def generate_test_pool(ispec, pspec, workdir, dbfile = None):
     '''
         Funtion to select the tests which are applicable for the DUT and generate the macros
         necessary for each test.
@@ -244,7 +245,11 @@ def generate_test_pool(ispec, pspec, workdir):
     spec = {**ispec, **pspec}
     test_pool = []
     test_list = {}
-    db = utils.load_yaml(constants.framework_db)
+    if dbfile is not None:
+        with open(dbfile,"r") as db_file:
+            db = yaml.load(db_file)
+    else:
+        db = utils.load_yaml(constants.framework_db)
     for file in db:
         macros = []
         cov_labels = []
@@ -285,6 +290,7 @@ def generate_test_pool(ispec, pspec, workdir):
         else:
             work_dir = os.path.join(workdir,entry[0].replace("suite/", ''))
         Path(work_dir).mkdir(parents=True, exist_ok=True)
+        temp['commit_id']=entry[1]
         temp['work_dir']=work_dir
         temp['macros']=entry[2]
         temp['isa']=entry[3]
@@ -299,9 +305,8 @@ def generate_test_pool(ispec, pspec, workdir):
         sys.exit(1)
 
     with open(os.path.join(workdir,"test_list.yaml"),"w") as tfile:
+        tfile.write('# testlist generated on ' + (datetime.now(pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")+'\n')
         yaml.dump(test_list,tfile)
-    with open(os.path.join(workdir,"test_pool.yaml"),"w") as tpfile:
-        yaml.dump(test_pool,tpfile)
 
     return (test_list, test_pool)
 
@@ -318,7 +323,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
 
         :param pspec: The platform specifications of the DUT.
         
-        :param cntr_args: testfile, no_ref_run, no_dut_run
+        :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run
 
         :type ispec: dict
 
@@ -327,20 +332,18 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         :return: A list of dictionary objects containing the necessary information
             required to generate the report.
     '''
-    if cntr_args[0]:
-        with open(os.path.join(work_dir,"test_pool.yaml"),"r") as tpfile:
-            test_pool = yaml.load(tpfile)
-        with open(os.path.join(work_dir,"test_list.yaml"),"r") as tfile:
+    if cntr_args[1] is not None:
+        with open(cntr_args[1],"r") as tfile:
             test_list = yaml.load(tfile)
     else:
-        test_list, test_pool = generate_test_pool(ispec, pspec, work_dir)
+        test_list, test_pool = generate_test_pool(ispec, pspec, work_dir, cntr_args[0])
     results = []
-    if cntr_args[1]:
+    if cntr_args[2]:
         logger.info("Running Tests on DUT.")
         dut.runTests(test_list)
         logger.info("Tests run on DUT done.")
         raise SystemExit
-    elif cntr_args[2]:
+    elif cntr_args[3]:
         logger.info("Running Tests on Reference Model.")
         base.runTests(test_list)
         logger.info("Tests run on Reference done.")
@@ -352,20 +355,21 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         base.runTests(test_list)
 
     logger.info("Initiating signature checking.")
-    for entry in test_pool:
-        work_dir = test_list[entry[0]]['work_dir']
-        res = os.path.join(test_list[entry[0]]['work_dir'],dut.name[:-1]+".signature")
-        ref = os.path.join(test_list[entry[0]]['work_dir'],base.name[:-1]+".signature")
+    for file in test_list:
+        testentry = test_list[file]
+        work_dir = testentry['work_dir']
+        res = os.path.join(testentry['work_dir'],dut.name[:-1]+".signature")
+        ref = os.path.join(testentry['work_dir'],base.name[:-1]+".signature")
         result, diff = compare_signature(res, ref)
         res = {
             'name':
-            entry[0],
+            file,
             'res':
             result,
             'commit_id':
-            entry[1],
+            testentry['commit_id'],
             'log':
-            'commit_id:' + entry[1] + "\nMACROS:\n" + "\n".join(entry[2]) +
+            'commit_id:' + testentry['commit_id'] + "\nMACROS:\n" + "\n".join(testentry['macros']) +
             "" if result == "Passed" else diff,
             'path':
             work_dir,
@@ -374,7 +378,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         }
         results.append(res)
 
-    logger.info('Following ' + str(len(test_pool)) + ' tests have been run :\n')
+    logger.info('Following ' + str(len(test_list)) + ' tests have been run :\n')
     logger.info('{0:<50s} : {1:<40s} : {2}'.format('TEST NAME', 'COMMIT ID',
                                                    'STATUS'))
     for res in results:

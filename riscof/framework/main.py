@@ -166,7 +166,7 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir, cntr_args):
         :param dut_platform_spec: The absolute path to the checked yaml containing
             the DUT platform specification.
             
-        :param cntr_args: testfile, no_ref_run, no_dut_run
+        :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run
 
         :type dut_platform_spec: str
 

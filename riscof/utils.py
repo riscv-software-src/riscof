@@ -598,8 +598,16 @@ argument. [Default = latest]',
                         metavar= 'PATH',
                         default=str(pathlib.Path('./riscof_work').absolute())
                         )
-    run.add_argument('--testfile',action='store_true',
-                     help="Run tests from already generated testlist file")
+    run.add_argument('--dbfile',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom suite directory.',
+                        metavar= 'PATH')
+    run.add_argument('--testfile',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the custom suite directory.',
+                        metavar= 'PATH')
     run.add_argument('--no-ref-run',action='store_true',
                      help="Do not run tests on Reference")
     run.add_argument('--no-dut-run',action='store_true',
