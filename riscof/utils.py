@@ -598,15 +598,16 @@ argument. [Default = latest]',
                         metavar= 'PATH',
                         default=str(pathlib.Path('./riscof_work').absolute())
                         )
-    run.add_argument('--dbfile',
+    run_group = run.add_mutually_exclusive_group()
+    run_group.add_argument('--dbfile',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        help='The Path to the custom suite directory.',
+                        help='The Path to the database file.',
                         metavar= 'PATH')
-    run.add_argument('--testfile',
+    run_group.add_argument('--testfile',
                         type= lambda p: str(pathlib.Path(p).absolute()),
                         action='store',
-                        help='The Path to the custom suite directory.',
+                        help='The Path to the testlist file.',
                         metavar= 'PATH')
     run.add_argument('--no-ref-run',action='store_true',
                      help="Do not run tests on Reference")

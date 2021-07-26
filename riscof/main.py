@@ -312,10 +312,6 @@ and DUT plugins in the config.ini file')
 
         with open(platform_file, "r") as platfile:
             pspecs = platfile.read()
-            
-        if args.dbfile is not None and args.testfile is not None:
-            logger.error("dbfile and testfile are mutually exclusive arguments")
-            raise SystemExit
         
         cntr_args = [args.dbfile,args.testfile,args.no_ref_run,args.no_dut_run]
         

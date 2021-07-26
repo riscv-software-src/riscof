@@ -246,8 +246,7 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
     test_pool = []
     test_list = {}
     if dbfile is not None:
-        with open(dbfile,"r") as db_file:
-            db = yaml.load(db_file)
+        db = utils.load_yaml(dbfile)
     else:
         db = utils.load_yaml(constants.framework_db)
     for file in db:
@@ -333,8 +332,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
             required to generate the report.
     '''
     if cntr_args[1] is not None:
-        with open(cntr_args[1],"r") as tfile:
-            test_list = yaml.load(tfile)
+        test_list = utils.load_yaml(cntr_args[1])
     else:
         test_list, test_pool = generate_test_pool(ispec, pspec, work_dir, cntr_args[0])
     results = []
