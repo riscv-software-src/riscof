@@ -26,8 +26,11 @@ The ``env`` directory in must contain:
 
   - ``model_test.h`` header file which provides the model specific macros as described in the
     `TestFormat Spec
-    <https://github.com/riscv/riscv-arch-test/blob/master/spec/TestFormatSpec.adoc>`_.
+    <https://github.com/riscv/riscv-arch-test/blob/master/spec/TestFormatSpec.adoc>`_. 
   - ``link.ld`` linker script which can be used by the plugin during test-compilation.
+
+  .. note:: If you have already ported your target to the old architectural test framework, the
+     above files can be re-used from that port/target itself.
 
 The ``env`` folder can also contain other necessary plugin specific files for pre/post processing of
 logs, signatures, elfs, etc.
@@ -41,30 +44,6 @@ The python plugin files capture the behavior of model for compiling tests, execu
 and finally extracting the signature for each test. The following sections provide a detailed
 explanation on how to build the python files for your model.
 
-
-Why Python Based Plugins ?
-==========================
-
-- Since the entire RISCOF framework is in python it did not make sense to have the 
-  user-DUT in a separate environment. It would then cause issues in transferring data across 
-  these environments/domains. 
-  
-- While many prefer the conventional *Makefile/autoconf* approach, transferring the *test-list* in YAML 
-  to be used by another Makefile-environment seemed like a bad and an unscalable idea.
-  
-- Expecting initial hesitation, we have tried to ensure that the python plugins can be made extremely 
-  simple (as crude as writing out bash instructions using shellCommand libraries). 
-  
-- Considering there would be a few backlashes in these choices, we have given enough pit-stops in the 
-  flow: ``validation, test-list, coverage, etc`` so one can stop at any point in the flow and move 
-  to their custom domain. 
-
-- Having a python plugin **does not change your test-bench** in anyway. The plugins only act as a common
-  interface between your environment and RISCOF. All you need to do is call the respective sim
-  commands from within the python plugin.
-  
-If you do feel the flow can be further improved or changed please do drop in an issue on the
-official repository.
 
 Start with Templates
 ====================
@@ -106,24 +85,49 @@ The command will also generate a sample ``config.ini`` file with the following c
 The following changes need to be made:
 
 1. Fix the paths in the ``config.ini`` to point to the folder containing the respective riscof_*.py files.
-2. The macros in the ``spike/env/model_test.h`` can be updated based on the model. Definitions of
+2. The macros in the ``spike/env/model_test.h`` can be updated/replaced based on the model. Definitions of
    the macros and their use is available in the :ref:`test_format_spec`.
 3. Update the ``riscof_<target-name>.py`` with respective functions as described in the following 
    paragraphs.
 
 The plugin file in the ``spike`` folder: riscof_spike.py is the one that needs to be
-changed and updated for each model as described in the next section.
+changed and updated for each model as described in the following sections
 
 
 Please note the user is free to add more custom functions in this file which are called within the
 three base functions (as mentioned above).
 
+Why Python Based Plugins ?
+==========================
+
+- Since the entire RISCOF framework is in python it did not make sense to have the 
+  user-DUT in a separate environment. It would then cause issues in transferring data across 
+  these environments/domains. 
+  
+- While many prefer the conventional *Makefile/autoconf* approach, transferring the *test-list* in YAML 
+  to be used by another Makefile-environment seemed like a bad and an unscalable idea.
+  
+- Expecting initial hesitation, we have tried to ensure that the python plugins can be made extremely 
+  simple (as crude as writing out bash instructions using shellCommand libraries). 
+  
+- Considering there would be a few backlashes in these choices, we have given enough pit-stops in the 
+  flow: ``validation, test-list, coverage, etc`` so one can stop at any point in the flow and move 
+  to their custom domain. 
+
+- Having a python plugin **does not change your test-bench** in anyway. The plugins only act as a common
+  interface between your environment and RISCOF. All you need to do is call the respective sim
+  commands from within the python plugin.
+  
+If you do feel the flow can be further improved or changed please do drop in an issue on the
+official repository.
+
+
 .. _plugin_def:
 
-Plugin Function Definitions
-===========================
+Python Plugin file
+==================
 
-As can be seen from the template python file, it creates a Metaclass for the plugins 
+As can be seen from the above generated template python file, it creates a Metaclass for the plugins 
 supported by the :ref:`abstract_class`. This class basically offers the users three basic 
 functions: ``initialize`` , ``build`` and ``runTests``. 
 For each model RISCOF calls these functions in the following order:
@@ -132,27 +136,83 @@ For each model RISCOF calls these functions in the following order:
 
   initialize --> build --> runTests
 
-We now define the various arguments and expected functionality of each of the above
+These functions have been conceptualized keeping in mind what a typical DUT execution may require.
+Instead of having a single complext function, we have split it across 3 functions.
+
+We now define the various arguments and possible functionality of each of the above
 mentioned functions. Please note, this is not a strict guide and the users can choose to perform
-different actions in different functions as opposed to what is outlined in this guide as long as
+different actions in different functions as long as
 they comply with the order of the functions being called and the signatures are generated in their 
-respective directories at the end of the `runTest` function.
+respective directories at the end of the `runTests` function.
 
 __init__ (self, *args, **kwargs)
 --------------------------------
 
+.. hint:: **PYTHON-HINT**: The self variable is used to represent the instance of the class which 
+   is often used in object-oriented programming. It works as a reference to the object. Python 
+   uses the self parameter to refer to instance attributes and methods of the class. In this 
+   guide we use the self parameter to create and access methods declared across the functions 
+   within the same class.
+
+
 This is the constructor function for the pluginTemplate class. The configuration dictionary of the
-plugin, as specified in the ``config.ini``, is passed to the plugin via the kwargs argument.
+dut plugin, as specified in the ``config.ini``, is passed to the plugin via the ``**kwargs`` argument.
+The typical action in this function would be to capture as much information about the DUT from the
+`config.ini` as possible, since the config will not be available as arguments to the remaining
+functions.
 
-In this function you will also need to define the path of the model executable in the `dut_exe`
-variable as shown in line-6 below. Note, this variable can be dierctly set in the ``config.ini`` by
-setting the `PATH` variable under the model plugin's header.
+.. hint:: **PYTHON-HINT**: In Python we use *args and **kwargs as an argument when we are unsure about the number 
+   of arguments to pass in the functions. *args allow us to pass the variable number of non 
+   keyword arguments to a function. The arguments are passed as a tuple and these passed arguments 
+   make tuple inside the function with same name as the parameter excluding asterisk ``*``.
 
-The `num_jobs` variable, in line-7,  is used to indicate the number of parallel jobs that can be
-spawned for simulation.
+   **kwargs allows us to pass the variable length of keyword 
+   arguments to the function. The double asterisk is used to indicate a variable lenght keyword
+   argument. The arguments are passed as a dictionary and these arguments make a dictionary inside 
+   function with name same as the parameter excluding double asterisk ``**``.
 
-Finally, thise constructor will capture the paths to the plugin, the isa yaml and the platform yaml
-for further usage (as seen in lines 13-14).
+   As is seen below, we access the config node as ``kwargs.get('config')``
+
+   Refer to this `blog
+   <https://www.programiz.com/python-programming/args-and-kwargs#:~:text=*args%20passes%20variable%20number%20of,a%20dictionary%20can%20be%20performed.>`_ for more information
+
+As mentioned, in the :ref:`config_syntax` section, the config.ini file can be used to pass some
+common or specific parameters to the python plugin. This makes it easy for users to modify the
+parameters in the config.ini file itself, instead of having to change it in the python file.
+
+At minimum, the DUT node of the ``config.ini`` must contain paths to the ISA and Platform yaml specs.
+If the DUT node is missing or is empty in the ``config.ini`` this function should throw an error and
+exit. This is done in lines 8-10 in the snippet below.
+
+One of the parameters we should capture here would be the path to the simulation executable of
+the DUT. In case of an RTL based DUT, this would be point to the final binary executable of your
+test-bench produced by a simulator (like verilator, vcs, incisive, etc). In case of an ISS or
+Emulator, this variable could point to where the ISS binary is located. This is shown in line-16 in
+the below snippet.
+
+Another variable of interest would be the number of parallel jobs that can be spawned off by RISCOF
+for various actions performed in later functions, specifically to run the tests in parallel on the
+DUT executable. This variable is captured in as the variable ``num_jobs`` in line-21 below. If the
+`config.ini` does not have the ``jobs`` variable specified then we default to the value of 1.
+
+.. note:: It is not necessary for your config.ini to pass any of these parameters. And one could
+   instead hardwire the paths in this function itself. For eg.
+
+   .. code-block:: python
+
+      self.dut_exe = '/scratch/mydut/sim/tb.exe'
+      self.num_jobs = 7
+
+
+Finally, the mandatory parameters that must be present in the ``config.ini`` for the DUT are the
+paths to the riscv-config based ISA and Platform YAML files. These paths are collected in lines
+27-28. Remember these are paths to the unchecked version of the yaml and are only captured here to
+send them across to the RISCOF framework, where RISCOF will validate them with riscv-config , send
+it to the reference model for configuration and also use it filter the tests.
+The verified/checked versions of the YAMLs will be provided to the build function.
+
+The above yaml file paths and other arguments are captured in the class methods and returned back to
+the RISCOF framework in line 30.
 
 .. code-block:: python
     :linenos:
@@ -162,84 +222,233 @@ for further usage (as seen in lines 13-14).
 
         config = kwargs.get('config')
 
-        self.dut_exe = os.path.join(config['PATH'] if 'PATH' in config else "","spike")
-        self.num_jobs = str(config['jobs'] if 'jobs' in config else 1)
+        # If the config node for this DUT is missing or empty. Raise an error. At minimum we need
+        # the paths to the ispec and pspec files
         if config is None:
             print("Please enter input file paths in configuration.")
             raise SystemExit
-        else:
-            self.isa_spec = os.path.abspath(config['ispec'])
-            self.platform_spec = os.path.abspath(config['pspec'])
-            self.pluginpath=os.path.abspath(config['pluginpath'])
 
+        # In case of an RTL based DUT, this would be point to the final binary executable of your
+        # test-bench produced by a simulator (like verilator, vcs, incisive, etc). In case of an iss or
+        # emulator, this variable could point to where the iss binary is located. If 'PATH variable
+        # is missing in the config.ini we can hardcode the alternate here (spike in this case)
+        self.dut_exe = os.path.join(config['PATH'] if 'PATH' in config else "","spike")
+
+        # Number of parallel jobs that can be spawned off by RISCOF
+        # for various actions performed in later functions, specifically to run the tests in 
+        # parallel on the DUT executable. Can also be used in the build function if required.
+        self.num_jobs = str(config['jobs'] if 'jobs' in config else 1)
+
+        # Path to the directory where this python file is located. Collect it from the config.ini
+        self.pluginpath=os.path.abspath(config['pluginpath'])
+
+        # Collect the paths to the  riscv-config absed ISA and platform yaml files. One can choose
+        # to hardcode these here itself instead of picking it from the config.ini file.
+        self.isa_spec = os.path.abspath(config['ispec'])
+        self.platform_spec = os.path.abspath(config['pspec'])
+
+        # Return the parameters set above back to RISCOF for further processing.
         return sclass
 
 .. warning:: if the config is empty or if the isa and platform yamls are not available in the
    specified paths, the above function shall generate an error and exit.
 
+Between lines 28-30 one can still add and capture many more DUT specific parameters which could be
+useful later. For example,
 
-initialize (suite, workdir, env)
---------------------------------
+.. code-block:: python
 
-This function is typically meant to create and initialize all necessary variables such as :
-compilation commands, elf2hex utility command, objdump command, include directories, etc.
-This function provides the following arguments which can be used:
+        # some system may use 'pmake' instead of 'make' for parallel jobs. The following line
+        # captures the make command set in the config.ini and defaults to using make otherwise.
+        self.make = config['make'] if 'make' in config else 'make'
+
+        # setting the build path for any artifacts generated in the build function
+        self.build_path = '/scratch/mybuild/'
+
+Compared to a conventional Makefile flow, this phase would be similar to capturing and setting some
+of the DUT specific parameters in a Makefile.include. Many of those variables can be set here and
+used later in different contexts.
+
+initialize (suite, workdir, archtest_env)
+-----------------------------------------
+
+The primary action here would be to create the templates for the compile and any other pre/post
+processing commands that will be required later here. This function provides the following 
+arguments which can be used in this function:
 
 1. `suite`: This argument holds the absolute path of the directory where the architectural test suite
-   exists.This can be used to replace the name of the file to create directories in proper order.
+   exists.
 2. `workdir`: This argument holds the absolute path of the work directory where all the execution
-   and meta files/states will be dumped as part of running RISCOF.
+   and meta files/states should be dumped as part of running RISCOF.
 3. `archtest_env`: This argument holds the absolute path of the directory where all the
-   architectural test header files are located. This should be used to initialize the include arguments to the
-   compiler/assembler.
+   architectural test header files (``arch_test.h``) are located. This should be used to initialize 
+   the include arguments to the compiler/assembler.
 
-An example of this function is shown below:
+Since we have access to the test environment directory here, it would make sense to build a generic
+template of the command that we will be using to compile the tests. For example consider the
+following python code which sets the compile command to use the riscv-gcc compiler.
+
+.. code-block:: python
+
+   self.compile_cmd = 'riscv{1}-unknown-elf-gcc -march={0} \
+         -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g\
+         -T '+self.pluginpath+'/env/link.ld\
+         -I '+self.pluginpath+'/env/\
+         -I ' + compliance_env + '{2} -o {3} {4}'
+
+.. hint:: **PYTHON-HINT**: Python's new style of string formatting makes it quite regular to use.
+   One can place curly braces within the string to indicate the point at which a replacement needs
+   to be peformed and then use the ``.format(var)`` syntax to assign those values. Curly braces with
+   integers in them indicate the argument number which should be used for replacement.
+
+   For example,
+
+   .. code-block:: python
+
+      'My name is {0} and age is {1}'.format('John','20')
+
+   In python one can also use the ``+`` symbol to concatenate strings as is shown in the above
+   snippet code, where the include directories are appended at the end
+
+
+Some folks might build a `riscv32-` toolchain or a `riscv64-` toolchain depending on
+their DUT. To be agnostic of this choice, in the above snippet we have left the integer following
+`riscv` string to be a variable (defined by ``{1}``. see below hint for python syntax details) 
+which will be fixed in the later functions. Based on the DUT one can even hard-code it here and
+remove the variable dependence. 
+
+Also, the ``march`` string that a test should be compiled with should not be hardwired here as it
+changes from test to test. Hence, we leave it as a variable in the above snippet (defined as
+``{0}``). 
+
+The variable ``{2}`` indicates the assembly file of the test that needs to be compiled. 
+The variables ``{3}`` and ``{4}`` are used to indicate the output elf name and any compile macros
+that need to be assigned respectively. Both of which will be set in the runTests function later.
+Remember here, we are assigning this string template to a method in the `self` instance of the class
+which can be accessed in other functions as well.
+
+
+Similar to the compile command above, one can choose to build template for many other commands that
+may be required to be executed for each test. For example, some common utilities would be:
+
+.. code-block:: python
+
+   # set the objdump template here. Note we continue with the variable toolchain below. Also the
+   # name of the elf is kept a variable to be fixed in the runTests function.
+   self.objdump = 'riscv{0}-unknown-elf-objdump -D {1} > test.disass'
+
+   # set the elf2hex command here. This is mostly used by rtl test-benches which use the readmemb or
+   # readmemh like utilities to load the test. Note again here, we have kept the name of the elf as
+   # variable which will be set in runTests function
+   self.elf2hex = elf2hex 8 33554432 {0} 2147483648 > code.mem
+
+The following snippet shows the entire function for reference based on the above discussion. One can
+add the above utility snippets  after line 20 below.
 
 .. code-block:: python
    :linenos:
 
    def initialise(self, suite, work_dir, archtest_env):
-       if shutil.which(self.dut_exe) is None:
-           logger.error(self.dut_exe+' Not Found')
-           logger.error('Please install Executable for spike to proceed further')
-           sys.exit(0)
+      
+       # capture the working directory. Any artifacts that the DUT creates should be placed in this
+       # directory. Other artifacts from the framework and the Reference plugin will also be placed
+       # here itself.
        self.work_dir = work_dir
+       
+       # capture the architectural test-suite directory. 
+       self.suite_dir = suite
 
-       #TODO: The following assumes you are using the riscv-gcc toolchain. If
-       #      not please change appropriately
+       # Note the march is not hardwired here, because it will change for each
+       # test. Similarly the output elf name and compile macros will be assigned later in the
+       # runTests function
        self.compile_cmd = 'riscv{1}-unknown-elf-gcc -march={0} \
-        -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles\
-        -T '+self.pluginpath+'/env/link.ld\
-        -I '+self.pluginpath+'/env/\
-        -I ' + archtest_env
+         -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g\
+         -T '+self.pluginpath+'/env/link.ld\
+         -I '+self.pluginpath+'/env/\
+         -I ' + compliance_env + '{2} -o {3} {4}'
 
-       # set all the necessary variables like compile command, elf2hex
-       # commands, objdump cmds. etc whichever you feel necessary and required
-       # for your plugin. 
+       # add more utility snippets here
 
-The `dut_exe` variable in line-2 above, is derived and set in the `__init__` function described
-earlier. This function checks if the `dut_exe` is indeed available and throws an error if not. The
-above template is used for the riscv-gnu-toolchain. If you are using an alternate or custom
-toolchain the `compile_cmd`, in line-10 above, will have  to be changed appropriately.
 
-One can also choose to add moer commands like objdump, elf2hex, etc from line 202 onwards which will
-be used further during the build and run phases.
+This phase is much similar to the setting up command variables in a Makefile. These commands are
+generic and parameterized and can be applied to any test.
+
+An example of a more complex compile command is provided below,
+
+.. code-block:: python
+   :linenos:
+
+   self.compile_cmd = 'riscv32-uknown-elf-gcc -march={0} \
+      -static -mcmodel=medany -g -fvisibility=hidden -nostdlib -nostartfiles \
+      -I {1} -I{2} -T{3} -o {4} {5};\
+      riscv32-unknown-elf-objcopy -O binary {4} {4}.bin;\
+      riscv32-unknown-elf-objdump {4} -D > {4}.objdump;\
+      riscv32-unknown-elf-objdump {4} --source > {4}.debug;\
+      riscv32-unknown-elf-readelf -a {4} > {4}.readelf;'
+
+In the above snippet the compile command has 6 variables ( indicated by ``{0}`` to ``{5}``). To
+assign values to these variables in the later stages, one can use the following syntax. Remember the
+order of the arguments in the ``format()`` function below must match the order of variables used
+above. Here the arguments of the format function are strings or variable holding the specified
+information.
+
+.. code-block:: python
+   :linenos:
+
+   self.compile_cmd.format(march_str, testsuite_env, dut_env, dut_link.ld, output_elf, input_asm)
+
+If the integer numbering feels uncomfortable, python also allows name-based substitution which would
+like the following:
+
+.. code-block:: python
+   :linenos:
+
+   self.compile_cmd = 'riscv32-uknown-elf-gcc -march={testmarch} \
+      -static -mcmodel=medany -g -fvisibility=hidden -nostdlib -nostartfiles \
+      -I {testenv} -I{dutenv} -T{dutlink} -o {outputelf} {inputasm};\
+      riscv32-unknown-elf-objcopy -O binary {outputelf} {outputelf}.bin;\
+      riscv32-unknown-elf-objdump {outputelf} -D > {outputelf}.objdump; \
+      riscv32-unknown-elf-objdump {outputelf} --source > {outputelf}.debug; \
+      riscv32-unknown-elf-readelf -a {outputelf} > {outputelf}.readelf;'
+
+   self.compile_cmd.format(testmarch=march_str, testenv=testsuite_env, dutenv=dut_env,
+   dutlink=dut_link.ld, outputelf=output_elf, inputasm=input_asm)
 
 build(isa_yaml, platform_yaml)
 ------------------------------
 
-RISCOF is not limited to validating only a RTL targets, but can also be used to validate
-instruction set simulators (ISS) or modern day core-generators like rocket or chromite. These ISS
-and core generators have the ability to tune themselves to a specific set of configurations as defined in
-the standardized RISCV-CONFIG YAML. Thus, the `build` phase can be used as an intermediate stage to
-build or configure not only these models/targets but also be used to build respective custom tool-chains that may be required.
+This function is primarily meant for building or configuring the DUT (or its runtime arguments) if 
+required. This is particularly useful when working with core-generators. This stage can be used to 
+generate a specific configuration of the DUT leveraging the specs available in the checked 
+ISA and Platform yamls. For example in the case of spike, we can use the ISA yaml to create the
+appropriate value of the ``--isa`` argument used by spike.
 
-The `build` function provides the following arguments:
+Apart, from configuring the DUT this stage can also be used to check if all the commands required by
+the DUT for successful execution are available or not. For example checking if the compiler is
+installed, the dut_exe executable is available, etc.
+
+To enable the above actions the `build` function provides the following arguments to the user:
 
 1. `isa_spec`: This argument holds the path to the validated ISA config YAML. This can be used to extract
    various fields from the YAML (e.g. ISA) and configure the DUT accordingly.
 2. `platform_spec`: This argument holds the path to the validated PLATFORM config YAML and can be used
    similarly as above.
+
+Some of the parameters of interest that can be captured in this stage using the isa yaml are:
+
+- the xlen value: this can be obtained from the max value in the ``supported_xlen`` field of the 
+  yaml. This is particularly useful in setting the compiler integer number we discussed before and
+  also for setting other DUT specific parameters (like the ``--isa`` argument of spike). Shown in
+  line 9 below.
+- the isa string: for simulators like spike, we can parse this to generate the string for the
+  ``--isa`` argument. Shown in lines 13-19 below.
+
+.. hint:: **PYTHON-HINT**: one can access dictionary elements using the square braces ``[]``.
+
+
+.. note:: For pre-compiled/configured RTL targets this phase is typically empty and no actions are 
+   required. Though, one could choose to compile the RTL in this phase if required using simulators
+   like verilator, vcs, etc.
 
 An example of this function for an ISS like spike is show below:
 
@@ -247,70 +456,163 @@ An example of this function for an ISS like spike is show below:
    :linenos:
 
    def build(self, isa_spec, platform_spec):
+
+      # load the isa yaml as a dictionary in python. 
       ispec = utils.load_yaml(isa_yaml)['hart0']
+
+      # capture the XLEN value by picking the max value in 'supported_xlen' field of isa yaml. This
+      # will be useful in setting integer value in the compiler string (if not already hardcoded);
+      # also for setting the '--isa' argument of spike.
       self.xlen = ('64' if 64 in ispec['supported_xlen'] else '32')
+
+      # for spike start building the '--isa' argument. the self.isa is spike specific and may not be
+      # useful for all DUTs
       self.isa = 'rv' + self.xlen
-      #TODO: The following assumes you are using the riscv-gcc toolchain. If
-      #      not please change appropriately
-      self.compile_cmd = self.compile_cmd+' -mabi='+('lp64 ' if 64 in ispec['supported_xlen'] else 'ilp32 ')
       if "I" in ispec["ISA"]:
           self.isa += 'i'
       if "M" in ispec["ISA"]:
           self.isa += 'm'
       if "C" in ispec["ISA"]:
           self.isa += 'c'
-
-      # based on the validated isa and platform configure your simulator or
-      # build your RTL here
-
-.. note:: For RTL targets this phase is typically empty and no actions are required. Though, one
-   could choose to compile the RTL in this phase if required.
+      
+      #TODO: The following assumes you are using the riscv-gcc toolchain. If
+      #      not please change appropriately
+      self.compile_cmd = self.compile_cmd+' -mabi='+('lp64 ' if 64 in ispec['supported_xlen'] else 'ilp32 ')
 
 runTests(testlist)
 ------------------
 
-This function is responsible for executing/running each test on the mode and produce individual
-signature files. A common approach is to create a simple Makefile with each test as a target using
-the commands and initializations done during the build and initialization phase. RISCOF also
-provides a simple `makeUtil` utility function which can be used directly, however, users are free to
-define their own execution environments. After generating the Makefile, the users should also
-call the ``make`` or suitable command to execute the run.
+This function is responsible for compiling and executing each test on the DUT and produce individual
+signature files, which can later be used for comparison. The function provides a single argument
+which is a the ``testList``. This argument is available as a python based dictionary and follows the
+syntax presented in the :ref:`testlist` section.
 
-The function takes a single argument: `testlist` which is a dictionary of tests and respective meta
-informations. The format of the testlist is available here: :ref:`testlist`.
+There are multiple ways of defining this function. We will start with the most simplest version and
+move on to more involved variants.
 
-At the end of execution of this function it is expected that each test has a signature file available 
-in the respective work_dir. The signature file generated should be named : ``self.name[:-1].+"signature"``
+Using Shell Commands
+^^^^^^^^^^^^^^^^^^^^
 
-A sample of this function which uses the ``shellCommand`` utility for compiling, executing and
-renaming the signature file. The function essentially iterates over all the tests in a sequence
-performing the same commands.
+In this variant we will build a simple function which will spawn off individual shell commands to
+compile the test, run the test and collect/post-process the signature of each test. An example of
+this script is provided below.
 
+.. hint:: **PYTHON-HINT**: To display progress on the terminal it is often good to have some print
+   statements in the code. In this plugin we use the logger library from python to achieve this.
+   Syntax for usage is::
+
+     logger.debug('My Progress here')
+
+   The keyword 'debug' above indicates that the above statement will be displayed on the terminal
+   only when the ``--verbose`` cli argument is set to "debug". Similarly one can create warning and
+   error statements (which will be printed in different colors and enabled via the cli)::
+
+     logger.warning('This is enabled when verbose is debug or warning')
+     logger.error('This is enabled when verbose is debug, warning or error')
 
 .. code-block:: python
   :linenos:
 
   def runTests(self, testList):
-      for file in testList:
-          testentry = testList[file]
+      
+      # we will iterate over each entry in the testList. Each entry node will be refered to by the
+      # variable testname.
+      for testname in testList:
+        
+          # for each testname we get all its fields (as described by the testList format)
+          testentry = testList[testname]
+
+          # we capture the path to the assembly file of this test
           test = testentry['test_path']
+
+          # capture the directory where the artifacts of this test will be dumped/created.
           test_dir = testentry['work_dir']
 
+          # name of the elf file after compilation of the test
           elf = 'my.elf'
-          sig_file = os.path.join(test_dir, self.name[:-1] + ".signature")
 
-          cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen) + ' ' + test + ' -o ' + elf
-          compile_cmd = cmd + ' -D' + " -D".join(testentry['macros'])
+          # name of the signature file as per requirement of RISCOF
+          sig_file = os.path.join(test_dir, self.name[:-1] + ".signature")
+          
+          # for each test there are specific compile macros that need to be enabled. The macros in
+          # the testList node only contain the macros/values. For the gcc toolchain we need to
+          # prefix with "-D". The following does precisely that.
+          compile_macros= ' -D' + " -D".join(testentry['macros'])
+
+          # collect the march string required for the compiler
+          marchstr = testentry['isa'].lower()
+
+          # substitute all variables in the compile command that we created in the initialize
+          # function
+          cmd = self.compile_cmd.format(marchstr, self.xlen, test, elf, compile_macros)
+
+          # just a simple logger statement that shows up on the terminal
           logger.debug('Compiling test: ' + test)
+
+          # the following command spawns a process to run the compile command. Note here, we are
+          # changing the directory for this command to that pointed by test_dir. If you would like
+          # the artifacts to be dumped else where change the test_dir variable to the path of your
+          # choice.
           utils.shellCommand(compile_cmd).run(cwd=test_dir)
 
-          execute = spike_path + 'spike --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
+          # for debug purposes if you would like stop the DUT plugin after compilation, you can 
+          # comment out the lines below and raise a SystemExit 
+
+          # build the command for running the elf on the DUT. In this case we use spike and indicate
+          # the isa arg that we parsed in the build stage, elf filename and signature filename.
+          execute = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
           logger.debug('Executing on Spike ' + execute)
+
+          # launch the execute command. Change the test_dir if required.
           utils.shellCommand(execute).run(cwd=test_dir)
 
-An example which uses the ``makeUtil`` utility is show below. Here a Makefile is first generated
-where every test is a make target. the utility automatically creates the relevant targets and only
-requires the user to define what should occur under each target.
+          # post-processing steps can be added here in the template below
+          #postprocess = 'mv {0} temp.sig'.format(sig_file)'
+          #utils.shellCommand(postprocess).run(cwd=test_dir)
+
+      # if you would like to exit the framework once the runTests function completes uncomment the
+      # following line. Note this will prevent any signature checking or report generation.
+      #raise SystemExit
+
+As mentioned earlier, the `-march` string is test-specific and needs to be collected from the
+testList fields. Line-28 above, shows that ``testentry['isa']`` provides this information. 
+
+.. hint:: **PYTHON-HINT**: the lower() function in line-28 above is used to reduce all the
+   characters of a string to lowercase
+
+Note, that as the toolchain and tests evolves, one might need to manipulate this string 
+before assigning it to the march argument of the compiler. 
+
+At times, for debug purposes or initial bring up purposes one might want to just compile the tests
+and not run them on the DUT. In order to achieve this, one could comment out lines 48-52 above and
+also uncomment line-60. This change will lead to compilation of the all the tests and then exit from
+the framework.
+
+.. hint:: **PYTHON-HINT**: Note in python we use ``#`` for comments. Also note, that python uses
+   indentation to indicate a block of code (hence the indentation of lines 7 through 56). Thus,
+   while uncommenting line-60 above, make sure its indentation matches that of the for loop in line
+   5. 
+
+Makefile Flow (Recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While the previous solution is small and precise, it offers very less debug artifacts. In this
+variant we will be generating a single Makefile which can be used outside RISCOF as well to run a
+particular or a collection of tests.
+
+The Makefile generated here will have as many targets as there are tests, and each make-target will
+correspond to having commands which will compile the test, run on the dut and collect the signature.
+To provide ease in creating such a Makefile, RISCOF provides a makeUtility which can be used in this
+function.
+
+.. tip:: if one is more well-versed with python, you can choose to create the Makefile differently
+   with more custom targets. However, note that the make utility provided from RISCOF might not 
+   work for custom Makefiles.
+
+An example of the runTests function which uses the ``makeUtil`` utility is shown below. 
+Here a Makefile is first generated where every test is a make target. The utility 
+automatically creates the relevant targets and only requires the user to define what should 
+occur under each target.
 
 The user can choose to use a different make command by setting
 the ``make.makeCommand``. More details of this utility are available at: :ref:`utils`
@@ -319,32 +621,71 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
   :linenos:
 
   def runTests(self, testList):
+      
+      # create an instance the makeUtil class that we will use to create targets.
       make = utils.makeUtil(makefilePath=os.path.join(self.work_dir, "Makefile." + self.name[:-1]))
+
+      # set the make command that will be used. The num_jobs parameter was set in the __init__
+      # function earlier
       make.makeCommand = 'make -j' + self.num_jobs
-      for file in testList:
-          testentry = testList[file]
+
+      # we will iterate over each entry in the testList. Each entry node will be refered to by the
+      # variable testname.
+      for testname in testList:
+        
+          # for each testname we get all its fields (as described by the testList format)
+          testentry = testList[testname]
+
+          # we capture the path to the assembly file of this test
           test = testentry['test_path']
+
+          # capture the directory where the artifacts of this test will be dumped/created.
           test_dir = testentry['work_dir']
 
-          elf = 'dut.elf'
-          
-          execute = "@cd "+testentry['work_dir']+";"
+          # name of the elf file after compilation of the test
+          elf = 'my.elf'
 
-          cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen) + ' ' + test + ' -o ' + elf
-
-          #TODO: we are using -D to enable compile time macros. If your
-          #      toolchain is not riscv-gcc you may want to change the below code
-          compile_cmd = cmd + ' -D' + " -D".join(testentry['macros'])
-          execute+=compile_cmd+";"
-
+          # name of the signature file as per requirement of RISCOF
           sig_file = os.path.join(test_dir, self.name[:-1] + ".signature")
+          
+          # for each test there are specific compile macros that need to be enabled. The macros in
+          # the testList node only contain the macros/values. For the gcc toolchain we need to
+          # prefix with "-D". The following does precisely that.
+          compile_macros= ' -D' + " -D".join(testentry['macros'])
+          
+          # substitute all variables in the compile command that we created in the initialize
+          # function
+          cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen, test, elf, compile_macros)
 
-          #TODO: You will need to add any other arguments to your DUT
-          #      executable if any in the quotes below
-          execute += self.dut_exe + ' --log-commits --log dump --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
+          # set up the simulation command 
+          simcmd = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
 
+          # concatenate all commands that need to be executed within a make-target.
+          execute = '@cd {0}; {1}; {2};'.format(testentry['work_dir'], cmd, simcmd)
+
+          # create a target. The makeutil will create a target with the name "TARGET<num>" where num
+          # starts from 0 and increments automatically for each new target that is added
           make.add_target(execute)
+      
+      # if you would like to exit the framework once the makefile generation is complete uncomment the
+      # following line. Note this will prevent any signature checking or report generation.
+      #raise SystemExit
+
+      # once the make-targets are done and the makefile has been created, run all the targets in
+      # parallel using the make command set above.
       make.execute_all(self.work_dir)
+  
+      # uncommenting the below line will cause the framework to exit once all the makefile targets have
+      # been run
+      #raise SystemExit
+
+Similar to the previous variant, if the user would like to skip some commands, say the simulation
+steps, they can do so by replacing the command variables with an empty string ``''`` as shown
+below::
+
+  simcmd = ''
+
+
 
 .. include:: ../../PLUGINS.rst
 
