@@ -137,7 +137,7 @@ For each model RISCOF calls these functions in the following order:
   initialize --> build --> runTests
 
 These functions have been conceptualized keeping in mind what a typical DUT execution may require.
-Instead of having a single complext function, we have split it across 3 functions.
+Instead of having a single complex function, we have split it across 3 functions.
 
 We now define the various arguments and possible functionality of each of the above
 mentioned functions. Please note, this is not a strict guide and the users can choose to perform
@@ -167,7 +167,7 @@ functions.
    make tuple inside the function with same name as the parameter excluding asterisk ``*``.
 
    **kwargs allows us to pass the variable length of keyword 
-   arguments to the function. The double asterisk is used to indicate a variable lenght keyword
+   arguments to the function. The double asterisk is used to indicate a variable length keyword
    argument. The arguments are passed as a dictionary and these arguments make a dictionary inside 
    function with name same as the parameter excluding double asterisk ``**``.
 
@@ -484,7 +484,7 @@ runTests(testlist)
 
 This function is responsible for compiling and executing each test on the DUT and produce individual
 signature files, which can later be used for comparison. The function provides a single argument
-which is a the ``testList``. This argument is available as a python based dictionary and follows the
+which is the ``testList``. This argument is available as a python based dictionary and follows the
 syntax presented in the :ref:`testlist` section.
 
 There are multiple ways of defining this function. We will start with the most simplest version and
@@ -515,7 +515,7 @@ this script is provided below.
 
   def runTests(self, testList):
       
-      # we will iterate over each entry in the testList. Each entry node will be refered to by the
+      # we will iterate over each entry in the testList. Each entry node will be referred to by the
       # variable testname.
       for testname in testList:
         
