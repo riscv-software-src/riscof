@@ -141,7 +141,7 @@ and DUT plugins in the config.ini file')
             logger.debug('Creating new work directory: ' + work_dir)
             os.mkdir(work_dir)
         elif args.command=='run':
-            if args.testfile is None:
+            if args.dbfile is None and args.testfile is None:
                 logger.debug('Removing old work directory: ' + work_dir)
                 shutil.rmtree(work_dir)
                 logger.debug('Creating new work directory: ' + work_dir)
@@ -203,7 +203,7 @@ and DUT plugins in the config.ini file')
         isa_file = dut.isa_spec
         platform_file = dut.platform_spec
         
-        if args.command=='run' and args.testfile is not None:
+        if args.command=='run' and (args.testfile is not None or args.dbfile is not None):
             isa_file = work_dir+ '/' + (isa_file.rsplit('/', 1)[1]).rsplit('.')[0] + "_checked.yaml"
             platform_file = work_dir+ '/' + (platform_file.rsplit('/', 1)[1]).rsplit('.')[0] + "_checked.yaml"
         else:
@@ -241,6 +241,13 @@ and DUT plugins in the config.ini file')
             logger.info('Database File Generated: '+constants.framework_db)
             constants.env = args.env
             logger.info('Env path set to'+constants.env)
+        elif args.dbfile is None:
+            constants.suite = args.suite
+            constants.framework_db = os.path.join(work_dir,"database.yaml")
+            constants.env = args.env
+        else:
+            constants.suite = args.suite
+            constants.env = args.env
 
     if args.command == 'testlist':
         test_routines.generate_test_pool(isa_specs, platform_specs, work_dir)
