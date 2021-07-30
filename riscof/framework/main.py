@@ -184,11 +184,18 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir, cntr_args):
     #Loading Specs
     ispec = utils.load_yaml(dut_isa_spec)
     pspec = utils.load_yaml(dut_platform_spec)
-
-    logger.info("Running Build for DUT")
-    dut.build(dut_isa_spec, dut_platform_spec)
-    logger.info("Running Build for Reference")
-    base.build(dut_isa_spec, dut_platform_spec)
+    
+    if cntr_args[2]:
+        logger.info("Running Build for DUT")
+        dut.build(dut_isa_spec, dut_platform_spec)
+    elif cntr_args[3]:
+        logger.info("Running Build for Reference")
+        base.build(dut_isa_spec, dut_platform_spec)
+    else:
+        logger.info("Running Build for DUT")
+        dut.build(dut_isa_spec, dut_platform_spec)
+        logger.info("Running Build for Reference")
+        base.build(dut_isa_spec, dut_platform_spec)
 
     results = test.run_tests(dut, base, ispec['hart0'], pspec, work_dir, cntr_args)
 
