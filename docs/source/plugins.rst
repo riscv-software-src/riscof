@@ -198,15 +198,6 @@ for various actions performed in later functions, specifically to run the tests 
 DUT executable. This variable is captured in as the variable ``num_jobs`` in line-21 below. If the
 `config.ini` does not have the ``jobs`` variable specified then we default to the value of 1.
 
-.. note:: It is not necessary for your config.ini to pass any of these parameters. And one could
-   instead hardwire the paths in this function itself. For eg.
-
-   .. code-block:: python
-
-      self.dut_exe = '/scratch/mydut/sim/tb.exe'
-      self.num_jobs = 7
-
-
 Finally, the mandatory parameters that must be present in the ``config.ini`` for the DUT are the
 paths to the riscv-config based ISA and Platform YAML files. These paths are collected in lines
 27-28. Remember these are paths to the unchecked version of the yaml and are only captured here to
@@ -256,6 +247,14 @@ the RISCOF framework in line 30.
 .. warning:: if the config is empty or if the isa and platform yamls are not available in the
    specified paths, the above function shall generate an error and exit.
 
+.. note:: It is not necessary for your config.ini to pass any of these parameters. And one could
+   instead hardwire the paths in this function itself. For eg.
+
+   .. code-block:: python
+
+      self.dut_exe = '/scratch/mydut/sim/tb.exe'
+      self.num_jobs = 7
+
 Between lines 28-30 one can still add and capture many more DUT specific parameters which could be
 useful later. For example,
 
@@ -272,8 +271,8 @@ Compared to a conventional Makefile flow, this phase would be similar to capturi
 of the DUT specific parameters in a Makefile.include. Many of those variables can be set here and
 used later in different contexts.
 
-initialize (suite, workdir, archtest_env)
------------------------------------------
+initialize (self, suite, workdir, archtest_env)
+-----------------------------------------------
 
 The primary action here would be to create the templates for the compile and any other pre/post
 processing commands that will be required later here. This function provides the following 
@@ -297,7 +296,7 @@ following python code which sets the compile command to use the riscv-gcc compil
          -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g\
          -T '+self.pluginpath+'/env/link.ld\
          -I '+self.pluginpath+'/env/\
-         -I ' + compliance_env + '{2} -o {3} {4}'
+         -I ' + archtest_env + '{2} -o {3} {4}'
 
 .. hint:: **PYTHON-HINT**: Python's new style of string formatting makes it quite regular to use.
    One can place curly braces within the string to indicate the point at which a replacement needs
@@ -368,7 +367,7 @@ add the above utility snippets  after line 20 below.
          -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g\
          -T '+self.pluginpath+'/env/link.ld\
          -I '+self.pluginpath+'/env/\
-         -I ' + compliance_env + '{2} -o {3} {4}'
+         -I ' + archtest_env + ' {2} -o {3} {4}'
 
        # add more utility snippets here
 
@@ -417,8 +416,8 @@ like the following:
    self.compile_cmd.format(testmarch=march_str, testenv=testsuite_env, dutenv=dut_env,
    dutlink=dut_link.ld, outputelf=output_elf, inputasm=input_asm)
 
-build(isa_yaml, platform_yaml)
-------------------------------
+build(self, isa_yaml, platform_yaml)
+------------------------------------
 
 This function is primarily meant for building or configuring the DUT (or its runtime arguments) if 
 required. This is particularly useful when working with core-generators. This stage can be used to 
@@ -432,9 +431,9 @@ installed, the dut_exe executable is available, etc.
 
 To enable the above actions the `build` function provides the following arguments to the user:
 
-1. `isa_spec`: This argument holds the path to the validated ISA config YAML. This can be used to extract
+1. `isa_yaml`: This argument holds the path to the validated ISA config YAML. This can be used to extract
    various fields from the YAML (e.g. ISA) and configure the DUT accordingly.
-2. `platform_spec`: This argument holds the path to the validated PLATFORM config YAML and can be used
+2. `platform_yaml`: This argument holds the path to the validated PLATFORM config YAML and can be used
    similarly as above.
 
 Some of the parameters of interest that can be captured in this stage using the isa yaml are:
@@ -458,7 +457,7 @@ An example of this function for an ISS like spike is show below:
 .. code-block:: python
    :linenos:
 
-   def build(self, isa_spec, platform_spec):
+   def build(self, isa_yaml, platform_yaml):
 
       # load the isa yaml as a dictionary in python. 
       ispec = utils.load_yaml(isa_yaml)['hart0']
@@ -482,8 +481,8 @@ An example of this function for an ISS like spike is show below:
       #      not please change appropriately
       self.compile_cmd = self.compile_cmd+' -mabi='+('lp64 ' if 64 in ispec['supported_xlen'] else 'ilp32 ')
 
-runTests(testlist)
-------------------
+runTests(self, testlist)
+------------------------
 
 This function is responsible for compiling and executing each test on the DUT and produce individual
 signature files, which can later be used for comparison. The function provides a single argument
@@ -568,7 +567,7 @@ this script is provided below.
           # changing the directory for this command to that pointed by test_dir. If you would like
           # the artifacts to be dumped else where change the test_dir variable to the path of your
           # choice.
-          utils.shellCommand(compile_cmd).run(cwd=test_dir)
+          utils.shellCommand(cmd).run(cwd=test_dir)
 
           # for debug purposes if you would like stop the DUT plugin after compilation, you can 
           # comment out the lines below and raise a SystemExit 
