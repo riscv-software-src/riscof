@@ -75,6 +75,8 @@ class dutname(pluginTemplate):
         # build your RTL here
 
     def runTests(self, testList, cgf_file=None):
+        if os.path.exists(self.work_dir+ "/Makefile." + self.name[:-1]):
+            os.remove(self.work_dir+ "/Makefile." + self.name[:-1])
         make = utils.makeUtil(makefilePath=os.path.join(self.work_dir, "Makefile." + self.name[:-1]))
         make.makeCommand = 'make -j' + self.num_jobs
         for file in testList:

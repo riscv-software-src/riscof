@@ -160,6 +160,10 @@ Optional arguments from the cli:
   ``./riscof_work``
 - no-browser: when used, RISCOF skips automatically opening the html report in the default web
   browser.
+- dbfile: The path to the database file, from which testlist will be generated 
+- testfile: The path to the testlist file on which tests will be run
+- no-ref-run: when used, RISCOF will not run tests on Reference and will quit before signatures comparison
+- no-dut-run: when used, RISCOF will not run tests on DUT and will quit before signatures comparison 
 
 All artifacts of this command are generated in the ``work_dir`` directory. Typicall artifacts will
 include:

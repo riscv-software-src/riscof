@@ -598,6 +598,21 @@ argument. [Default = latest]',
                         metavar= 'PATH',
                         default=str(pathlib.Path('./riscof_work').absolute())
                         )
+    run_group = run.add_mutually_exclusive_group()
+    run_group.add_argument('--dbfile',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the database file.',
+                        metavar= 'PATH')
+    run_group.add_argument('--testfile',
+                        type= lambda p: str(pathlib.Path(p).absolute()),
+                        action='store',
+                        help='The Path to the testlist file.',
+                        metavar= 'PATH')
+    run.add_argument('--no-ref-run',action='store_true',
+                     help="Do not run tests on Reference")
+    run.add_argument('--no-dut-run',action='store_true',
+                     help="Do not run tests on DUT")
     testlist = subparsers.add_parser('testlist',
                         help='Generate the test list for the given DUT and suite.',formatter_class=SortingHelpFormatter)
     testlist.add_argument('--work-dir',
