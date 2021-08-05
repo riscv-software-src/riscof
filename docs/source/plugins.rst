@@ -58,6 +58,7 @@ using the following command::
 This above command should generate a spike folder with the following contents:
 
 .. code-block:: bash
+  :linenos:
 
   env                          # contains sample header file and linker file   
   riscof_spike.py              # sample spike plugin for RISCOF
@@ -67,6 +68,7 @@ This above command should generate a spike folder with the following contents:
 The command will also generate a sample ``config.ini`` file with the following contents:
 
 .. code-block:: bash
+  :linenos:
 
   [RISCOF]
   ReferencePlugin=cSail                                                                               
@@ -78,6 +80,7 @@ The command will also generate a sample ``config.ini`` file with the following c
   pluginpath=/scratch/git-repo/incoresemi/riscof/spike
   ispec=/scratch/git-repo/incoresemi/riscof/spike/spike_isa.yaml                                 
   pspec=/scratch/git-repo/incoresemi/riscof/spike/spike_platform.yaml
+  target_run=1
   
   [sail_cSim]
   pluginpath=/scratch/git-repo/incoresemi/riscof/sail_cSim
@@ -198,15 +201,22 @@ for various actions performed in later functions, specifically to run the tests 
 DUT executable. This variable is captured in as the variable ``num_jobs`` in line-21 below. If the
 `config.ini` does not have the ``jobs`` variable specified then we default to the value of 1.
 
+The ``target_run`` parameter is used to control if the user would like to stop
+after compilation of the tests or continue running the tests on the target and
+go on to signature comparison. When set to '0' the plugin must only compile the
+tests and exit (using ``raise SystemExit`` in python). When set to ``1`` the
+plugin will compile and run the tests on the target. This parameter is captured
+in lines 34-37. 
+
 Finally, the mandatory parameters that must be present in the ``config.ini`` for the DUT are the
 paths to the riscv-config based ISA and Platform YAML files. These paths are collected in lines
-27-28. Remember these are paths to the unchecked version of the yaml and are only captured here to
+28-29. Remember these are paths to the unchecked version of the yaml and are only captured here to
 send them across to the RISCOF framework, where RISCOF will validate them with riscv-config , send
 it to the reference model for configuration and also use it filter the tests.
 The verified/checked versions of the YAMLs will be provided to the build function.
 
 The above yaml file paths and other arguments are captured in the class methods and returned back to
-the RISCOF framework in line 30.
+the RISCOF framework in line 40.
 
 .. code-block:: python
     :linenos:
@@ -241,6 +251,14 @@ the RISCOF framework in line 30.
         self.isa_spec = os.path.abspath(config['ispec'])
         self.platform_spec = os.path.abspath(config['pspec'])
 
+        #We capture if the user would like the run the tests on the target or
+        #not. If you are interested in just compiling the tests and not running
+        #them on the target, then following variable should be set to False
+        if 'target_run' in config and config['target_run']=='0':
+            self.target_run = False
+        else:
+            self.target_run = True
+
         # Return the parameters set above back to RISCOF for further processing.
         return sclass
 
@@ -255,7 +273,7 @@ the RISCOF framework in line 30.
       self.dut_exe = '/scratch/mydut/sim/tb.exe'
       self.num_jobs = 7
 
-Between lines 28-30 one can still add and capture many more DUT specific parameters which could be
+Between lines 38-40 one can still add and capture many more DUT specific parameters which could be
 useful later. For example,
 
 .. code-block:: python
@@ -569,24 +587,26 @@ this script is provided below.
           # choice.
           utils.shellCommand(cmd).run(cwd=test_dir)
 
-          # for debug purposes if you would like stop the DUT plugin after compilation, you can 
-          # comment out the lines below and raise a SystemExit 
+	        # if the user wants to disable running the tests and only compile the tests, then
+	        # the if condition is skipped
+          if self.target_run:
+            # build the command for running the elf on the DUT. In this case we use spike and indicate
+            # the isa arg that we parsed in the build stage, elf filename and signature filename.
+            # Template is for spike. Please change for your DUT
+            execute = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
+            logger.debug('Executing on Spike ' + execute)
 
-          # build the command for running the elf on the DUT. In this case we use spike and indicate
-          # the isa arg that we parsed in the build stage, elf filename and signature filename.
-          execute = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
-          logger.debug('Executing on Spike ' + execute)
-
-          # launch the execute command. Change the test_dir if required.
-          utils.shellCommand(execute).run(cwd=test_dir)
+            # launch the execute command. Change the test_dir if required.
+            utils.shellCommand(execute).run(cwd=test_dir)
 
           # post-processing steps can be added here in the template below
           #postprocess = 'mv {0} temp.sig'.format(sig_file)'
           #utils.shellCommand(postprocess).run(cwd=test_dir)
 
-      # if you would like to exit the framework once the runTests function completes uncomment the
-      # following line. Note this will prevent any signature checking or report generation.
-      #raise SystemExit
+      # if target runs are not required then we simply exit as this point after running all 
+      # the makefile targets. 
+      if not self.target_run:
+        raise SystemExit
 
 As mentioned earlier, the `-march` string is test-specific and needs to be collected from the
 testList fields. Line-30 above, shows that ``testentry['isa']`` provides this information. 
@@ -598,14 +618,13 @@ Note, that as the toolchain and tests evolves, one might need to manipulate this
 before assigning it to the march argument of the compiler. 
 
 At times, for debug purposes or initial bring up purposes one might want to just compile the tests
-and not run them on the DUT. In order to achieve this, one could comment out lines 50-54 above and
-also uncomment line-62. This change will lead to compilation of the all the tests and then exit from
-the framework.
+and not run them on the DUT. In order to achieve this, one can set the
+``target_run`` parameter in the ``config.ini`` file to 0. This will cause lines
+47-55 to be skipped and thereby skip from running tests on the target.
+
 
 .. hint:: **PYTHON-HINT**: Note in python we use ``#`` for comments. Also note, that python uses
-   indentation to indicate a block of code (hence the indentation of lines 7 through 58). Thus,
-   while uncommenting line-62 above, make sure its indentation matches that of the for loop in line
-   5. 
+   indentation to indicate a block of code (hence the indentation of lines 7 through 58). 
 
 Makefile Flow (Recommended)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -674,8 +693,14 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
           # function
           cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen, test, elf, compile_macros)
 
-          # set up the simulation command 
-          simcmd = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
+	        # if the user wants to disable running the tests and only compile the tests, then
+	        # the "else" clause is executed below assigning the sim command to simple no action
+	        # echo statement. 
+          if self.target_run:
+            # set up the simulation command. Template is for spike. Please change.
+            simcmd = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
+          else:
+            simcmd = 'echo "NO RUN"'
 
           # concatenate all commands that need to be executed within a make-target.
           execute = '@cd {0}; {1}; {2};'.format(testentry['work_dir'], cmd, simcmd)
@@ -692,16 +717,10 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
       # parallel using the make command set above.
       make.execute_all(self.work_dir)
   
-      # uncommenting the below line will cause the framework to exit once all the makefile targets have
-      # been run
-      #raise SystemExit
-
-Similar to the previous variant, if the user would like to skip some commands, say the simulation
-steps, they can do so by replacing the command variables with an empty string ``''`` as shown
-below::
-
-  simcmd = ''
-
+      # if target runs are not required then we simply exit as this point after running all 
+      # the makefile targets. 
+      if not self.target_run:
+          raise SystemExit
 
 
 .. include:: ../../PLUGINS.rst

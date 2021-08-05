@@ -51,6 +51,14 @@ class dutname(pluginTemplate):
         self.isa_spec = os.path.abspath(config['ispec'])
         self.platform_spec = os.path.abspath(config['pspec'])
 
+        #We capture if the user would like the run the tests on the target or
+        #not. If you are interested in just compiling the tests and not running
+        #them on the target, then following variable should be set to False
+        if 'target_run' in config and config['target_run']=='0':
+            self.target_run = False
+        else:
+            self.target_run = True
+
         # Return the parameters set above back to RISCOF for further processing.
         return sclass
 
@@ -138,8 +146,14 @@ class dutname(pluginTemplate):
           # function
           cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen, test, elf, compile_macros)
 
-          # set up the simulation command. Template is for spike. Please change.
-          simcmd = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
+	  # if the user wants to disable running the tests and only compile the tests, then
+	  # the "else" clause is executed below assigning the sim command to simple no action
+	  # echo statement. 
+          if self.target_run:
+            # set up the simulation command. Template is for spike. Please change.
+            simcmd = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
+          else:
+            simcmd = 'echo "NO RUN"'
 
           # concatenate all commands that need to be executed within a make-target.
           execute = '@cd {0}; {1}; {2};'.format(testentry['work_dir'], cmd, simcmd)
@@ -156,9 +170,10 @@ class dutname(pluginTemplate):
       # parallel using the make command set above.
       make.execute_all(self.work_dir)
   
-      # uncommenting the below line will cause the framework to exit once all the makefile targets have
-      # been run
-      #raise SystemExit
+      # if target runs are not required then we simply exit as this point after running all 
+      # the makefile targets. 
+      if not self.target_run:
+          raise SystemExit
 
 #The following is an alternate template that can be used instead of the above.
 #The following template only uses shell commands to compile and run the tests.
@@ -211,11 +226,12 @@ class dutname(pluginTemplate):
 #          # for debug purposes if you would like stop the DUT plugin after compilation, you can 
 #          # comment out the lines below and raise a SystemExit 
 #
-#          # build the command for running the elf on the DUT. In this case we use spike and indicate
-#          # the isa arg that we parsed in the build stage, elf filename and signature filename.
-#          # Template is for spike. Please change for your DUT
-#          execute = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
-#          logger.debug('Executing on Spike ' + execute)
+#          if self.target_run:
+#            # build the command for running the elf on the DUT. In this case we use spike and indicate
+#            # the isa arg that we parsed in the build stage, elf filename and signature filename.
+#            # Template is for spike. Please change for your DUT
+#            execute = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
+#            logger.debug('Executing on Spike ' + execute)
 #
 #          # launch the execute command. Change the test_dir if required.
 #          utils.shellCommand(execute).run(cwd=test_dir)
@@ -224,6 +240,7 @@ class dutname(pluginTemplate):
 #          #postprocess = 'mv {0} temp.sig'.format(sig_file)'
 #          #utils.shellCommand(postprocess).run(cwd=test_dir)
 #
-#      # if you would like to exit the framework once the runTests function completes uncomment the
-#      # following line. Note this will prevent any signature checking or report generation.
-#      #raise SystemExit
+#      # if target runs are not required then we simply exit as this point after running all 
+#      # the makefile targets. 
+#      if not self.target_run:
+#          raise SystemExit
