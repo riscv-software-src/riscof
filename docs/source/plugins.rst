@@ -738,6 +738,11 @@ Tips
    overview on the same.
 3. It is advisable to use the ``logger`` provided by ``riscof.utils`` for logging/printing
    information to the console.
+4. Ensure to add space between multiple arguments in a command to avoid execution errors.
+   .. code-block:: python
+        ## Avoid this. The generated command is wrong and will cause an execution error due to a
+        ## missing space before -T
+        execute += 'riscv64-unknown-elf-gcc'+'-T bin/link.ld'
 
 
 Other Utilities available
