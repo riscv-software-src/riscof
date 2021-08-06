@@ -44,6 +44,8 @@ The python plugin files capture the behavior of model for compiling tests, execu
 and finally extracting the signature for each test. The following sections provide a detailed
 explanation on how to build the python files for your model.
 
+.. hint:: All paths provided by riscof are absolute and it is advised to always use absolute paths while executing/generating commands to avoid errors. 
+
 
 Start with Templates
 ====================
@@ -420,6 +422,7 @@ information.
 If the integer numbering feels uncomfortable, python also allows name-based substitution which would
 like the following:
 
+<<<<<<< Updated upstream
 .. code-block:: python
    :linenos:
 
@@ -449,9 +452,9 @@ installed, the dut_exe executable is available, etc.
 
 To enable the above actions the `build` function provides the following arguments to the user:
 
-1. `isa_yaml`: This argument holds the path to the validated ISA config YAML. This can be used to extract
+1. `isa_spec`: This argument holds the absolute path to the validated ISA config YAML. This can be used to extract
    various fields from the YAML (e.g. ISA) and configure the DUT accordingly.
-2. `platform_yaml`: This argument holds the path to the validated PLATFORM config YAML and can be used
+2. `platform_spec`: This argument holds the absolute path to the validated PLATFORM config YAML and can be used
    similarly as above.
 
 Some of the parameters of interest that can be captured in this stage using the isa yaml are:
@@ -724,6 +727,17 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
 
 
 .. include:: ../../PLUGINS.rst
+
+
+Tips
+====
+
+1. Avoid writing out multiple ``;`` simultaneously in the Makefiles.
+2. Use the template substitution provided by the ``string`` class in python instead of string
+   operations to ease command generation and avoid formatting errors. `This <https://askpython.com/python/string/python-template-strings>`_ article provides a good
+   overview on the same.
+3. It is advisable to use the ``logger`` provided by ``riscof.utils`` for logging/printing
+   information to the console.
 
 
 Other Utilities available
