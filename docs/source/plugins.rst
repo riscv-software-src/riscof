@@ -422,7 +422,6 @@ information.
 If the integer numbering feels uncomfortable, python also allows name-based substitution which would
 like the following:
 
-<<<<<<< Updated upstream
 .. code-block:: python
    :linenos:
 
@@ -728,6 +727,389 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
 
 .. include:: ../../PLUGINS.rst
 
+Using the Target files from existing framework with riscof
+==========================================================
+To ease transition from the old framework, the ``makeplugin`` is provided in the IncorePlugins
+repository.
+
+Setup
+-----
+
+1. Clone the repository using the following command.
+
+    .. code-block:: shell
+
+        git clone https://gitlab.com/incoresemi/riscof-plugins.git
+
+2. Modify the following values in the ``config.ini``
+
+    .. code-block:: ini
+
+        DUTPlugin=makeplugin
+        DUTPluginPath=<path-to-riscof-plugins>/makeplugin 
+
+3. Add the following node to the ``config.ini``.
+
+   .. code-block:: ini
+
+        [makeplugiun]
+        # To specify multiple files use comma separated paths
+        makefiles=<path-to-makefile.includes>
+        ispec=<path-to-isa-yaml-file>
+        pspec=<path-to-platform-yaml-file>
+
+Modifying the makefile
+----------------------
+The commands in the makefile need to be modified such that the variables from the following tables
+are used in the commands. These variables shall be replaced with the appropriate values in the
+``RUN_TARGET`` and ``COMPILE_TARGET`` commands.
+
+.. list-table:: 
+    :header-rows: 1
+
+    * - Variable Name
+      - Description
+    * - ``${target_dir}``
+      - The directory where the plugin file resides. (riscof_makeplugin.py))
+    * - ``${asm}``
+      - Absolute path to the assemble test file i.e the .S file for the test.
+    * - ``${work_dir}``
+      - The absolute path to the work directory for the test.
+    * - ``${test_name}``
+      - The name of the test, for example add-01 etc. Can be used for naming any intermediate files generated.
+    * - ``${include}``
+      - The path to the directory which containts the test header files. This needs to be specified as an include path in the compile command.
+    * - ``${march}``
+      - The ISA to be used for compiling the test. This is in the format expected by march argument of gcc.
+    * - ``${mabi}``
+      - The abi to be used for compiling the test. This is in the format expected by mabi argument of gcc.
+    * - ${target_isa}
+      - This is the ISA specified in the input ISA yaml. The idea is that it can be used to configure the model at run time via cli arguments if necessary.
+    * - ``${test_bin}``
+      - The name of the binary file to be created after compilation. Can be ignored. Custom names can be used as long as the ``RUN_TARGET`` command picks up the correct binary to execute on the target.
+    * - ``${signature_file}``
+      - The absolute path to the signature file. This path cannot be changed and the signature file should be present at this path for riscof to verify at the end of testing.
+    * - ``${macros}``
+      - The macros to be defined while compilation. Currently they are in the format expected by gcc i.e. ``-D <macro-name>=<macro-value>``
+
+**Example**:
+
+The Makefile.include for the SAIL C Simulator from 
+`here <https://github.com/riscv/riscv-arch-test/blob/2.4.4/riscv-target/sail-riscv-c/device/rv32i_m/I/Makefile.include>`_ 
+is used as a reference for this example.
+
+.. code-block:: Makefile
+    :linenos:    
+
+    TARGET_SIM   ?= riscv_sim_RV32 -V
+    TARGET_FLAGS ?= $(RISCV_TARGET_FLAGS)
+    ifeq ($(shell command -v $(TARGET_SIM) 2> /dev/null),)
+        $(error Target simulator executable '$(TARGET_SIM)` not found)
+    endif
+    
+    RUN_CMD=\
+        $(TARGET_SIM) $(TARGET_FLAGS) \
+            --test-signature=$(*).signature.output \
+            $(<) 
+    
+    RISCV_PREFIX   ?= riscv32-unknown-elf-
+    RISCV_GCC      ?= $(RISCV_PREFIX)gcc
+    RISCV_OBJDUMP  ?= $(RISCV_PREFIX)objdump
+    RISCV_GCC_OPTS ?= -g -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles $(RVTEST_DEFINES)
+    
+    COMPILE_CMD = $$(RISCV_GCC) $(1) $$(RISCV_GCC_OPTS) \
+    							-I$(ROOTDIR)/riscv-test-suite/env/ \
+    							-I$(TARGETDIR)/$(RISCV_TARGET)/ \
+    							-T$(TARGETDIR)/$(RISCV_TARGET)/link.ld \
+    							$$(<) -o $$@ 
+    OBJ_CMD = $$(RISCV_OBJDUMP) $$@ -D > $$@.objdump; \
+    					$$(RISCV_OBJDUMP) $$@ --source > $$@.debug
+    
+    
+    COMPILE_TARGET=\
+    				$(COMPILE_CMD); \
+            if [ $$$$? -ne 0 ] ; \
+                    then \
+                    echo "\e[31m$$(RISCV_GCC) failed for target $$(@) \e[39m" ; \
+                    exit 1 ; \
+                    fi ; \
+    				$(OBJ_CMD); \
+            if [ $$$$? -ne 0 ] ; \
+                    then \
+                    echo "\e[31m $$(RISCV_OBJDUMP) failed for target $$(@) \e[39m" ; \
+                    exit 1 ; \
+                    fi ;
+    
+    RUN_TARGET=\
+    	$(RUN_CMD) 
+
+The first order of business is to move the ``COMPILE_CMD`` and ``RUN_CMD`` and define the contents
+in the ``COMPILE_TARGET`` and ``RUN_TARGET`` respectively as these are the only commands where the
+values will be substituted by the python function. Hence the respective variables look like this:
+
+.. code-block:: Makefile
+    :linenos:    
+
+    COMPILE_CMD = $$(RISCV_GCC) $(1) $$(RISCV_GCC_OPTS) \
+    							-I$(ROOTDIR)/riscv-test-suite/env/ \
+    							-I$(TARGETDIR)/$(RISCV_TARGET)/ \
+    							-T$(TARGETDIR)/$(RISCV_TARGET)/link.ld \
+    							$$(<) -o $$@ 
+
+    RUN_CMD=\
+        $(TARGET_SIM) $(TARGET_FLAGS) \
+            --test-signature=$(*).signature.output \
+            $(<) 
+
+Then these commands are rewritten to work with the python substitution variables. Hence variables
+such as ``$$(<)`` are replaced with ``${asm}`` in compile and ``$test_bin`` in the run commands. The
+``$$@`` in compile is replaced with ``${test_bin}``. This ensures that the binary file is
+appropriately created. The values for ``march`` and ``mabi`` was defied in the old framework in the
+makefiles for the suite. These values are provided per target in riscof. Hence the ``$(1)`` is
+replaced with ``-march=${march} -mabi=${mabi}``. 
+
+The directory with the header files for the tests is also provided by riscof. Hence line 2 is
+replaced with ``-I${include} \``. The paths in lines 3 and 4 are fixed to the appropriate ones by
+using the directory where the plugin file is present as an anchor. Riscof also provides macro
+definitions for the tests too and the plugin generates these macros in the format required by gcc.
+Hence ``${macro}`` is added to the end of the compile command.
+
+Similarly the path to the signature file in line 9 is also replaced with ``${signature_file}`` to
+ensure correct path. Since ``$(RVTEST_DEFINES)`` is no longer available, it is removed from
+``RISCV_GCC_OPTS`` on line 15 in the first snippet. Finally, all conditional code is cleanned up and
+the final makefile looks like this:
+
+.. code-block:: Makefile
+    :linenos:
+
+    TARGET_SIM   ?= riscv_sim_RV32 -V
+    TARGET_FLAGS =
+    
+    RISCV_PREFIX   ?= riscv32-unknown-elf-
+    RISCV_GCC      ?= $(RISCV_PREFIX)gcc
+    RISCV_OBJDUMP  ?= $(RISCV_PREFIX)objdump
+    RISCV_GCC_OPTS ?= -g -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles
+    
+    COMPILE_TARGET=\
+                $$(RISCV_GCC) -march=${march} -mabi=${mabi} $$(RISCV_GCC_OPTS) \
+    							-I${include} \
+    							-I${target_dir}/env/ \
+    							-T${target_dir}/env/link.ld \
+    						    ${asm} -o ${test_bin} ${macros}
+    
+    RUN_TARGET=\
+        $(TARGET_SIM) $(TARGET_FLAGS)\
+            --test-signature=${signature_file} \
+            ${test_bin} 
+
+To add the disassembly of the test as an artifact of the run, the ``COMPILE_TARGET`` can be modified
+to the following:
+
+.. code-block:: Makefile
+    :linenos:
+
+    COMPILE_TARGET=\
+                $$(RISCV_GCC) -march=${march} -mabi=${mabi} $$(RISCV_GCC_OPTS) \
+    							-I${include} \
+    							-I${target_dir}/env/ \
+    							-T${target_dir}/env/link.ld \
+    						    ${asm} -o ${test_bin} ${macros};\
+            $$(RISCV_OBJDUMP) ${test_bin} -D > ${test_name}.disass; \
+    					$$(RISCV_OBJDUMP) ${test_bin} --source > ${test_name}.debug
+
+.. note::
+    To ensure that a ``$`` is printed in the output Makefile (like ``$(RISCV_GCC)``) ensure that a
+    ``$$`` is present in the input makefile.
+
+Plugin Function Explanation
+---------------------------
+
+\_\_init\_\_(self, *args, **kwargs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+    :linenos:
+
+    def __init__(self, *args, **kwargs):
+        sclass = super().__init__(*args, **kwargs)
+
+        # Get the node for the plugin in the config.ini file. This is extracted by riscof and only
+        # the node relevant to the plugin is passed.
+        config = kwargs.get('config')
+
+        # Extract all information from the nodes. If any required values are missing, an error and a
+        # system exit is raised.
+        if 'makefiles' not in config:
+            logger.error("Path to the Makefiles not specified for "+self.__model__)
+            raise SystemExit
+        if 'ispec' not in config or 'pspec' not in config:
+            logger.error("Path to the input YAML files not specified for "+self.__model__)
+            raise SystemExit
+        # Paths to the Makefile.include files. Mandatory to be provided
+        self.makefiles = [os.path.abspath(path) for path in config['makefiles'].split(",")]
+        # Number of jobs to launch in parallel
+        self.num_jobs = str(config['jobs'] if 'jobs' in config else 1)
+        # Path to the directory in which this file is present
+        self.pluginpath = os.path.dirname(__file__)
+        # Path to the input ISA yaml as per riscv-config format.
+        self.isa_spec = os.path.abspath(config['ispec']) if 'ispec' in config else ''
+        # Path to the input platform yaml as per riscv-config format.
+        self.platform_spec = os.path.abspath(config['pspec']) if 'ispec' in config else ''
+        self.make = config['make'] if 'make' in config else 'make'
+        return sclass
+
+This function extracts the necessary fields from the node for the plugin in the config file given to
+riscof. The plugin supports the following arguments.
+    - **makefiles** (*required*)- Comma separated paths to the makefiles. If multiple are specified, all will be
+      merged in the final output makefile. Note that only the varaibles in the makefiles are written
+      out into the final makefiles. Any targets or includes will be left out. Such cases can be
+      handled by editing the plugin to output the relevant lines as a part of the ``build`` function.
+    - **ispec** (*required*)- The path to the input ISA yaml specification of the target.
+    - **pspec** (*required*)- The path to the input platform yaml specification of the target.
+    - **make** - The make utility to use like make,bmake,pmake etc. (Default is ``make``)
+    - **jobs** - The number of threads to launch parallely. (Default is ``1``)
+
+initialise(self, suite, work_dir, archtest_env)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+    :linenos:
+
+    def initialise(self, suite, work_dir, archtest_env):
+        # Store the path to the suite.
+        self.suite = suite
+        # Store the path to the root level work directory.
+        self.work_dir = work_dir
+        # Store the path to the folder which contains the header files for the tests.
+        self.archtest_env = archtest_env
+
+This function stores the necessary values as variables local to the instance.
+
+
+build(self, isa_yaml, platform_yaml)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+    :linenos:
+
+    def build(self, isa_yaml, platform_yaml):
+        # Extract the configuration of hart0 from isa yaml to figure out the configuration of the
+        # hart being tested.
+        ispec = utils.load_yaml(isa_yaml)['hart0']
+        # Resolve xlen value from the isa yaml
+        self.xlen = ('64' if 64 in ispec['supported_xlen'] else '32')
+        # Store the ISA of the target.
+        self.isa = ispec["ISA"]
+        self.var_dict = {}
+        # Extract all variables from the makefiles
+        for fpath in self.makefiles:
+            self.var_dict.update(getmakevars(fpath))
+        # The path where the Makefile is created
+        self.makefilepath = os.path.join(self.work_dir, "Makefile." + self.name[:-1])
+        with open(self.makefilepath,"w") as fp:
+            # The path to the target directory, i.e the directory where this python file is
+            # present. This variable is written out to the makefile so that other variables can use
+            # this value.
+            fp.write("TARGET_DIR = "+self.pluginpath+"\n")
+            # Write out all values except the COMPILE_TARGET and RUN_TARGET commands
+            for entry in self.var_dict.keys():
+                if not entry.endswith("_TARGET"):
+                    fp.write(entry+" = "+self.var_dict[entry]+"\n")
+                else:
+                    self.var_dict[entry] = Template(self.var_dict[entry])
+
+This function extracts and resolves the values of different fields needed while generating compile
+commands. Line 8, the ISA of the model is extracted from the input ISA yaml. Lines 11 and 12
+extract all variables from the input makefiles. Line 14 generates the absolute path for the
+makefile. The rest of the lines write out all the variables except the ones named ``*_TARGET`` to 
+the output makefile. Line 19 writes out an extra variable ``TARGET_DIR`` which points to the
+directory where the plugin files exist. This variable can be used as an anchor to resolve paths to
+other necessary files (like linker scripts) in the commands.
+
+
+runTests(self, testList,cgf_file=None)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+    :linenos:
+
+    def runTests(self, testList,cgf_file=None):
+        # Initialise the Make Utility from riscof with the output path for the Makefile
+        make = utils.makeUtil(makefilePath=self.makefilepath)
+        # Modify the make command based on the input values in the config file.
+        make.makeCommand = self.make + ' -j' + self.num_jobs
+        # Iterate over all the entries in the test list
+        for entry in testList:
+            # Extract the entry from the testlist
+            testentry = testList[entry]
+            # Extract the path to the assembly test file from the test list entry
+            test = testentry['test_path']
+            # Extract the path to the work directory for the test.
+            test_dir = testentry['work_dir']
+            # Macros to be defined are added in the GCC command format
+            # -D <macro_name>=<macro_value>
+            # Change this if the toolchain uses a different format
+            macros = ' -D' + " -D".join(testentry['macros'])
+            # Variables accessible in the *_TARGET commands
+            # Add more variables below if you wish to use these variables in the *_TARGET commands.
+            substitute = {
+                # The path to the target directory, i.e the directory where this python file is
+                # present
+                'target_dir': self.pluginpath,
+                # Path to the test assembly file
+                'asm': test,
+                # Path to the work directory
+                'work_dir': testentry['work_dir'],
+                # Name of the Test. Can be used to name files in the work directory.
+                'test_name': test.rsplit('/',1)[1][:-2],
+                # The path to the env folder containing the header files for the suite. This path
+                # should be passed as an include path in the compile commands.
+                'include': self.archtest_env,
+                # The isa string to be passed to the compiler. The format adheres to the march
+                # argument of GCC
+                'march': testentry['isa'].lower(),
+                # The abi string to be passed to the compiler. The format adheres to the mabi
+                # argument of GCC. To change how this string is derived, change function on line 21.
+                'mabi': mabi(testentry['isa']),
+                # The ISA string present in the input yaml. Can be used to set the ISA of the target
+                'target_isa': self.isa,
+                # Name of the generated binary file. Can be custom.
+                'test_bin': 'ref.elf',
+                # Name of the signature file. Note the name of the file should be in the same
+                # particular format and inside the test work directory.
+                'signature_file': os.path.join(test_dir, self.name[:-1] + ".signature"),
+                # The string which specifies all the macros to be defined for the test. As computed
+                # in line 108.
+                'macros': macros
+            }
+
+            # Construct the command for the test and add a target in the makefile. The format of the
+            # command is as follows:
+            # cd <work_directory>;substitute(COMPILE_TARGET);substitute(RUN_TARGET);
+            # The RUN_TARGET is optional and can be skipped if the same is not defined in the input
+            # makefile
+            execute = "@cd "+testentry['work_dir']+";"
+
+            compile_cmd = self.var_dict['COMPILE_TARGET'].safe_substitute(substitute)
+            execute+=compile_cmd+";"
+            if 'RUN_TARGET' in self.var_dict:
+                run_cmd = self.var_dict['RUN_TARGET'].safe_substitute(substitute)
+                execute+=run_cmd+";"
+            # Add target in the makefile for the test
+            make.add_target(execute,)
+        # Execute all targets.
+        make.execute_all(self.work_dir)
+
+This function uses the ``makeUtil`` provided by ``riscof.utils`` to write out a Makefile with the
+commands for each entry in the testlist. The format of the command for each target is 
+``cd <work_directory>;substitute(COMPILE_TARGET);substitute(RUN_TARGET);``. Lines 9 to 49 extract 
+and setup the values of the necessary variables for substitution. This function uses the `template 
+substitution <https://docs.python.org/3/library/string.html#template-strings>`_ provided by the 
+``string`` class of python. The values of the variables in the template strings are defined in a
+dictionary(``substitute``) and the substitution is performed for the ``COMPILE_TARGET`` on line 58.
+Similarly if ``RUN_TARGET`` is defined in the input makefile, the substitution for the same is done
+on line 61. Finally the target is added to the makefile and all targets are executed.
+
 
 Tips
 ====
@@ -739,7 +1121,9 @@ Tips
 3. It is advisable to use the ``logger`` provided by ``riscof.utils`` for logging/printing
    information to the console.
 4. Ensure to add space between multiple arguments in a command to avoid execution errors.
+
    .. code-block:: python
+
         ## Avoid this. The generated command is wrong and will cause an execution error due to a
         ## missing space before -T
         execute += 'riscv64-unknown-elf-gcc'+'-T bin/link.ld'
