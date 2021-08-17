@@ -107,7 +107,7 @@ class makeUtil():
 
         """
         assert tname in self.targets, "Target does not exist."
-        return shellCommand(self.makeCommand+" -f "+self.makefilePath+""+tname).run(cwd=cwd,
+        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd,
                 timeout=timeout)
     def execute_all(self,cwd="./",timeout=300):
         """
