@@ -374,6 +374,8 @@ and DUT plugins in the config.ini file')
             except:
                 return 1
 
+        if report_objects['num_failed'] > 0:
+            return 1
 
 if __name__ == "__main__":
     exit(execute())
