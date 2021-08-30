@@ -361,7 +361,8 @@ These are often used as reference models in RISCOF.
   .. tab:: Spike (riscv-isa-sim)
 
     .. code-block:: bash
-    
+   
+      $ sudo apt-get install device-tree-compiler
       $ git clone https://github.com/riscv/riscv-isa-sim.git
       $ cd riscv-isa-sim
       $ mkdir build
