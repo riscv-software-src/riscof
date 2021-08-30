@@ -91,7 +91,7 @@ class makeUtil():
         with open(self.makefilePath,"a") as makefile:
             makefile.write("\n\n.PHONY : " + tname + "\n" + tname + " :\n\t"+command.replace("\n","\n\t"))
             self.targets.append(tname)
-    def execute_target(self,tname,cwd="./"):
+    def execute_target(self,tname,cwd="./",timeout=300):
         """
         Function to execute a particular target only.
 
@@ -107,8 +107,9 @@ class makeUtil():
 
         """
         assert tname in self.targets, "Target does not exist."
-        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd)
-    def execute_all(self,cwd):
+        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+tname).run(cwd=cwd,
+                timeout=timeout)
+    def execute_all(self,cwd="./",timeout=300):
         """
         Function to execute all the defined targets.
 
@@ -117,7 +118,8 @@ class makeUtil():
         :type cwd: str
 
         """
-        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(cwd=cwd)
+        return shellCommand(self.makeCommand+" -f "+self.makefilePath+" "+" ".join(self.targets)).run(
+                cwd=cwd,timeout=timeout)
 
 
 class Command():
@@ -197,10 +199,18 @@ class Command():
                 non-zero value.
         """
         kwargs.setdefault('shell', self._is_shell_command())
+        kwargs.setdefault('timeout', 300)
         cwd = self._path2str(kwargs.get(
             'cwd')) if not kwargs.get('cwd') is None else self._path2str(
                 os.getcwd())
         kwargs.update({'cwd': cwd})
+        process_args = dict(kwargs)
+        timeout = kwargs['timeout']
+        del process_args['timeout']
+        in_val = None
+        if 'input' in kwargs:
+            in_val = kwargs['input']
+            del process_args['input']
         logger.debug(cwd)
         # When running as shell command, subprocess expects
         # The arguments to be string.
@@ -209,10 +219,19 @@ class Command():
         x = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
-                             **kwargs)
-        out, err = x.communicate()
-        out = out.rstrip()
-        err = err.rstrip()
+                             **process_args)
+        try:
+            out, err = x.communicate(input=in_val,timeout=timeout)
+            out = out.rstrip()
+            err = err.rstrip()
+        except subprocess.TimeoutExpired as cmd:
+            x.kill()
+            out, err = x.communicate()
+            out = out.rstrip()
+            err = err.rstrip()
+            logger.error("Process Killed.")
+            logger.error("Command did not exit within {0} seconds: {1}".format(timeout,cmd))
+
         if x.returncode != 0:
             if out:
                 logger.error(out.decode("ascii"))
