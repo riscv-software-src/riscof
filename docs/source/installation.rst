@@ -507,13 +507,6 @@ any generic DUT. Components of this folder will need to be modified by the user 
 By default the ``model_test.h`` files and the ``link.ld`` file will work out of the box for
 ``spike`` and ``sail`` models.
 
-Since our DUT model in this guide is spike, you will only have to change the execute command at line 100 of
-spike/riscof_spike.py to the following:
-
-.. code-block:: python
-
-  execute += self.dut_exe + ' --log-commits --log dump --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
-
 .. note:: Custom DUTs can go through the various ``#TODO`` comments to figure out what changes need to be
   made in the respective python file.
 
@@ -534,6 +527,19 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
 .. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugin/README.md 
+
+Cloning the Architectural Tests
+===============================
+
+We will be running the tests from the official riscv-arch-test repository on the DUT and Reference
+models. To create a copy of the latest tests from the riscv-arch-test repository do the following:
+
+.. code-block:: console
+    
+    $ riscof --verbose info arch-tests --clone
+
+This will create a riscv-arch-test in the current working directory.
+   
 
 Running RISCOF
 ==============
@@ -569,7 +575,7 @@ The next step is to generate the list of tests that need to be run on the models
 
 .. code-block:: bash
 
-  riscof testlist --config=config.ini
+  riscof testlist --config=config.ini --suite=riscv-arch-test/riscv-test-suite/ --env=riscv-arch-test/riscv-test-suite/env
 
 This step calls the validate-step and thus the output adds one more line to the above dump:
 
@@ -605,7 +611,7 @@ guarantee correctness.
 
 .. code-block:: bash
 
-  riscof run --config=config.ini
+  riscof run --config=config.ini --suite=riscv-arch-test/riscv-test-suite/ --env=riscv-arch-test/riscv-test-suite/env
 
 This should compile and execute the tests on each of the models and end up with the following log.
 The run will also open an HTML page with all the information.
