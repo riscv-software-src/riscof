@@ -39,7 +39,7 @@ class dutname(pluginTemplate):
         self.dut_exe = os.path.join(config['PATH'] if 'PATH' in config else "","dutname")
 
         # Number of parallel jobs that can be spawned off by RISCOF
-        # for various actions performed in later functions, specifically to run the tests in 
+        # for various actions performed in later functions, specifically to run the tests in
         # parallel on the DUT executable. Can also be used in the build function if required.
         self.num_jobs = str(config['jobs'] if 'jobs' in config else 1)
 
@@ -63,13 +63,13 @@ class dutname(pluginTemplate):
         return sclass
 
     def initialise(self, suite, work_dir, archtest_env):
-      
+
        # capture the working directory. Any artifacts that the DUT creates should be placed in this
        # directory. Other artifacts from the framework and the Reference plugin will also be placed
        # here itself.
        self.work_dir = work_dir
 
-       # capture the architectural test-suite directory. 
+       # capture the architectural test-suite directory.
        self.suite_dir = suite
 
        # Note the march is not hardwired here, because it will change for each
@@ -85,7 +85,7 @@ class dutname(pluginTemplate):
 
     def build(self, isa_yaml, platform_yaml):
 
-      # load the isa yaml as a dictionary in python. 
+      # load the isa yaml as a dictionary in python.
       ispec = utils.load_yaml(isa_yaml)['hart0']
 
       # capture the XLEN value by picking the max value in 'supported_xlen' field of isa yaml. This
@@ -107,7 +107,10 @@ class dutname(pluginTemplate):
       self.compile_cmd = self.compile_cmd+' -mabi='+('lp64 ' if 64 in ispec['supported_xlen'] else 'ilp32 ')
 
     def runTests(self, testList):
-      
+
+      # Delete Makefile if it already exists.
+      if os.path.exists(self.work_dir+ "/Makefile." + self.name[:-1]):
+            os.remove(self.work_dir+ "/Makefile." + self.name[:-1])
       # create an instance the makeUtil class that we will use to create targets.
       make = utils.makeUtil(makefilePath=os.path.join(self.work_dir, "Makefile." + self.name[:-1]))
 
@@ -118,7 +121,7 @@ class dutname(pluginTemplate):
       # we will iterate over each entry in the testList. Each entry node will be refered to by the
       # variable testname.
       for testname in testList:
-        
+
           # for each testname we get all its fields (as described by the testList format)
           testentry = testList[testname]
 
@@ -131,7 +134,7 @@ class dutname(pluginTemplate):
 
           # name of the elf file after compilation of the test
           elf = 'my.elf'
-            
+
           # name of the signature file as per requirement of RISCOF. RISCOF expects the signature to
           # be named as DUT-<dut-name>.signature. The below variable creates an absolute path of
           # signature file.
@@ -148,7 +151,7 @@ class dutname(pluginTemplate):
 
 	  # if the user wants to disable running the tests and only compile the tests, then
 	  # the "else" clause is executed below assigning the sim command to simple no action
-	  # echo statement. 
+	  # echo statement.
           if self.target_run:
             # set up the simulation command. Template is for spike. Please change.
             simcmd = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
@@ -161,7 +164,7 @@ class dutname(pluginTemplate):
           # create a target. The makeutil will create a target with the name "TARGET<num>" where num
           # starts from 0 and increments automatically for each new target that is added
           make.add_target(execute)
-      
+
       # if you would like to exit the framework once the makefile generation is complete uncomment the
       # following line. Note this will prevent any signature checking or report generation.
       #raise SystemExit
@@ -169,9 +172,9 @@ class dutname(pluginTemplate):
       # once the make-targets are done and the makefile has been created, run all the targets in
       # parallel using the make command set above.
       make.execute_all(self.work_dir)
-  
-      # if target runs are not required then we simply exit as this point after running all 
-      # the makefile targets. 
+
+      # if target runs are not required then we simply exit as this point after running all
+      # the makefile targets.
       if not self.target_run:
           raise SystemExit
 
@@ -179,11 +182,11 @@ class dutname(pluginTemplate):
 #The following template only uses shell commands to compile and run the tests.
 
 #    def runTests(self, testList):
-#      
+#
 #      # we will iterate over each entry in the testList. Each entry node will be referred to by the
 #      # variable testname.
 #      for testname in testList:
-#        
+#
 #          logger.debug('Running Test: {0} on DUT'.format(testname))
 #          # for each testname we get all its fields (as described by the testList format)
 #          testentry = testList[testname]
@@ -201,7 +204,7 @@ class dutname(pluginTemplate):
 #          # be named as DUT-<dut-name>.signature. The below variable creates an absolute path of
 #          # signature file.
 #          sig_file = os.path.join(test_dir, self.name[:-1] + ".signature")
-#          
+#
 #          # for each test there are specific compile macros that need to be enabled. The macros in
 #          # the testList node only contain the macros/values. For the gcc toolchain we need to
 #          # prefix with "-D". The following does precisely that.
@@ -223,8 +226,8 @@ class dutname(pluginTemplate):
 #          # choice.
 #          utils.shellCommand(cmd).run(cwd=test_dir)
 #
-#          # for debug purposes if you would like stop the DUT plugin after compilation, you can 
-#          # comment out the lines below and raise a SystemExit 
+#          # for debug purposes if you would like stop the DUT plugin after compilation, you can
+#          # comment out the lines below and raise a SystemExit
 #
 #          if self.target_run:
 #            # build the command for running the elf on the DUT. In this case we use spike and indicate
@@ -240,7 +243,7 @@ class dutname(pluginTemplate):
 #          #postprocess = 'mv {0} temp.sig'.format(sig_file)'
 #          #utils.shellCommand(postprocess).run(cwd=test_dir)
 #
-#      # if target runs are not required then we simply exit as this point after running all 
-#      # the makefile targets. 
+#      # if target runs are not required then we simply exit as this point after running all
+#      # the makefile targets.
 #      if not self.target_run:
 #          raise SystemExit
