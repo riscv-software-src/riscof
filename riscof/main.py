@@ -140,6 +140,12 @@ and DUT plugins in the config.ini file')
         if not os.path.exists(work_dir):
             logger.debug('Creating new work directory: ' + work_dir)
             os.mkdir(work_dir)
+        elif args.command=='run':
+            if args.dbfile is None and args.testfile is None:
+                logger.debug('Removing old work directory: ' + work_dir)
+                shutil.rmtree(work_dir)
+                logger.debug('Creating new work directory: ' + work_dir)
+                os.mkdir(work_dir)
         else:
             logger.debug('Removing old work directory: ' + work_dir)
             shutil.rmtree(work_dir)
@@ -196,20 +202,23 @@ and DUT plugins in the config.ini file')
         #Run riscv_config on inputs
         isa_file = dut.isa_spec
         platform_file = dut.platform_spec
-
-
-        try:
-            isa_file = checker.check_isa_specs( isa_file, work_dir, True)
-            platform_file = checker.check_platform_specs( platform_file, work_dir, True)
-        except ValidationError as msg:
-            logger.error(msg)
-            return 1
+        
+        if args.command=='run' and (args.testfile is not None or args.dbfile is not None):
+            isa_file = work_dir+ '/' + (isa_file.rsplit('/', 1)[1]).rsplit('.')[0] + "_checked.yaml"
+            platform_file = work_dir+ '/' + (platform_file.rsplit('/', 1)[1]).rsplit('.')[0] + "_checked.yaml"
+        else:
+            try:
+                isa_file = checker.check_isa_specs( isa_file, work_dir, True)
+                platform_file = checker.check_platform_specs( platform_file, work_dir, True)
+            except ValidationError as msg:
+                logger.error(msg)
+                return 1
 
         isa_specs = utils.load_yaml(isa_file)['hart0']
         platform_specs = utils.load_yaml(platform_file)
 
-    if args.command=='gendb' or args.command=='run' or \
-            args.command=='testlist' or args.command == 'coverage' :
+    if args.command=='gendb' or args.command=='testlist' or \
+            args.command=='coverage' :
         logger.info("Generating database for suite: "+args.suite)
         work_dir = args.work_dir
         constants.suite = args.suite
@@ -220,6 +229,25 @@ and DUT plugins in the config.ini file')
         logger.info('Database File Generated: '+constants.framework_db)
         constants.env = args.env
         logger.info('Env path set to'+constants.env)
+    elif args.command=='run' :
+        if args.dbfile is None and args.testfile is None:
+            logger.info("Generating database for suite: "+args.suite)
+            work_dir = args.work_dir
+            constants.suite = args.suite
+            constants.framework_db = os.path.join(work_dir,"database.yaml")
+            logger.debug('Suite used: '+constants.suite)
+            logger.debug('ENV used: '+ args.env)
+            dbgen.generate()
+            logger.info('Database File Generated: '+constants.framework_db)
+            constants.env = args.env
+            logger.info('Env path set to'+constants.env)
+        elif args.dbfile is None:
+            constants.suite = args.suite
+            constants.framework_db = os.path.join(work_dir,"database.yaml")
+            constants.env = args.env
+        else:
+            constants.suite = args.suite
+            constants.env = args.env
 
     if args.command == 'testlist':
         test_routines.generate_test_pool(isa_specs, platform_specs, work_dir)
@@ -291,7 +319,9 @@ and DUT plugins in the config.ini file')
 
         with open(platform_file, "r") as platfile:
             pspecs = platfile.read()
-
+        
+        cntr_args = [args.dbfile,args.testfile,args.no_ref_run,args.no_dut_run]
+        
         report_objects = {}
         report_objects['date'] = (datetime.now(
             pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")
@@ -312,7 +342,7 @@ and DUT plugins in the config.ini file')
         report_objects['platform_specs'] = pspecs
 
         report_objects['results'] = framework.run(dut, base, isa_file,
-                                                  platform_file, work_dir)
+                                                  platform_file, work_dir, cntr_args)
 
         report_objects['num_passed'] = 0
         report_objects['num_failed'] = 0

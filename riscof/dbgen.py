@@ -3,6 +3,8 @@ import os
 import git
 import sys
 import re
+import pytz
+from datetime import datetime
 from riscof.utils import yaml
 import riscof.utils as utils
 import collections
@@ -189,5 +191,6 @@ def generate():
                 continue
             db[fpath] = {'commit_id': '-', **temp}
     with open(dbfile, "w") as wrfile:
+        wrfile.write('# database generated on ' + (datetime.now(pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")+'\n')
         yaml.dump(orderdict(db),
                   wrfile)

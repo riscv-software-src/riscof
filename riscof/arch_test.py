@@ -21,7 +21,7 @@ def get_version(path):
         tags = repo.tags
         remote = repo.remote()
         url = remote.url
-        if (tags) and (url==constants.https_url or url == ssh_url):
+        if (tags) and (url==constants.https_url or url == constants.ssh_url):
             ver_dict['commit'] = str(commit)
             for tag in tags:
                 if tag.commit == commit:

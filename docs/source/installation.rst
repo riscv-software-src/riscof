@@ -267,17 +267,22 @@ Once you have installed RISCOF you can execute ``riscof --help`` to print the he
     	  -h, --help       show this help message and exit
     	
     Action 'run'
-    
-    	usage: riscof run [-h] [--config PATH] --suite PATH --env PATH [--no-browser]
-    	                  [--work-dir PATH]
-    	
-    	optional arguments:
-    	  --config PATH    The Path to the config file. [Default=./config.ini]
-    	  --env PATH       The Path to the custom env directory.
-    	  --no-browser     Do not open the browser for showing the test report.
-    	  --suite PATH     The Path to the custom suite directory.
-    	  --work-dir PATH  The Path to the work-dir.
-    	  -h, --help       show this help message and exit
+
+	usage: riscof run [-h] [--config PATH] --suite PATH --env PATH [--no-browser] [--work-dir PATH] [--dbfile PATH | --testfile PATH]
+	                  [--no-ref-run] [--no-dut-run]
+	
+	optional arguments:
+	  --config PATH    The Path to the config file. [Default=./config.ini]
+	  --dbfile PATH    The Path to the database file.
+	  --env PATH       The Path to the custom env directory.
+	  --no-browser     Do not open the browser for showing the test report.
+	  --no-dut-run     Do not run tests on DUT
+	  --no-ref-run     Do not run tests on Reference
+	  --suite PATH     The Path to the custom suite directory.
+	  --testfile PATH  The Path to the testlist file.
+	  --work-dir PATH  The Path to the work-dir.
+	  -h, --help       show this help message and exit
+
     	
     Action 'testlist'
     

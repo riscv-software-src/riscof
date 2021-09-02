@@ -151,7 +151,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None)
 
     return results, for_html, test_stats, coverpoints
 
-def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir):
+def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir, cntr_args):
     '''
         Entry point for the framework module. This function initializes and sets up the required
         variables for the tests to run.
@@ -165,6 +165,8 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir):
 
         :param dut_platform_spec: The absolute path to the checked yaml containing
             the DUT platform specification.
+            
+        :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run
 
         :type dut_platform_spec: str
 
@@ -182,13 +184,20 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir):
     #Loading Specs
     ispec = utils.load_yaml(dut_isa_spec)
     pspec = utils.load_yaml(dut_platform_spec)
+    
+    if cntr_args[2]:
+        logger.info("Running Build for DUT")
+        dut.build(dut_isa_spec, dut_platform_spec)
+    elif cntr_args[3]:
+        logger.info("Running Build for Reference")
+        base.build(dut_isa_spec, dut_platform_spec)
+    else:
+        logger.info("Running Build for DUT")
+        dut.build(dut_isa_spec, dut_platform_spec)
+        logger.info("Running Build for Reference")
+        base.build(dut_isa_spec, dut_platform_spec)
 
-    logger.info("Running Build for DUT")
-    dut.build(dut_isa_spec, dut_platform_spec)
-    logger.info("Running Build for Reference")
-    base.build(dut_isa_spec, dut_platform_spec)
-
-    results = test.run_tests(dut, base, ispec['hart0'], pspec, work_dir)
+    results = test.run_tests(dut, base, ispec['hart0'], pspec, work_dir, cntr_args)
 
     return results
 
