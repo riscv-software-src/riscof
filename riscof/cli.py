@@ -223,7 +223,7 @@ def generate(ctx,suite,env,work_dir):
                         default='./config.ini')
 @click.option('--work-dir',default="./riscof_work",metavar='PATH',
         type=click.Path(resolve_path=True,writable=True),
-        help='Path to the work directory.')
+        help='Path to the work directory. [Default = ./riscof_work]')
 @click.pass_context
 def testlist(ctx,config,work_dir,suite,env):
     setup_directories(work_dir)
@@ -363,7 +363,7 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
                         default='./config.ini')
 @click.option('--work-dir',default="./riscof_work",metavar='PATH',
         type=click.Path(resolve_path=True,writable=True),
-        help='Path to the work directory.')
+        help='Path to the work directory. [Default = ./riscof_work]')
 @click.option('--no-browser',is_flag=True,
                      help="Do not open the browser for showing the test report.")
 @click.option(
