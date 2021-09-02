@@ -3,14 +3,6 @@
 import logging
 import colorlog
 
-# a theme is just a dict of strings to represent each level
-THEME = {logging.CRITICAL: "    critical ",
-         logging.ERROR:    "       error ",
-         logging.WARNING:  "     command ",
-         logging.INFO:     "        info ",
-         logging.DEBUG:    "       debug "}
-
-
 class Log:
     """
     this class holds all the logic; see the end of the script to
@@ -28,7 +20,7 @@ class Log:
 
     def __init__(self, format=None):
         if not format:
-            format = "  %(log_color)s%(levelname)s%(reset)s | %(log_color)s%(message)s%(reset)s"
+            format = "%(log_color)s%(levelname)8s%(reset)s | %(log_color)s%(message)s%(reset)s"
         self.format = format
         self.colors = {
             'DEBUG': 'purple',
