@@ -28,3 +28,5 @@ docs/build
 sail_cSim
 
 spike
+
+riscof.egg-info/

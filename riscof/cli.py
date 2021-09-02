@@ -37,7 +37,6 @@ class Context:
     platform_file = None
 
 def setup_directories(work_dir,skip_rm=False):
-    print(skip_rm)
     #Creating work directory
     if not os.path.exists(work_dir):
         logger.debug('Creating new work directory: ' + work_dir)
@@ -262,7 +261,6 @@ def testlist(ctx,config,work_dir,suite,env):
 @click.option('--no-dut-run',is_flag=True,help="Do not run tests on DUT")
 @click.pass_context
 def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run):
-    print("Test run")
     setup_directories(work_dir,(testfile is not None or dbfile is not None))
     ctx.obj.mkdir = False
     constants.env = env
