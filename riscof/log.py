@@ -3,14 +3,6 @@
 import logging
 import colorlog
 
-# a theme is just a dict of strings to represent each level
-THEME = {logging.CRITICAL: "    critical ",
-         logging.ERROR:    "       error ",
-         logging.WARNING:  "     command ",
-         logging.INFO:     "        info ",
-         logging.DEBUG:    "       debug "}
-
-
 class Log:
     """
     this class holds all the logic; see the end of the script to
@@ -26,21 +18,19 @@ class Log:
         logging.DEBUG:    ("debug", "dbg")
     }
 
-    def __init__(self, lvl=logging.CRITICAL, format=None):
-        self._lvl = lvl
+    def __init__(self, format=None):
         if not format:
-            format = "  %(log_color)s%(styledname)-8s%(reset)s | %(log_color)s%(message)s%(reset)s"
+            format = "%(log_color)s%(levelname)8s%(reset)s | %(log_color)s%(message)s%(reset)s"
         self.format = format
-        logging.root.setLevel(self._lvl)
-        self.formatter = colorlog.ColoredFormatter(self.format)
-        self.stream = logging.StreamHandler()
-        self.stream.setLevel(self._lvl)
-        self.stream.setFormatter(self.formatter)
-        self.logger = logging.getLogger('pythonConfig')
-        self.logger.setLevel(self._lvl)
-        self.logger.addHandler(self.stream)
-        self.theme = THEME
-        self.extra = {"styledname": self.theme[self._lvl]}
+        self.colors = {
+            'DEBUG': 'purple',
+            'INFO': 'green',
+            'WARNING': 'red',
+            'ERROR': 'bold_red',
+            'CRITICAL': 'bold_red',
+        }
+        self.logger = logging.getLogger()
+
 
     # the magic happens here: we use the "extra" argument documented in
     # https://docs.python.org/2/library/logging.html#logging.Logger.debug
@@ -49,35 +39,30 @@ class Log:
     def critical(self, message, *args, **kwargs):
         for line in str(message).splitlines():
             self.logger.critical(line,
-                                 extra={"styledname": self.theme[logging.CRITICAL]},
                                  *args, **kwargs)
     crit = c = fatal = critical
 
     def error(self, message, *args, **kwargs):
         for line in str(message).splitlines():
             self.logger.error(line,
-                              extra={"styledname": self.theme[logging.ERROR]},
                               *args, **kwargs)
     err = e = error
 
     def warn(self, message, *args, **kwargs):
         for line in str(message).splitlines():
             self.logger.warning(line,
-                             extra={"styledname": self.theme[logging.WARNING]},
                              *args, **kwargs)
     warning = w = warn
 
     def info(self, message, *args, **kwargs):
         for line in str(message).splitlines():
             self.logger.info(line,
-                             extra={"styledname": self.theme[logging.INFO]},
                              *args, **kwargs)
     inf = nfo = i = info
 
     def debug(self, message, *args, **kwargs):
         for line in str(message).splitlines():
             self.logger.debug(line,
-                              extra={"styledname": self.theme[logging.DEBUG]},
                               *args, **kwargs)
     dbg = d = debug
 
@@ -86,15 +71,22 @@ class Log:
         for log_level in self.aliases:
             if lvl == log_level or lvl in self.aliases[log_level]:
                 return log_level
-        self.logger.debug('Invalid log level passed. Please select from debug | info | warning | error')
+        print('Invalid log level passed. Please select from debug | info | warning | error')
         raise ValueError("{}-Invalid log level.".format(lvl))
 
-    def level(self, lvl=None):
-        '''Get or set the logging level.'''
-        if not lvl:
-            return self._lvl
+    def level(self, lvl=logging.CRITICAL):
+        '''Setup the Logger.'''
+
         self._lvl = self._parse_level(lvl)
+
+        self.stream = logging.StreamHandler()
         self.stream.setLevel(self._lvl)
+
+        self.stream.setLevel(self._lvl)
+
+        self.stream.setFormatter(colorlog.ColoredFormatter(self.format,log_colors=self.colors))
         self.logger.setLevel(self._lvl)
+
+        self.logger.addHandler(self.stream)
         logging.root.setLevel(self._lvl)
 logger = Log()

@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.2] - 2021-09-03
+- Ported CLI to use click package
+- Improved documentation for using plugins.
+- Added separate paths for dut and ref artifacts.
+
 ## [1.21.1] - 2021-07-24
 - Added support for intermediate run start points #1
 - --dbfile is added to generate the test-list and then run tests on the target and reference

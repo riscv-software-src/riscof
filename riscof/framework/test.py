@@ -8,6 +8,7 @@ import ast
 import pytz
 import random
 from datetime import datetime
+from copy import deepcopy
 
 from riscof.utils import yaml
 import riscof.utils as utils
@@ -301,7 +302,7 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
         test_list[entry[0]]=temp
     if (len(test_list) == 0):
         logger.error('No Tests Selected')
-        sys.exit(1)
+        raise SystemExit
 
     with open(os.path.join(workdir,"test_list.yaml"),"w") as tfile:
         tfile.write('# testlist generated on ' + (datetime.now(pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")+'\n')
@@ -321,7 +322,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         :param ispec: The isa specifications of the DUT.
 
         :param pspec: The platform specifications of the DUT.
-        
+
         :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run
 
         :type ispec: dict
@@ -335,29 +336,39 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         test_list = utils.load_yaml(cntr_args[1])
     else:
         test_list, test_pool = generate_test_pool(ispec, pspec, work_dir, cntr_args[0])
+    dut_test_list = {}
+    base_test_list = {}
+    for entry in test_list:
+        node = test_list[entry]
+        dut_test_list[entry] = deepcopy(node)
+        base_test_list[entry] = deepcopy(node)
+        dut_test_list[entry]['work_dir'] = os.path.join(node['work_dir'],'dut')
+        os.mkdir(dut_test_list[entry]['work_dir'])
+        base_test_list[entry]['work_dir'] = os.path.join(node['work_dir'],'ref')
+        os.mkdir(base_test_list[entry]['work_dir'])
     results = []
     if cntr_args[2]:
         logger.info("Running Tests on DUT.")
-        dut.runTests(test_list)
+        dut.runTests(dut_test_list)
         logger.info("Tests run on DUT done.")
         raise SystemExit
     elif cntr_args[3]:
         logger.info("Running Tests on Reference Model.")
-        base.runTests(test_list)
+        base.runTests(base_test_list)
         logger.info("Tests run on Reference done.")
         raise SystemExit
     else:
         logger.info("Running Tests on DUT.")
-        dut.runTests(test_list)
+        dut.runTests(dut_test_list)
         logger.info("Running Tests on Reference Model.")
-        base.runTests(test_list)
+        base.runTests(base_test_list)
 
     logger.info("Initiating signature checking.")
     for file in test_list:
         testentry = test_list[file]
         work_dir = testentry['work_dir']
-        res = os.path.join(testentry['work_dir'],dut.name[:-1]+".signature")
-        ref = os.path.join(testentry['work_dir'],base.name[:-1]+".signature")
+        res = os.path.join(dut_test_list[file]['work_dir'],dut.name[:-1]+".signature")
+        ref = os.path.join(base_test_list[file]['work_dir'],base.name[:-1]+".signature")
         result, diff = compare_signature(res, ref)
         res = {
             'name':
