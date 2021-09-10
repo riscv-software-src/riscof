@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.22.0] - 2021-09-10
+- Fixed signature alignment to begin and end at 16-byte boundaries for all header templates.
+
 ## [1.21.2] - 2021-09-03
 - Ported CLI to use click package
 - Improved documentation for using plugins.
