@@ -1,11 +1,5 @@
 #ifndef _COMPLIANCE_MODEL_H
 #define _COMPLIANCE_MODEL_H
-#if XLEN == 64
-  #define ALIGNMENT 3
-#else
-  #define ALIGNMENT 2
-#endif
-
 #define RVMODEL_DATA_SECTION \
         .pushsection .tohost,"aw",@progbits;                            \
         .align 8; .global tohost; tohost: .dword 0;                     \
