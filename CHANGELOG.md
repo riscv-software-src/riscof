@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.22.1] - 2021-09-13
+- Added return code of 1 on error
+
 ## [1.22.0] - 2021-09-10
 - Fixed signature alignment to begin and end at 16-byte boundaries for all header templates.
 
