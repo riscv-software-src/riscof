@@ -41,7 +41,7 @@ class refname(pluginTemplate):
         self.suite = suite
         if shutil.which(self.ref_exe) is None:
             logger.error('Please install Executable for DUTNAME to proceed further')
-            sys.exit(0)
+            raise SystemExit(1)
         self.work_dir = work_dir
 
         #TODO: The following assumes you are using the riscv-gcc toolchain. If
@@ -55,7 +55,7 @@ class refname(pluginTemplate):
 
         # set all the necessary variables like compile command, elf2hex
         # commands, objdump cmds. etc whichever you feel necessary and required
-        # for your plugin. 
+        # for your plugin.
 
     def build(self, isa_yaml, platform_yaml):
         ispec = utils.load_yaml(isa_yaml)['hart0']
@@ -90,7 +90,7 @@ class refname(pluginTemplate):
             test_name = test.rsplit('/',1)[1][:-2]
 
             elf = 'ref.elf'
-            
+
             execute = "@cd "+testentry['work_dir']+";"
 
             cmd = self.compile_cmd.format(testentry['isa'].lower(), self.xlen) + ' ' + test + ' -o ' + elf
@@ -105,7 +105,7 @@ class refname(pluginTemplate):
 
             #TODO: You will need to add any other arguments to your DUT
             #      executable if any in the quotes below
-            execute += self.ref_exe + '' 
+            execute += self.ref_exe + ''
 
             #TODO: The following is useful only if your reference model can
             #      support coverage extraction from riscv-isac. Else leave it

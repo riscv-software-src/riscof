@@ -54,7 +54,7 @@ def read_config(configfile):
         config.read(configfile)
     except FileNotFoundError as err:
         logger.error(err)
-        raise SystemExit
+        raise SystemExit(1)
     return config,os.path.dirname(os.path.abspath(configfile))
 
 def prepare_models(config_dir,config):
@@ -69,7 +69,7 @@ def prepare_models(config_dir,config):
     except KeyError as key:
         logger.error("Error in config file. Possible missing keys.")
         logger.error(key)
-        raise SystemExit
+        raise SystemExit(1)
 
     logger.debug("Importing " + dut_model + " plugin from: "+str(dut_model_path))
     sys.path.append(dut_model_path)
@@ -77,7 +77,7 @@ def prepare_models(config_dir,config):
         dut_plugin = importlib.import_module("riscof_" + dut_model)
     except ImportError as msg:
         logger.error("Error while importing "+dut_model+".\n"+str(msg))
-        raise SystemExit
+        raise SystemExit(1)
     dut_class = getattr(dut_plugin, dut_model)
     if dut_model in config:
         dut = dut_class(name="DUT", config=config[dut_model], config_dir=config_dir)
@@ -90,7 +90,7 @@ def prepare_models(config_dir,config):
         base_plugin = importlib.import_module("riscof_" + base_model)
     except ImportError as msg:
         logger.error("Error while importing "+base_model+".\n"+str(msg))
-        raise SystemExit
+        raise SystemExit(1)
     base_class = getattr(base_plugin, base_model)
     if base_model in config:
         base = base_class(name="Reference", config=config[base_model], config_dir=config_dir)
@@ -183,7 +183,7 @@ def validate(ctx,config,work_dir):
         platform_file = checker.check_platform_specs( platform_file, work_dir, True)
     except ValidationError as msg:
         logger.error(msg)
-        raise SystemExit
+        raise SystemExit(1)
     ctx.obj.isa_file = isa_file
     ctx.obj.platform_file = platform_file
 
@@ -261,6 +261,7 @@ def testlist(ctx,config,work_dir,suite,env):
 @click.option('--no-dut-run',is_flag=True,help="Do not run tests on DUT")
 @click.pass_context
 def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run):
+    exitcode = 0
     setup_directories(work_dir,(testfile is not None or dbfile is not None))
     ctx.obj.mkdir = False
     constants.env = env
@@ -326,6 +327,7 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
             report_objects['num_passed'] += 1
         else:
             report_objects['num_failed'] += 1
+            exitcode = 1
 
     with open(constants.html_template, "r") as report_template:
         template = Template(report_template.read())
@@ -345,8 +347,9 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
             import webbrowser
             logger.info("Openning test report in web-browser")
             webbrowser.open(reportfile)
+            raise SystemExit(exitcode)
         except:
-            raise SystemExit
+            raise SystemExit(exitcode)
 
 
 
@@ -437,7 +440,7 @@ def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file):
             logger.info("Openning test report in web-browser")
             webbrowser.open(reportfile)
         except:
-            raise SystemExit
+            raise SystemExit(0)
 
 
 
@@ -541,7 +544,7 @@ and plugins in the config.ini file')
         configfile.close()
     except FileExistsError as err:
         logger.error(err)
-        raise SystemExit
+        raise SystemExit(1)
 
 if __name__=="__main__":
     cli()

@@ -30,7 +30,7 @@ def load_yaml(foo):
         logger = logging.getLogger(__name__)
         error = "\n".join(str(msg).split("\n")[2:-7])
         logger.error(error)
-        raise SystemExit
+        raise SystemExit(1)
 
 def absolute_path(config_dir, entry_path):
     """

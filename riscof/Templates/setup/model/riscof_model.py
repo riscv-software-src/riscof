@@ -30,7 +30,7 @@ class dutname(pluginTemplate):
         # the paths to the ispec and pspec files
         if config is None:
             print("Please enter input file paths in configuration.")
-            raise SystemExit
+            raise SystemExit(1)
 
         # In case of an RTL based DUT, this would be point to the final binary executable of your
         # test-bench produced by a simulator (like verilator, vcs, incisive, etc). In case of an iss or
@@ -176,7 +176,7 @@ class dutname(pluginTemplate):
       # if target runs are not required then we simply exit as this point after running all
       # the makefile targets.
       if not self.target_run:
-          raise SystemExit
+          raise SystemExit(0)
 
 #The following is an alternate template that can be used instead of the above.
 #The following template only uses shell commands to compile and run the tests.
