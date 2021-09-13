@@ -25,7 +25,7 @@ class sail_cSim(pluginTemplate):
         config = kwargs.get('config')
         if config is None:
             logger.error("Config node for sail_cSim missing.")
-            raise SystemExit
+            raise SystemExit(1)
         self.num_jobs = str(config['jobs'] if 'jobs' in config else 1)
         self.pluginpath = os.path.abspath(config['pluginpath'])
         self.sail_exe = { '32' : os.path.join(config['PATH'] if 'PATH' in config else "","riscv_sim_RV32"),
@@ -66,17 +66,17 @@ class sail_cSim(pluginTemplate):
         objdump = "riscv{0}-unknown-elf-objdump".format(self.xlen)
         if shutil.which(objdump) is None:
             logger.error(objdump+": executable not found. Please check environment setup.")
-            raise SystemExit
+            raise SystemExit(1)
         compiler = "riscv{0}-unknown-elf-gcc".format(self.xlen)
         if shutil.which(compiler) is None:
             logger.error(compiler+": executable not found. Please check environment setup.")
-            raise SystemExit
+            raise SystemExit(1)
         if shutil.which(self.sail_exe[self.xlen]) is None:
             logger.error(self.sail_exe[self.xlen]+ ": executable not found. Please check environment setup.")
-            raise SystemExit
+            raise SystemExit(1)
         if shutil.which(self.make) is None:
             logger.error(self.make+": executable not found. Please check environment setup.")
-            raise SystemExit
+            raise SystemExit(1)
 
 
     def runTests(self, testList, cgf_file=None):

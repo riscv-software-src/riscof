@@ -37,7 +37,7 @@ def compare_signature(file1, file2):
     '''
     if not os.path.exists(file1) :
         logger.error('Signature file : ' + file1 + ' does not exist')
-        sys.exit(1)
+        raise SystemExit(1)
     file1_lines = open(file1, "r").readlines()
     res = ("".join(
         difflib.unified_diff(file1_lines,open(file2, "r").readlines(), file1, file2))).strip()
@@ -302,7 +302,7 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
         test_list[entry[0]]=temp
     if (len(test_list) == 0):
         logger.error('No Tests Selected')
-        raise SystemExit
+        raise SystemExit(1)
 
     with open(os.path.join(workdir,"test_list.yaml"),"w") as tfile:
         tfile.write('# testlist generated on ' + (datetime.now(pytz.timezone('GMT'))).strftime("%Y-%m-%d %H:%M GMT")+'\n')
@@ -351,12 +351,12 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         logger.info("Running Tests on DUT.")
         dut.runTests(dut_test_list)
         logger.info("Tests run on DUT done.")
-        raise SystemExit
+        raise SystemExit(0)
     elif cntr_args[3]:
         logger.info("Running Tests on Reference Model.")
         base.runTests(base_test_list)
         logger.info("Tests run on Reference done.")
-        raise SystemExit
+        raise SystemExit(0)
     else:
         logger.info("Running Tests on DUT.")
         dut.runTests(dut_test_list)
