@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.2] - 2021-09-13
+- Added return with value of 1 in riscof/main.py if any test failed. i.e num_failed > 0
+
+
 ## [1.21.1] - 2021-07-24
 - Added support for intermediate run start points #1
 - --dbfile is added to generate the test-list and then run tests on the target and reference
