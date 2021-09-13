@@ -183,120 +183,22 @@ Once you have installed RISCOF you can execute ``riscof --help`` to print the he
 
 .. code-block:: bash
 
-    usage: riscof [-h] [--version] [--verbose]
-                  {arch-tests,coverage,gendb,setup,validateyaml,run,testlist} ...
-    
-    RISCOF is a framework used to run the Architectural Tests on a DUT and check
-    compatibility with the RISC-V ISA
-    
-    optional arguments:
-      --verbose             [Default=info]
-      --version, -v         Print version of RISCOF being used
-      -h, --help            show this help message and exit
-    
-    Action:
-      The action to be performed by riscof.
-    
-      {arch-tests,coverage,gendb,setup,validateyaml,run,testlist}
-                            List of actions supported by riscof.
-        arch-tests          Setup and maintenance for Architectural Test Suite.
-        coverage            Generate Coverage Report for the given YAML spec.
-        gendb               Generate Database for the standard suite.
-        setup               Initiate setup for riscof.
-        validateyaml        Validate the Input YAMLs using riscv-config.
-        run                 Run the tests on DUT and reference and compare
-                            signatures.
-        testlist            Generate the test list for the given DUT and suite.
-    Action 'arch-tests'
-    
-    	usage: riscof arch-tests [-h] [--dir PATH] [--get-version] [--clone]
-    	                         [--update] [--show-version]
-    	
-    	optional arguments:
-    	  --clone         Clone and setup the architectural tests from the remote
-    	                  repository.
-    	  --dir PATH      The Path to the directory to initialise/containing the
-    	                  tests.[Default = ./riscv-arch-test]
-    	  --get-version   Version of the repository to get. To be used with the
-    	                  update/clone argument. [Default = latest]
-    	  --show-version  Print the version of the architectural tests being used.
-    	  --update        Update the architectural tests to the latest release.
-    	  -h, --help      show this help message and exit
-    	
-    Action 'coverage'
-    
-    	usage: riscof coverage [-h] [--config PATH] --cgf PATH --suite PATH --env PATH
-    	                       [--work-dir PATH] [--no-browser]
-    	
-    	optional arguments:
-    	  --cgf PATH       The Path to the cgf file(s). Multiple allowed
-    	  --config PATH    The Path to the config file. [Default=./config.ini]
-    	  --env PATH       The Path to the custom env directory.
-    	  --no-browser     Do not open the browser for showing the test report.
-    	  --suite PATH     The Path to the custom suite directory.
-    	  --work-dir PATH  The Path to the work-dir.
-    	  -h, --help       show this help message and exit
-    	
-    Action 'gendb'
-    
-    	usage: riscof gendb [-h] --suite PATH --env PATH [--work-dir PATH]
-    	
-    	optional arguments:
-    	  --env PATH       The Path to the custom env directory.
-    	  --suite PATH     The Path to the custom suite directory.
-    	  --work-dir PATH  The Path to the work-dir.
-    	  -h, --help       show this help message and exit
-    	
-    Action 'setup'
-    
-    	usage: riscof setup [-h] [--dutname NAME] [--refname NAME] [--work-dir PATH]
-    	
-    	optional arguments:
-    	  --dutname NAME   Name of DUT plugin. [Default=spike]
-    	  --refname NAME   Name of Reference plugin. [Default=sail_cSim]
-    	  --work-dir PATH  The Path to the work-dir.
-    	  -h, --help       show this help message and exit
-    	
-    Action 'validateyaml'
-    
-    	usage: riscof validateyaml [-h] [--config PATH] [--work-dir PATH]
-    	
-    	optional arguments:
-    	  --config PATH    The Path to the config file. [Default=./config.ini]
-    	  --work-dir PATH  The Path to the work-dir.
-    	  -h, --help       show this help message and exit
-    	
-    Action 'run'
-
-	usage: riscof run [-h] [--config PATH] --suite PATH --env PATH [--no-browser] [--work-dir PATH] [--dbfile PATH | --testfile PATH]
-	                  [--no-ref-run] [--no-dut-run]
-	
-	optional arguments:
-	  --config PATH    The Path to the config file. [Default=./config.ini]
-	  --dbfile PATH    The Path to the database file.
-	  --env PATH       The Path to the custom env directory.
-	  --no-browser     Do not open the browser for showing the test report.
-	  --no-dut-run     Do not run tests on DUT
-	  --no-ref-run     Do not run tests on Reference
-	  --suite PATH     The Path to the custom suite directory.
-	  --testfile PATH  The Path to the testlist file.
-	  --work-dir PATH  The Path to the work-dir.
-	  -h, --help       show this help message and exit
-
-    	
-    Action 'testlist'
-    
-    	usage: riscof testlist [-h] [--work-dir PATH] [--config PATH] --suite PATH
-    	                       --env PATH
-    	
-    	optional arguments:
-    	  --config PATH    The Path to the config file. [Default=./config.ini]
-    	  --env PATH       The Path to the custom env directory.
-    	  --suite PATH     The Path to the custom suite directory.
-    	  --work-dir PATH  The Path to the work-dir.
-    	  -h, --help       show this help message and exit
-    
-	
+    Usage: riscof [OPTIONS] COMMAND [ARGS]...
+        
+        Options:
+          --version                       Show the version and exit.
+          -v, --verbose [info|error|debug]
+                                          Set verbose level
+          --help                          Show this message and exit.
+        
+        Commands:
+          arch-test     Setup and maintenance for Architectural TestSuite.
+          coverage      Run the tests on DUT and reference and compare signatures
+          gendb         Generate Database for the Suite.
+          run           Run the tests on DUT and reference and compare signatures
+          setup         Initiate Setup for riscof.
+          testlist      Generate the test list for the given DUT and suite.
+          validateyaml  Validate the Input YAMLs using riscv-config.
 
 Install RISCV-GNU Toolchain
 ===========================
@@ -366,7 +268,8 @@ These are often used as reference models in RISCOF.
   .. tab:: Spike (riscv-isa-sim)
 
     .. code-block:: bash
-    
+   
+      $ sudo apt-get install device-tree-compiler
       $ git clone https://github.com/riscv/riscv-isa-sim.git
       $ cd riscv-isa-sim
       $ mkdir build
@@ -511,13 +414,6 @@ any generic DUT. Components of this folder will need to be modified by the user 
 By default the ``model_test.h`` files and the ``link.ld`` file will work out of the box for
 ``spike`` and ``sail`` models.
 
-Since our DUT model in this guide is spike, you will only have to change the execute command at line 100 of
-spike/riscof_spike.py to the following:
-
-.. code-block:: python
-
-  execute += self.dut_exe + ' --log-commits --log dump --isa={0} +signature={1} +signature-granularity=4 {2};'.format(self.isa, sig_file, elf)
-
 .. note:: Custom DUTs can go through the various ``#TODO`` comments to figure out what changes need to be
   made in the respective python file.
 
@@ -538,6 +434,19 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
 .. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugin/README.md 
+
+Cloning the Architectural Tests
+===============================
+
+We will be running the tests from the official riscv-arch-test repository on the DUT and Reference
+models. To create a copy of the latest tests from the riscv-arch-test repository do the following:
+
+.. code-block:: console
+    
+    $ riscof --verbose info arch-tests --clone
+
+This will create a riscv-arch-test in the current working directory.
+   
 
 Running RISCOF
 ==============
@@ -573,7 +482,7 @@ The next step is to generate the list of tests that need to be run on the models
 
 .. code-block:: bash
 
-  riscof testlist --config=config.ini
+  riscof testlist --config=config.ini --suite=riscv-arch-test/riscv-test-suite/ --env=riscv-arch-test/riscv-test-suite/env
 
 This step calls the validate-step and thus the output adds one more line to the above dump:
 
@@ -609,7 +518,7 @@ guarantee correctness.
 
 .. code-block:: bash
 
-  riscof run --config=config.ini
+  riscof run --config=config.ini --suite=riscv-arch-test/riscv-test-suite/ --env=riscv-arch-test/riscv-test-suite/env
 
 This should compile and execute the tests on each of the models and end up with the following log.
 The run will also open an HTML page with all the information.

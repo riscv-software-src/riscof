@@ -1,10 +1,5 @@
 #ifndef _COMPLIANCE_MODEL_H
 #define _COMPLIANCE_MODEL_H
-#if XLEN == 64
-  #define ALIGNMENT 3
-#else
-  #define ALIGNMENT 2
-#endif
 
 #define RVMODEL_DATA_SECTION \
         .pushsection .tohost,"aw",@progbits;                            \
@@ -28,12 +23,12 @@
 //RV_COMPLIANCE_DATA_BEGIN
 #define RVMODEL_DATA_BEGIN                                              \
   RVMODEL_DATA_SECTION                                                        \
-  .align ALIGNMENT;\
+  .align 4;\
   .global begin_signature; begin_signature:
 
 //RV_COMPLIANCE_DATA_END
 #define RVMODEL_DATA_END                                                      \
-  .global end_signature; end_signature:  
+  .align 4; .global end_signature; end_signature:  
 
 //RVTEST_IO_INIT
 #define RVMODEL_IO_INIT

@@ -2,9 +2,16 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.21.2] - 2021-09-13
+## [1.22.1] - 2021-09-13
 - Added return with value of 1 in riscof/main.py if any test failed. i.e num_failed > 0
 
+## [1.22.0] - 2021-09-10
+- Fixed signature alignment to begin and end at 16-byte boundaries for all header templates.
+
+## [1.21.2] - 2021-09-03
+- Ported CLI to use click package
+- Improved documentation for using plugins.
+- Added separate paths for dut and ref artifacts.
 
 ## [1.21.1] - 2021-07-24
 - Added support for intermediate run start points #1

@@ -34,6 +34,7 @@ DUTPluginPath={3}
 pluginpath={3}
 ispec={3}/{2}_isa.yaml
 pspec={3}/{2}_platform.yaml
+target_run=1
 
 [{0}]
 pluginpath={1}
