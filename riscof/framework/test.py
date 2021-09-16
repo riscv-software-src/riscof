@@ -17,6 +17,9 @@ from riscv_config.warl import warl_interpreter
 
 logger = logging.getLogger(__name__)
 
+class TestSelectError(Exception):
+    "Raised on an error while selecting Tests."
+    pass
 
 def compare_signature(file1, file2):
     '''
@@ -222,6 +225,56 @@ def eval_macro(macro, spec):
     else:
         return (False,[])
 
+def isa_set(string):
+    all_ext = ("M,A,F,D,Q,L,C,B,J,K,T,P,V,N,S,H,U").split(",")
+    exts = []
+    for ext in all_ext:
+        if ext in string:
+            exts.append(ext)
+    return set(exts)
+
+def canonicalise(isa):
+    all_ext = ("M,A,F,D,Q,L,C,B,J,K,T,P,V,N,S,H,U").split(",")
+    canonical_string = ""
+    for ext in all_ext:
+        if ext in isa:
+            canonical_string += ext
+    return canonical_string
+
+
+def prod_isa(dut_isa, test_isa):
+    '''
+        Function to generate the isa a test has to be compiled with. The various possible ISAs a
+        test can be compiled with is compared with the ISA defined in the DUT specification.
+
+        :param dut_isa: The ISA field in the DUT specification.
+
+        :param test_isa: A list of ISA strings from the test.
+
+        :type dut_isa: str
+
+        :type test_isa: list(str)
+
+        :return: The maximal set of all the applicable ISA strings from the test in canonical form.
+
+        :raises: TestSelectError
+
+    '''
+    dut_exts = isa_set(re.sub("RV(64|128|32)(I|E)","",dut_isa))
+    isa = set([])
+    last_prefix = ''
+    for entry in test_isa:
+        match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",entry)
+        prefix = match[0][0]
+        exts = isa_set(re.sub("RV(64|128|32)(I|E)","",entry))
+        overlap = dut_exts & exts
+        if overlap == exts:
+            isa = isa | overlap
+            if last_prefix:
+                if last_prefix != prefix:
+                    raise TestSelectError("Incompatiple prefix for valid ISA strings in test.")
+            last_prefix = prefix
+    return prefix+canonicalise(isa)
 
 def generate_test_pool(ispec, pspec, workdir, dbfile = None):
     '''
@@ -236,11 +289,8 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
 
         :type pspec: dict
 
-        :return: A list of 3 entry tuples. Each entry in a list corresponds to a
-            test which should be executed. In each tuple, the first entry is the
-            path to the test relative to the riscof root, the second entry is the
-            list of macros for the test and the third entry is the
-            isa(adhering to RISCV specifications) required for the test.
+        :return: A dictionary which contains all the necessary information for the selected tests.
+        Refer to Test List Format for further information.
 
     '''
     spec = {**ispec, **pspec}
@@ -267,7 +317,11 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
                     if (temp[0]):
                         macros.extend(temp[1])
         if not macros == []:
-            isa = db[file]['isa']
+            try:
+                isa = prod_isa(ispec['ISA'],db[file]['isa'])
+            except TestSelectError as e:
+                logger.error("Error in test: "+str(file)+"\n"+str(e))
+                continue
             if '32' in isa:
                 xlen = '32'
             elif '64' in isa:
@@ -280,7 +334,7 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
             elif re.match(r"^[^(Z,z)]+F.*$",isa):
                 macros.append("FLEN=32")
             test_pool.append(
-                (file, db[file]['commit_id'], macros, db[file]['isa'],cov_labels))
+                (file, db[file]['commit_id'], macros,isa,cov_labels))
     logger.info("Selecting Tests.")
     for entry in test_pool:
         # logger.info("Test file:" + entry[0])
