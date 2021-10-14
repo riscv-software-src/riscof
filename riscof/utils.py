@@ -232,16 +232,30 @@ class Command():
             logger.error("Process Killed.")
             logger.error("Command did not exit within {0} seconds: {1}".format(timeout,cmd))
 
-        if x.returncode != 0:
+        try:
+            fmt = sys.stdout.encoding if sys.stdout.encoding is not None else 'utf-8'
             if out:
-                logger.error(out.decode("ascii"))
+                if x.returncode != 0:
+                    logger.error(out.decode(fmt))
+                else:
+                    logger.debug(out.decode(fmt))
+        except UnicodeError:
+            logger.warning("Unable to decode STDOUT for launched subprocess. Output written to:"+
+                    cwd+"/stdout.log")
+            with open(cwd+"/stdout.log") as f:
+                f.write(out)
+        try:
+            fmt = sys.stderr.encoding if sys.stdout.encoding is not None else 'utf-8'
             if err:
-                logger.error(err.decode("ascii"))
-        else:
-            if out:
-                logger.warning(out.decode("ascii"))
-            if err:
-                logger.warning(err.decode("ascii"))
+                if x.returncode != 0:
+                    logger.error(err.decode(fmt))
+                else:
+                    logger.debug(err.decode(fmt))
+        except UnicodeError:
+            logger.warning("Unable to decode STDERR for launched subprocess. Output written to:"+
+                    cwd+"/stderr.log")
+            with open(cwd+"/stderr.log") as f:
+                f.write(out)
         return x.returncode
 
     def _is_shell_command(self):

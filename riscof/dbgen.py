@@ -87,7 +87,7 @@ def createdict(file):
                 continue
             re_search = isa_regex.search(line)
             if re_search is not None:
-                isa = re_search.group('isa')
+                isa = [x.strip() for x in (re_search.group('isa')).split(",")]
             if "RVTEST_CASE(" in line:
                 temp = ''
                 lno = i
@@ -132,7 +132,7 @@ def createdict(file):
     if len(part_dict.keys()) == 0:
         logger.warning("{}: Atleast one part must exist in the test.".format(file))
         raise DbgenError
-    return {'isa': str(isa), 'parts': orderdict(part_dict)}
+    return {'isa': [str(x) for x in isa], 'parts': orderdict(part_dict)}
 
 def check_commit(repo, fpath, old_commit):
     commit = next(
