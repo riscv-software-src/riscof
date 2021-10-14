@@ -226,19 +226,32 @@ def eval_macro(macro, spec):
         return (False,[])
 
 def isa_set(string):
-    all_ext = ("M,A,F,D,Q,L,C,B,J,K,T,P,V,N,S,H,U").split(",")
-    exts = []
-    for ext in all_ext:
-        if ext in string:
-            exts.append(ext)
-    return set(exts)
+    str_match = re.findall(r'([^\d]*?)(?!_)*(Z.*?)*(_|$)',string,re.M)
+    extension_list= []
+    for match in str_match:
+        stdisa, z, ignore = match
+        if stdisa != '':
+            for e in stdisa:
+                extension_list.append(e)
+        if z != '':
+            extension_list.append(z)
+    return set(extension_list)
 
 def canonicalise(isa):
-    all_ext = ("M,A,F,D,Q,L,C,B,J,K,T,P,V,N,S,H,U").split(",")
+    all_ext = ["M","A","F","D","Q","L","C","B","J","K","T","P","V","N","S","H","U","Zicsr",
+            "Zifencei","Zihintpause","Zmmul","Zam","Zbc","Zbb","Zbp","Zbm","Zbe","Zbf","Zkne",
+            "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso"]
     canonical_string = ""
+    switch = False
     for ext in all_ext:
         if ext in isa:
+            if switch:
+                canonical_string += "_"
+            elif ext.startswith("Z"):
+                switch=True
             canonical_string += ext
+            if ext.startswith("Z"):
+                switch=True
     return canonical_string
 
 

@@ -87,7 +87,7 @@ def createdict(file):
                 continue
             re_search = isa_regex.search(line)
             if re_search is not None:
-                isa = (re_search.group('isa')).split(",")
+                isa = [x.strip() for x in (re_search.group('isa')).split(",")]
             if "RVTEST_CASE(" in line:
                 temp = ''
                 lno = i
