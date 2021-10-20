@@ -42,8 +42,9 @@ def compare_signature(file1, file2):
         logger.error('Signature file : ' + file1 + ' does not exist')
         raise SystemExit(1)
     file1_lines = open(file1, "r").readlines()
+    file2_lines = open(file2, "r").readlines()
     res = ("".join(
-        difflib.unified_diff(file1_lines,open(file2, "r").readlines(), file1, file2))).strip()
+        difflib.unified_diff(file1_lines,file2_lines, file1, file2))).strip()
     if res == "":
         if len(file1_lines)==0:
             return 'Failed', '---- \nBoth FIles empty\n'
@@ -51,6 +52,7 @@ def compare_signature(file1, file2):
             status = 'Passed'
     else:
         status = 'Failed'
+        res = difflib.HtmlDiff(tabsize=4).make_table(file1_lines,file2_lines,file1,file2)
     return status, res
 
 def get_node(spec,node):
@@ -446,7 +448,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
             testentry['commit_id'],
             'log':
             'commit_id:' + testentry['commit_id'] + "\nMACROS:\n" + "\n".join(testentry['macros']) +
-            "" if result == "Passed" else diff,
+            ("" if result == "Passed" else diff),
             'path':
             work_dir,
             'repclass':
