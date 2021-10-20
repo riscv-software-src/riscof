@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.23.1] - 2021-10-20
+- Improved diff reporting in case of Failed tests.
+
 ## [1.23.0] - 2021-10-14
 - Added support for new RVTEST_ISA macro
 - Fixed decode error in Command util.
