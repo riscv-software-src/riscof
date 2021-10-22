@@ -99,6 +99,10 @@ class dutname(pluginTemplate):
           self.isa += 'i'
       if "M" in ispec["ISA"]:
           self.isa += 'm'
+      if "F" in ispec["ISA"]:
+          self.isa += 'f'
+      if "D" in ispec["ISA"]:
+          self.isa += 'd'
       if "C" in ispec["ISA"]:
           self.isa += 'c'
 

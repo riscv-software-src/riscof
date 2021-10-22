@@ -42,8 +42,9 @@ def compare_signature(file1, file2):
         logger.error('Signature file : ' + file1 + ' does not exist')
         raise SystemExit(1)
     file1_lines = open(file1, "r").readlines()
+    file2_lines = open(file2, "r").readlines()
     res = ("".join(
-        difflib.unified_diff(file1_lines,open(file2, "r").readlines(), file1, file2))).strip()
+        difflib.unified_diff(file1_lines,file2_lines, file1, file2))).strip()
     if res == "":
         if len(file1_lines)==0:
             return 'Failed', '---- \nBoth FIles empty\n'
@@ -51,6 +52,8 @@ def compare_signature(file1, file2):
             status = 'Passed'
     else:
         status = 'Failed'
+        res = difflib.HtmlDiff(tabsize=4).make_table(file1_lines,file2_lines,file1,file2,
+                context=True, numlines=0)
     return status, res
 
 def get_node(spec,node):
@@ -276,17 +279,21 @@ def prod_isa(dut_isa, test_isa):
     dut_exts = isa_set(re.sub("RV(64|128|32)(I|E)","",dut_isa))
     isa = set([])
     last_prefix = ''
+    atleast_1 = False
     for entry in test_isa:
         match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",entry)
         prefix = match[0][0]
         exts = isa_set(re.sub("RV(64|128|32)(I|E)","",entry))
         overlap = dut_exts & exts
         if overlap == exts:
+            atleast_1 = True
             isa = isa | overlap
             if last_prefix:
                 if last_prefix != prefix:
                     raise TestSelectError("Incompatiple prefix for valid ISA strings in test.")
             last_prefix = prefix
+    if not atleast_1:
+        raise TestSelectError("Test Selected without the relevant extensions being available on DUT.")
     return prefix+canonicalise(isa)
 
 def generate_test_pool(ispec, pspec, workdir, dbfile = None):
@@ -446,7 +453,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
             testentry['commit_id'],
             'log':
             'commit_id:' + testentry['commit_id'] + "\nMACROS:\n" + "\n".join(testentry['macros']) +
-            "" if result == "Passed" else diff,
+            ("" if result == "Passed" else diff),
             'path':
             work_dir,
             'repclass':

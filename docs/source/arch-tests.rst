@@ -5,7 +5,7 @@ Running RISCV-ARCH-TESTS
 ########################
 
 The following guide provides a walkthrough on how to run the tests available at 
-the `riscv-arch-tests <https://github.com/riscv/riscv-arch-test>`_ repository.
+the `riscv-arch-test <https://github.com/riscv/riscv-arch-test>`_ repository.
 
 The following assumes you have installed riscof as a cli on your system. If not, then please refer
 to the :ref:`install_riscof` section for the same.
@@ -64,7 +64,7 @@ Cloning the riscv-arch-test repo
 
     .. code-block:: console
         
-        $ riscof --verbose info arch-tests --clone
+        $ riscof --verbose info arch-test --clone
 
 Running Tests with RISCOF
 -------------------------
