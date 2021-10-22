@@ -345,7 +345,7 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
     if not no_browser:
         try:
             import webbrowser
-            logger.info("Openning test report in web-browser")
+            logger.info("Opening test report in web-browser")
             webbrowser.open(reportfile)
             raise SystemExit(exitcode)
         except:
@@ -437,7 +437,7 @@ def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file):
     if not no_browser:
         try:
             import webbrowser
-            logger.info("Openning test report in web-browser")
+            logger.info("Opening test report in web-browser")
             webbrowser.open(reportfile)
         except:
             raise SystemExit(0)

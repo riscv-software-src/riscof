@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Improved diff reporting in case of Failed tests.
 - Added support for f and d exts in model plugin.
 - Added checking to ensure that tests with wrong filtering based on ISA are not selected.
+- Fixed spelling for opening and arch test command in docs.
 
 ## [1.23.0] - 2021-10-14
 - Added support for new RVTEST_ISA macro
