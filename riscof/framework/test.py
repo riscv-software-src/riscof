@@ -52,7 +52,8 @@ def compare_signature(file1, file2):
             status = 'Passed'
     else:
         status = 'Failed'
-        res = difflib.HtmlDiff(tabsize=4).make_table(file1_lines,file2_lines,file1,file2)
+        res = difflib.HtmlDiff(tabsize=4).make_table(file1_lines,file2_lines,file1,file2,
+                context=True, numlines=0)
     return status, res
 
 def get_node(spec,node):
