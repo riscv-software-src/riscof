@@ -52,8 +52,26 @@ def compare_signature(file1, file2):
             status = 'Passed'
     else:
         status = 'Failed'
-        res = difflib.HtmlDiff(tabsize=4).make_table(file1_lines,file2_lines,file1,file2,
-                context=True, numlines=0)
+
+        error_report = '\nFile1 Path:{0}\nFile2 Path:{1}\nMatch  Line#    File1    File2\n'.format(
+                            file1,file2)
+        fmt = "{0:5s} {1:6d} {2:8s} {3:8s}\n"
+        prev = ''
+        include = False
+        for lnum,lines in enumerate(zip(file1_lines,file2_lines)):
+            if lines[0] != lines[1]:
+                include = True
+                if not include:
+                    error_report += prev
+                rline = fmt.format("*",lnum,lines[0].strip(),lines[1].strip())
+                error_report += rline
+                prev = rline
+            elif include:
+                rline = fmt.format("",lnum,lines[0].strip(),lines[1].strip())
+                error_report += rline
+                include = False
+                prev = rline
+        res = error_report
     return status, res
 
 def get_node(spec,node):

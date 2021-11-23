@@ -164,6 +164,10 @@ Optional arguments from the cli:
 - testfile: The path to the testlist file on which tests will be run
 - no-ref-run: when used, RISCOF will not run tests on Reference and will quit before signatures comparison
 - no-dut-run: when used, RISCOF will not run tests on DUT and will quit before signatures comparison 
+- no-clean: when used, RISCOF will not remove the ``work_dir``, if it exists. 
+
+The ``work_dir`` is cleaned by default. However, if one of ``no-clean``, ``testfile`` or ``dbfile`` 
+are specified, it is preserved as is.
 
 All artifacts of this command are generated in the ``work_dir`` directory. Typicall artifacts will
 include:
