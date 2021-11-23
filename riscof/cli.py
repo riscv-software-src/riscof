@@ -259,10 +259,12 @@ def testlist(ctx,config,work_dir,suite,env):
                         metavar= 'PATH',cls=CustomOption,mutually_exclusive=['--dbfile'])
 @click.option('--no-ref-run',is_flag=True,help="Do not run tests on Reference")
 @click.option('--no-dut-run',is_flag=True,help="Do not run tests on DUT")
+@click.option('--no-clean',is_flag=True,help="Do not clean work directory(if exists).")
 @click.pass_context
-def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run):
+def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run,no_clean):
     exitcode = 0
-    setup_directories(work_dir,(testfile is not None or dbfile is not None))
+    clean =  (testfile is not None or dbfile is not None or no_clean)
+    setup_directories(work_dir,clean)
     ctx.obj.mkdir = False
     constants.env = env
     constants.suite = suite

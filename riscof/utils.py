@@ -58,7 +58,7 @@ class makeUtil():
     Supports automatic addition and execution of targets. Uses the class
     :py:class:`shellCommand` to execute commands.
     """
-    def __init__(self,makeCommand='make',makefilePath="./Makefile"):
+    def __init__(self,makeCommand='make',makefilePath="./Makefile",clean=True):
         """ Constructor.
 
         :param makeCommand: The variant of make to be used with optional arguments.
@@ -70,10 +70,16 @@ class makeUtil():
 
         :type makefilePath: str
 
+        :param clean: Should the Makefile be removed if it already exists.
+
+        :type clean: Bool
+
         """
         self.makeCommand=makeCommand
         self.makefilePath = makefilePath
         self.targets = []
+        if os.path.exists(makefilePath) and clean:
+            os.remove(makefilePath)
     def add_target(self,command,tname=""):
         """
         Function to add a target to the makefile.
