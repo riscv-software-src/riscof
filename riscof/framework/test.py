@@ -260,7 +260,7 @@ def isa_set(string):
 
 def canonicalise(isa):
     all_ext = ["M","A","F","D","Q","L","C","B","J","K","T","P","V","N","S","H","U","Zicsr",
-            "Zifencei","Zihintpause","Zmmul","Zam","Zbc","Zbb","Zbp","Zbm","Zbe","Zbf","Zkne",
+            "Zifencei","Zihintpause","Zmmul","Zam","Zba","Zbc","Zbb","Zbs","Zbp","Zbm","Zbe","Zbf","Zkne",
             "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso"]
     canonical_string = ""
     switch = False
@@ -298,6 +298,7 @@ def prod_isa(dut_isa, test_isa):
     isa = set([])
     last_prefix = ''
     atleast_1 = False
+
     for entry in test_isa:
         match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",entry)
         prefix = match[0][0]
