@@ -261,7 +261,7 @@ def isa_set(string):
 def canonicalise(isa):
     all_ext = ["M","A","F","D","Q","L","C","B","J","K","T","P","V","N","S","H","U","Zicsr",
             "Zifencei","Zihintpause","Zmmul","Zam","Zba","Zbc","Zbb","Zbs","Zbp","Zbm","Zbe","Zbf","Zkne",
-            "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso"]
+            "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso","Zbkb","Zbkc","Zbkx"]
     canonical_string = ""
     switch = False
     for ext in all_ext:
