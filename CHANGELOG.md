@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.23.3] - 2022-01-27
+- Added missing subextensions for B and K specs in ISA generation function.
+
 ## [1.23.2] - 2021-11-23
 - Fixed report generation for failing tests. Removed HTML table and added manual diff of lines in the report.
 - Added no_clean flag to CLI. 
