@@ -208,7 +208,7 @@ If you already have the 32-bit gnu-toolchain available, you can skip to the next
 
 .. note:: The git clone and installation will take significant time. Please be patient. If you face
    issues with any of the following steps please refer to
-   https://github.com/riscv/riscv-gnu-toolchain for further help in installation.
+   https://github.com/riscv-collab/riscv-gnu-toolchain for further help in installation.
 
 .. tabs::
    .. tab:: Ubuntu
@@ -264,13 +264,49 @@ This section will walk your throguh installing 2 important RISC-V reference mode
 These are often used as reference models in RISCOF.
 
 .. tabs::
-  
+
+  .. tab:: SAIL (SAIL C-emulator)
+
+    **Alternative 1: Local Install**
+
+    .. code-block:: bash
+
+       $ sudo apt-get install opam  build-essential libgmp-dev z3 pkg-config zlib1g-dev
+       $ opam init -y --disable-sandboxing
+       $ opam switch create ocaml-base-compiler.4.06.1
+       $ opam install sail -y
+       $ eval $(opam config env)
+       $ git clone https://github.com/riscv/sail-riscv.git
+       $ cd sail-riscv
+       $ make
+       $ ARCH=RV32 make
+       $ ARCH=RV64 make
+       $ ln -s sail-riscv/c_emulator/riscv_sim_RV64 /usr/bin/riscv_sim_RV64
+       $ ln -s sail-riscv/c_emulator/riscv_sim_RV32 /usr/bin/riscv_sim_RV32
+
+    This will create a C simulator in ``c_emulator/riscv_sim_RV64`` and
+    ``c_emulator/riscv_sim_RV32``. You will not need to add these paths in your ``$PATH`` or an
+    alias to it to execute them from command line.
+
+    **Alternative 2: Using Docker**
+
+    For the convenience of the users, a docker image with all the necessary tools is available. The
+    plugin also supports using this docker image to generate the reference signatures. 
+
+    .. warning:: Ensure that docker is installed and configured properly before running this step.
+    
+    The following command can be used to pull the docker image.
+    
+    .. code-block:: bash
+        
+        $ docker pull registry.gitlab.com/incoresemi/docker-images/compliance
+    
   .. tab:: Spike (riscv-isa-sim)
 
     .. code-block:: bash
    
       $ sudo apt-get install device-tree-compiler
-      $ git clone https://github.com/riscv/riscv-isa-sim.git
+      $ git clone https://github.com/riscv-software-src/riscv-isa-sim.git
       $ cd riscv-isa-sim
       $ mkdir build
       $ cd build
@@ -307,26 +343,7 @@ These are often used as reference models in RISCOF.
         --debug-sba=<bits>    Debug bus master supports up to <bits> wide accesses [default 0]
         --debug-auth          Debug module requires debugger to authenticate
 
-  .. tab:: SAIL (SAIL C-emulator)
 
-    .. code-block:: bash
-
-       $ sudo apt-get install opam  build-essential libgmp-dev z3 pkg-config zlib1g-dev
-       $ opam init -y --disable-sandboxing
-       $ opam switch create ocaml-base-compiler.4.06.1
-       $ opam install sail -y
-       $ eval $(opam config env)
-       $ git clone https://github.com/rems-project/sail-riscv.git
-       $ cd sail-riscv
-       $ make
-       $ ARCH=RV32 make
-       $ ARCH=RV64 make
-       $ ln -s sail-riscv/c_emulator/riscv_sim_RV64 /usr/bin/riscv_sim_RV64
-       $ ln -s sail-riscv/c_emulator/riscv_sim_RV32 /usr/bin/riscv_sim_RV32
-
-    This will create a C simulator in ``c_emulator/riscv_sim_RV64` and
-    ``c_emulator/riscv_sim_RV32``. You will not need to add these paths in your ``$PATH`` or an
-    alias to it to execute them from command line.
 
 Create Neccesary Env Files
 ==========================
@@ -351,7 +368,7 @@ In order to run tests via RISCOF you will need to provide the following items :
     Finally, an env directory will also need to be present in the dut-plugin directory, which
     contains the environment files like the ``model_test.h`` that is required to compile and run the tests
     on the DUT. Refer to the `TestFormat spec
-    <https://github.com/riscv/riscv-arch-test/blob/master/spec/TestFormatSpec.adoc>`_ for definition of macros that can be used in the
+    <https://github.com/riscv-software-src/riscv-arch-test/blob/master/spec/TestFormatSpec.adoc>`_ for definition of macros that can be used in the
     ``model_test.h`` file. The env directory may also include other files like the linker script,
     post-processing scripts that the user may want.
 
@@ -409,6 +426,15 @@ above config::
 
   PATH=<path_to_my_Sail_binaries>
 
+To use the docker image(instead of a local sail installation) the ``sail_cSim`` node in the above
+snippet should be replaced with the following::
+
+  [sail_cSim]
+  pluginpath=/path/to/riscof/sail_cSim
+  docker=True
+  image=registry.gitlab.com/incoresemi/docker-images/compliance
+
+
 The folder ``spike`` contains various templates of files that would be required for testing of 
 any generic DUT. Components of this folder will need to be modified by the user as per the DUT spec.
 By default the ``model_test.h`` files and the ``link.ld`` file will work out of the box for
@@ -433,7 +459,7 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
-.. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugin/README.md 
+.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/tree/master/sail_cSim#riscof-plugin-for-sail-risc-v-formal-model 
 
 Cloning the Architectural Tests
 ===============================
