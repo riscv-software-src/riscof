@@ -37,7 +37,7 @@ logs, signatures, elfs, etc.
 
 The yaml specs in the DUT plugin directory are the most important inputs to the RISCOF framework.
 All decisions of filtering tests depend on the these YAML files. The files must follow the
-syntax/format specified by `riscv-config <https://github.com/riscv/riscv-config>`_. These YAMLs are
+syntax/format specified by `riscv-config <https://github.com/riscv-software-src/riscv-config>`_. These YAMLs are
 validated in RISCOF using riscv-config. 
 
 The python plugin files capture the behavior of model for compiling tests, executing them on the DUT
