@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.23.4] - 2022-02-24
+- fixed doc dependency on mistune for successful RTD build
+
 ## [1.23.3] - 2022-01-27
 - Added missing subextensions for B and K specs in ISA generation function.
 
