@@ -265,9 +265,7 @@ These are often used as reference models in RISCOF.
 
 .. tabs::
 
-  .. tab:: SAIL (SAIL C-emulator)
-
-    **Alternative 1: Local Install**
+  .. tab:: SAIL (Local Install)
 
     .. code-block:: bash
 
@@ -288,7 +286,7 @@ These are often used as reference models in RISCOF.
     ``c_emulator/riscv_sim_RV32``. You will not need to add these paths in your ``$PATH`` or an
     alias to it to execute them from command line.
 
-    **Alternative 2: Using Docker**
+  .. tab:: SAIL (via Docker)
 
     For the convenience of the users, a docker image with all the necessary tools is available. The
     plugin also supports using this docker image to generate the reference signatures. 

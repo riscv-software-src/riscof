@@ -34,32 +34,51 @@ Setup all the DUT and Ref Plugins
 Create a config.ini file
 ------------------------
 
-  1. You will need to create a `config.ini` file with the following contents.
+   1. You will need to create a ``config.ini`` file with the following contents. 
 
-    .. code-block:: ini
-      :linenos:
+.. tabs::
 
-      [RISCOF]
-      ReferencePlugin=sail_cSim
-      ReferencePluginPath=/path/to/riscof-plugins/sail_cSim
-      DUTPlugin=<your-dut-name>
-      DUTPluginPath=/path/to/your/dut-directory
-      
-      ## Configuration for Your DUT.
-      [dut-name]
-      pluginpath=/path/to/your/dut-directory
-      ispec=/path/to/your/dut-directory/dut_isa.yaml
-      pspec=/path/to/your/dut-directory/dut_platform.yaml
-      
-      [sail_cSim]
-      pluginpath=/path/to/sail-riscv/riscof-plugins/sail_cSim
-      #docker = True
-      #image=registry.gitlab.com/incoresemi/docker-images/compliance
+    .. tab:: SAIL(Local Install)
 
-    .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
+        .. code-block:: ini
 
-    .. tip:: Incase the docker image for the SAIL model was installed, uncomment lines 15 and 16 in
-        the above snippet to run the tests using the docker.
+          [RISCOF]
+          ReferencePlugin=sail_cSim
+          ReferencePluginPath=/path/to/riscof-plugins/sail_cSim
+          DUTPlugin=<your-dut-name>
+          DUTPluginPath=/path/to/your/dut-directory
+          
+          ## Configuration for Your DUT.
+          [dut-name]
+          pluginpath=/path/to/your/dut-directory
+          ispec=/path/to/your/dut-directory/dut_isa.yaml
+          pspec=/path/to/your/dut-directory/dut_platform.yaml
+          
+          [sail_cSim]
+          pluginpath=/path/to/sail-riscv/riscof-plugins/sail_cSim
+
+    .. tab:: SAIL(via Docker)
+
+        .. code-block:: ini
+
+          [RISCOF]
+          ReferencePlugin=sail_cSim
+          ReferencePluginPath=/path/to/riscof-plugins/sail_cSim
+          DUTPlugin=<your-dut-name>
+          DUTPluginPath=/path/to/your/dut-directory
+          
+          ## Configuration for Your DUT.
+          [dut-name]
+          pluginpath=/path/to/your/dut-directory
+          ispec=/path/to/your/dut-directory/dut_isa.yaml
+          pspec=/path/to/your/dut-directory/dut_platform.yaml
+          
+          [sail_cSim]
+          pluginpath=/path/to/sail-riscv/riscof-plugins/sail_cSim
+          docker = True
+          image=registry.gitlab.com/incoresemi/docker-images/compliance
+
+.. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
 .. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/blob/master/sail_cSim/README.md
 
