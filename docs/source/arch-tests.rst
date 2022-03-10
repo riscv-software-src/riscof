@@ -23,7 +23,7 @@ Setup all the DUT and Ref Plugins
      .. code-block:: console
 
         $ cd ~/
-        $ git clone https://github.com/rems-project/sail-riscv.git
+        $ git clone https://gitlab.com/incoresemi/riscof-plugins.git
 
      You will need the path of the `riscof-plugins` directory from the above repo for the next
      steps.
@@ -37,14 +37,15 @@ Create a config.ini file
   1. You will need to create a `config.ini` file with the following contents.
 
     .. code-block:: ini
+      :linenos:
 
       [RISCOF]
       ReferencePlugin=sail_cSim
-      ReferencePluginPath=/path/to/sail-riscv/riscof-plugins/sail_cSim
+      ReferencePluginPath=/path/to/riscof-plugins/sail_cSim
       DUTPlugin=<your-dut-name>
       DUTPluginPath=/path/to/your/dut-directory
       
-      ## Example configuration for spike plugin.
+      ## Configuration for Your DUT.
       [dut-name]
       pluginpath=/path/to/your/dut-directory
       ispec=/path/to/your/dut-directory/dut_isa.yaml
@@ -52,10 +53,15 @@ Create a config.ini file
       
       [sail_cSim]
       pluginpath=/path/to/sail-riscv/riscof-plugins/sail_cSim
+      #docker = True
+      #image=registry.gitlab.com/incoresemi/docker-images/compliance
 
     .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
-.. _csim_docs: https://github.com/rems-project/sail-riscv/riscof-plugins/README.md
+    .. tip:: Incase the docker image for the SAIL model was installed, uncomment lines 15 and 16 in
+        the above snippet to run the tests using the docker.
+
+.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/blob/master/sail_cSim/README.md
 
 Cloning the riscv-arch-test repo
 --------------------------------
@@ -65,21 +71,24 @@ Cloning the riscv-arch-test repo
     .. code-block:: console
         
         $ riscof --verbose info arch-test --clone
+    
+    .. note:: The above command takes around 5 mins to complete.
+
 
 Running Tests with RISCOF
 -------------------------
 
-  1. Run the tests using the following:
+    1. Run the tests using the following:
 
-     .. code-block:: console
+        .. code-block:: console
 
-       $ riscof --verbose info run --config ./config.ini --suite ./riscv-arch-test/riscv-test-suite/rv32i_m --env ./riscv-arch-test/riscv-test-suite/env
+          $ riscof --verbose info run --config ./config.ini --suite ./riscv-arch-test/riscv-test-suite/rv32i_m --env ./riscv-arch-test/riscv-test-suite/env
 
-     The above step will first create a database of the all tests from the ``rv32i_m`` directory 
-     (recursively). This database can be found in the `riscof_work/database.yaml` file that is 
-     generated. From this database, RISCOF selects the applicable test depending on the ISA yaml 
-     provided and then runs them first on the DUT and then on the REFERENCE plugins. The end, it
-     compares the signatures and provides an html report of the result.
+        The above step will first create a database of the all tests from the ``rv32i_m`` directory 
+        (recursively). This database can be found in the `riscof_work/database.yaml` file that is 
+        generated. From this database, RISCOF selects the applicable test depending on the ISA yaml 
+        provided and then runs them first on the DUT and then on the REFERENCE plugins. The end, it
+        compares the signatures and provides an html report of the result.
 
-     .. note:: Make sure to change the paths in the above command or even the test-suite directory
-        to ``rv64i_m`` as the case maybe.
+        .. note:: Make sure to change the paths in the above command or even the test-suite directory
+           to ``rv64i_m`` as the case maybe.

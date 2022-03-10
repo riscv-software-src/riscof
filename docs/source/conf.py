@@ -15,7 +15,7 @@
 import sys
 import os
 import shlex
-import re 
+import re
 
 def get_version():
     changelog = open('../../CHANGELOG.md','r').read()
@@ -58,6 +58,7 @@ extensions = [
     'sphinxcontrib.autoyaml',
     'sphinxcontrib.bibtex',
     'sphinx_tabs.tabs',
+    'sphinx_copybutton',
     'm2r2'
 ]
 # Add any paths that contain templates here, relative to this directory.
@@ -437,3 +438,6 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# Ignore $ at the start of the line in bash commands to enable copy.
+copybutton_prompt_text = "$"

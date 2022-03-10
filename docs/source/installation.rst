@@ -260,7 +260,7 @@ With this you should now have all the following available as command line argume
 Install Plugin Models
 =====================
 
-This section will walk your throguh installing 2 important RISC-V reference models: Spike and SAIL.
+This section will walk your through installing 2 important RISC-V reference models: Spike and SAIL.
 These are often used as reference models in RISCOF.
 
 .. tabs::
@@ -294,7 +294,10 @@ These are often used as reference models in RISCOF.
     plugin also supports using this docker image to generate the reference signatures. 
 
     .. warning:: Ensure that docker is installed and configured properly before running this step.
-    
+        A guide to installing docker can be found `here <docker_ref_>`_.
+ 
+    .. _docker_ref: https://docs.docker.com/engine/install/ 
+
     The following command can be used to pull the docker image.
     
     .. code-block:: bash
