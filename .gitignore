@@ -30,3 +30,5 @@ sail_cSim
 spike
 
 riscof.egg-info/
+
+.python-version
