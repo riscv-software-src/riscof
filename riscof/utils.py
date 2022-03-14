@@ -248,7 +248,7 @@ class Command():
         except UnicodeError:
             logger.warning("Unable to decode STDOUT for launched subprocess. Output written to:"+
                     cwd+"/stdout.log")
-            with open(cwd+"/stdout.log") as f:
+            with open(cwd+"/stdout.log","wb") as f:
                 f.write(out)
         try:
             fmt = sys.stderr.encoding if sys.stdout.encoding is not None else 'utf-8'
@@ -260,7 +260,7 @@ class Command():
         except UnicodeError:
             logger.warning("Unable to decode STDERR for launched subprocess. Output written to:"+
                     cwd+"/stderr.log")
-            with open(cwd+"/stderr.log") as f:
+            with open(cwd+"/stderr.log","wb") as f:
                 f.write(out)
         return x.returncode
 
