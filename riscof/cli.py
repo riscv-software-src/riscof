@@ -370,12 +370,18 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
 @click.option('--no-browser',is_flag=True,
                      help="Do not open the browser for showing the test report.")
 @click.option(
+        '--flen','-f',
+        type=click.Choice(['32','64','16']),
+        default='32',
+        help="Floating point length that is being tested, [Default value = 32]"
+)
+@click.option(
         '--cgf-file','-c',multiple=True,
         type=click.Path(resolve_path=True,readable=True,exists=True),
         help="Coverage Group File(s). Multiple allowed.",required=True
     )
 @click.pass_context
-def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file):
+def coverage(ctx,config,work_dir,suite,env,no_browser,flen,cgf_file):
     setup_directories(work_dir)
     ctx.obj.mkdir = False
     ctx.obj.config, ctx.obj.config_dir = read_config(config)
@@ -397,7 +403,7 @@ def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file):
     with open(platform_file, "r") as platfile:
         pspecs = platfile.read()
     report, for_html, test_stats, coverpoints = framework.run_coverage(base, isa_file, platform_file,
-            work_dir, cgf_file)
+            work_dir, flen, cgf_file)
     report_file = open(work_dir+'/suite_coverage.rpt','w')
     utils.dump_yaml(report, report_file)
     report_file.close()

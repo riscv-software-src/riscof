@@ -48,8 +48,9 @@ class sail_cSim(pluginTemplate):
          -I '+self.pluginpath+'/env/\
          -I ' + archtest_env
 
-    def build(self, isa_yaml, platform_yaml):
+    def build(self, isa_yaml, platform_yaml, flen): #Added a new parameter flen to pass the float length
         ispec = utils.load_yaml(isa_yaml)['hart0']
+        self.flen = flen
         self.xlen = ('64' if 64 in ispec['supported_xlen'] else '32')
         self.isa = 'rv' + self.xlen
         self.compile_cmd = self.compile_cmd+' -mabi='+('lp64 ' if 64 in ispec['supported_xlen'] else 'ilp32 ')
@@ -112,8 +113,8 @@ class sail_cSim(pluginTemplate):
                         -t {0}.log --parser-name c_sail -o coverage.rpt  \
                         --sig-label begin_signature  end_signature \
                         --test-label rvtest_code_begin rvtest_code_end \
-                        -e ref.elf -c {1} -x{2} {3};'.format(\
-                        test_name, ' -c '.join(cgf_file), self.xlen, cov_str)
+                        -e ref.elf -c {1} -x{2} -f{3} {4};'.format(\
+                        test_name, ' -c '.join(cgf_file), self.xlen, self.flen, cov_str) #Added a new parameter flen to pass the float length
             else:
                 coverage_cmd = ''
 
