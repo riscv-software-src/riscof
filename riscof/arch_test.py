@@ -29,16 +29,16 @@ def get_version(path):
             success = True
         else:
             logger.debug("Repository is not the official RISCV Architectural Test suite or the \
-branch is not the master branch.")
+branch is not the main branch.")
     return ver_dict,success
 
-def update(path,branch='master'):
+def update(path,branch='main'):
     version,is_repo = get_version(path)
     if is_repo:
         logger.debug("Current version of the repository: " + version['version'])
         logger.debug("Current commit hash of the repository: " + version['commit'])
         repo = git.Repo(path)
-        repo.git.pull('origin','master')
+        repo.git.pull('origin','main')
         latest_tag = (repo.tags)[-1]
         checkout_target = latest_tag if branch=='latest' else branch
         repo.git.checkout(checkout_target)
@@ -48,7 +48,7 @@ def update(path,branch='master'):
     else:
         logger.info("Directory does not contain the riscv-arch-test repo.")
 
-def clone(path,branch="master"):
+def clone(path,branch="main"):
     logger.info("Clonning repository at "+str(path))
     repo = git.Repo.clone_from(constants.https_url, path)
     latest_tag = (repo.tags)[-1]
