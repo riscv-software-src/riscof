@@ -34,3 +34,4 @@ urllib3==1.25.3
 twine==1.13.0
 sphinx_tabs==2.1.0
 m2r2==0.2.7
+mistune==0.8.4
