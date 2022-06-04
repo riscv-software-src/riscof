@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.24.1] - 2022-0602
+- Add support for Zicbo* extension
+
 ## [1.24.0] - 2022-0514
 - rename the "master" branch of riscv-arch-test to "main"  
 

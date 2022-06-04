@@ -259,9 +259,10 @@ def isa_set(string):
     return set(extension_list)
 
 def canonicalise(isa):
-    all_ext = ["M","A","F","D","Q","L","C","B","J","K","T","P","V","N","S","H","U","Zicsr",
-            "Zifencei","Zihintpause","Zmmul","Zam","Zba","Zbc","Zbb","Zbs","Zbp","Zbm","Zbe","Zbf","Zkne",
-            "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso","Zbkb","Zbkc","Zbkx"]
+    all_ext = ["M","A","F","D","Q","L","C","B","J","K","T","P","V","N","S","H","U","Zicbom","Zicbop",
+            "Zicboz","Zicsr", "Zifencei","Zihintpause","Zmmul","Zam","Zba","Zbc","Zbb","Zbs","Zbp",
+            "Zbm","Zbe","Zbf","Zkne", "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso",
+            "Zbkb","Zbkc","Zbkx"]
     canonical_string = ""
     switch = False
     for ext in all_ext:
@@ -372,6 +373,10 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
                 macros.append("FLEN=64")
             elif re.match(r"^[^(Z,z)]+F.*$",isa):
                 macros.append("FLEN=32")
+            if 'cbozero' in file:
+                macros.append("BLOCKSZ="+str(pspec['zicbo_cache_block_sz']['zicboz_sz']))
+            elif 'cbo' in file:
+                macros.append("BLOCKSZ="+str(pspec['zicbo_cache_block_sz']['zicbom_sz']))
             test_pool.append(
                 (file, db[file]['commit_id'], macros,isa,cov_labels))
     logger.info("Selecting Tests.")
