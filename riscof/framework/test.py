@@ -298,19 +298,15 @@ def prod_isa(dut_isa, test_isa):
     isa = set([])
     last_prefix = ''
     atleast_1 = False
-
+    match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",dut_isa)
+    prefix = match[0][0]
     for entry in test_isa:
         match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",entry)
-        prefix = match[0][0]
         exts = isa_set(re.sub("RV(64|128|32)(I|E)","",entry))
         overlap = dut_exts & exts
-        if overlap == exts:
+        if overlap == exts and match[0][0] == prefix:
             atleast_1 = True
             isa = isa | overlap
-            if last_prefix:
-                if last_prefix != prefix:
-                    raise TestSelectError("Incompatiple prefix for valid ISA strings in test.")
-            last_prefix = prefix
     if not atleast_1:
         raise TestSelectError("Test Selected without the relevant extensions being available on DUT.")
     return prefix+canonicalise(isa)
