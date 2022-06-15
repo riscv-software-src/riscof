@@ -126,10 +126,15 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None)
                             'test_size': [str(entry) for entry in find_elf_size(elf)],
                             'test_groups': str(set(test_list[entry[0]]['coverage_labels']))
                             })
+    flen = 0
+    if 'F' in ispec['ISA']:
+        flen = 32
+    elif 'D' in ispec['ISA']:
+        flen = 64
     if 64 in ispec['supported_xlen']:
-        results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,64), True, 64)
+        results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,64,flen), True)
     elif 32 in ispec['supported_xlen']:
-        results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,32), True, 32)
+        results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,32,flen), True)
 
 
 #    results_yaml = yaml.load(results)
@@ -165,7 +170,7 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir, cntr_args):
 
         :param dut_platform_spec: The absolute path to the checked yaml containing
             the DUT platform specification.
-            
+
         :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run
 
         :type dut_platform_spec: str
@@ -184,7 +189,7 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir, cntr_args):
     #Loading Specs
     ispec = utils.load_yaml(dut_isa_spec)
     pspec = utils.load_yaml(dut_platform_spec)
-    
+
     if cntr_args[2]:
         logger.info("Running Build for DUT")
         dut.build(dut_isa_spec, dut_platform_spec)
