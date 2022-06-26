@@ -42,7 +42,7 @@ template file can be generated using the ``--setup`` command of RISCOF.
    PATH=<executable-path> #OPTIONAL
 
    [ref-name]
-   pluginpath=<path-to-dut-plugin>
+   pluginpath=<path-to-ref-plugin>
    jobs=<num-of-jobs> #OPTIONAL
    PATH=<executable-path> #OPTIONAL
 
