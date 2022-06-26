@@ -469,10 +469,9 @@ models. To create a copy of the latest tests from the riscv-arch-test repository
 
 .. code-block:: console
     
-    $ riscof --verbose info arch-tests --clone
+    $ riscof --verbose info arch-test --clone
 
-This will create a riscv-arch-test in the current working directory.
-   
+This will create a `riscv-arch-test` folder in the current working directory.
 
 Running RISCOF
 ==============
