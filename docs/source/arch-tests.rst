@@ -28,7 +28,7 @@ Setup all the DUT and Ref Plugins
      You will need the path of the `riscof-plugins` directory from the above repo for the next
      steps.
 
-  3. You will also need to create a riscof-plugin for you own DUT. If you haven't already done so,
+  3. You will also need to create a RISCOF plugin for you own DUT. If you haven't already done so,
      please refer to the :ref:`plugins` section for details on building one.
 
 Create a config.ini file
