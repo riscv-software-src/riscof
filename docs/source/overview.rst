@@ -60,7 +60,7 @@ internal utilities
   under consideration. This list is presented as a YAML file and more information on this format is
   available in :ref:`testlist`. 
 
-  This utility is currently internal to RISCOF and is not available as a separate cli (command line
+  This utility is currently internal to RISCOF and is not available as a separate CLI (command line
   interface). Neither users or contributors should need to deal with this utility as a separate
   module.
 

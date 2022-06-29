@@ -4,26 +4,26 @@
 Understanding RISCOF Inputs
 ###########################
 
-There are three major inputs that are required by most of the subcommand of RISCOF listed in the
+There are three major inputs that are required by most of the subcommand of ``riscof`` listed in the
 :ref:`commands` section:
 
-1. The ``config.ini`` file
-2. The ``DUT plugin directory``
-3. The ``Reference plugin directory``
+1. The ``config.ini`` file,
+2. The **DUT plugin directory**,
+3. The **Reference plugin directory**.
 
-This section will discuss each of the above requirements in detail
+This section will discuss each of the above requirements in detail.
 
 .. _config_syntax:
 
-Config.ini Syntax
-=================
+``config.ini`` syntax
+=====================
 
 The ``config.ini`` file follows the `ini <https://en.wikipedia.org/wiki/INI_file>`_ syntax and is 
 used to specify the name of the dut and reference plugins, path of the model plugins, plugin
 specific parameters and paths to the DUT's riscv-config based ISA and platform YAMLs.
 
 
-A generic format of the ``config.ini`` file required by RISCOF is presented below. A similar
+A generic format of the ``config.ini`` file required by ``riscof`` is presented below. A similar
 template file can be generated using the ``--setup`` command of RISCOF.
 
 .. code-block:: ini
@@ -49,8 +49,8 @@ template file can be generated using the ``--setup`` command of RISCOF.
 
 The config file also allows you to define specific nodes/fields
 which can be used by the respective model plugins. For e.g., in the above template the
-`pluginpath` variable under the `[dut-name]` header is available to the DUT Python plugin file 
-via RISCOF. The plugin may use this pluginpath to detect the ``env`` files, scripts and other
+```pluginpath``` variable under the ``[dut-name]`` header is available to the DUT Python plugin file 
+via RISCOF. The plugin may use this ``pluginpath`` to detect the ``env`` files, scripts and other
 collaterals that may be required during execution.
 
 Similarly one can define more variables and prefixes here which can directly be
@@ -85,18 +85,18 @@ successful execution.
 
 A typical DUT plugin directory has the following structure::
 
- ├──dut-name/                    # DUT plugin templates
-    ├── env
+ ├── dut-name/                   # DUT plugin templates
+    ├── env/
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
     ├── riscof_dut-name.py       # DUT Python plugin
     ├── dut-name_isa.yaml        # DUT ISA YAML based on riscv-config
-    └── dut-name_platform.yaml   # DUT Platform YAML based on riscv-config
+    └── dut-name_platform.yaml   # DUT platform YAML based on riscv-config
 
 A typical Reference directory has the following structure::
 
- ├──ref-name/                    # Reference plugin templates
-    ├── env
+ ├── ref-name/                   # Reference plugin templates
+    ├── env/
     │   ├── link.ld              # Reference linker script
     │   └── model_test.h         # Reference specific header file
     ├── riscof_ref-name.py       # Reference Python plugin

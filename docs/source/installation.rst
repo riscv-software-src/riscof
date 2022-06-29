@@ -26,18 +26,18 @@ Install Python
    .. tab:: Ubuntu
 
 
-      Ubuntu 17.10 and 18.04 by default come with python-3.6.9 which is sufficient for using riscv-config.
+      Ubuntu 17.10 and 18.04 by default come with Python 3.6.9 which is sufficient for using riscv-config.
       
-      If you are are Ubuntu 16.10 and 17.04 you can directly install python3.6 using the Universe
-      repository
+      If you are are Ubuntu 16.10 and 17.04 you can directly install ``python3.6`` using the Universe
+      repository:
       
       .. code-block:: shell-session
 
         $ sudo apt-get install python3.6
         $ pip3 install --upgrade pip
       
-      If you are using Ubuntu 14.04 or 16.04 you need to get python3.6 from a Personal Package Archive 
-      (PPA)
+      If you are using Ubuntu 14.04 or 16.04 you need to get ``python3.6`` from a Personal Package Archive 
+      (PPA):
       
       .. code-block:: shell-session
 
@@ -46,8 +46,8 @@ Install Python
         $ sudo apt-get install python3.6 -y 
         $ pip3 install --upgrade pip
       
-      You should now have 2 binaries: ``python3`` and ``pip3`` available in your $PATH. 
-      You can check the versions as below
+      You should now have 2 binaries: ``python3`` and ``pip3`` available in your ``$PATH``. 
+      You can check the versions as below:
       
       .. code-block:: shell-session
 
@@ -59,7 +59,7 @@ Install Python
    .. tab:: CentOS7
 
       The CentOS 7 Linux distribution includes Python 2 by default. However, as of CentOS 7.7, Python 3 
-      is available in the base package repository which can be installed using the following commands
+      is available in the base package repository which can be installed using the following commands:
       
       .. code-block:: shell-session
 
@@ -67,7 +67,7 @@ Install Python
         $ sudo yum install -y python3
         $ pip3 install --upgrade pip
       
-      For versions prior to 7.7 you can install python3.6 using third-party repositories, such as the 
+      For versions prior to 7.7 you can install ``python3.6`` using third-party repositories, such as the 
       IUS repository
       
       .. code-block:: shell-session
@@ -92,14 +92,14 @@ Using Virtualenv for Python
 
 Many a times users face issues in installing and managing multiple Python versions. This is actually 
 a major issue as many gui elements in Linux use the default Python versions, in which case installing
-python3.6 using the above methods might break other software. We thus advise the use of **pyenv** to
-install python3.6.
+``python3.6`` using the above methods might break other software. We thus advise the use of ``pyenv`` to
+install ``python3.6``.
 
 For Ubuntu and CentosOS, please follow the steps here: https://github.com/pyenv/pyenv#basic-github-checkout
 
 RHEL users can find more detailed guides for virtual-env here: https://developers.redhat.com/blog/2018/08/13/install-python3-rhel/#create-env
 
-Once you have pyenv installed do the following to install Python 3.6.0::
+Once you have ``pyenv`` installed do the following to install Python 3.6.0::
 
   $ pyenv install 3.6.0
   $ pip3 install --upgrade pip
@@ -260,7 +260,7 @@ With this you should now have all the following available as command line argume
 Install Plugin Models
 =====================
 
-This section will walk your throguh installing 2 important RISC-V reference models: Spike and SAIL.
+This section will walk your through installing 2 important RISC-V reference models: Spike and SAIL.
 These are often used as reference models in RISCOF.
 
 .. tabs::
@@ -345,27 +345,27 @@ These are often used as reference models in RISCOF.
 
 
 
-Create Neccesary Env Files
+Create Necessary Env Files
 ==========================
 
 In order to run tests via RISCOF you will need to provide the following items :
 
-  - **config.ini**: This file is a basic configuration file following the `ini` syntax. This file
-    will capture information like: name of the dut/reference plugins, path to the plugins, path to
+  - ``config.ini``: This file is a basic configuration file following the INI syntax. This file
+    will capture information like: name of the DUT/reference plugins, path to the plugins, path to
     the riscv-config based YAMLs, etc. For more information on the contents and syntax please refer
-    to the :ref:`config_syntax` section
-  - **dut-plugin directory**: RISCOF requires that the DUT model for testing is presented in the
+    to the :ref:`config_syntax` section.
+  - **DUT plugin directory**: RISCOF requires that the DUT model for testing is presented in the
     form of a Python plugin. The Python plugin is nothing more than a Python file which includes
     certain standard and defined functions to carry out the activities of test-compilation,
     execution and signature extraction. This Python file name needs to be prefixed with ``riscof_``
-    and must be present in the dut-plugin directory. One can refer to the :ref:`plugin_def` section
+    and must be present in the DUT plugin directory. One can refer to the :ref:`plugin_def` section
     for more details on how to write this Python file.
 
     The directory will also need to contain the `riscv-config` based ISA and platform YAMLs which provide
     a definition of the DUT. These YAMLs will be used to filter tests that need to be run on the
     DUT.
 
-    Finally, an env directory will also need to be present in the dut-plugin directory, which
+    Finally, an env directory will also need to be present in the DUT plugin directory, which
     contains the environment files like the ``model_test.h`` that is required to compile and run the tests
     on the DUT. Refer to the `TestFormat spec
     <https://github.com/riscv-software-src/riscv-arch-test/blob/master/spec/TestFormatSpec.adoc>`_ for definition of macros that can be used in the
@@ -388,16 +388,16 @@ Models for the user via the ``setup`` command as shown below::
 
 The above command will generate the following files and directories in the current directory::
 
- ├──config.ini                   # configuration file for RISCOF
- ├──spike/                       # DUT plugin templates
-    ├── env
+ ├── config.ini                  # configuration file for RISCOF
+ ├── spike/                      # DUT plugin templates
+    ├── env/
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
     ├── riscof_spike.py          # DUT Python plugin
     ├── spike_isa.yaml           # DUT ISA YAML based on riscv-config
     └── spike_platform.yaml      # DUT Platform YAML based on riscv-config
- ├──sail_cSim/                   # reference plugin templates
-    ├── env
+ ├── sail_cSim/                  # reference plugin templates
+    ├── env/
     │   ├── link.ld              # Reference linker script
     │   └── model_test.h         # Reference model specific header file
     ├── __init__.py
@@ -443,7 +443,7 @@ By default the ``model_test.h`` files and the ``link.ld`` file will work out of 
 .. note:: Custom DUTs can go through the various ``#TODO`` comments to figure out what changes need to be
   made in the respective Python file.
 
-The configuration of spike we will be using is available in the ``spike/spike_isa.yaml``. Modifying
+The configuration of Spike we will be using is available in the ``spike/spike_isa.yaml``. Modifying
 this will change the tests applicable for the DUT. For now let's leave it as is. For more
 information on creating and modifying your plugins can be found in :ref:`plugins`
 
@@ -454,8 +454,8 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 
 .. tip:: By default RISCOF resorts to using RISC-V's SAIL C Emulator as a reference model. To generate
  templates for a reference model add the argument '--refname myref' to the setup command above. This
- will generate a *myref* directory containing template files for defining a reference model plugin.
- Lookout for the #TODO in the Python file for places where changes will be required. 
+ will generate a ``myref`` directory containing template files for defining a reference model plugin.
+ Lookout for the ``#TODO`` in the Python file for places where changes will be required. 
 
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
@@ -464,8 +464,8 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 Cloning the Architectural Tests
 ===============================
 
-We will be running the tests from the official riscv-arch-test repository on the DUT and Reference
-models. To create a copy of the latest tests from the riscv-arch-test repository do the following:
+We will be running the tests from the official ``riscv-arch-test`` repository on the DUT and Reference
+models. To create a copy of the latest tests from the ``riscv-arch-test`` repository do the following:
 
 .. code-block:: console
     
@@ -613,5 +613,3 @@ The run will also open an HTML page with all the information.
   [INFO]    : suite/rv32i_m/I/I-SW-01.S                          : d50921ef64708678832770fd842355aa2b0684af : Passed
   [INFO]    : suite/rv32i_m/I/I-XOR-01.S                         : d50921ef64708678832770fd842355aa2b0684af : Passed
   [INFO]    : suite/rv32i_m/I/I-XORI-01.S                        : d50921ef64708678832770fd842355aa2b0684af : Passed
-
-

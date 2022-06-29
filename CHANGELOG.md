@@ -2,6 +2,23 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.24.2] -
+- Documentation consistency cleanup, changes are mostly aesthetic, the content is not changed:
+  - Expanding use of fixed width fonts for file, function, argument, variable, macro, ... names.
+  - Fixed missing capitalization and punctuation, mostly for lists.
+  - Capitalization of acronyms and proper nouns:
+    - python => Python,
+    - riscof => RISCOF,
+    - isa => ISA,
+    - yaml => YAML,
+    - verilator => Verilator,
+    - cli => CLI,
+    - makefile => Makefile (depending on context),
+    - ...
+  - Few spelling and grammar fixes.
+  - Few instances where names in documentation did not match names in the source code.
+    This were either copy/paste errors or code changes not propagated to documentation.
+
 ## [1.24.1] - 2022-07-19
 - Account for the same test to be included with both XLEN variants in the isa generation.
 - Add markdown report for coverage statistics.
