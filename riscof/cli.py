@@ -432,6 +432,10 @@ def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file):
     with open(reportfile, "w") as report:
         report.write(output)
 
+    with open(reportfile.replace("html","md"),"w") as report_md:
+        template = Template(constants.coverage_report_md)
+        report_md.write(template.render(report_objects))
+
     shutil.copyfile(constants.css,
                     os.path.join(work_dir, "style.css"))
 
