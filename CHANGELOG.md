@@ -2,7 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.24.0] - 2022-0514
+## [1.24.1] - 2022-07-19
+- Account for the same test to be included with both XLEN variants in the isa generation.
+- Add markdown report for coverage statistics.
+
+## [1.24.0] - 2022-05-14
 - rename the "master" branch of riscv-arch-test to "main"  
 
 ## [1.23.4] - 2022-02-24
