@@ -40,4 +40,11 @@ target_run=1
 pluginpath={1}
 '''
 
+coverage_report_md = '''
+|Covergroup|Coverage|
+|:--------:|:------:|
+{% for result in results %}|{{result.name}}|{{result.coverage}} ({{result.percentage}}%)|
+{%endfor%}
+'''
+
 
