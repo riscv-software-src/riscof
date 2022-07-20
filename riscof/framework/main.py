@@ -129,7 +129,7 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None)
     flen = 0
     if 'F' in ispec['ISA']:
         flen = 32
-    elif 'D' in ispec['ISA']:
+    if 'D' in ispec['ISA']:
         flen = 64
     if 64 in ispec['supported_xlen']:
         results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,64,flen), True)
