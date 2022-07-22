@@ -96,7 +96,7 @@ significant amount of the framework shall depend on the existence of these macro
   `RVTEST_ISA(isa_str)`::          
   
     - defines the Test Virtual Machine (TVM, the ISA being tested) +
-    - empty macro to specify the isa required for compilation of the test. +
+    - empty macro to specify the ISA required for compilation of the test. +
     - this is mandated to be present at the start of the test.
 
     

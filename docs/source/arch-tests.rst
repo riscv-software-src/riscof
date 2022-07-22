@@ -7,7 +7,7 @@ Running RISCV-ARCH-TESTS
 The following guide provides a walkthrough on how to run the tests available at 
 the `riscv-arch-test <https://github.com/riscv/riscv-arch-test>`_ repository.
 
-The following assumes you have installed riscof as a cli on your system. If not, then please refer
+The following assumes you have installed RISCOF as a CLI on your system. If not, then please refer
 to the :ref:`install_riscof` section for the same.
 
 
@@ -17,7 +17,7 @@ Setup all the DUT and Ref Plugins
 
   1. You will first need to install the SAIL C-emulator on your system.  You can refer to the
      :ref:`plugin_models` section for steps on installing the SAIL C-emulator.
-  2. You will then need to download/clone the ``sail_cSim`` riscof plugin. You can do this with the
+  2. You will then need to download/clone the ``sail_cSim`` RISCOF plugin. You can do this with the
      following command:
 
      .. code-block:: console
@@ -28,13 +28,13 @@ Setup all the DUT and Ref Plugins
      You will need the path of the `riscof-plugins` directory from the above repo for the next
      steps.
 
-  3. You will also need to create a riscof-plugin for you own DUT. If you haven't already done so,
+  3. You will also need to create a RISCOF plugin for you own DUT. If you haven't already done so,
      please refer to the :ref:`plugins` section for details on building one.
 
-Create a config.ini file
-------------------------
+Create a ``config.ini`` file
+----------------------------
 
-  1. You will need to create a `config.ini` file with the following contents.
+  1. You will need to create a ``config.ini`` file with the following contents.
 
     .. code-block:: ini
 
@@ -77,7 +77,7 @@ Running Tests with RISCOF
 
      The above step will first create a database of the all tests from the ``rv32i_m`` directory 
      (recursively). This database can be found in the `riscof_work/database.yaml` file that is 
-     generated. From this database, RISCOF selects the applicable test depending on the ISA yaml 
+     generated. From this database, RISCOF selects the applicable test depending on the ISA YAML 
      provided and then runs them first on the DUT and then on the REFERENCE plugins. The end, it
      compares the signatures and provides an html report of the result.
 
