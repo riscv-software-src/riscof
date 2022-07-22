@@ -18,7 +18,7 @@ A typical DUT plugin directory has the following structure::
     ├── env
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
-    ├── riscof_dut-name.py       # DUT python plugin
+    ├── riscof_dut-name.py       # DUT Python plugin
     ├── dut-name_isa.yaml        # DUT ISA yaml based on riscv-config
     └── dut-name_platform.yaml   # DUT Platform yaml based on riscv-config
 
@@ -40,9 +40,9 @@ All decisions of filtering tests depend on the these YAML files. The files must 
 syntax/format specified by `riscv-config <https://github.com/riscv-software-src/riscv-config>`_. These YAMLs are
 validated in RISCOF using riscv-config. 
 
-The python plugin files capture the behavior of model for compiling tests, executing them on the DUT
+The Python plugin files capture the behavior of model for compiling tests, executing them on the DUT
 and finally extracting the signature for each test. The following sections provide a detailed
-explanation on how to build the python files for your model.
+explanation on how to build the Python files for your model.
 
 .. hint:: All paths provided by riscof are absolute and it is advised to always use absolute paths while executing/generating commands to avoid errors. 
 
@@ -105,23 +105,23 @@ three base functions (as mentioned above).
 Why Python Based Plugins ?
 ==========================
 
-- Since the entire RISCOF framework is in python it did not make sense to have the 
+- Since the entire RISCOF framework is in Python it did not make sense to have the 
   user-DUT in a separate environment. It would then cause issues in transferring data across 
   these environments/domains. 
   
 - While many prefer the conventional *Makefile/autoconf* approach, transferring the *test-list* in YAML 
   to be used by another Makefile-environment seemed like a bad and an unscalable idea.
   
-- Expecting initial hesitation, we have tried to ensure that the python plugins can be made extremely 
+- Expecting initial hesitation, we have tried to ensure that the Python plugins can be made extremely 
   simple (as crude as writing out bash instructions using shellCommand libraries). 
   
 - Considering there would be a few backlashes in these choices, we have given enough pit-stops in the 
   flow: ``validation, test-list, coverage, etc`` so one can stop at any point in the flow and move 
   to their custom domain. 
 
-- Having a python plugin **does not change your test-bench** in anyway. The plugins only act as a common
+- Having a Python plugin **does not change your test-bench** in anyway. The plugins only act as a common
   interface between your environment and RISCOF. All you need to do is call the respective sim
-  commands from within the python plugin.
+  commands from within the Python plugin.
   
 If you do feel the flow can be further improved or changed please do drop in an issue on the
 official repository.
@@ -132,7 +132,7 @@ official repository.
 Python Plugin file
 ==================
 
-As can be seen from the above generated template python file, it creates a Metaclass for the plugins 
+As can be seen from the above generated template Python file, it creates a Metaclass for the plugins 
 supported by the :ref:`abstract_class`. This class basically offers the users three basic 
 functions: ``initialize`` , ``build`` and ``runTests``. 
 For each model RISCOF calls these functions in the following order:
@@ -185,8 +185,8 @@ functions.
    <https://www.programiz.com/python-programming/args-and-kwargs#:~:text=*args%20passes%20variable%20number%20of,a%20dictionary%20can%20be%20performed.>`_ for more information
 
 As mentioned, in the :ref:`config_syntax` section, the config.ini file can be used to pass some
-common or specific parameters to the python plugin. This makes it easy for users to modify the
-parameters in the config.ini file itself, instead of having to change it in the python file.
+common or specific parameters to the Python plugin. This makes it easy for users to modify the
+parameters in the config.ini file itself, instead of having to change it in the Python file.
 
 At minimum, the DUT node of the ``config.ini`` must contain paths to the ISA and Platform yaml specs.
 If the DUT node is missing or is empty in the ``config.ini`` this function should throw an error and
@@ -206,7 +206,7 @@ DUT executable. This variable is captured in as the variable ``num_jobs`` in lin
 The ``target_run`` parameter is used to control if the user would like to stop
 after compilation of the tests or continue running the tests on the target and
 go on to signature comparison. When set to '0' the plugin must only compile the
-tests and exit (using ``raise SystemExit`` in python). When set to ``1`` the
+tests and exit (using ``raise SystemExit`` in Python). When set to ``1`` the
 plugin will compile and run the tests on the target. This parameter is captured
 in lines 34-37. 
 
@@ -308,7 +308,7 @@ arguments which can be used in this function:
 
 Since we have access to the test environment directory here, it would make sense to build a generic
 template of the command that we will be using to compile the tests. For example consider the
-following python code which sets the compile command to use the riscv-gcc compiler.
+following Python code which sets the compile command to use the riscv-gcc compiler.
 
 .. code-block:: python
 
@@ -329,13 +329,13 @@ following python code which sets the compile command to use the riscv-gcc compil
 
       'My name is {0} and age is {1}'.format('John','20')
 
-   In python one can also use the ``+`` symbol to concatenate strings as is shown in the above
+   In Python one can also use the ``+`` symbol to concatenate strings as is shown in the above
    snippet code, where the include directories are appended at the end
 
 
 Some folks might build a `riscv32-` toolchain or a `riscv64-` toolchain depending on
 their DUT. To be agnostic of this choice, in the above snippet we have left the integer following
-`riscv` string to be a variable (defined by ``{1}``. see below hint for python syntax details) 
+`riscv` string to be a variable (defined by ``{1}``. see below hint for Python syntax details) 
 which will be fixed in the later functions. Based on the DUT one can even hard-code it here and
 remove the variable dependence. 
 
@@ -419,7 +419,7 @@ information.
 
    self.compile_cmd.format(march_str, testsuite_env, dut_env, dut_link.ld, output_elf, input_asm)
 
-If the integer numbering feels uncomfortable, python also allows name-based substitution which would
+If the integer numbering feels uncomfortable, Python also allows name-based substitution which would
 like the following:
 
 .. code-block:: python
@@ -506,7 +506,7 @@ runTests(self, testlist)
 
 This function is responsible for compiling and executing each test on the DUT and produce individual
 signature files, which can later be used for comparison. The function provides a single argument
-which is the ``testList``. This argument is available as a python based dictionary and follows the
+which is the ``testList``. This argument is available as a Python based dictionary and follows the
 syntax presented in the :ref:`testlist` section.
 
 The only outcome of this function should be a signature file generated for each test. These
@@ -530,7 +530,7 @@ compile the test, run the test and collect/post-process the signature of each te
 this script is provided below.
 
 .. hint:: **PYTHON-HINT**: To display progress on the terminal it is often good to have some print
-   statements in the code. In this plugin we use the logger library from python to achieve this.
+   statements in the code. In this plugin we use the logger library from Python to achieve this.
    Syntax for usage is::
 
      logger.debug('My Progress here')
@@ -625,7 +625,7 @@ and not run them on the DUT. In order to achieve this, one can set the
 47-55 to be skipped and thereby skip from running tests on the target.
 
 
-.. hint:: **PYTHON-HINT**: Note in python we use ``#`` for comments. Also note, that python uses
+.. hint:: **PYTHON-HINT**: Note in Python we use ``#`` for comments. Also note, that Python uses
    indentation to indicate a block of code (hence the indentation of lines 7 through 58). 
 
 Makefile Flow (Recommended)
@@ -640,7 +640,7 @@ correspond to having commands which will compile the test, run on the dut and co
 To provide ease in creating such a Makefile, RISCOF provides a makeUtility which can be used in this
 function.
 
-.. tip:: if one is more well-versed with python, you can choose to create the Makefile differently
+.. tip:: if one is more well-versed with Python, you can choose to create the Makefile differently
    with more custom targets. However, note that the make utility provided from RISCOF might not 
    work for custom Makefiles.
 
@@ -845,7 +845,7 @@ is used as a reference for this example.
 
 The first order of business is to move the ``COMPILE_CMD`` and ``RUN_CMD`` and define the contents
 in the ``COMPILE_TARGET`` and ``RUN_TARGET`` respectively as these are the only commands where the
-values will be substituted by the python function. Hence the respective variables look like this:
+values will be substituted by the Python function. Hence the respective variables look like this:
 
 .. code-block:: Makefile
     :linenos:    
@@ -861,7 +861,7 @@ values will be substituted by the python function. Hence the respective variable
             --test-signature=$(*).signature.output \
             $(<) 
 
-Then these commands are rewritten to work with the python substitution variables. Hence variables
+Then these commands are rewritten to work with the Python substitution variables. Hence variables
 such as ``$$(<)`` are replaced with ``${asm}`` in compile and ``$test_bin`` in the run commands. The
 ``$$@`` in compile is replaced with ``${test_bin}``. This ensures that the binary file is
 appropriately created. The values for ``march`` and ``mabi`` was defied in the old framework in the
@@ -1105,7 +1105,7 @@ commands for each entry in the testlist. The format of the command for each targ
 ``cd <work_directory>;substitute(COMPILE_TARGET);substitute(RUN_TARGET);``. Lines 9 to 49 extract 
 and setup the values of the necessary variables for substitution. This function uses the `template 
 substitution <https://docs.python.org/3/library/string.html#template-strings>`_ provided by the 
-``string`` class of python. The values of the variables in the template strings are defined in a
+``string`` class of Python. The values of the variables in the template strings are defined in a
 dictionary(``substitute``) and the substitution is performed for the ``COMPILE_TARGET`` on line 58.
 Similarly if ``RUN_TARGET`` is defined in the input makefile, the substitution for the same is done
 on line 61. Finally the target is added to the makefile and all targets are executed.
@@ -1115,7 +1115,7 @@ Tips
 ====
 
 1. Avoid writing out multiple ``;`` simultaneously in the Makefiles.
-2. Use the template substitution provided by the ``string`` class in python instead of string
+2. Use the template substitution provided by the ``string`` class in Python instead of string
    operations to ease command generation and avoid formatting errors. `This <https://askpython.com/python/string/python-template-strings>`_ article provides a good
    overview on the same.
 3. It is advisable to use the ``logger`` provided by ``riscof.utils`` for logging/printing

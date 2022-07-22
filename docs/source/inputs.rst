@@ -49,7 +49,7 @@ template file can be generated using the ``--setup`` command of RISCOF.
 
 The config file also allows you to define specific nodes/fields
 which can be used by the respective model plugins. For e.g., in the above template the
-`pluginpath` variable under the `[dut-name]` header is available to the DUT python plugin file 
+`pluginpath` variable under the `[dut-name]` header is available to the DUT Python plugin file 
 via RISCOF. The plugin may use this pluginpath to detect the ``env`` files, scripts and other
 collaterals that may be required during execution.
 
@@ -89,7 +89,7 @@ A typical DUT plugin directory has the following structure::
     ├── env
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
-    ├── riscof_dut-name.py       # DUT python plugin
+    ├── riscof_dut-name.py       # DUT Python plugin
     ├── dut-name_isa.yaml        # DUT ISA yaml based on riscv-config
     └── dut-name_platform.yaml   # DUT Platform yaml based on riscv-config
 
@@ -99,7 +99,7 @@ A typical Reference directory has the following structure::
     ├── env
     │   ├── link.ld              # Reference linker script
     │   └── model_test.h         # Reference specific header file
-    ├── riscof_ref-name.py       # Reference python plugin
+    ├── riscof_ref-name.py       # Reference Python plugin
 
 
 env directory
@@ -133,11 +133,11 @@ for its configuration and execution.
 Python Plugin
 -------------
 
-The python files prefixed with ``riscof_`` are the most important component of the model plugins.
-These python files define how the particular model compiles a test, runs it on the DUT and extracts the
+The Python files prefixed with ``riscof_`` are the most important component of the model plugins.
+These Python files define how the particular model compiles a test, runs it on the DUT and extracts the
 signature.
 
-To provide a standardized interface for all models, the python plugins must define all actions of
+To provide a standardized interface for all models, the Python plugins must define all actions of
 the model under specific functions defined by the :ref:`abstract_class` 
 specified by RISCOF. A more detailed explanation on how to build this file for you model can be
 found in the :ref:`plugin_def` section.

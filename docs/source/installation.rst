@@ -90,8 +90,8 @@ Install Python
 Using Virtualenv for Python 
 ---------------------------
 
-Many a times users face issues in installing and managing multiple python versions. This is actually 
-a major issue as many gui elements in Linux use the default python versions, in which case installing
+Many a times users face issues in installing and managing multiple Python versions. This is actually 
+a major issue as many gui elements in Linux use the default Python versions, in which case installing
 python3.6 using the above methods might break other software. We thus advise the use of **pyenv** to
 install python3.6.
 
@@ -99,7 +99,7 @@ For Ubuntu and CentosOS, please follow the steps here: https://github.com/pyenv/
 
 RHEL users can find more detailed guides for virtual-env here: https://developers.redhat.com/blog/2018/08/13/install-python3-rhel/#create-env
 
-Once you have pyenv installed do the following to install python 3.6.0::
+Once you have pyenv installed do the following to install Python 3.6.0::
 
   $ pyenv install 3.6.0
   $ pip3 install --upgrade pip
@@ -355,11 +355,11 @@ In order to run tests via RISCOF you will need to provide the following items :
     the riscv-config based yamls, etc. For more information on the contents and syntax please refer
     to the :ref:`config_syntax` section
   - **dut-plugin directory**: RISCOF requires that the DUT model for testing is presented in the
-    form of a python plugin. The python plugin is nothing more than a python file which includes
+    form of a Python plugin. The Python plugin is nothing more than a Python file which includes
     certain standard and defined functions to carry out the activities of test-compilation,
-    execution and signature extraction. This python file name needs to be prefixed with ``riscof_``
+    execution and signature extraction. This Python file name needs to be prefixed with ``riscof_``
     and must be present in the dut-plugin directory. One can refer to the :ref:`plugin_def` section
-    for more details on how to write this python file.
+    for more details on how to write this Python file.
 
     The directory will also need to contain the `riscv-config` based isa and platform yamls which provide
     a definition of the DUT. These yamls will be used to filter tests that need to be run on the
@@ -393,7 +393,7 @@ The above command will generate the following files and directories in the curre
     ├── env
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
-    ├── riscof_spike.py          # DUT python plugin
+    ├── riscof_spike.py          # DUT Python plugin
     ├── spike_isa.yaml           # DUT ISA yaml based on riscv-config
     └── spike_platform.yaml      # DUT Platform yaml based on riscv-config
  ├──sail_cSim/                   # reference plugin templates
@@ -401,7 +401,7 @@ The above command will generate the following files and directories in the curre
     │   ├── link.ld              # Reference linker script
     │   └── model_test.h         # Reference model specific header file
     ├── __init__.py
-    └── riscof_sail_cSim.py      # Reference model python plugin.
+    └── riscof_sail_cSim.py      # Reference model Python plugin.
 
 The generate template ``config.ini`` will look something like this by default::
 
@@ -441,7 +441,7 @@ By default the ``model_test.h`` files and the ``link.ld`` file will work out of 
 ``spike`` and ``sail`` models.
 
 .. note:: Custom DUTs can go through the various ``#TODO`` comments to figure out what changes need to be
-  made in the respective python file.
+  made in the respective Python file.
 
 The configuration of spike we will be using is available in the ``spike/spike_isa.yaml``. Modifying
 this will change the tests applicable for the DUT. For now let's leave it as is. For more
@@ -455,7 +455,7 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 .. tip:: By default RISCOF resorts to using RISC-V's SAIL C Emulator as a reference model. To generate
  templates for a reference model add the argument '--refname myref' to the setup command above. This
  will generate a *myref* directory containing template files for defining a reference model plugin.
- Lookout for the #TODO in the python file for places where changes will be required. 
+ Lookout for the #TODO in the Python file for places where changes will be required. 
 
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 

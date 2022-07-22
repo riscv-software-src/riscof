@@ -19,7 +19,7 @@ As can be seen in the image above, the framework requires 2 specific inputs from
 1. A RISCV-CONFIG based YAML specification of the ISA choices made by the user. Details on writing
    the specific YAML spec can be found here : `Spec Documentation <https://riscv-config.readthedocs.io/en/latest/yaml-specs.html>`_
 2. A Python plugin which can be used by the framework to compile the test, simulate the test and
-   extract the signature of each test. Steps to define the python plugin is available in the
+   extract the signature of each test. Steps to define the Python plugin is available in the
    :ref:`plugins` section.
 
 External Dependencies
@@ -77,7 +77,7 @@ validating a RISC-V target against a golden reference model.
    required tooling please refer to :ref:`quickstart`
 
 The flow starts with the user providing a YAML specification which captures the choices made in the
-implementation and also providing a python plugin (a python code written with certain defined
+implementation and also providing a Python plugin (a Python code written with certain defined
 constraints) which can enable compilation and simulation of a test on the implementation. 
 
 The input YAML is first validated using the RISCV-CONFIG tool to confirm the implementation choices
@@ -88,15 +88,15 @@ The normalized YAML is then fed to the *Test Selector* utility to filter and sel
 test-pool which are applicable to the implementation of the user. These selected tests are written
 out in a YAML file and represent the *test-list*. 
 
-The normalized YAML is also fed into the reference model's python plugin to configure the model to
+The normalized YAML is also fed into the reference model's Python plugin to configure the model to
 mimic the implementation as close as possible.
 
-The *test-list* is next forwarded to both, the user and reference defined python plugins, to
+The *test-list* is next forwarded to both, the user and reference defined Python plugins, to
 initiate compilation and execution of the tests on the respective platforms. 
 
 One should note the each test in the architectural test suite adheres to the :ref:`test_format_spec`
 and thus produces a signature in the memory region of the test which captures the essence that
-particular test. Thus, it is also the job of the python plugins to extract this signature to a file
+particular test. Thus, it is also the job of the Python plugins to extract this signature to a file
 on the host system. 
 
 RISCOF, thus declares a test to have passed on the implementation only when the its signature
