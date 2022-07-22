@@ -55,15 +55,15 @@ using the following command::
 
   $ riscof setup --refname=sail_cSim --dutname=spike
 
-.. note:: You can change the name from spike to the name of your target
+.. note:: You can change the name from Spike to the name of your target
 
-This above command should generate a spike folder with the following contents:
+This above command should generate a Spike folder with the following contents:
 
 .. code-block:: bash
   :linenos:
 
   env                          # contains sample header file and linker file   
-  riscof_spike.py              # sample spike plugin for RISCOF
+  riscof_spike.py              # sample Spike plugin for RISCOF
   spike_isa.yaml               # sample ISA YAML configuration file
   spike_platform.yaml          # sample PLATFORM YAML configuration file
 
@@ -442,8 +442,8 @@ build(self, isa_yaml, platform_yaml)
 This function is primarily meant for building or configuring the DUT (or its runtime arguments) if 
 required. This is particularly useful when working with core-generators. This stage can be used to 
 generate a specific configuration of the DUT leveraging the specs available in the checked 
-ISA and Platform YAMLs. For example in the case of spike, we can use the ISA YAML to create the
-appropriate value of the ``--isa`` argument used by spike.
+ISA and Platform YAMLs. For example in the case of Spike, we can use the ISA YAML to create the
+appropriate value of the ``--isa`` argument used by Spike.
 
 Apart, from configuring the DUT this stage can also be used to check if all the commands required by
 the DUT for successful execution are available or not. For example checking if the compiler is
@@ -460,9 +460,9 @@ Some of the parameters of interest that can be captured in this stage using the 
 
 - the xlen value: this can be obtained from the max value in the ``supported_xlen`` field of the 
   YAML. This is particularly useful in setting the compiler integer number we discussed before and
-  also for setting other DUT specific parameters (like the ``--isa`` argument of spike). Shown in
+  also for setting other DUT specific parameters (like the ``--isa`` argument of Spike). Shown in
   line 9 below.
-- the ISA string: for simulators like spike, we can parse this to generate the string for the
+- the ISA string: for simulators like Spike, we can parse this to generate the string for the
   ``--isa`` argument. Shown in lines 13-19 below.
 
 .. hint:: **PYTHON-HINT**: one can access dictionary elements using the square braces ``[]``.
@@ -472,7 +472,7 @@ Some of the parameters of interest that can be captured in this stage using the 
    required. Though, one could choose to compile the RTL in this phase if required using simulators
    like Verilator, VCS, etc.
 
-An example of this function for an ISS like spike is show below:
+An example of this function for an ISS like Spike is show below:
 
 .. code-block:: python
    :linenos:
