@@ -194,7 +194,7 @@ exit. This is done in lines 8-10 in the snippet below.
 
 One of the parameters we should capture here would be the path to the simulation executable of
 the DUT. In case of an RTL based DUT, this would be point to the final binary executable of your
-test-bench produced by a simulator (like verilator, vcs, incisive, etc). In case of an ISS or
+test-bench produced by a simulator (like Verilator, VCS, incisive, etc). In case of an ISS or
 Emulator, this variable could point to where the ISS binary is located. This is shown in line-16 in
 the below snippet.
 
@@ -470,7 +470,7 @@ Some of the parameters of interest that can be captured in this stage using the 
 
 .. note:: For pre-compiled/configured RTL targets this phase is typically empty and no actions are 
    required. Though, one could choose to compile the RTL in this phase if required using simulators
-   like verilator, vcs, etc.
+   like Verilator, VCS, etc.
 
 An example of this function for an ISS like spike is show below:
 
