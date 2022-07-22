@@ -7,7 +7,7 @@ Running RISCV-ARCH-TESTS
 The following guide provides a walkthrough on how to run the tests available at 
 the `riscv-arch-test <https://github.com/riscv/riscv-arch-test>`_ repository.
 
-The following assumes you have installed riscof as a cli on your system. If not, then please refer
+The following assumes you have installed RISCOF as a cli on your system. If not, then please refer
 to the :ref:`install_riscof` section for the same.
 
 
@@ -17,7 +17,7 @@ Setup all the DUT and Ref Plugins
 
   1. You will first need to install the SAIL C-emulator on your system.  You can refer to the
      :ref:`plugin_models` section for steps on installing the SAIL C-emulator.
-  2. You will then need to download/clone the ``sail_cSim`` riscof plugin. You can do this with the
+  2. You will then need to download/clone the ``sail_cSim`` RISCOF plugin. You can do this with the
      following command:
 
      .. code-block:: console

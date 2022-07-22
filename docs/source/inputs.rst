@@ -4,7 +4,7 @@
 Understanding RISCOF Inputs
 ###########################
 
-There are three major inputs that are required by most of the subcommand of riscof listed in the
+There are three major inputs that are required by most of the subcommand of RISCOF listed in the
 :ref:`commands` section:
 
 1. The ``config.ini`` file
@@ -23,7 +23,7 @@ used to specify the name of the dut and reference plugins, path of the model plu
 specific parameters and paths to the DUT's riscv-config based isa and platform yamls.
 
 
-A generic format of the ``config.ini`` file required by riscof is presented below. A similar
+A generic format of the ``config.ini`` file required by RISCOF is presented below. A similar
 template file can be generated using the ``--setup`` command of RISCOF.
 
 .. code-block:: ini

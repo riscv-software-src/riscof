@@ -10,7 +10,7 @@ Quickstart
 
 This section is meant to serve as a quick-guide to setup RISCOF and perform a sample validation check
 between ``spike`` (DUT in this case) and ``SAIL-RISCV`` (Reference model in this case). This guide
-will help you setup all the required tooling for running riscof on your system.
+will help you setup all the required tooling for running RISCOF on your system.
 
 If you would like to know how to build a plugin for your DUT please refer to the :ref:`plugins`
 section for more details.
@@ -388,7 +388,7 @@ Models for the user via the ``setup`` command as shown below::
 
 The above command will generate the following files and directories in the current directory::
 
- ├──config.ini                   # configuration file for riscof
+ ├──config.ini                   # configuration file for RISCOF
  ├──spike/                       # DUT plugin templates
     ├── env
     │   ├── link.ld              # DUT linker script

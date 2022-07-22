@@ -44,7 +44,7 @@ The Python plugin files capture the behavior of model for compiling tests, execu
 and finally extracting the signature for each test. The following sections provide a detailed
 explanation on how to build the Python files for your model.
 
-.. hint:: All paths provided by riscof are absolute and it is advised to always use absolute paths while executing/generating commands to avoid errors. 
+.. hint:: All paths provided by RISCOF are absolute and it is advised to always use absolute paths while executing/generating commands to avoid errors. 
 
 
 Start with Templates
@@ -727,7 +727,7 @@ the ``make.makeCommand``. More details of this utility are available at: :ref:`u
 
 .. include:: ../../PLUGINS.rst
 
-Using the Target files from existing framework with riscof
+Using the Target files from existing framework with RISCOF
 ==========================================================
 To ease transition from the old framework, the ``makeplugin`` is provided in the IncorePlugins
 repository.
@@ -865,12 +865,12 @@ Then these commands are rewritten to work with the Python substitution variables
 such as ``$$(<)`` are replaced with ``${asm}`` in compile and ``$test_bin`` in the run commands. The
 ``$$@`` in compile is replaced with ``${test_bin}``. This ensures that the binary file is
 appropriately created. The values for ``march`` and ``mabi`` was defied in the old framework in the
-makefiles for the suite. These values are provided per target in riscof. Hence the ``$(1)`` is
+makefiles for the suite. These values are provided per target in RISCOF. Hence the ``$(1)`` is
 replaced with ``-march=${march} -mabi=${mabi}``. 
 
-The directory with the header files for the tests is also provided by riscof. Hence line 2 is
+The directory with the header files for the tests is also provided by RISCOF. Hence line 2 is
 replaced with ``-I${include} \``. The paths in lines 3 and 4 are fixed to the appropriate ones by
-using the directory where the plugin file is present as an anchor. Riscof also provides macro
+using the directory where the plugin file is present as an anchor. RISCOF also provides macro
 definitions for the tests too and the plugin generates these macros in the format required by gcc.
 Hence ``${macro}`` is added to the end of the compile command.
 
@@ -959,7 +959,7 @@ Plugin Function Explanation
         return sclass
 
 This function extracts the necessary fields from the node for the plugin in the config file given to
-riscof. The plugin supports the following arguments.
+RISCOF. The plugin supports the following arguments.
     - **makefiles** (*required*)- Comma separated paths to the makefiles. If multiple are specified, all will be
       merged in the final output makefile. Note that only the varaibles in the makefiles are written
       out into the final makefiles. Any targets or includes will be left out. Such cases can be
