@@ -264,7 +264,7 @@ the RISCOF framework in line 40.
         # Return the parameters set above back to RISCOF for further processing.
         return sclass
 
-.. warning:: if the config is empty or if the isa and platform yamls are not available in the
+.. warning:: if the config is empty or if the ISA and platform yamls are not available in the
    specified paths, the above function shall generate an error and exit.
 
 .. note:: It is not necessary for your config.ini to pass any of these parameters. And one could
@@ -456,13 +456,13 @@ To enable the above actions the `build` function provides the following argument
 2. `platform_spec`: This argument holds the absolute path to the validated PLATFORM config YAML and can be used
    similarly as above.
 
-Some of the parameters of interest that can be captured in this stage using the isa yaml are:
+Some of the parameters of interest that can be captured in this stage using the ISA yaml are:
 
 - the xlen value: this can be obtained from the max value in the ``supported_xlen`` field of the 
   yaml. This is particularly useful in setting the compiler integer number we discussed before and
   also for setting other DUT specific parameters (like the ``--isa`` argument of spike). Shown in
   line 9 below.
-- the isa string: for simulators like spike, we can parse this to generate the string for the
+- the ISA string: for simulators like spike, we can parse this to generate the string for the
   ``--isa`` argument. Shown in lines 13-19 below.
 
 .. hint:: **PYTHON-HINT**: one can access dictionary elements using the square braces ``[]``.

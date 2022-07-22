@@ -20,7 +20,7 @@ Config.ini Syntax
 
 The ``config.ini`` file follows the `ini <https://en.wikipedia.org/wiki/INI_file>`_ syntax and is 
 used to specify the name of the dut and reference plugins, path of the model plugins, plugin
-specific parameters and paths to the DUT's riscv-config based isa and platform yamls.
+specific parameters and paths to the DUT's riscv-config based ISA and platform yamls.
 
 
 A generic format of the ``config.ini`` file required by RISCOF is presented below. A similar

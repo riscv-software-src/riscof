@@ -17,7 +17,7 @@ Each test in the database is defined as follows:
 
     * **commit_id**: Contains the recent commit id of the commit in which the test was modified.
 
-    * **isa**: Contains the isa required for the compilation of the test. This field is extracted from the *RVTEST_ISA* macro.
+    * **isa**: Contains the ISA required for the compilation of the test. This field is extracted from the *RVTEST_ISA* macro.
 
     * **parts**: Contains the individual parts present in the test and the conditions and macros required by each of them. The parts are identified by unique names as specified in the test. A test must contain at-least one part for it to be included in the database.
 
