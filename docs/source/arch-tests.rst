@@ -77,7 +77,7 @@ Running Tests with RISCOF
 
      The above step will first create a database of the all tests from the ``rv32i_m`` directory 
      (recursively). This database can be found in the `riscof_work/database.yaml` file that is 
-     generated. From this database, RISCOF selects the applicable test depending on the ISA yaml 
+     generated. From this database, RISCOF selects the applicable test depending on the ISA YAML 
      provided and then runs them first on the DUT and then on the REFERENCE plugins. The end, it
      compares the signatures and provides an html report of the result.
 

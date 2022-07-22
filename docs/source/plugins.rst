@@ -19,8 +19,8 @@ A typical DUT plugin directory has the following structure::
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
     ├── riscof_dut-name.py       # DUT Python plugin
-    ├── dut-name_isa.yaml        # DUT ISA yaml based on riscv-config
-    └── dut-name_platform.yaml   # DUT Platform yaml based on riscv-config
+    ├── dut-name_isa.yaml        # DUT ISA YAML based on riscv-config
+    └── dut-name_platform.yaml   # DUT Platform YAML based on riscv-config
 
 The ``env`` directory in must contain:
 
@@ -35,7 +35,7 @@ The ``env`` directory in must contain:
 The ``env`` folder can also contain other necessary plugin specific files for pre/post processing of
 logs, signatures, elfs, etc.
 
-The yaml specs in the DUT plugin directory are the most important inputs to the RISCOF framework.
+The YAML specs in the DUT plugin directory are the most important inputs to the RISCOF framework.
 All decisions of filtering tests depend on the these YAML files. The files must follow the
 syntax/format specified by `riscv-config <https://github.com/riscv-software-src/riscv-config>`_. These YAMLs are
 validated in RISCOF using riscv-config. 
@@ -188,7 +188,7 @@ As mentioned, in the :ref:`config_syntax` section, the config.ini file can be us
 common or specific parameters to the Python plugin. This makes it easy for users to modify the
 parameters in the config.ini file itself, instead of having to change it in the Python file.
 
-At minimum, the DUT node of the ``config.ini`` must contain paths to the ISA and Platform yaml specs.
+At minimum, the DUT node of the ``config.ini`` must contain paths to the ISA and Platform YAML specs.
 If the DUT node is missing or is empty in the ``config.ini`` this function should throw an error and
 exit. This is done in lines 8-10 in the snippet below.
 
@@ -212,12 +212,12 @@ in lines 34-37.
 
 Finally, the mandatory parameters that must be present in the ``config.ini`` for the DUT are the
 paths to the riscv-config based ISA and Platform YAML files. These paths are collected in lines
-28-29. Remember these are paths to the unchecked version of the yaml and are only captured here to
+28-29. Remember these are paths to the unchecked version of the YAML and are only captured here to
 send them across to the RISCOF framework, where RISCOF will validate them with riscv-config , send
 it to the reference model for configuration and also use it filter the tests.
 The verified/checked versions of the YAMLs will be provided to the build function.
 
-The above yaml file paths and other arguments are captured in the class methods and returned back to
+The above YAML file paths and other arguments are captured in the class methods and returned back to
 the RISCOF framework in line 40.
 
 .. code-block:: python
@@ -442,7 +442,7 @@ build(self, isa_yaml, platform_yaml)
 This function is primarily meant for building or configuring the DUT (or its runtime arguments) if 
 required. This is particularly useful when working with core-generators. This stage can be used to 
 generate a specific configuration of the DUT leveraging the specs available in the checked 
-ISA and Platform yamls. For example in the case of spike, we can use the ISA yaml to create the
+ISA and Platform YAMLs. For example in the case of spike, we can use the ISA YAML to create the
 appropriate value of the ``--isa`` argument used by spike.
 
 Apart, from configuring the DUT this stage can also be used to check if all the commands required by
@@ -456,10 +456,10 @@ To enable the above actions the `build` function provides the following argument
 2. `platform_spec`: This argument holds the absolute path to the validated PLATFORM config YAML and can be used
    similarly as above.
 
-Some of the parameters of interest that can be captured in this stage using the ISA yaml are:
+Some of the parameters of interest that can be captured in this stage using the ISA YAML are:
 
 - the xlen value: this can be obtained from the max value in the ``supported_xlen`` field of the 
-  yaml. This is particularly useful in setting the compiler integer number we discussed before and
+  YAML. This is particularly useful in setting the compiler integer number we discussed before and
   also for setting other DUT specific parameters (like the ``--isa`` argument of spike). Shown in
   line 9 below.
 - the ISA string: for simulators like spike, we can parse this to generate the string for the
@@ -784,7 +784,7 @@ are used in the commands. These variables shall be replaced with the appropriate
     * - ``${mabi}``
       - The abi to be used for compiling the test. This is in the format expected by mabi argument of gcc.
     * - ${target_isa}
-      - This is the ISA specified in the input ISA yaml. The idea is that it can be used to configure the model at run time via cli arguments if necessary.
+      - This is the ISA specified in the input ISA YAML. The idea is that it can be used to configure the model at run time via cli arguments if necessary.
     * - ``${test_bin}``
       - The name of the binary file to be created after compilation. Can be ignored. Custom names can be used as long as the ``RUN_TARGET`` command picks up the correct binary to execute on the target.
     * - ``${signature_file}``
@@ -964,8 +964,8 @@ RISCOF. The plugin supports the following arguments.
       merged in the final output makefile. Note that only the varaibles in the makefiles are written
       out into the final makefiles. Any targets or includes will be left out. Such cases can be
       handled by editing the plugin to output the relevant lines as a part of the ``build`` function.
-    - **ispec** (*required*)- The path to the input ISA yaml specification of the target.
-    - **pspec** (*required*)- The path to the input platform yaml specification of the target.
+    - **ispec** (*required*)- The path to the input ISA YAML specification of the target.
+    - **pspec** (*required*)- The path to the input platform YAML specification of the target.
     - **make** - The make utility to use like make,bmake,pmake etc. (Default is ``make``)
     - **jobs** - The number of threads to launch parallely. (Default is ``1``)
 
@@ -1019,7 +1019,7 @@ build(self, isa_yaml, platform_yaml)
                     self.var_dict[entry] = Template(self.var_dict[entry])
 
 This function extracts and resolves the values of different fields needed while generating compile
-commands. Line 8, the ISA of the model is extracted from the input ISA yaml. Lines 11 and 12
+commands. Line 8, the ISA of the model is extracted from the input ISA YAML. Lines 11 and 12
 extract all variables from the input makefiles. Line 14 generates the absolute path for the
 makefile. The rest of the lines write out all the variables except the ones named ``*_TARGET`` to 
 the output makefile. Line 19 writes out an extra variable ``TARGET_DIR`` which points to the

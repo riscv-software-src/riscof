@@ -362,7 +362,7 @@ There are two types of valid statements allowed.
     * keylist:=value
 
         The *keylist* specifies the path to the field in the ISA YAML dictionary whose value needs to be checked. 
-        The *value* is the value against which the entry in the input yaml is checked.
+        The *value* is the value against which the entry in the input YAML is checked.
         The *value* can be a regular expression as well, in which case it should be specified as *regex("expression")*
 
         Example: 
@@ -386,7 +386,7 @@ There are two types of valid statements allowed.
 
     * function_call=Rval
       
-        The *function_call* specifies the function to be called along with the arguments to be specified to the function. The node from the yaml which has to be passed to the function can be specified using the *keylist*. 
+        The *function_call* specifies the function to be called along with the arguments to be specified to the function. The node from the YAML which has to be passed to the function can be specified using the *keylist*. 
         *Rval* is the value against which the return value of the function is checked. The list of different functions,arguments and their return values is listed below.
         
         **Function Signatures**

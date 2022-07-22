@@ -20,7 +20,7 @@ Config.ini Syntax
 
 The ``config.ini`` file follows the `ini <https://en.wikipedia.org/wiki/INI_file>`_ syntax and is 
 used to specify the name of the dut and reference plugins, path of the model plugins, plugin
-specific parameters and paths to the DUT's riscv-config based ISA and platform yamls.
+specific parameters and paths to the DUT's riscv-config based ISA and platform YAMLs.
 
 
 A generic format of the ``config.ini`` file required by RISCOF is presented below. A similar
@@ -90,8 +90,8 @@ A typical DUT plugin directory has the following structure::
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
     ├── riscof_dut-name.py       # DUT Python plugin
-    ├── dut-name_isa.yaml        # DUT ISA yaml based on riscv-config
-    └── dut-name_platform.yaml   # DUT Platform yaml based on riscv-config
+    ├── dut-name_isa.yaml        # DUT ISA YAML based on riscv-config
+    └── dut-name_platform.yaml   # DUT Platform YAML based on riscv-config
 
 A typical Reference directory has the following structure::
 
@@ -118,7 +118,7 @@ logs, signatures, elfs, etc.
 YAML specs
 ----------
 
-The yaml specs in the DUT plugin directory are the most important inputs to the RISCOF framework.
+The YAML specs in the DUT plugin directory are the most important inputs to the RISCOF framework.
 All decisions of filtering tests depend on the these YAML files. The files must follow the
 syntax/format specified by `riscv-config <https://github.com/riscv/riscv-config>`_. These YAMLs are
 validated in RISCOF using riscv-config. 

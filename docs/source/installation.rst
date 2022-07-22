@@ -352,7 +352,7 @@ In order to run tests via RISCOF you will need to provide the following items :
 
   - **config.ini**: This file is a basic configuration file following the `ini` syntax. This file
     will capture information like: name of the dut/reference plugins, path to the plugins, path to
-    the riscv-config based yamls, etc. For more information on the contents and syntax please refer
+    the riscv-config based YAMLs, etc. For more information on the contents and syntax please refer
     to the :ref:`config_syntax` section
   - **dut-plugin directory**: RISCOF requires that the DUT model for testing is presented in the
     form of a Python plugin. The Python plugin is nothing more than a Python file which includes
@@ -361,8 +361,8 @@ In order to run tests via RISCOF you will need to provide the following items :
     and must be present in the dut-plugin directory. One can refer to the :ref:`plugin_def` section
     for more details on how to write this Python file.
 
-    The directory will also need to contain the `riscv-config` based ISA and platform yamls which provide
-    a definition of the DUT. These yamls will be used to filter tests that need to be run on the
+    The directory will also need to contain the `riscv-config` based ISA and platform YAMLs which provide
+    a definition of the DUT. These YAMLs will be used to filter tests that need to be run on the
     DUT.
 
     Finally, an env directory will also need to be present in the dut-plugin directory, which
@@ -374,7 +374,7 @@ In order to run tests via RISCOF you will need to provide the following items :
 
   - **reference-plugin directory**: Similar to the DUT plugin, RISCOF also expects a reference model
     plugin. The structure of the directory and files is the same as that of the DUT. However, the
-    ISA and platform yamls are not required since RISCOF will always pick the yamls from the DUT
+    ISA and platform YAMLs are not required since RISCOF will always pick the YAMLs from the DUT
     plugin for all purposes.
 
 .. For sample templates of pre-built plugins please refer to : `riscof-plugins <https://github.com/riscv/riscof-plugins>`_. 
@@ -394,8 +394,8 @@ The above command will generate the following files and directories in the curre
     │   ├── link.ld              # DUT linker script
     │   └── model_test.h         # DUT specific header file
     ├── riscof_spike.py          # DUT Python plugin
-    ├── spike_isa.yaml           # DUT ISA yaml based on riscv-config
-    └── spike_platform.yaml      # DUT Platform yaml based on riscv-config
+    ├── spike_isa.yaml           # DUT ISA YAML based on riscv-config
+    └── spike_platform.yaml      # DUT Platform YAML based on riscv-config
  ├──sail_cSim/                   # reference plugin templates
     ├── env
     │   ├── link.ld              # Reference linker script
@@ -478,8 +478,8 @@ Running RISCOF
 ==============
 
 The RISCOF run is divided into three steps as shown in the overview Figure.
-The first step is to check if the input yaml files are configured correctly. This step internally calls
-the ``riscv-config`` on both the ISA and platform yaml files indicated in the ``config.ini`` file.
+The first step is to check if the input YAML files are configured correctly. This step internally calls
+the ``riscv-config`` on both the ISA and platform YAML files indicated in the ``config.ini`` file.
 
 .. code-block:: bash
 
