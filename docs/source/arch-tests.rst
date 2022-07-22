@@ -31,10 +31,10 @@ Setup all the DUT and Ref Plugins
   3. You will also need to create a RISCOF plugin for you own DUT. If you haven't already done so,
      please refer to the :ref:`plugins` section for details on building one.
 
-Create a config.ini file
-------------------------
+Create a ``config.ini`` file
+----------------------------
 
-  1. You will need to create a `config.ini` file with the following contents.
+  1. You will need to create a ``config.ini`` file with the following contents.
 
     .. code-block:: ini
 
