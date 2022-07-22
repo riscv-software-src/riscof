@@ -20,13 +20,13 @@ arch-tests
 ----------
 This command is used to clone and update the tests from the official `riscv-arch-test <https://github.com/riscv/riscv-arch-test>`_ repository.
 
-This command requires one of the following flags to be specified from the cli.
+This command requires one of the following flags to be specified from the CLI.
 
 - show-version: Display the current version of the official suite present at the specified directory path.
 - clone: Clone the suite from github.
 - update: Update the suite to reflect latest changes from github.
 
-Optional arguments from the cli:
+Optional arguments from the CLI:
 
 - get-version: The specific version of the tests to be fetched. Can be used with both the clone and
   update flags. The latest release is fetched if skipped.
@@ -39,14 +39,14 @@ coverage
 This command is used to collect the ISA coverage metrics of a given test-suite and generate a coverage
 report in html.
 
-This command will require the following inputs from the cli:
+This command will require the following inputs from the CLI:
 
 - suite: The test suite path on which coverage needs to be run
 - env: The path to the environment directory containing the suite-specific header files.
 - cgf: list of covergroup-format files specifying the coverpoints that need to be covered by the
   the suite
 
-Optional arguments from the cli:
+Optional arguments from the CLI:
 
 - config: path to the ``config.ini`` file. Defaults to ``./config.ini`` if skipped.
 - work-dir: path to the working directory where all artifacts need to be dumped. Defaults to
@@ -70,7 +70,7 @@ gendb
 -----
 
 This command is used to generate a database YAML file for all tests available in the test-suite. The
-commands requires the following inputs from the cli:
+commands requires the following inputs from the CLI:
 
 - suite: The test suite path for which database needs to be generated.
 - work-dir: path to the working directory where all artifacts need to be dumped. Defaults to
@@ -98,7 +98,7 @@ The setup command is used to generate a series of Template files that are requir
 These files are meant to provide ease to users integrating their DUT to RISCOF for the first time
 and should be modified by the users.
 
-The setup utility takes in the following optional inputs from the cli:
+The setup utility takes in the following optional inputs from the CLI:
 
 - dutname: name of the dut for running the tests on. The utility will use this name to create a
   template plugin directory with all the relevant files. These files will have to be modified by 
@@ -121,11 +121,11 @@ testlist
 
 This command is used to filter tests from the database.yaml based on the configuration of DUT
 present in the ISA and platform YAMLs as mentioned in the ``config.ini``. This command will require 
-the following inputs from the cli:
+the following inputs from the CLI:
 
 - suite: The test suite from which the test need to filtered.
 
-This command takes the following optional inputs from cli
+This command takes the following optional inputs from CLI
 
 - config: path to the ``config.ini`` file. Defaults to ``./config.ini`` if skipped.
 - work-dir: path to the working directory where all artifacts need to be dumped. Defaults to
@@ -148,12 +148,12 @@ creating a database of the tests in the ``suite`` directory, generate a
 filtered test-list, run the tests on the DUT and then the Reference Plugins, and finally compare the
 generated signatures and present an html report of the findings.
 
-The following inputs are required on the cli by this command:
+The following inputs are required on the CLI by this command:
 
 - suite: The test suite path on which coverage needs to be run
 - env: The path to the environment directory containing the suite-specific header files.
 
-Optional arguments from the cli:
+Optional arguments from the CLI:
 
 - config: path to the ``config.ini`` file. Defaults to ``./config.ini`` if skipped.
 - work-dir: path to the working directory where all artifacts need to be dumped. Defaults to

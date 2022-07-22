@@ -7,7 +7,7 @@ Running RISCV-ARCH-TESTS
 The following guide provides a walkthrough on how to run the tests available at 
 the `riscv-arch-test <https://github.com/riscv/riscv-arch-test>`_ repository.
 
-The following assumes you have installed RISCOF as a cli on your system. If not, then please refer
+The following assumes you have installed RISCOF as a CLI on your system. If not, then please refer
 to the :ref:`install_riscof` section for the same.
 
 

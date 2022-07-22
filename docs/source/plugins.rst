@@ -536,8 +536,8 @@ this script is provided below.
      logger.debug('My Progress here')
 
    The keyword 'debug' above indicates that the above statement will be displayed on the terminal
-   only when the ``--verbose`` cli argument is set to "debug". Similarly one can create warning and
-   error statements (which will be printed in different colors and enabled via the cli)::
+   only when the ``--verbose`` CLI argument is set to "debug". Similarly one can create warning and
+   error statements (which will be printed in different colors and enabled via the CLI)::
 
      logger.warning('This is enabled when verbose is debug or warning')
      logger.error('This is enabled when verbose is debug, warning or error')
@@ -784,7 +784,7 @@ are used in the commands. These variables shall be replaced with the appropriate
     * - ``${mabi}``
       - The abi to be used for compiling the test. This is in the format expected by mabi argument of gcc.
     * - ${target_isa}
-      - This is the ISA specified in the input ISA YAML. The idea is that it can be used to configure the model at run time via cli arguments if necessary.
+      - This is the ISA specified in the input ISA YAML. The idea is that it can be used to configure the model at run time via CLI arguments if necessary.
     * - ``${test_bin}``
       - The name of the binary file to be created after compilation. Can be ignored. Custom names can be used as long as the ``RUN_TARGET`` command picks up the correct binary to execute on the target.
     * - ``${signature_file}``
