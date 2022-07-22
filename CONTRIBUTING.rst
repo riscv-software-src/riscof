@@ -68,7 +68,7 @@ be followed while assigning a new version number :
 Note: You can have either a patch or minor or major update.
 Note: In case of a conflict, the maintainers will decide the final version to be assigned.
 
-To update the version of the python package for deployment you can use the following::
+To update the version of the Python package for deployment you can use the following::
 
 $ bumpversion --no-tag --config-file setup.cfg patch # possible: major / minor / patch
 
