@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.24.2] - 2022-07-27
+- Fix `riscv_config` dependency version to 2.10.1
+
 ## [1.24.1] - 2022-07-19
 - Account for the same test to be included with both XLEN variants in the isa generation.
 - Add markdown report for coverage statistics.
