@@ -2,5 +2,5 @@ GitPython==3.1.17
 click>=7.1.2
 Jinja2>=2.10.1
 pytz>=2019.1
-riscv-config>=2.10.1
+riscv-config==2.10.1
 riscv_isac>=0.7.2
