@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.24.3] - 2022-08-29
+- fix typeo in doc for command related to cloning arch-suites
+- bump riscv-config version to be 2.17.0
+
 ## [1.24.2] - 2022-07-27
 - Fix `riscv_config` dependency version to 2.10.1
 
