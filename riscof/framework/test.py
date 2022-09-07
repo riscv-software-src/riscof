@@ -249,36 +249,6 @@ def eval_macro(macro, spec):
     else:
         return (False,[])
 
-def isa_set(string):
-    str_match = re.findall(r'([^\d]*?)(?!_)*(Z.*?)*(_|$)',string,re.M)
-    extension_list= []
-    for match in str_match:
-        stdisa, z, ignore = match
-        if stdisa != '':
-            for e in stdisa:
-                extension_list.append(e)
-        if z != '':
-            extension_list.append(z)
-    return set(extension_list)
-
-def canonicalise(isa):
-    all_ext = ["M","A","F","D","Q","L","C","B","J","K","T","P","V","N","S","H","U","Zicsr",
-            "Zifencei","Zihintpause","Zmmul","Zam","Zba","Zbc","Zbb","Zbs","Zbp","Zbm","Zbe","Zbf","Zkne",
-            "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso","Zbkb","Zbkc","Zbkx"]
-    canonical_string = ""
-    switch = False
-    for ext in all_ext:
-        if ext in isa:
-            if switch:
-                canonical_string += "_"
-            elif ext.startswith("Z"):
-                switch=True
-            canonical_string += ext
-            if ext.startswith("Z"):
-                switch=True
-    return canonical_string
-
-
 def prod_isa(dut_isa, test_isa):
     '''
         Function to generate the isa a test has to be compiled with. The various possible ISAs a
@@ -297,22 +267,17 @@ def prod_isa(dut_isa, test_isa):
         :raises: TestSelectError
 
     '''
-    dut_exts = isa_set(re.sub("RV(64|128|32)(I|E)","",dut_isa))
-    isa = set([])
-    last_prefix = ''
-    atleast_1 = False
-    match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",dut_isa)
-    prefix = match[0][0]
-    for entry in test_isa:
-        match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",entry)
-        exts = isa_set(re.sub("RV(64|128|32)(I|E)","",entry))
-        overlap = dut_exts & exts
-        if overlap == exts and match[0][0] == prefix:
-            atleast_1 = True
-            isa = isa | overlap
-    if not atleast_1:
-        raise TestSelectError("Test Selected without the relevant extensions being available on DUT.")
-    return prefix+canonicalise(isa)
+    (dut_ext_list, err, err_list) = get_extension_list(dut_isa)
+    dut_ext_set = set(dut_ext_list)
+    dut_base = 32 if '32' in dut_isa else 64
+    for isa in test_isa:
+        (test_ext_list, err, err_list) = get_extension_list(isa)
+        test_base = 32 if '32' in isa else 64
+        test_ext_set = set(test_ext_list)
+        if test_ext_set.issubset(dut_ext_set) and dut_base == test_base:
+            return isa
+    raise TestSelectError("Test Selected without the relevant extensions being available on DUT.")
+    return ''
 
 def generate_test_pool(ispec, pspec, workdir, dbfile = None):
     '''
