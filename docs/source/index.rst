@@ -15,6 +15,7 @@ Welcome to RISCOF
    plugins
    arch-tests
    testlist
+   testformat
    database
    coverage
    code-doc
