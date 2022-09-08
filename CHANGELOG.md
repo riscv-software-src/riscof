@@ -3,8 +3,8 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.25.0] - 2022-09-07
-- migrated to using riscv-config versino 3.0.0+
-- modified functions to use the new warl_class from riscv-config-3.0.0+
+- migrated to using riscv-config version 3.2.0+
+- modified functions to use the new warl_class from riscv-config-3.2.0+
 - modified prod_isa to use riscv-config isa_validator
 
 ## [1.24.3] - 2022-08-29
