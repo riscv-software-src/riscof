@@ -13,7 +13,8 @@ from copy import deepcopy
 from riscof.utils import yaml
 import riscof.utils as utils
 import riscof.constants as constants
-from riscv_config.warl import warl_interpreter
+from riscv_config.warl import warl_class
+from riscv_config.isa_validator import get_extension_list
 
 logger = logging.getLogger(__name__)
 
@@ -96,38 +97,38 @@ def eval_cond(condition, spec):
             the given specifications or not.
     '''
     condition = (condition.replace("check", '')).strip()
-    if 'writable' in condition:
+    if 'range_writable' in condition:
         parts = condition.split("=")
-        func_args = ((parts[0].replace("writable(","")).replace(")","")).split(",")
-        if writable(spec,int(func_args[0]),func_args[1]) == eval(parts[1]):
+        func_args = ((parts[0].replace("range_writable(","")).replace(")","")).split(",")
+        if range_writable(spec,int(func_args[0]),func_args[1], func_args[2]) == eval(parts[1]):
             return True
         else:
             return False
     elif 'islegal' in condition:
         func_args = ((condition.replace("islegal(","")).replace(")","")).split(",")
         try:
-            spec = get_node(spec,func_args[2])
+            node = get_node(spec,func_args[2])
         except KeyError:
             return False
-        if 'warl' in spec['type']:
-            warl = warl_interpreter(spec['type']['warl'])
-            deps = warl.dependencies()
-            return warl.islegal(func_args[0],eval(func_args[1]))
+        if 'warl' in node['type']:
+            warl = warl_class(node['type']['warl'], "".join(func_args[2]),node['msb'], node['lsb'], spec)
+            err = warl.islegal(func_args[0], eval(func_args[1]))
+            return not bool(err)
         return False
     elif ':=' in condition:
         temp = condition.split(":=")
         try:
-            spec = get_node(spec,temp[0])
+            node = get_node(spec,temp[0])
         except KeyError:
             return False
         if "regex(" in temp[1]:
             exp = temp[1].replace("regex(", "r\"")[:-1] + ("\"")
-            x = re.match(eval(exp), spec)
+            x = re.match(eval(exp), node)
             if x is None:
                 return False
             else:
                 return True
-        elif ast.literal_eval(temp[1]) == spec:
+        elif ast.literal_eval(temp[1]) == node:
             return True
         else:
             return False
@@ -144,69 +145,71 @@ def eval_cond(condition, spec):
 
 def getlegal(spec,dep_vals,num,node):
     end_vals = []
+    csrname = node.split('>')[0]
     try:
-        spec = get_node(spec,node)
+        node= get_node(spec,node)
     except KeyError:
         return []
-    if 'warl' in spec['type']:
-        warl = (warl_interpreter(spec['type']['warl']))
-        deps = warl.dependencies()
-        vals = warl.legal(eval(dep_vals))
-        end_vals = [ hex(int(li[0],base=16)<<spec['lsb']) if '0x' in li[0] else hex(int(li[0])<<spec['lsb']) for li in vals ]
-    elif 'ro_constant' in spec['type']:
-        end_vals = [hex(spec['type']['ro_constant'][0]<<spec['lsb'])]
-    num = int(num)
-    if num < len(end_vals):
-        end_vals = end_vals[:num]
-    else:
-        end_vals.extend([end_vals[-1]]*(num-len(end_vals)))
+    if 'warl' in node['type']:
+        tries = 0
+        while len(end_vals) != num and tries < 4*num:
+            warl = warl_class(node['type']['warl'], csrname,node['msb'], node['lsb'], spec)
+            err, vals = warl.getlegal(eval(dep_vals))
+            if not err:
+                end_vals.append(vals)
+            tries += 1
+        if len(end_vals) != num:
+            return []
+    elif 'ro_constant' in node['type']:
+        end_vals = [node['type']['ro_constant']]*num
     return end_vals
 
-def writable(spec,bit,node):
+def range_writable(spec, dep_vals, bits, node):
+    csrname = node.split('>')[0]
     try:
-        spec = get_node(spec,node)
+        csrnode = get_node(spec,node)
     except KeyError:
         return False
-
-    bit_width = spec['msb']-spec['lsb']+1
-    if bit>bit_width:
+    bit_width = csrnode['msb']-csrnode['lsb']+1
+    range_msb = bits.split(':')[0]
+    range_lsb = bits.split(':')[1] if ':' in bits else range_msb
+    range_mask = int("0b"+"".join(['1']*(range_msb-range_lsb+1)),0)<<range_lsb
+    if range_msb > bit_width or range_lsb > bit_width:
         return False
-    if 'warl' in spec['type']:
-        warl = (warl_interpreter(spec['type']['warl']))
-        deps = warl.dependencies()
-        vals = warl.legal([])
-        legal = [ bin(int(li[0],base=16))[2:].zfill(bit_width) if '0x' in li[0] else bin(int(li[0]))[2:].zfill(bit_width) for li in vals ]
-        if any([x[bit_width-bit-1]=='1' for x in legal]) and any([x[bit_width-bit-1]=='0' for x in legal]):
-            return True
-        else:
-            return False
+    if 'ro_' in csrnode['type']:
+        return False
+    elif 'warl' in csrnode['type']:
+        warl = warl_class(node['type']['warl'], csrname,node['msb'], node['lsb'], spec)
+        val = warl.getlegal([])
+        new_val = val ^ range_mask
+        err = warl.islegal(new_val, dep_vals)
+        return not bool(err)
+    else:
+        return False
 
 def getillegal(spec,dep_vals,num,node):
-    end_vals = []
-    legal = []
+    csrname = node.split('>')[0]
     try:
-        spec = get_node(spec,node)
+        csrnode = get_node(spec,node)
     except KeyError:
         return []
-    bit_width = spec['msb']-spec['lsb']+1
-    if 'warl' in spec['type']:
-        warl = (warl_interpreter(spec['type']['warl']))
-        deps = warl.dependencies()
-        vals = warl.legal(eval(dep_vals))
-        legal = [ bin(int(li[0],base=16))[2:].zfill(bit_width) if '0x' in li[0] else bin(int(li[0]))[2:].zfill(bit_width) for li in vals ]
-    elif 'ro_constant' in spec['type']:
-        legal = [bin(spec['type']['ro_constant'][0])[2:].zfill(bit_width)]
-    num = int(num)
-    if legal:
+    bitlen = csrnode['msb'] - csr['lsb'] + 1
+    end_vals = []
+    if 'warl' in csrnode['type']:
+        warl = warl_class(csrnode['type']['warl'], csrname, csrnode['msb'], csrnode['lsb'], spec)
+        tries = 0
+        while len(end_vals) < num and tries < 2**num:
+            random_val = random.randint(0,(2**bitlen)-1)
+            err = warl.islegal(random_val, dep_vals)
+            if err:
+                end_vals.append(random_val)
+            tries += 1
+    elif 'ro_constant' in csrnode['type']:
+        constant_val = csrnode['type']['ro_constant']
         while len(end_vals) < num:
-            random.seed(datetime.now())
-            flip_bits = random.sample(list(range(0,bit_width)),random.randint(0,bit_width-1))
-            val = legal[random.randint(0,len(legal)-1)]
-            flip = lambda x: '1' if x=='0' else '0'
-            ill_val = ''.join([flip(val[i]) if i in flip_bits else val[i] for i in range(0,bit_width)])
-            if ill_val not in legal:
-                end_vals.append(ill_val)
-    end_vals = [hex(int(x,base=2)<<spec['lsb']) for x in end_vals]
+            random_val = random.randint(0,(2**bitlen)-1)
+            if random_val != constant_val:
+                end_vals.append(random_val)
     return end_vals
 
 def eval_macro(macro, spec):
@@ -231,50 +234,20 @@ def eval_macro(macro, spec):
         return (True, [str(args[0]).strip() + "=" + str(args[1]).strip()])
     elif "getlegal" in args[1]:
         func_args = ((args[1].replace("getlegal(","")).replace(")","")).split(",")
-        vals = getlegal(spec,func_args[0],func_args[1],func_args[2])
+        vals = getlegal(spec,func_args[0],int(func_args[1],0),func_args[2])
         if vals:
             return (True, [str(j).strip()+ "=" + str(k) for j,k in zip(args[0].split(","),vals)])
         else:
             return (False,[])
     elif "getillegal" in args[1]:
         func_args = ((args[1].replace("getillegal(","")).replace(")","")).split(",")
-        vals = getillegal(spec,func_args[0],func_args[1],func_args[2])
+        vals = getillegal(spec,func_args[0],int(func_args[1],0),func_args[2])
         if vals:
             return (True, [str(j).strip()+ "=" + str(k) for j,k in zip(args[0].split(","),vals)])
         else:
             return (False,[])
     else:
         return (False,[])
-
-def isa_set(string):
-    str_match = re.findall(r'([^\d]*?)(?!_)*(Z.*?)*(_|$)',string,re.M)
-    extension_list= []
-    for match in str_match:
-        stdisa, z, ignore = match
-        if stdisa != '':
-            for e in stdisa:
-                extension_list.append(e)
-        if z != '':
-            extension_list.append(z)
-    return set(extension_list)
-
-def canonicalise(isa):
-    all_ext = ["M","A","F","D","Q","L","C","B","J","K","T","P","V","N","S","H","U","Zicsr",
-            "Zifencei","Zihintpause","Zmmul","Zam","Zba","Zbc","Zbb","Zbs","Zbp","Zbm","Zbe","Zbf","Zkne",
-            "Zknd","Zknh","Zkse","Zksh","Zkg","Zkb","Zkr","Zks","Zkn","Ztso","Zbkb","Zbkc","Zbkx"]
-    canonical_string = ""
-    switch = False
-    for ext in all_ext:
-        if ext in isa:
-            if switch:
-                canonical_string += "_"
-            elif ext.startswith("Z"):
-                switch=True
-            canonical_string += ext
-            if ext.startswith("Z"):
-                switch=True
-    return canonical_string
-
 
 def prod_isa(dut_isa, test_isa):
     '''
@@ -294,22 +267,17 @@ def prod_isa(dut_isa, test_isa):
         :raises: TestSelectError
 
     '''
-    dut_exts = isa_set(re.sub("RV(64|128|32)(I|E)","",dut_isa))
-    isa = set([])
-    last_prefix = ''
-    atleast_1 = False
-    match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",dut_isa)
-    prefix = match[0][0]
-    for entry in test_isa:
-        match = re.findall("(?P<prefix>RV(64|128|32)(I|E))",entry)
-        exts = isa_set(re.sub("RV(64|128|32)(I|E)","",entry))
-        overlap = dut_exts & exts
-        if overlap == exts and match[0][0] == prefix:
-            atleast_1 = True
-            isa = isa | overlap
-    if not atleast_1:
-        raise TestSelectError("Test Selected without the relevant extensions being available on DUT.")
-    return prefix+canonicalise(isa)
+    (dut_ext_list, err, err_list) = get_extension_list(dut_isa)
+    dut_ext_set = set(dut_ext_list)
+    dut_base = 32 if '32' in dut_isa else 64
+    for isa in test_isa:
+        (test_ext_list, err, err_list) = get_extension_list(isa)
+        test_base = 32 if '32' in isa else 64
+        test_ext_set = set(test_ext_list)
+        if test_ext_set.issubset(dut_ext_set) and dut_base == test_base:
+            return isa
+    raise TestSelectError("Test Selected without the relevant extensions being available on DUT.")
+    return ''
 
 def generate_test_pool(ispec, pspec, workdir, dbfile = None):
     '''
@@ -325,8 +293,7 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
         :type pspec: dict
 
         :return: A dictionary which contains all the necessary information for the selected tests.
-        Refer to Test List Format for further information.
-
+            Refer to Test List Format for further information.
     '''
     spec = {**ispec, **pspec}
     test_pool = []
