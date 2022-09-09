@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.25.1] - 2022-09-09
+- Modified the code to fix the issue #62, which changed the condition to allow flen=64 for D extension tests.
+
 ## [1.25.0] - 2022-09-07
 - migrated to using riscv-config version 3.2.0+
 - modified functions to use the new warl_class from riscv-config-3.2.0+
