@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.25.2] - 2022-10-08
+- updating paths for docker image and plugins to point to new location
+
 ## [1.25.1] - 2022-09-09
 - Modified the code to fix the issue #62, which changed the condition to allow flen=64 for D extension tests.
 
