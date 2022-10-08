@@ -299,7 +299,7 @@ These are often used as reference models in RISCOF.
     
     .. code-block:: bash
         
-        $ docker pull registry.gitlab.com/incoresemi/docker-images/compliance
+        $ docker pull gitlab.incoresemi.com:5050/dockers/docker-compliance
     
   .. tab:: Spike (riscv-isa-sim)
 
@@ -432,7 +432,7 @@ snippet should be replaced with the following::
   [sail_cSim]
   pluginpath=/path/to/riscof/sail_cSim
   docker=True
-  image=registry.gitlab.com/incoresemi/docker-images/compliance
+  image=gitlab.incoresemi.com:5050/dockers/docker-compliance
 
 
 The folder ``spike`` contains various templates of files that would be required for testing of 
@@ -459,7 +459,7 @@ We are now ready to run the architectural tests on the DUT via RISCOF.
 
 .. tip:: For details on the various configuration options supported by the *sail_cSim* plugin refer `here <csim_docs_>`_.
 
-.. _csim_docs: https://gitlab.com/incoresemi/riscof-plugins/-/tree/master/sail_cSim#riscof-plugin-for-sail-risc-v-formal-model 
+.. _csim_docs: https://gitlab.incoresemi.com/core-verification/riscof-plugins/-/tree/master/sail_cSim#riscof-plugin-for-sail-risc-v-formal-model 
 
 Cloning the Architectural Tests
 ===============================

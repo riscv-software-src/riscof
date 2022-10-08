@@ -739,7 +739,7 @@ Setup
 
     .. code-block:: shell
 
-        git clone https://gitlab.com/incoresemi/riscof-plugins.git
+        git clone https://gitlab.incoresemi.com/core-verification/riscof-plugins.git
 
 2. Modify the following values in the ``config.ini``
 
