@@ -23,7 +23,7 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(name="riscof",
-      version='1.25.1',
+      version='1.25.2',
       description="RISC-V Architectural Test Framework",
       long_description=readme + '\n\n',
       classifiers=[
