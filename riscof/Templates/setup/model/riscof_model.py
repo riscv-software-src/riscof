@@ -22,7 +22,7 @@ class dutname(pluginTemplate):
     __version__ = "XXX"
 
     def __init__(self, *args, **kwargs):
-        sclass = super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         config = kwargs.get('config')
 
@@ -58,9 +58,6 @@ class dutname(pluginTemplate):
             self.target_run = False
         else:
             self.target_run = True
-
-        # Return the parameters set above back to RISCOF for further processing.
-        return sclass
 
     def initialise(self, suite, work_dir, archtest_env):
 
