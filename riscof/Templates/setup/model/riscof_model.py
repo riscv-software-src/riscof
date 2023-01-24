@@ -117,7 +117,7 @@ class dutname(pluginTemplate):
 
       # set the make command that will be used. The num_jobs parameter was set in the __init__
       # function earlier
-      make.makeCommand = 'make -j' + self.num_jobs
+      make.makeCommand = 'make -k -j' + self.num_jobs
 
       # we will iterate over each entry in the testList. Each entry node will be refered to by the
       # variable testname.
