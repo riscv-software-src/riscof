@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.25.3] - 2023-01-24
+- use "make -k" in riscof_model.py template to ensure all test cases run, even after a failure. Fixes #73.
+
 ## [1.25.2] - 2022-10-08
 - updating paths for docker image and plugins to point to new location
 
