@@ -352,6 +352,8 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
             raise SystemExit(exitcode)
         except:
             raise SystemExit(exitcode)
+    elif exitcode:
+        raise SystemExit(exitcode)
 
 
 
