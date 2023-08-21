@@ -49,12 +49,12 @@ def update(path,branch='main'):
         logger.info("Directory does not contain the riscv-arch-test repo.")
 
 def clone(path,branch="main"):
-    logger.info("Clonning repository at "+str(path))
+    logger.info("Cloning repository at "+str(path))
     repo = git.Repo.clone_from(constants.https_url, path)
     latest_tag = (repo.tags)[-1]
     checkout_target = latest_tag if branch=='latest' else branch
     repo.git.checkout(checkout_target)
     version, _ = get_version(path)
-    logger.info("Clonned version {0} of the repository with commit hash {1} ".format(
+    logger.info("Cloned version {0} of the repository with commit hash {1} ".format(
                     str(version['version']),version['commit']))
 
