@@ -335,6 +335,10 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
                 macros.append("FLEN=64")
             elif re.match(r"^[^(Z,z)]+F.*$",isa):
                 macros.append("FLEN=32")
+            if 'cbozero' in file:
+                macros.append("RVMODEL_CBZ_BLOCKSIZE="+str(pspec['zicbo_cache_block_sz']['zicboz_sz']))
+            elif 'cbo' in file:
+                macros.append("RVMODEL_CMO_BLOCKSIZE="+str(pspec['zicbo_cache_block_sz']['zicbom_sz']))
             test_pool.append(
                 (file, db[file]['commit_id'], macros,isa,cov_labels))
     logger.info("Selecting Tests.")
