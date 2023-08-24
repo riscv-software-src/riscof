@@ -2,8 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.25.4] - 2023-04-25
+Please note the header `WIP-DEV` is to always remain indicating the changes done on the dev branch.
+Only when a release to the main branch is done, the contents of the WIP-DEV are put under a
+versioned header while the `WIP-DEV` is left empty
+
+## [WIP-DEV]
 - Ensure correct riscof return code when `--no-browser` is used. Fixes #87.
+- Updating CONTRIBUTING.rst to capture the new git strategy adopted to follow a monthly release
 
 ## [1.25.3] - 2023-01-24
 - use "make -k" in riscof_model.py template to ensure all test cases run, even after a failure. Fixes #73.

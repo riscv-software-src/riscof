@@ -481,7 +481,7 @@ def arch_test(dir,get_version,clone,update,show_version):
         if not is_repo:
             logger.error("Not the riscv-arch-test repo.")
         else:
-            logger.info("Clonned version {0} of the repository with commit hash {1} ".format(
+            logger.info("Cloned version {0} of the repository with commit hash {1} ".format(
                     version['version'],version['commit']))
     else:
         logger.error("Please specify one of [update,clone,show-version] flags.")
