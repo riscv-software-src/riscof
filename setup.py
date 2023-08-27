@@ -1,6 +1,5 @@
 import os
 import codecs
-import pip
 from setuptools import setup, find_packages
 
 # Base directory of package
