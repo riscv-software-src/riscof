@@ -399,9 +399,9 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         dut_test_list[entry] = deepcopy(node)
         base_test_list[entry] = deepcopy(node)
         dut_test_list[entry]['work_dir'] = os.path.join(node['work_dir'],'dut')
-        os.mkdir(dut_test_list[entry]['work_dir'])
+        os.makedirs(dut_test_list[entry]['work_dir'], exist_ok=True)
         base_test_list[entry]['work_dir'] = os.path.join(node['work_dir'],'ref')
-        os.mkdir(base_test_list[entry]['work_dir'])
+        os.makedirs(base_test_list[entry]['work_dir'], exist_ok=True)
     results = []
     if cntr_args[2]:
         logger.info("Running Tests on DUT.")
