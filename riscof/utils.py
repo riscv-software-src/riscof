@@ -32,6 +32,54 @@ def load_yaml(foo):
         logger.error(error)
         raise SystemExit(1)
 
+def pagetabel_gen (xlen, trans_mode, code_addr, data_addr, sig_addr):
+    """
+    Function to generate static 4kiB page table depending upon the 
+    address translation mode and also returns the lsb of differentiating bits.
+    Sample inputs:
+    xlen = 32
+    trans_mode = 'sv32'
+    code_addr = 0x50000123
+    data_addr = 0x90000456
+    sig_addr  = 0xD0000789
+    """
+    #----------------------------------------
+    #---------Dictionary Setup
+    #----------------------------------------
+    no_of_pte       = {32: 1024, 64: 512}
+    top_VA_len      = {32: 10, 64: 9}
+    data_len        = {32: 'word', 64: 'dword'}
+    addr_trans_mode = {'sv32': 32, 'sv39': 39, 'sv48': 48, 'sv57': 57}
+
+    #----------------------------------------
+    #---------Page Table gen
+    #----------------------------------------
+    def_perm  = 0xef    # default permissions: (PTE_D | PTE_A | PTE_X | PTE_W | PTE_R | PTE_V)
+    incr_base = 0x400   # increament to the consecutive PTEs
+    base_pte  = ((code_addr >> 12) << 10) | def_perm
+
+    file = open("root_page_tbl.S","w")
+    for i in range(0,no_of_pte[xlen]):
+        str_data = '.'+data_len[xlen]+' '+hex(base_pte)
+        file.write(str_data)
+        file.write('  # PTE %d \n' %i )
+        base_pte = base_pte + incr_base
+    file.close()
+
+    #----------------------------------------
+    #---------Differentiating bit extraction
+    #----------------------------------------
+    ca_bin = bin(code_addr)[2:].zfill(xlen)[abs(xlen-addr_trans_mode[trans_mode]) : abs(xlen-addr_trans_mode[trans_mode])+top_VA_len[xlen]]
+    da_bin = bin(data_addr)[2:].zfill(xlen)[abs(xlen-addr_trans_mode[trans_mode]) : abs(xlen-addr_trans_mode[trans_mode])+top_VA_len[xlen]]
+    sa_bin = bin(sig_addr )[2:].zfill(xlen)[abs(xlen-addr_trans_mode[trans_mode]) : abs(xlen-addr_trans_mode[trans_mode])+top_VA_len[xlen]]
+
+    for i in range(0,top_VA_len[xlen]-1):
+        if((ca_bin[i]==da_bin[i]==sa_bin[i]) & (ca_bin[i+1]==da_bin[i+1]==sa_bin[i+1])):
+            diff_lsb = (addr_trans_mode[trans_mode]-1)- i - 1
+            break
+
+    return diff_lsb
+
 def absolute_path(config_dir, entry_path):
     """
     Create an absolute path based on the config's file directory location and a
