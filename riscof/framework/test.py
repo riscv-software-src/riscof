@@ -81,6 +81,29 @@ def get_node(spec,node):
         spec = spec[key]
     return spec
 
+def eval_verify(condition, spec):
+    '''
+        Function to evaluate the "verify" statements in the database entry and return the macro string.
+
+        :param condition: The "verify" statement in the test which needs to be evaluated.
+
+        :param spec: The specifications of the DUT.
+
+        :type condition: str
+
+        :type spec: dict
+
+        :return: A boolean value specifying whether the condition is satisfied by
+            the given specifications or not.
+    '''
+    temp = condition.split("verify", 1)[1].strip()
+    try:
+        # Use eval to evaluate the condition in the context of the provided dictionary
+        return eval(temp, {}, spec)
+    except Exception as e:
+        logger.error(f"Error evaluating verify condition {temp}: {e}")
+        return False
+
 def eval_cond(condition, spec):
     '''
         Function to evaluate the "check" statements in the database entry and return the macro string.
@@ -314,6 +337,9 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
             logger.debug("Checking conditions for {}-{}".format(file, part))
             for condition in part_dict['check']:
                 include = include and eval_cond(condition, spec)
+            for condition in part_dict['verify']:
+                # get the condition and verify on the isa spec.
+                include = include and eval_verify(condition, spec)
             if include:
                 for macro in part_dict['define']:
                     temp = eval_macro(macro, spec)
