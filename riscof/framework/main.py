@@ -175,7 +175,7 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir, cntr_args):
         :param dut_platform_spec: The absolute path to the checked yaml containing
             the DUT platform specification.
 
-        :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run
+        :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run, gen_sig_file, self_check
 
         :type dut_platform_spec: str
 
@@ -194,10 +194,12 @@ def run(dut, base, dut_isa_spec, dut_platform_spec, work_dir, cntr_args):
     ispec = utils.load_yaml(dut_isa_spec)
     pspec = utils.load_yaml(dut_platform_spec)
 
-    if cntr_args[2]:
+    if cntr_args[2] or cntr_args[5]:
+        if cntr_args[5]:
+            logger.info("Running Tests in SELF-CHECKING MODE...")
         logger.info("Running Build for DUT")
         dut.build(dut_isa_spec, dut_platform_spec)
-    elif cntr_args[3]:
+    elif cntr_args[3] or cntr_args[4]:
         logger.info("Running Build for Reference")
         base.build(dut_isa_spec, dut_platform_spec)
     else:

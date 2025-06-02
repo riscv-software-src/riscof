@@ -409,7 +409,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
 
         :param pspec: The platform specifications of the DUT.
 
-        :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run
+        :param cntr_args: dbfile, testfile, no_ref_run, no_dut_run, gen_sig_file, self_check
 
         :type ispec: dict
 
@@ -433,14 +433,17 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
         base_test_list[entry]['work_dir'] = os.path.join(node['work_dir'],'ref')
         os.makedirs(base_test_list[entry]['work_dir'], exist_ok=True)
     results = []
-    if cntr_args[2]:
+    if cntr_args[2] or cntr_args[5]:
         logger.info("Running Tests on DUT.")
         dut.runTests(dut_test_list)
         logger.info("Tests run on DUT done.")
         raise SystemExit(0)
-    elif cntr_args[3]:
+    elif cntr_args[3] or cntr_args[4]:
         logger.info("Running Tests on Reference Model.")
         base.runTests(base_test_list)
+        if cntr_args[4]:
+            base.genSigheader(base.name, test_list)
+        logger.info("Signature Header File Generated.")
         logger.info("Tests run on Reference done.")
         raise SystemExit(0)
     else:

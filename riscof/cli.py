@@ -260,8 +260,10 @@ def testlist(ctx,config,work_dir,suite,env):
 @click.option('--no-ref-run',is_flag=True,help="Do not run tests on Reference")
 @click.option('--no-dut-run',is_flag=True,help="Do not run tests on DUT")
 @click.option('--no-clean',is_flag=True,help="Do not clean work directory(if exists).")
+@click.option('--gen-sig-header',is_flag=True,help="Run tests on the Reference Model and Generate Signature Header File for the Self-Checking Tests.")
+@click.option('--self-check',is_flag=True,help="Self-Checking Mode: Run tests on the DUT using already generated Signature Files.")
 @click.pass_context
-def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run,no_clean):
+def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run,no_clean, gen_sig_header, self_check):
     exitcode = 0
     clean =  (testfile is not None or dbfile is not None or no_clean)
     setup_directories(work_dir,clean)
@@ -297,7 +299,7 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
     with open(ctx.obj.platform_file, "r") as platfile:
         pspecs = platfile.read()
 
-    cntr_args = [dbfile,testfile,no_ref_run,no_dut_run]
+    cntr_args = [dbfile,testfile,no_ref_run,no_dut_run, gen_sig_header, self_check]
 
     report_objects = {}
     report_objects['date'] = (datetime.now(
