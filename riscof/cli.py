@@ -260,8 +260,11 @@ def testlist(ctx,config,work_dir,suite,env):
 @click.option('--no-ref-run',is_flag=True,help="Do not run tests on Reference")
 @click.option('--no-dut-run',is_flag=True,help="Do not run tests on DUT")
 @click.option('--no-clean',is_flag=True,help="Do not clean work directory(if exists).")
+@click.option(
+        '--filter', metavar='PATH', type=str,
+        help="Filter testcases to be run by regex")
 @click.pass_context
-def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run,no_clean):
+def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run,no_clean,filter=None):
     exitcode = 0
     clean =  (testfile is not None or dbfile is not None or no_clean)
     setup_directories(work_dir,clean)
@@ -319,7 +322,7 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
     report_objects['platform_specs'] = pspecs
 
     report_objects['results'] = framework.run(dut, base, ctx.obj.isa_file,
-                                              ctx.obj.platform_file, work_dir, cntr_args)
+                                              ctx.obj.platform_file, work_dir, cntr_args, filter)
 
     report_objects['num_passed'] = 0
     report_objects['num_failed'] = 0
@@ -381,8 +384,11 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
         type=click.Path(resolve_path=True,readable=True,exists=True),
         help="YAML macro file to include"
     )
+@click.option(
+        '--filter', metavar='PATH', type=str,
+        help="Filter testcases to be run by regex")
 @click.pass_context
-def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file,header_file):
+def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file,header_file,filter):
     setup_directories(work_dir)
     ctx.obj.mkdir = False
     ctx.obj.config, ctx.obj.config_dir = read_config(config)
@@ -404,7 +410,7 @@ def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file,header_file):
     with open(platform_file, "r") as platfile:
         pspecs = platfile.read()
     report, for_html, test_stats, coverpoints = framework.run_coverage(base, isa_file, platform_file,
-            work_dir, cgf_file, header_file)
+            work_dir, cgf_file, header_file, filter)
     report_file = open(work_dir+'/suite_coverage.rpt','w')
     utils.dump_yaml(report, report_file)
     report_file.close()
