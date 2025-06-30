@@ -15,8 +15,8 @@ from riscof.pluginTemplate import pluginTemplate
 
 logger = logging.getLogger()
 
-class spike_simple(pluginTemplate):
-    __model__ = "spike"
+class dutname(pluginTemplate):
+    __model__ = "dutname"
 
     #TODO: please update the below to indicate family, version, etc of your DUT.
     __version__ = "XXX"
@@ -36,7 +36,7 @@ class spike_simple(pluginTemplate):
         # test-bench produced by a simulator (like verilator, vcs, incisive, etc). In case of an iss or
         # emulator, this variable could point to where the iss binary is located. If 'PATH variable
         # is missing in the config.ini we can hardcode the alternate here.
-        self.dut_exe = os.path.join(config['PATH'] if 'PATH' in config else "","spike")
+        self.dut_exe = os.path.join(config['PATH'] if 'PATH' in config else "","dutname")
 
         # Number of parallel jobs that can be spawned off by RISCOF
         # for various actions performed in later functions, specifically to run the tests in
@@ -89,7 +89,7 @@ class spike_simple(pluginTemplate):
       # will be useful in setting integer value in the compiler string (if not already hardcoded);
       self.xlen = ('64' if 64 in ispec['supported_xlen'] else '32')
 
-      # for spike start building the '--isa' argument. the self.isa is dutnmae specific and may not be
+      # for dutname start building the '--isa' argument. the self.isa is dutnmae specific and may not be
       # useful for all DUTs
       self.isa = 'rv' + self.xlen
       if "I" in ispec["ISA"]:
@@ -157,7 +157,7 @@ class spike_simple(pluginTemplate):
 	  # the "else" clause is executed below assigning the sim command to simple no action
 	  # echo statement.
           if self.target_run:
-            # set up the simulation command. Template is for spike. Please change.
+            # set up the simulation command. Template is for dutname. Please change.
             simcmd = self.dut_exe + ' --misaligned --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
             simcmd = simcmd + ';' + self.dut_exe + ' --isa={0} --log-commits -l my.elf 2> {1}'.format(self.isa, log_file)
           else:
@@ -235,11 +235,11 @@ class spike_simple(pluginTemplate):
 #          # comment out the lines below and raise a SystemExit
 #
 #          if self.target_run:
-#            # build the command for running the elf on the DUT. In this case we use spike and indicate
+#            # build the command for running the elf on the DUT. In this case we use dutname and indicate
 #            # the isa arg that we parsed in the build stage, elf filename and signature filename.
-#            # Template is for spike. Please change for your DUT
+#            # Template is for dutname. Please change for your DUT
 #            execute = self.dut_exe + ' --isa={0} +signature={1} +signature-granularity=4 {2}'.format(self.isa, sig_file, elf)
-#            logger.debug('Executing on Spike ' + execute)
+#            logger.debug('Executing on dutname ' + execute)
 #
 #          # launch the execute command. Change the test_dir if required.
 #          utils.shellCommand(execute).run(cwd=test_dir)
