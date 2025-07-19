@@ -138,7 +138,6 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None,
     if 64 in ispec['supported_xlen']:
         results = isac.merge_coverage(cov_files, preprocessing(Translate_cgf(expand_cgf(cgf_file,64,flen)), header_file, cgf_macros), True)
     elif 32 in ispec['supported_xlen']:
-        print(cov_files)
         results = isac.merge_coverage(cov_files, preprocessing(Translate_cgf(expand_cgf(cgf_file,32,flen)), header_file, cgf_macros), True)
 
 
