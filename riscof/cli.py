@@ -36,16 +36,26 @@ class Context:
     isa_file = None
     platform_file = None
 
-def setup_directories(work_dir,skip_rm=False):
+def setup_directories(work_dir,skip_rm=False,keep_checked_files=False):
     #Creating work directory
     if not os.path.exists(work_dir):
         logger.debug('Creating new work directory: ' + work_dir)
         os.mkdir(work_dir)
     elif not skip_rm:
-        logger.debug('Removing old work directory: ' + work_dir)
-        shutil.rmtree(work_dir)
-        logger.debug('Creating new work directory: ' + work_dir)
-        os.mkdir(work_dir)
+        if keep_checked_files:
+            logger.debug('Removing everything in ' + work_dir + ' except for checked.yaml files')
+            for item in os.listdir(work_dir):
+                if not item.endswith("_checked.yaml"):
+                    item_path = os.path.join(work_dir, item)
+                    if os.path.isfile(item_path):
+                        os.remove(item_path)
+                    if os.path.isdir(item_path):
+                        shutil.rmtree(item_path)
+        else:
+            logger.debug('Removing old work directory: ' + work_dir)
+            shutil.rmtree(work_dir)
+            logger.debug('Creating new work directory: ' + work_dir)
+            os.mkdir(work_dir)
 
 def read_config(configfile):
     config = configparser.ConfigParser()
@@ -179,7 +189,13 @@ def validate(ctx,config,work_dir):
     isa_file = ctx.obj.dut.isa_spec
     platform_file = ctx.obj.dut.platform_spec
     try:
-        isa_file = checker.check_isa_specs( isa_file, work_dir, True)
+        isa_file_name_split = (os.path.split(isa_file)[1]).split('.')
+        checked_isa_file = os.path.join(work_dir, isa_file_name_split[0] + '_checked.' + isa_file_name_split[1])
+        if os.path.exists(checked_isa_file) and (os.path.getmtime(checked_isa_file) > os.path.getmtime(isa_file)):
+            logger.info("Checked ISA file already exists") 
+            isa_file = checked_isa_file
+        else:
+            isa_file = checker.check_isa_specs( isa_file, work_dir, True)
         platform_file = checker.check_platform_specs( platform_file, work_dir, True)
     except ValidationError as msg:
         logger.error(msg)
@@ -264,7 +280,7 @@ def testlist(ctx,config,work_dir,suite,env):
 def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_dut_run,no_clean):
     exitcode = 0
     clean =  (testfile is not None or dbfile is not None or no_clean)
-    setup_directories(work_dir,clean)
+    setup_directories(work_dir,clean,True)
     ctx.obj.mkdir = False
     constants.env = env
     constants.suite = suite
@@ -383,7 +399,7 @@ def run(ctx,config,work_dir,suite,env,no_browser,dbfile,testfile,no_ref_run,no_d
     )
 @click.pass_context
 def coverage(ctx,config,work_dir,suite,env,no_browser,cgf_file,header_file):
-    setup_directories(work_dir)
+    setup_directories(work_dir,False,True)
     ctx.obj.mkdir = False
     ctx.obj.config, ctx.obj.config_dir = read_config(config)
     ctx.obj.dut,ctx.obj.base = prepare_models(ctx.obj.config_dir,ctx.obj.config)
