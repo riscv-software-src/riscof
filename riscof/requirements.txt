@@ -3,4 +3,4 @@ click>=7.1.2
 Jinja2>=2.10.1
 pytz>=2019.1
 riscv-config>=3.2.0
-riscv_isac>=0.7.2
+riscv-isac @ git+https://github.com/riscv-software-src/riscv-isac@dev
