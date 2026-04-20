@@ -273,7 +273,7 @@ These are often used as reference models in RISCOF.
 
        $ sudo apt-get install opam  build-essential libgmp-dev z3 pkg-config zlib1g-dev
        $ opam init -y --disable-sandboxing
-       $ opam switch create ocaml-base-compiler.4.06.1
+       $ opam switch create ocaml-base-compiler.4.08.1
        $ opam install sail -y
        $ eval $(opam config env)
        $ git clone https://github.com/riscv/sail-riscv.git
