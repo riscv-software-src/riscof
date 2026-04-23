@@ -64,7 +64,8 @@ To run coverage
 
 .. code-block:: shell-session
 
-   $ riscof --verbose debug coverage --suite /path/to/suite --env /path/to/suite
+   $ riscof coverage --config=config.ini --suite=riscv-arch-test/riscv-test-suite/ --env=riscv-arch-test/riscv-test-suite/env --cgf-file <full_path>/riscof/riscv-arch-test/coverage/dataset.cgf --cgf-file <full_path>/riscof/riscv-arch-test/coverage/rvi_c.cgf --cgf-file <full_path>/riscof/riscv-arch-test/coverage/rvi.cgf --cgf-file <full_path>/riscof/riscv-arch-test/coverage/rvi_fencei.cgf --cgf-file <full_path>/riscof/riscv-arch-test/coverage/rvi_m.cgf --cgf-file <full_path>/riscof/riscv-arch-test/coverage/rvi_priv.cgf 
+
 
 Or, to run coverage including the macros file:
 
