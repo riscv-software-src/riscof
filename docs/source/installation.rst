@@ -273,20 +273,15 @@ These are often used as reference models in RISCOF.
 
        $ sudo apt-get install opam  build-essential libgmp-dev z3 pkg-config zlib1g-dev
        $ opam init -y --disable-sandboxing
-       $ opam switch create ocaml-base-compiler.4.06.1
+       $ opam switch create ocaml-base-compiler
        $ opam install sail -y
        $ eval $(opam config env)
        $ git clone https://github.com/riscv/sail-riscv.git
        $ cd sail-riscv
-       $ make
-       $ ARCH=RV32 make
-       $ ARCH=RV64 make
-       $ ln -s sail-riscv/c_emulator/riscv_sim_RV64 /usr/bin/riscv_sim_RV64
-       $ ln -s sail-riscv/c_emulator/riscv_sim_RV32 /usr/bin/riscv_sim_RV32
+       $ ./build_simulators.sh
 
-    This will create a C simulator in ``c_emulator/riscv_sim_RV64`` and
-    ``c_emulator/riscv_sim_RV32``. You will not need to add these paths in your ``$PATH`` or an
-    alias to it to execute them from command line.
+    This will create a C simulator executables ``riscv_sim_rv32d`` and ``riscv_sim_rv64d``
+    in the folder ``build/c_emulator/``. Add the folder to the ``$PATH`` environmantal variable.
 
     **Alternative 2: Using Docker**
 
@@ -421,8 +416,8 @@ The generate template ``config.ini`` will look something like this by default::
   [sail_cSim]
   pluginpath=/path/to/riscof/sail_cSim
 
-If the SAIL binaries (i.e. ``riscv_sim_RV32``) are not in your $PATH you may want to add the following to the last line of the
-above config::
+If the SAIL binaries (i.e. ``riscv_sim_rv32d``/``riscv_sim_rv64d``) are not in your $PATH
+you may want to add the following to the last line of the above config::
 
   PATH=<path_to_my_Sail_binaries>
 

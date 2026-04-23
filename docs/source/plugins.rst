@@ -801,7 +801,7 @@ is used as a reference for this example.
 .. code-block:: Makefile
     :linenos:    
 
-    TARGET_SIM   ?= riscv_sim_RV32 -V
+    TARGET_SIM   ?= riscv_sim_rv32d -V
     TARGET_FLAGS ?= $(RISCV_TARGET_FLAGS)
     ifeq ($(shell command -v $(TARGET_SIM) 2> /dev/null),)
         $(error Target simulator executable '$(TARGET_SIM)` not found)
@@ -882,7 +882,7 @@ the final makefile looks like this:
 .. code-block:: Makefile
     :linenos:
 
-    TARGET_SIM   ?= riscv_sim_RV32 -V
+    TARGET_SIM   ?= riscv_sim_rv32d -V
     TARGET_FLAGS =
     
     RISCV_PREFIX   ?= riscv32-unknown-elf-
